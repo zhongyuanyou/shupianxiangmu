@@ -95,6 +95,9 @@ export default {
   width: 100%;
   padding: 0 40px;
   margin-top: 22px;
+  ::v-deep.cousulttel {
+    margin-left: -40px;
+  }
   .title {
     display: block;
     font-size: 40px;
