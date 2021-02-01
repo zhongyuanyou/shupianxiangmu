@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="footer">
+    <div class="footer" v-if="isShow">
       <div class="service">
         <img :src="planner.imgSrc" alt="" />
         <div class="waiter">
@@ -95,26 +95,26 @@ export default {
   },
   mounted() {
     // @-- 监听窗口大小和横竖屏变化
-    const _this = this
-    const windheight = window.innerHeight
-    window.addEventListener(
-      'orientationchange',
-      function () {
-        if (window.orientation === 90) {
-          location.reload()
-        }
-      },
-      false
-    )
-    window.onresize = () => {
-      const docheight = window.innerHeight
-      if (docheight < windheight) {
-        _this.$refs.fixed.style.position = 'relative'
-        _this.$refs.fixed.style.marginTop = '-100px'
-      } else {
-        _this.$refs.fixed.style.position = 'fixed'
-      }
-    }
+    // const _this = this
+    // const windheight = window.innerHeight
+    // window.addEventListener(
+    //   'orientationchange',
+    //   function () {
+    //     if (window.orientation === 90) {
+    //       location.reload()
+    //     }
+    //   },
+    //   false
+    // )
+    // window.onresize = () => {
+    //   const docheight = window.innerHeight
+    //   if (docheight < windheight) {
+    //     _this.$refs.fixed.style.position = 'relative'
+    //     _this.$refs.fixed.style.marginTop = '-100px'
+    //   } else {
+    //     _this.$refs.fixed.style.position = 'fixed'
+    //   }
+    // }
 
     // @--Android系统：添加事件监听
     if (this.isAndroidOrIOS() === 'Android') {

@@ -6,7 +6,7 @@
           src="https://cdn.shupian.cn/sp-pt/wap/images/62to3cpd7h40000.png"
           alt=""
         />
-        <h4>立即预约银行服务</h4>
+        <h4>银行服务方案定制</h4>
         <img
           src="https://cdn.shupian.cn/sp-pt/wap/images/x5o8jch38cg000.png"
           alt=""
