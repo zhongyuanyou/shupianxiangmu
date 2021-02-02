@@ -3,7 +3,7 @@
     <div class="planner-title">{{ plannersCommon.title }}</div>
     <div class="planner-flex">
       <sp-swipe
-        :autoplay="3000"
+        :autoplay="300000"
         indicator-color="white"
         :show-indicators="false"
         class="planner-content my-swipe"
@@ -277,8 +277,15 @@ a {
             display: flex;
             align-items: center;
             justify-content: center;
-            .line {
-              line-height: 32px;
+            a {
+              font-size: 0;
+              display: inline-block;
+              height: 60px;
+              line-height: 60px;
+              .line {
+                display: inline-block;
+                line-height: -32px;
+              }
             }
           }
         }
