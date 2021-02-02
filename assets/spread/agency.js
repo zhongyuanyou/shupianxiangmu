@@ -150,3 +150,4 @@ const dataResult = {
     ],
   },
 }
+export default dataResult
