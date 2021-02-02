@@ -32,9 +32,34 @@
               <span class="list-title_icon">热门</span>
               <i class="img">限时特惠</i>
             </span>
-            <span class="list-title_icon"></span>
+            <span class="list-title_icon"> </span>
           </div>
-          <div class="list-label"></div>
+          <!-- // -- -->
+          <div class="list-label">
+            <div class="list-label-item">
+              <img
+                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
+                alt=""
+              />
+              <div class="list-label-item-content">在线咨询</div>
+            </div>
+
+            <div class="list-label-item">
+              <img
+                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
+                alt=""
+              />
+              <div class="list-label-item-content">在线咨询</div>
+            </div>
+
+            <div class="list-label-item">
+              <img
+                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
+                alt=""
+              />
+              <div class="list-label-item-content">在线咨询</div>
+            </div>
+          </div>
           <div class="list-count">
             <div class="list-count_item">
               <span>{{ listCounts.operating.actualViews }}</span>
@@ -171,9 +196,7 @@ export default {
         position: relative;
         width: 100%;
         height: 93px;
-        opacity: 0.8;
         border-radius: 7px 7px 0px 0px;
-        border: 1px solid red;
         .img {
           position: absolute;
           display: inline-block;
@@ -188,7 +211,7 @@ export default {
           font-weight: bold;
           color: #ffffff;
           line-height: 24px;
-          padding: 8px 10px 0 6px;
+          padding: 6px 4px 0 6px;
           text-align: center;
         }
         &_name {
@@ -217,15 +240,34 @@ export default {
       }
       // 标签部分
       .list-label {
-        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         height: 90px;
-        border: 1px solid green;
+        width: 100%;
+        padding-left: 32px;
+        .list-label-item {
+          display: flex;
+          height: 24px;
+          align-items: center;
+          margin-right: 39px;
+          > img {
+            width: 24px;
+            height: 24px;
+            margin-right: 13px;
+          }
+          &-content {
+            font-size: 24px;
+            font-weight: 400;
+            color: #555555;
+          }
+        }
       }
       // 列表框中间部分
       .list-count {
         display: flex;
         justify-content: space-between;
-        padding: 22px 82px 30px;
+        padding: 22px 82px 30px 70px;
         position: relative;
         .list-count_item {
           font-size: 34px;

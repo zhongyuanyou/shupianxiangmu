@@ -248,6 +248,8 @@ export default {
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+          title: '有限责任公司',
+          label: ['免费刻名', '3天领取执照', '价格透明'],
           operating: {
             actualViews: 3291,
             defaultSales: 1837,
@@ -259,6 +261,8 @@ export default {
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+          title: '有限责任公司',
+          label: ['免费刻名', '3天领取执照', '价格透明'],
           operating: {
             actualViews: 3291,
             defaultSales: 1837,
@@ -270,6 +274,8 @@ export default {
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+          title: '有限责任公司',
+          label: ['免费刻名', '3天领取执照', '价格透明'],
           operating: {
             actualViews: 3291,
             defaultSales: 1837,
@@ -281,6 +287,8 @@ export default {
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+          title: '有限责任公司',
+          label: ['免费刻名', '3天领取执照', '价格透明'],
           operating: {
             actualViews: 3291,
             defaultSales: 1837,
@@ -365,6 +373,8 @@ export default {
                 ? index
                 : Math.floor(Math.random() * this.imgPlanner.length)
             ].bgImg,
+            title: '有限责任',
+            label: ['免费刻名', '3天领取执照', '价格透明'],
             operating: valueObj.operating,
             id: '7862495547640840192',
             name: '李劲',
