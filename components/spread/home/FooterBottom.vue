@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="footer">
+    <div class="footer" v-if="isShow">
       <div class="service">
         <img :src="planner.imgSrc" alt="" />
         <div class="waiter">
@@ -8,12 +8,14 @@
           <p class="level">金牌规划师</p>
         </div>
       </div>
+
+      <!-- S 右侧按钮 -->
       <div class="btns">
         <button
           v-md-map
           v-md:p_IMClick
-          :data-im_name="md.imMd.name"
-          :data-im_type="md.imMd.type"
+          :data-name="`${md.imMd.name}`"
+          :data-im_type="`${md.imMd.type}`"
           @click="onlineConsult"
         >
           在线咨询
@@ -21,12 +23,13 @@
         <button
           v-md-map
           v-md:webClick
-          :data-name="md.telMd.name"
+          :data-name="`${md.telMd.name}`"
           @click="telConsult"
         >
           电话联系
         </button>
       </div>
+      <!-- E 右侧按钮 -->
     </div>
   </div>
 </template>
@@ -35,7 +38,6 @@ export default {
   props: {
     planner: {
       type: Object,
-      required: true,
       default: () => {
         return {
           id: '7862495547640840192',
@@ -65,34 +67,24 @@ export default {
   },
   data() {
     return {
-      isFixed: true,
-      // 默认屏幕高度
-      docHeight: 0, // 一开始的屏幕高度
-      showHeight: 0, // 实时屏幕高度
-      userAgent: '',
-      isInputEle: false,
+      // @--组件是否显示
+      isShow: true,
+      userAgent: '', // 当前机型的系统
+
+      // @--安卓机判断组件是否显示的参数
+      docHeight: 0, // 页面初始的屏幕高度
+      showHeight: 0, // 实时屏幕高度，<=页面初始高度
+
+      // @--IOS机判断组件是否显示的参数
+      isInputEle: false, // 当前点击元素是否是INPUT标签元素
     }
-  },
-  computed: {
-    card() {
-      return {
-        imgSrc:
-          this.planner.imgSrc ||
-          'https://tenant-assets.meiqiausercontent.com/avatars/16984/5uyI/HqRHeYKk3pkWUn04xfOB.jpg',
-        cardName: this.planner.name,
-        cardSign: '金牌规划师',
-        icon: '',
-        round: true,
-        avatarSize: 40,
-      }
-    },
   },
   watch: {
     showHeight() {
       if (this.docHeight > this.showHeight + 120) {
-        this.isFixed = false
+        this.isShow = false
       } else {
-        this.isFixed = true
+        this.isShow = true
       }
     },
   },
@@ -103,33 +95,35 @@ export default {
   },
   mounted() {
     // @-- 监听窗口大小和横竖屏变化
-    const _this = this
-    const windheight = window.innerHeight
-    window.addEventListener(
-      'orientationchange',
-      function () {
-        if (window.orientation === 90) {
-          location.reload()
-        }
-      },
-      false
-    )
-    window.onresize = () => {
-      const docheight = window.innerHeight
-      if (docheight < windheight) {
-        _this.$refs.fixed.style.position = 'relative'
-        _this.$refs.fixed.style.marginTop = '-100px'
-      } else {
-        _this.$refs.fixed.style.position = 'fixed'
-      }
-    }
+    // const _this = this
+    // const windheight = window.innerHeight
+    // window.addEventListener(
+    //   'orientationchange',
+    //   function () {
+    //     if (window.orientation === 90) {
+    //       location.reload()
+    //     }
+    //   },
+    //   false
+    // )
+    // window.onresize = () => {
+    //   const docheight = window.innerHeight
+    //   if (docheight < windheight) {
+    //     _this.$refs.fixed.style.position = 'relative'
+    //     _this.$refs.fixed.style.marginTop = '-100px'
+    //   } else {
+    //     _this.$refs.fixed.style.position = 'fixed'
+    //   }
+    // }
 
-    // @-- 监听是安卓还是IOS
+    // @--Android系统：添加事件监听
     if (this.isAndroidOrIOS() === 'Android') {
       this.docHeight = document.body.clientHeight
       // window.onresize监听页面高度的变化
       window.addEventListener('resize', this.windowResize)
     }
+
+    // @--IOS系统：添加事件监听
     if (this.isAndroidOrIOS() === 'IOS') {
       document.body.addEventListener('focusin', this.hideBottom)
       document.body.addEventListener('focusout', this.showBottom)
@@ -144,10 +138,10 @@ export default {
       })()
     },
     showBottom(event) {
-      if (event.target.tagName === 'INPUT') this.isFixed = true
+      if (event.target.tagName === 'INPUT') this.isShow = true
     },
     hideBottom(event) {
-      if (event.target.tagName === 'INPUT') this.isFixed = false
+      if (event.target.tagName === 'INPUT') this.isShow = false
     },
 
     // @--判断页面所在设备的系统
@@ -176,8 +170,7 @@ export default {
     },
     // 电话咨询
     telConsult() {
-      if (!this.planner.telephone) return
-      window.location.href = `tel:${this.planner.telephone}`
+      window.location.href = `tel:4000962540`
     },
   },
 }
