@@ -17,7 +17,7 @@
         <div class="introduce-box-item-title">
           <div class="introduce-box-item-title-box">
             <p class="introduce_title">{{ item.title }}</p>
-            <img :src="item.titlelable" alt="" />
+            <div class="introduce-tag-img-box">限时优惠</div>
           </div>
           <p class="introduce-box-item-title-desc">{{ item.titleContent }}</p>
         </div>
@@ -29,7 +29,7 @@
             class="introduce-tags-item"
           >
             <img
-              src="https://cdn.shupian.cn/sp-pt/wap/4zncfqtj0u80000.png"
+              src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
               alt=""
             />
             <div class="introduce-tags-item-content">{{ value }}</div>
@@ -202,9 +202,17 @@ export default {
           line-height: 31px;
           margin-right: 15px;
         }
-        > img {
-          width: 88px;
+        .introduce-tag-img-box {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           height: 32px;
+          font-size: 18px;
+          font-weight: 400;
+          color: #ffffff;
+          background: linear-gradient(90deg, #ff7e3b 0%, #ff3433 100%);
+          border-radius: 10px 3px 10px 3px;
+          padding: 0px 9px;
         }
       }
       &-desc {
