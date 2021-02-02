@@ -60,7 +60,7 @@ import Bottom from '@/components/spread/common/FixedBottom'
 import Need from '@/components/spread/agency/Need'
 import dggImCompany from '@/components/spread/DggImCompany'
 import { spreadApi } from '@/api/spread'
-import { dataResult } from '@/assets/spread/agency.js'
+import dataResult from '@/assets/spread/agency.js'
 export default {
   components: {
     Header,
@@ -78,7 +78,7 @@ export default {
   },
   async asyncData({ $axios }) {
     const type = 'extendAccount'
-    const result = dataResult
+    const resultData = dataResult
     try {
       const res = await $axios.get(spreadApi.list, {
         params: { pageCode: type },
@@ -89,11 +89,12 @@ export default {
           result: res,
         }
       } else {
-        return { result }
+        return { result: resultData }
       }
     } catch (error) {
       // 请求出错也要保证页面正常显示
-      return { result }
+      console.log(1111)
+      return { result: resultData }
     }
   },
   data() {
@@ -109,7 +110,10 @@ export default {
         'https://cdn.shupian.cn/sp-pt/wap/images/g9qto371i600000.jpg',
         'https://cdn.shupian.cn/sp-pt/wap/images/3nw97vec94s0000.jpg',
       ],
-      nums: null,
+      nums: {
+        totalNum: 640116,
+        todayNum: 123,
+      },
       planner: {
         id: '7887200447257313280',
         name: '李劲',
