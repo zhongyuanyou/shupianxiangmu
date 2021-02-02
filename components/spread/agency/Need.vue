@@ -7,14 +7,17 @@
           v-md-map
           v-md:webClick
           :data-name="`${needlist[index]}`"
+          :style="{ backgroundImage: 'url(' + item.bgimage + ')' }"
           href="javascript:;"
           @click="
             () => {
               $parent.openIM(item.url)
             }
           "
-          ><img :src="item.img" alt=""
-        /></a>
+        >
+          <span>{{ item.title }}</span>
+          <span>{{ item.subtitle }}</span></a
+        >
       </li>
     </ul>
     <ConsultTel
@@ -49,21 +52,28 @@ export default {
       ProductList: [
         {
           code: 1,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/4sydiz0knhg0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/4je0tke40qo0000.jpg',
           url: '/spread/companyRegister',
+          title: '工商注册',
+          subtitle: '专家护航，注册无忧',
         },
         {
           code: 2,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6q2l9tmcb7g0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/bbgyc5pc5140000.jpg',
           url: '/spread/tax',
+          title: '税务筹划',
+          subtitle: '落地园区多，税筹效果好',
         },
         {
           code: 3,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/4gzzwko5f9g0000.jpg',
+          bgimage: 'https://cdn.shupian.cn/sp-pt/wap/images/c62qcfb0z5s000.jpg',
           url: '',
+          title: '其他工商服务',
+          subtitle: '一站式服务，省时高效',
         },
       ],
-      url: '',
     }
   },
   created() {},
@@ -104,9 +114,36 @@ export default {
       background: #f8f8f8;
       border: 1px solid rgba(205, 205, 205, 0.3);
       border-radius: 8px;
+      width: 215px;
+      height: 163px;
+      border-radius: 8px;
       > a {
-        > img {
-          width: 100%;
+        width: 100%;
+        height: 100%;
+        display: block;
+        background-repeat: no-repeat;
+        background-position: 0px 0px;
+        background-size: 100% 100%;
+        border-radius: 8px;
+        padding: 32px 0 0 24px;
+        > span:first-child {
+          display: block;
+          font-size: 28px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+        }
+        > span:last-child {
+          margin-top: -5px;
+          font-size: 22px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #555555;
+          line-height: 32px;
+          display: block;
+          margin-top: 19px;
+          white-space: pre-wrap;
         }
       }
     }
