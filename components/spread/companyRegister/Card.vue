@@ -37,7 +37,6 @@
             v-md:webClick
             data-form_name="工商注册表单_手机号"
             data-form_type="咨询表单"
-            type="tel"
             :border="false"
             maxlength="20"
             label="公司名称"

@@ -50,7 +50,6 @@
               label="公司名称"
               :maxlength="5"
               :formatter="companyTest"
-              :readonly="isOverlay"
               placeholder="3-5个"
             />
             <!-- e公司名称 -->
