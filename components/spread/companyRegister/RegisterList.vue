@@ -20,21 +20,34 @@
           data-even_name="在线咨询"
           data-im_type="售前"
           data-name="工商注册_服务介绍_在线咨询"
-          class="list-count"
         >
-          <div class="list-count_item">
-            <span>{{ listCounts.operating.actualViews }}</span>
-            <div>在线咨询</div>
+          <div class="list-title">
+            <span class="list-title_name">
+              <!-- <img
+                src="https://cdn.shupian.cn/sp-pt/wap/images/312ntaxb9au0000.png"
+                alt=""
+              /> -->
+              <i class="img"></i>
+              <span></span>
+            </span>
+            <span class="list-title_icon"></span>
           </div>
-          <div class="list-count_line"></div>
-          <div class="list-count_item">
-            <span>{{ listCounts.operating.defaultSales }}</span>
-            <div>累计成交</div>
-          </div>
-          <div class="list-count_line"></div>
-          <div class="list-count_item">
-            <span>{{ listCounts.operating.actualSales }}</span>
-            <div>成功案例</div>
+          <div class="list-label"></div>
+          <div class="list-count">
+            <div class="list-count_item">
+              <span>{{ listCounts.operating.actualViews }}</span>
+              <div>在线咨询</div>
+            </div>
+            <div class="list-count_line"></div>
+            <div class="list-count_item">
+              <span>{{ listCounts.operating.defaultSales }}</span>
+              <div>累计成交</div>
+            </div>
+            <div class="list-count_line"></div>
+            <div class="list-count_item">
+              <span>{{ listCounts.operating.actualSales }}</span>
+              <div>成功案例</div>
+            </div>
           </div>
         </a>
         <div class="list-advisory">
@@ -151,10 +164,34 @@ export default {
       border: 1px solid rgba(205, 205, 205, 0.3);
       border-radius: 8px;
       margin-bottom: 25px;
+      // 标题部分
+      .list-title {
+        position: relative;
+        width: 100%;
+        height: 93px;
+        opacity: 0.8;
+        border-radius: 7px 7px 0px 0px;
+        border: 1px solid red;
+        .img {
+          position: absolute;
+          display: inline-block;
+          top: 0px;
+          right: 0px;
+          width: 64px;
+          height: 72px;
+        }
+      }
+      // 标签部分
+      .list-label {
+        width: 100%;
+        height: 90px;
+        border: 1px solid green;
+      }
+      // 列表框中间部分
       .list-count {
         display: flex;
         justify-content: space-between;
-        padding: 206px 82px 30px;
+        padding: 22px 82px 30px;
         position: relative;
         .list-count_item {
           font-size: 34px;
@@ -181,6 +218,7 @@ export default {
           background: #f4f4f4;
         }
       }
+      // 列表框底部
       .list-advisory {
         display: flex;
         justify-content: space-between;

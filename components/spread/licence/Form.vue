@@ -437,9 +437,10 @@ export default {
   }
 }
 /deep/ .sp-field__label {
-  width: 85px;
+  width: 95px;
   font-size: 28px;
   color: #1a1a1a;
+  margin-right: 7px;
 }
 /deep/ .sp-field__control {
   margin-left: 5px;

@@ -2,17 +2,26 @@
   <div class="you-need">
     <Title title="你可能还需办理" />
     <ul class="need-content">
-      <li v-for="(item, i) of needData" :key="i" class="need-content-item">
-        <nuxt-link
+      <li
+        v-for="(item, i) of needData"
+        :key="i"
+        class="need-content-item"
+        @click="jumpLink(item.url)"
+      >
+        <a
           v-md-map
           v-md:webClick
           data-type="售前"
           :data-name="item.mdName"
-          :to="item.url"
+          href="javascript:;"
           class="a-clear"
         >
           <img :src="item.background" alt="" />
-        </nuxt-link>
+          <div class="need-content-item-box">
+            <div class="need-content-item-box--title">{{ item.title }}</div>
+            <div class="need-content-item-box--desc">{{ item.desc }}</div>
+          </div>
+        </a>
       </li>
     </ul>
     <div class="need-tel">
@@ -36,37 +45,54 @@ export default {
     return {
       needData: [
         {
-          background: 'https://cdn.shupian.cn/sp-pt/wap/3le2fgutr1q0000.png',
+          background: 'https://cdn.shupian.cn/sp-pt/wap/a7b98fnqs0c0000.png',
           url: '/spread/system',
           mdName: '工商注销_还需要办理_体系认证',
+          title: '体系认证',
+          desc: '快速办理ISO认证',
         },
         {
-          background: 'https://cdn.shupian.cn/sp-pt/wap/dpsgk5q0c5c0000.png',
+          background: 'https://cdn.shupian.cn/sp-pt/wap/87vztpsbuzk0000.png',
           url: '/spread/licence',
           mdName: '工商注销_还需要办理_许可证办理',
+          title: '许可证办理',
+          desc: '各大热门许可证',
         },
         {
-          background: 'https://cdn.shupian.cn/sp-pt/wap/3z1ra7t3h4u0000.png',
+          background: 'https://cdn.shupian.cn/sp-pt/wap/lcr5190g8k0000.png',
           url: '/spread/tax',
           mdName: '工商注销_还需要办理_财务税筹',
+          title: '财务税筹',
+          desc: '各大服务包，随心选择',
         },
         {
-          background: 'https://cdn.shupian.cn/sp-pt/wap/2elyy3kkyg74000.png',
+          background: 'https://cdn.shupian.cn/sp-pt/wap/dtjfez55sj40000.png',
           url: '/spread/internetQualification',
           mdName: '工商注销_还需要办理_互联网资质',
+          title: '互联网资质',
+          desc: '专业团队，快捷无忧',
         },
         {
-          background: 'https://cdn.shupian.cn/sp-pt/wap/dkjzwaiiokg0000.png',
+          background: 'https://cdn.shupian.cn/sp-pt/wap/2nnjq5x4vig0000.png',
           url: '/spread/agency',
           mdName: '工商注销_还需要办理_代理记账',
+          title: '代理记账',
+          desc: '灵活制定节税方案',
         },
         {
-          background: 'https://cdn.shupian.cn/sp-pt/wap/7yz1bmsxurk0000.png',
+          background: 'https://cdn.shupian.cn/sp-pt/wap/dq4jr4w4v2o0000.png',
           url: '/spread/bankService',
           mdName: '工商注销_还需要办理_银行服务',
+          title: '银行服务',
+          desc: '各大银行业务一站式解决',
         },
       ],
     }
+  },
+  methods: {
+    jumpLink(url) {
+      this.$router.push(url)
+    },
   },
 }
 </script>
@@ -80,14 +106,38 @@ export default {
   width: 100%;
   justify-content: space-between;
   &-item {
+    position: relative;
     width: 215px;
     height: 153px;
-    // border: 1px solid rgba(205, 205, 205, 0.5);
+    border: 1px solid rgba(205, 205, 205, 0.5);
     border-radius: 8px;
     margin-bottom: 12px;
+    overflow: hidden;
     img {
       width: 215px;
       height: 153px;
+    }
+    &-box {
+      position: absolute;
+      width: 215px;
+      height: 153px;
+      left: 0;
+      top: 0;
+      padding: 32px 45px 32px 24px;
+      overflow: hidden;
+      &--title {
+        font-size: 26px;
+        font-weight: bold;
+        color: #222222;
+        line-height: 1;
+        margin-bottom: 12px;
+      }
+      &--desc {
+        font-size: 22px;
+        font-weight: 400;
+        color: #555555;
+        line-height: 1.27;
+      }
     }
   }
 }

@@ -14,9 +14,11 @@
       </template>
     </Header>
     <!-- E 头部分 -->
+
     <!-- S banner轮播 -->
     <BannerSwipe :banner-images="bannerImages" />
     <!-- E banner轮播 -->
+
     <!-- S 表单 -->
     <Card :card-title="'体系认证 费用测算'" />
     <!-- E 表单 -->
@@ -28,12 +30,15 @@
       :page-title="'体系认证'"
     />
     <!-- E 列表 -->
+
     <!-- S 侧边导航 -->
     <SidebarNavbar />
     <!-- E 侧边导航 -->
+
     <!-- S 立即咨询 -->
     <ConsultPhone :title="'有疑问？千万企服专家为您免费解答'" />
     <!-- E 立即咨询 -->
+
     <!-- S 认证好处 -->
     <Benefit />
     <!-- E 认证好处 -->
@@ -46,6 +51,7 @@
       ></PlannerSwipe>
     </div>
     <!-- E咨询规划师 -->
+
     <!-- S其他服务 -->
     <div class="service">
       <h5>您可能还需要其他服务</h5>
@@ -59,11 +65,16 @@
           :data-name="item.name"
           @click="onService(item.url)"
         >
-          <sp-image :src="item.img"
-        /></a>
+          <div class="serice-cotent">
+            <p>{{ item.title[0] }}</p>
+            <p class="serice-cotent_title">{{ item.title[1] }}</p>
+          </div>
+          <sp-image :src="item.img"></sp-image>
+        </a>
       </div>
     </div>
     <!-- E其他服务 -->
+
     <!-- S免费咨询 -->
     <ConsultTel
       :title="'有疑问？千万企服规划师为您免费解答'"
@@ -74,6 +85,7 @@
     />
     <Chips />
     <!-- S免费咨询 -->
+
     <!-- S底部咨询 -->
     <FixedBottom :planner="planner" :md="fixedMd" md-type="new" />
     <!-- E底部咨询 -->
@@ -258,33 +270,40 @@ export default {
       sericeImg: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/fbnkmcxvxqg0000.png',
+          // img: '',
           name: '体系认证_还需要办理_许可证办理',
           url: '/spread/licence',
+          title: ['许可证办理', '快速通道办理'],
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/2dv958uknitc000.png',
           name: '体系认证_还需要办理_工商注销',
           url: '/spread/businessCancellation',
+          title: ['工商注销', '免进黑名单'],
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/72gbx82vsnk0000.png',
           name: '体系认证_还需要办理_工商变更',
           url: '/spread/businessChange',
+          title: ['工商变更', '避免高额罚款'],
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/d4jmafpuy5s0000.png',
           name: '体系认证_还需要办理_互联网资质',
           url: '/spread/internetQualification',
+          title: ['互联网资质', '互联网企业必备'],
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/elaeb6is89s0000.png',
           name: '体系认证_还需要办理_代理记账',
           url: '/spread/agency',
+          title: ['代理记账', '灵活制定节税方案'],
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/2ni7sgi4kii0000.png',
           name: '体系认证_还需要办理_银行服务',
           url: '/spread/bankService',
+          title: ['银行服务', '银行业务一站解决'],
         },
       ],
     }
@@ -482,6 +501,7 @@ export default {
       flex-wrap: wrap;
       justify-content: space-between;
       a {
+        position: relative;
         width: 207px;
         height: 187px !important;
         background: #ffffff;
@@ -489,6 +509,25 @@ export default {
         ::v-deep.sp-image {
           width: 208px;
           height: 188px;
+        }
+        .serice-cotent {
+          position: absolute;
+          z-index: 3;
+          width: 208px;
+          height: 188px;
+          font-size: 28px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+          padding: 24px 0 0 24px;
+          &_title {
+            font-size: 22px;
+            font-weight: 400;
+            color: #999999;
+            line-height: 22px;
+            padding-top: 16px;
+          }
         }
       }
       a:first-child {

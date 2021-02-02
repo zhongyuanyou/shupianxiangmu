@@ -7,25 +7,26 @@
           v-md-map
           v-md:webClick
           :data-name="`${needlist[index]}`"
+          :style="{ backgroundImage: 'url(' + item.bgimage + ')' }"
           href="javascript:;"
           @click="
             () => {
               $parent.openIM(item.url)
             }
           "
-          ><img :src="item.img" alt=""
-        /></a>
+          ><span>{{ item.title }}</span> <span>{{ item.subtitle }}</span></a
+        >
       </li>
     </ul>
     <ConsultTel title="还有疑问？企服专家为您免费解答" tel="4000-962540" />
     <div class="chips">
       <div>
         <div></div>
-        <span>顶呱呱</span>
+        <span>薯片找人</span>
         <div></div>
       </div>
-      <span class="service">顶呱呱企业服务平台，2800万用户的选择</span>
-      <span>顶呱呱科技股份版权所有</span>
+      <span class="service">薯片找人企业服务平台，2800万用户的选择</span>
+      <span>薯片科技版权所有</span>
     </div>
     <div class="positionbox"></div>
   </div>
@@ -47,18 +48,27 @@ export default {
       ProductList: [
         {
           code: 1,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6tk67e93mps0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/9e14rfhects0000.jpg',
           url: '/spread/companyRegister',
+          title: '工商注册',
+          subtitle: '专家护航，注册\n无忧',
         },
         {
           code: 2,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6q2l9tmcb7g0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/16a0p4muwfb4000.jpg',
           url: '/spread/tax',
+          title: '财务税筹',
+          subtitle: '节税降负好帮手',
         },
         {
           code: 3,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/aqftfdwnwz40000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/9yypweni8kc0000.jpg',
           url: '',
+          title: '其他服务',
+          subtitle: '一站式服务，省\n时高效',
         },
       ],
     }
@@ -100,9 +110,35 @@ export default {
       flex-basis: 32%;
       background: #f8f8f8;
       border-radius: 8px;
+      width: 215px;
+      height: 164px;
+      border-radius: 8px;
       > a {
-        > img {
-          width: 100%;
+        height: 100%;
+        width: 100%;
+        display: block;
+        background-repeat: no-repeat;
+        background-position: 0px 0px;
+        background-size: 100% 100%;
+        border-radius: 8px;
+        padding: 32px 0 0 24px;
+        > span:first-child {
+          display: block;
+          font-size: 28px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+        }
+        > span:last-child {
+          font-size: 22px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #555555;
+          line-height: 30px;
+          display: block;
+          margin-top: 19px;
+          white-space: pre-wrap;
         }
       }
     }

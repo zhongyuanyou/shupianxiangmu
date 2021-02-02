@@ -53,7 +53,7 @@ import Need from '@/components/spread/bankService/MayNeed'
 import Bottom from '@/components/spread/common/FixedBottom'
 import dggImCompany from '@/components/spread/DggImCompany'
 import { spreadApi } from '@/api/spread'
-import { dataResult } from '@/assets/spread/bankService.js'
+import dataResult from '@/assets/spread/bankService.js'
 export default {
   components: {
     Header,

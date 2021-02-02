@@ -83,6 +83,11 @@
           :data-name="`${item.name}`"
           @click="onService(item.url, index)"
         >
+          <div class="serice-cotent">
+            <p>工商注销</p>
+            <p class="serice-cotent_title">灵活制定</p>
+            <p class="serice-cotent_title">节税方案</p>
+          </div>
           <sp-image :src="item.img"
         /></a>
       </div>
@@ -197,14 +202,17 @@ export default {
       // 其他服务
       sericeImg: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/f67zabgy4w00000.png',
+          // img: 'https://cdn.shupian.cn/sp-pt/wap/f67zabgy4w00000.png',
+          img: '',
           name: '工商注册_你可能还需要其他服务_税务筹划',
           url: '/spread/tax',
+          title: ['税务筹划', '各大服务包', '随心选择'],
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/7mdee1enz8s0000.png',
           name: '工商注册_你可能还需要其他服务_代理记账',
           url: '/spread/agency',
+          title: ['代理记账', '各大服务包', '随心选择'],
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/86kmcgq4i1s0000.png',
@@ -532,6 +540,28 @@ export default {
         ::v-deep.sp-image {
           width: 208px;
           height: 188px;
+        }
+        .serice-cotent {
+          position: absolute;
+          z-index: 3;
+          width: 208px;
+          height: 188px;
+          font-size: 28px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+          padding: 24px 0 0 24px;
+          &_title {
+            font-size: 22px;
+            font-weight: 400;
+            color: #999999;
+            line-height: 22px;
+            padding-top: 16px;
+          }
+          &_title:last-child {
+            padding-top: 8px;
+          }
         }
       }
     }
