@@ -7,10 +7,6 @@
       <div
         v-for="(listCounts, index) of listCount"
         :key="index"
-        :style="{
-          background:
-            'url(' + listCounts.bgImg + ')' + 'top center/100% auto no-repeat',
-        }"
         class="list"
         @click="onMessage('', index, $event)"
       >
@@ -21,14 +17,20 @@
           data-im_type="售前"
           data-name="工商注册_服务介绍_在线咨询"
         >
-          <div class="list-title">
+          <div
+            class="list-title"
+            :style="{
+              background:
+                'url(' +
+                listCounts.bgImg +
+                ')' +
+                'top center/100% auto no-repeat',
+            }"
+          >
             <span class="list-title_name">
-              <!-- <img
-                src="https://cdn.shupian.cn/sp-pt/wap/images/312ntaxb9au0000.png"
-                alt=""
-              /> -->
-              <i class="img"></i>
-              <span></span>
+              <span>有限责任公司</span>
+              <span class="list-title_icon">热门</span>
+              <i class="img">限时特惠</i>
             </span>
             <span class="list-title_icon"></span>
           </div>
@@ -179,6 +181,38 @@ export default {
           right: 0px;
           width: 64px;
           height: 72px;
+          background-image: url(https://cdn.shupian.cn/sp-pt/wap/images/312ntaxb9au0000.png);
+          background-size: 100%;
+          font-size: 20px;
+          font-style: normal;
+          font-weight: bold;
+          color: #ffffff;
+          line-height: 24px;
+          padding: 8px 10px 0 6px;
+          text-align: center;
+        }
+        &_name {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          span {
+            font-size: 32px;
+            font-weight: bold;
+            color: #222222;
+            margin: 0px 0px 0 32px;
+          }
+          .list-title_icon {
+            width: 68px;
+            height: 34px;
+            margin-left: 16px;
+            background: #fe8c29;
+            border-radius: 8px 0px 8px 0px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 34px;
+            text-align: center;
+          }
         }
       }
       // 标签部分

@@ -60,9 +60,11 @@
       />
     </div>
     <!-- E立即咨询 -->
+
     <!-- S注册公司准备工作-平台优势 -->
     <RegisterReady />
     <!-- E注册公司准备工作-平台优势 -->
+
     <!-- S咨询规划师 -->
     <div class="refer">
       <PlannerSwipe
@@ -243,7 +245,7 @@ export default {
       listCount: [
         {
           pric: 4000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/a0761uxgsiw0000.png',
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
           operating: {
@@ -254,7 +256,7 @@ export default {
         },
         {
           pric: 5000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/kbpgoqhkn58000.png',
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
           operating: {
@@ -265,7 +267,7 @@ export default {
         },
         {
           pric: 7000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/v5qbb7umt7k000.png',
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
           operating: {
@@ -276,7 +278,7 @@ export default {
         },
         {
           pric: 7000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2d721lqgmtz4000.png',
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
           operating: {
@@ -287,12 +289,13 @@ export default {
         },
       ],
       imgPlanner: [
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/a0761uxgsiw0000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/kbpgoqhkn58000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/v5qbb7umt7k000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2d721lqgmtz4000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/9odvjxumogs0000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d8yaj7dckgw0000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/a0761uxgsiw0000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/kbpgoqhkn58000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/v5qbb7umt7k000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2d721lqgmtz4000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/9odvjxumogs0000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d8yaj7dckgw0000.png' },
+        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png' },
       ],
       planner: {
         id: '7862495547640840192',
