@@ -1,6 +1,9 @@
 <template>
   <div>
-    <sp-popup v-model="display" :lazy-render="false"
+    <sp-popup
+      v-model="display"
+      :lazy-render="false"
+      @click-overlay="displayNone"
       ><div class="wrapper">
         <div class="wrapper__verify">
           <!--s 手机号弹窗标题 -->
@@ -219,6 +222,12 @@ export default {
           }
         })
       }
+    },
+    displayNone() {
+      const vla = {
+        Dis: false,
+      }
+      this.$emit('DisplayNone', vla)
     },
     // 选中样式
     onStyle(data, value) {
