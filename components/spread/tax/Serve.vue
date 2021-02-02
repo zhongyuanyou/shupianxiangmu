@@ -8,9 +8,29 @@
       v-md:webClick
       :data-name="`税筹服务介绍_${item.productName}_在线咨询`"
       class="serve-card"
-      :style="item.bg"
       @click="openImUrl(i)"
     >
+      <div class="serve-card-bg"></div>
+      <div class="serve-card-text">
+        <p class="serve-card-text-title">增值税筹划</p>
+        <p class="serve-card-text-subtitle">增值税即征即退</p>
+      </div>
+      <div class="serve-card-activity">
+        <p class="serve-card-activity-text">限时活动</p>
+      </div>
+      <div class="serve-card-promise">
+        <div
+          v-for="(item, index) of promise"
+          :key="index"
+          class="serve-card-promise-item"
+        >
+          <img
+            src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
+            alt=""
+          />
+          <p class="serve-card-promise-item-text">{{ item }}</p>
+        </div>
+      </div>
       <div class="serve-card-first">
         <div>
           <div class="serve-card-first-big">{{ item.num1 }}</div>
@@ -104,6 +124,7 @@ export default {
   data() {
     return {
       url: '',
+      promise: ['一对一服务', '开具正规发票', '节税率高'],
     }
   },
   methods: {
@@ -153,16 +174,85 @@ export default {
     line-height: 40px;
   }
   &-card {
+    position: relative;
     width: 670px;
-    height: 472px;
+    // height: 472px;
     background-size: 101% 101%;
     background-position: center;
     background-repeat: no-repeat;
     border: 1px solid rgba(205, 205, 205, 0.3);
     border-radius: 4px;
     margin-bottom: 25px;
+    &-promise {
+      margin-bottom: 64px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-around;
+      &-item {
+        display: flex;
+        align-items: center;
+        > img {
+          width: 26px;
+          height: 26px;
+          margin-right: 18px;
+        }
+        &-text {
+          font-size: 26px;
+          font-weight: 400;
+          color: #555555;
+          // line-height: 52px;
+          line-height: 1;
+        }
+      }
+    }
+    &-activity {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 63px;
+      height: 71px;
+      background: url(https://cdn.shupian.cn/sp-pt/wap/images/312ntaxb9au0000.png)
+        no-repeat 100% 100%;
+      background-size: 100% 100%;
+      &-text {
+        width: 50px;
+        height: 48px;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        color: #ffffff;
+        -webkit-transform: scale(0.84);
+      }
+    }
+    &-text {
+      position: absolute;
+      top: 32px;
+      left: 32px;
+      &-title {
+        font-size: 32px;
+        font-weight: bold;
+        color: #222222;
+        line-height: 1;
+        margin-bottom: 15px;
+      }
+      &-subtitle {
+        font-size: 22px;
+        font-weight: 400;
+        color: #999999;
+        line-height: 1;
+      }
+    }
+    &-bg {
+      background: url(https://cdn.shupian.cn/sp-pt/wap/images/fc9g2cng1dc0000.jpg)
+        no-repeat 100% 100%;
+      background-size: 100% 100%;
+      width: 100%;
+      height: 130px;
+    }
     &-first {
-      height: 351px;
+      // height: 351px;
       padding: 0 0 32px 0;
       display: flex;
       align-items: flex-end;

@@ -139,7 +139,6 @@ export default {
     try {
       this.serviceList(this.resultData)
       this.plannerHandle(this.resultData)
-      console.log(this.resultData)
     } catch (err) {}
   },
   methods: {
@@ -181,8 +180,7 @@ export default {
         const list = item.materialList[0].productDetail
         const serviceObj = {
           title: list.operating.showName,
-          titlelable:
-            'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+          titlelable: 'https://cdn.shupian.cn/sp-pt/wap/fr83o22hz3s0000.png',
           titleContent: list.operating.slogan,
           lowerPrice: list.referencePrice,
           tags: this.lables[subscript],
@@ -221,7 +219,6 @@ export default {
       })
       const hasFalse = dataList.indexOf(false)
       if (hasFalse === -1) {
-        console.log(1111111)
         this.serviceListData = dataList
       }
     },
