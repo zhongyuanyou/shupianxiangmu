@@ -135,7 +135,7 @@ export default {
         this.$appFn.dggSetTitle({ title: '公司注册标准' }, () => {})
       }
     },
-    /** 将异步数据修改成需要的样子 */
+    /** 异步数据修改成需要的样子 */
     plannerHandle(data) {
       if (data.length !== 0) {
         const plannerList = []
@@ -183,7 +183,7 @@ export default {
   width: 100%;
   max-width: @spread-page-width;
   font-family: PingFang SC;
-  padding-bottom: 224px;
+  padding-bottom: 64px;
   background: #fff;
   margin: 0 auto;
   .back_icon {

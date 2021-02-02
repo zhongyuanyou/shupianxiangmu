@@ -139,7 +139,6 @@ export default {
     try {
       this.serviceList(this.resultData)
       this.plannerHandle(this.resultData)
-      console.log(this.resultData)
     } catch (err) {}
   },
   methods: {
@@ -221,7 +220,6 @@ export default {
       })
       const hasFalse = dataList.indexOf(false)
       if (hasFalse === -1) {
-        console.log(1111111)
         this.serviceListData = dataList
       }
     },
