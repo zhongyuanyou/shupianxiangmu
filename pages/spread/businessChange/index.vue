@@ -55,7 +55,7 @@ import Need from '@/components/spread/businessChange/Need'
 import Bottom from '@/components/spread/common/FixedBottom'
 import dggImCompany from '@/components/spread/DggImCompany'
 import { spreadApi } from '@/api/spread'
-import { dataResult } from '@/assets/spread/businessChange.js'
+import dataResult from '@/assets/spread/businessChange.js'
 
 export default {
   components: {
