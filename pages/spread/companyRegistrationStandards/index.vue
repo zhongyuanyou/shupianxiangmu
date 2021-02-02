@@ -183,7 +183,7 @@ export default {
   width: 100%;
   max-width: @spread-page-width;
   font-family: PingFang SC;
-  padding-bottom: 224px;
+  padding-bottom: 64px;
   background: #fff;
   margin: 0 auto;
   .back_icon {

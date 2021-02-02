@@ -191,18 +191,18 @@ export default {
     getServeData() {
       // const length = this.adList[0].sortMaterialList.length
       for (let i = 0; i < 3; i++) {
-        let bgImg
-        if (i === 0) {
-          bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/21cjuvpuz5vk000.jpg)'
-        } else if (i === 1) {
-          bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/3i3g8eyy7q20000.jpg)'
-        } else if (i === 2) {
-          bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/fab76tq8cnk0000.jpg)'
-        }
+        // let bgImg
+        // if (i === 0) {
+        //   bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/21cjuvpuz5vk000.jpg)'
+        // } else if (i === 1) {
+        //   bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/3i3g8eyy7q20000.jpg)'
+        // } else if (i === 2) {
+        //   bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/fab76tq8cnk0000.jpg)'
+        // }
         const obj = {
-          bg: {
-            backgroundImage: bgImg,
-          },
+          // bg: {
+          //   backgroundImage: bgImg,
+          // },
           num1: this.adList[0].sortMaterialList[i].materialList[0].productDetail
             .operating.actualViews,
           num2: this.adList[0].sortMaterialList[i].materialList[0].productDetail
