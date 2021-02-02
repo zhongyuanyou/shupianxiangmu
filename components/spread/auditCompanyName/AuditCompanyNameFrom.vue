@@ -301,11 +301,15 @@ export default {
         if (versions.length <= 13 && !!phoneValue.match(/Quark/)) {
           setTimeout(() => {
             this.isShowCity = true
+            this.isOverlay = false
           }, 600)
         } else {
           this.isShowCity = true
+          this.isOverlay = false
         }
       } else {
+        this.isOverlay = false
+
         this.isShowCity = true
       }
     },
@@ -319,16 +323,22 @@ export default {
         if (versions.length <= 12 && !!phoneValue.match(/Quark/)) {
           setTimeout(() => {
             this.isShow = true
+            this.isOverlay = false
           }, 600)
         } else {
+          this.isOverlay = false
           this.isShow = true
         }
       } else {
+        this.isOverlay = false
         this.isShow = true
       }
     },
     Dis(data) {
-      this.isOverlay = data.Dis
+      console.log(1)
+      this.isOverlay = false
+      // this.isOverlay = data.Dis
+      console.log(this.isOverlay)
       this.cityName = '成都'
       this.cityCode = 'cd'
       this.industry = ''
