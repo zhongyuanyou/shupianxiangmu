@@ -93,7 +93,6 @@ export default {
       }
     } catch (error) {
       // 请求出错也要保证页面正常显示
-      console.log(1111)
       return { result: resultData }
     }
   },
