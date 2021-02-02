@@ -277,8 +277,15 @@ a {
             display: flex;
             align-items: center;
             justify-content: center;
-            .line {
-              line-height: 32px;
+            a {
+              font-size: 0;
+              display: inline-block;
+              height: 60px;
+              line-height: 60px;
+              .line {
+                display: inline-block;
+                line-height: -32px;
+              }
             }
           }
         }
