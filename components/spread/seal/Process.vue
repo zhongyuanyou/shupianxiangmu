@@ -66,7 +66,7 @@ export default {
 
 <style scoped lang="less">
 .seal-process {
-  margin: 23px 40px 31px;
+  margin: 64px 40px 31px;
   &-box {
     padding: 31px 0 0 32px;
     text-align: center;
