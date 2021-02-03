@@ -22,11 +22,12 @@
         >
           <div class="serviceList-content-head-title">
             <span>{{ item.title }}</span>
-            <img
+            <div>限时优惠</div>
+            <!-- <img
               v-show="item.titleLabel !== undefined"
               :src="item.titleLabel"
               alt=""
-            />
+            /> -->
           </div>
           <span>{{ item.titleContent }}</span>
         </div>
@@ -311,7 +312,6 @@ export default {
     margin-bottom: 32px;
     .serviceList-content-head-title {
       display: flex;
-
       > span {
         font-size: 32px;
         font-family: PingFang SC;
@@ -320,11 +320,19 @@ export default {
         line-height: 31px;
         display: block;
       }
-      > img {
-        width: 96px;
+      > div {
         height: 32px;
+        background: #fa5741;
+        border: 1px solid #fa5741;
+        border-radius: 10px 0px 10px 0px;
         margin-left: 15px;
-        margin-top: -3px;
+        padding: 7px 8px 6px 9px;
+        font-size: 20px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #ffffff;
+        line-height: 19px;
+        margin-top: -5px;
       }
     }
     > span {
