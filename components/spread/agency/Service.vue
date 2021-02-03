@@ -249,8 +249,8 @@ export default {
               font-family: PingFang SC;
               font-weight: bold;
               color: #ffffff;
-              line-height: 19px;
-              padding: 7px 9px 6px 9px;
+              line-height: 31px;
+              padding: 0px 9px;
               margin-top: -5px;
             }
           }
