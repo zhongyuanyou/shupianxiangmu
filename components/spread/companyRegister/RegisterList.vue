@@ -5,10 +5,10 @@
       :class="isMore ? 'register-list_max' : 'register-list_max--active'"
     >
       <div
-        v-for="(listCounts, index) of listCount"
-        :key="index"
+        v-for="(listCounts, list) of listCount"
+        :key="list"
         class="list"
-        @click="onMessage('', index, $event)"
+        @click="onMessage('', list, $event)"
       >
         <a
           v-md-map
@@ -28,7 +28,7 @@
             }"
           >
             <span class="list-title_name">
-              <span>有限责任公司</span>
+              <span>{{ listCounts.title }}</span>
               <span class="list-title_icon">热门</span>
               <i class="img">限时特惠</i>
             </span>
@@ -36,28 +36,16 @@
           </div>
           <!-- // -- -->
           <div class="list-label">
-            <div class="list-label-item">
+            <div
+              class="list-label-item"
+              v-for="(labels, label) of listCounts.label"
+              :key="label"
+            >
               <img
                 src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
                 alt=""
               />
-              <div class="list-label-item-content">在线咨询</div>
-            </div>
-
-            <div class="list-label-item">
-              <img
-                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                alt=""
-              />
-              <div class="list-label-item-content">在线咨询</div>
-            </div>
-
-            <div class="list-label-item">
-              <img
-                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                alt=""
-              />
-              <div class="list-label-item-content">在线咨询</div>
+              <div class="list-label-item-content">{{ labels }}</div>
             </div>
           </div>
           <div class="list-count">
@@ -119,7 +107,7 @@
               data-im_type="售前"
               data-name="工商注册_服务介绍_电话"
               type="primary"
-              @click="onPhone(index)"
+              @click="onPhone(list)"
             >
               <my-icon
                 name="notify_ic_tel"
@@ -158,23 +146,23 @@ export default {
     },
   },
   methods: {
-    onMessage(url, index, e) {
+    onMessage(url, list, e) {
       if (e.target.dataset.stop !== 'stop') {
         if (url !== '') {
           window.location.href = url
         } else {
           this.$root.$emit(
             'openIMM',
-            this.listCount[index].id,
-            this.listCount[index].name,
-            this.listCount[index].jobNum,
-            this.listCount[index].imgSrc
+            this.listCount[list].id,
+            this.listCount[list].name,
+            this.listCount[list].jobNum,
+            this.listCount[list].imgSrc
           )
         }
       }
     },
-    onPhone(index) {
-      window.location.href = `tel:${this.listCount[index].telephone}`
+    onPhone(list) {
+      window.location.href = `tel:${this.listCount[list].telephone}`
     },
   },
 }

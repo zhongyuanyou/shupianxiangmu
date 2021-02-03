@@ -86,9 +86,9 @@
           @click="onService(item.url, index)"
         >
           <div class="serice-cotent">
-            <p>工商注销</p>
-            <p class="serice-cotent_title">灵活制定</p>
-            <p class="serice-cotent_title">节税方案</p>
+            <p>{{ item.title[0] }}</p>
+            <p class="serice-cotent_title">{{ item.title[1] }}</p>
+            <p class="serice-cotent_title">{{ item.title[2] }}</p>
           </div>
           <sp-image :src="item.img"
         /></a>
@@ -124,7 +124,6 @@ import {
   SwipeItem,
   Lazyload,
   Image,
-  Sticky,
 } from '@chipspc/vant-dgg'
 import { mapState } from 'vuex'
 import Dialog from '@/components/spread/common/Dialog'
@@ -205,21 +204,24 @@ export default {
       sericeImg: [
         {
           // img: 'https://cdn.shupian.cn/sp-pt/wap/f67zabgy4w00000.png',
-          img: '',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ctlpg6iiio00000.png',
           name: '工商注册_你可能还需要其他服务_税务筹划',
           url: '/spread/tax',
           title: ['税务筹划', '各大服务包', '随心选择'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/7mdee1enz8s0000.png',
+          // img: 'https://cdn.shupian.cn/sp-pt/wap/7mdee1enz8s0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/731gw63toz40000.png',
           name: '工商注册_你可能还需要其他服务_代理记账',
           url: '/spread/agency',
           title: ['代理记账', '各大服务包', '随心选择'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/86kmcgq4i1s0000.png',
+          // img: 'https://cdn.shupian.cn/sp-pt/wap/86kmcgq4i1s0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ece46ht1ha80000.png',
           name: '工商注册_你可能还需要其他服务_其他服务',
           url: '',
+          title: ['其他服务', '一站服务', '省时高效'],
         },
       ],
       // 规划师轮播列表
@@ -245,45 +247,6 @@ export default {
       listCount: [
         {
           pric: 4000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          title: '有限责任公司',
-          label: ['免费刻名', '3天领取执照', '价格透明'],
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-        {
-          pric: 5000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          title: '有限责任公司',
-          label: ['免费刻名', '3天领取执照', '价格透明'],
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-        {
-          pric: 7000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          title: '有限责任公司',
-          label: ['免费刻名', '3天领取执照', '价格透明'],
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-        {
-          pric: 7000,
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
