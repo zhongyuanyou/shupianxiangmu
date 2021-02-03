@@ -45,7 +45,7 @@ export default {
       }
     }
   }
-  /deep/.sp-swipe__indicators {
+  ::v-deep .sp-swipe__indicators {
     bottom: 96px;
   }
 }

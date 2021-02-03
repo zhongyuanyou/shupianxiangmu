@@ -5,10 +5,10 @@
       :class="isMore ? 'register-list_max' : 'register-list_max--active'"
     >
       <div
-        v-for="(listCounts, index) of listCount"
-        :key="index"
+        v-for="(listCounts, list) of listCount"
+        :key="list"
         class="list"
-        @click="onMessage('', index, $event)"
+        @click="onMessage('', list, $event)"
       >
         <a
           v-md-map
@@ -28,7 +28,7 @@
             }"
           >
             <span class="list-title_name">
-              <span>有限责任公司</span>
+              <span>{{ listCounts.title }}</span>
               <span class="list-title_icon">热门</span>
               <i class="img">限时特惠</i>
             </span>
@@ -36,28 +36,18 @@
           </div>
           <!-- // -- -->
           <div class="list-label">
-            <div class="list-label-item">
-              <img
-                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                alt=""
+            <div
+              v-for="(labels, label) of listCounts.label"
+              :key="label"
+              class="list-label-item"
+            >
+              <sp-image
+                width="0.24rem"
+                height="0.24rem"
+                fit="contain"
+                src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
               />
-              <div class="list-label-item-content">在线咨询</div>
-            </div>
-
-            <div class="list-label-item">
-              <img
-                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                alt=""
-              />
-              <div class="list-label-item-content">在线咨询</div>
-            </div>
-
-            <div class="list-label-item">
-              <img
-                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                alt=""
-              />
-              <div class="list-label-item-content">在线咨询</div>
+              <div class="list-label-item-content">{{ labels }}</div>
             </div>
           </div>
           <div class="list-count">
@@ -119,7 +109,7 @@
               data-im_type="售前"
               data-name="工商注册_服务介绍_电话"
               type="primary"
-              @click="onPhone(index)"
+              @click="onPhone(list)"
             >
               <my-icon
                 name="notify_ic_tel"
@@ -158,23 +148,23 @@ export default {
     },
   },
   methods: {
-    onMessage(url, index, e) {
+    onMessage(url, list, e) {
       if (e.target.dataset.stop !== 'stop') {
         if (url !== '') {
           window.location.href = url
         } else {
           this.$root.$emit(
             'openIMM',
-            this.listCount[index].id,
-            this.listCount[index].name,
-            this.listCount[index].jobNum,
-            this.listCount[index].imgSrc
+            this.listCount[list].id,
+            this.listCount[list].name,
+            this.listCount[list].jobNum,
+            this.listCount[list].imgSrc
           )
         }
       }
     },
-    onPhone(index) {
-      window.location.href = `tel:${this.listCount[index].telephone}`
+    onPhone(list) {
+      window.location.href = `tel:${this.listCount[list].telephone}`
     },
   },
 }
@@ -233,8 +223,9 @@ export default {
             font-size: 22px;
             font-weight: bold;
             color: #ffffff;
-            line-height: 34px;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
         }
       }
@@ -254,12 +245,13 @@ export default {
           > img {
             width: 24px;
             height: 24px;
-            margin-right: 13px;
           }
           &-content {
             font-size: 24px;
             font-weight: 400;
+            line-height: 26px;
             color: #555555;
+            margin-left: 13px;
           }
         }
       }
@@ -267,7 +259,7 @@ export default {
       .list-count {
         display: flex;
         justify-content: space-between;
-        padding: 22px 82px 30px 70px;
+        padding: 8px 82px 20px 70px;
         position: relative;
         .list-count_item {
           font-size: 34px;
@@ -332,7 +324,7 @@ export default {
     max-height: 10000px;
   }
   .register-list_max--active {
-    max-height: 1450px;
+    max-height: 1374px;
   }
 }
 </style>

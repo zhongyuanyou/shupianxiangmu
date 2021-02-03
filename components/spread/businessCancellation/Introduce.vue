@@ -21,6 +21,7 @@
           </div>
           <p class="introduce-box-item-title-desc">{{ item.titleContent }}</p>
         </div>
+
         <!-- 标签 -->
         <div class="introduce-tags">
           <div
@@ -28,13 +29,16 @@
             :key="index"
             class="introduce-tags-item"
           >
-            <img
-              src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-              alt=""
-            />
+            <div class="introduce-tags-item-img">
+              <img
+                src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                alt=""
+              />
+            </div>
             <div class="introduce-tags-item-content">{{ value }}</div>
           </div>
         </div>
+
         <!-- 售卖数量 -->
         <div class="introduce-count">
           <div
@@ -48,6 +52,7 @@
             <div class="introduce-count-item-desc">{{ val.content }}</div>
           </div>
         </div>
+
         <!-- 价格、联系人 -->
         <div class="introduce-contact">
           <div class="price">
@@ -206,13 +211,15 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          height: 32px;
-          font-size: 18px;
+          height: 64px;
+          font-size: 36px;
           font-weight: 400;
           color: #ffffff;
           background: linear-gradient(90deg, #ff7e3b 0%, #ff3433 100%);
-          border-radius: 10px 3px 10px 3px;
-          padding: 0px 9px;
+          border-radius: 20px 6px 20px 6px;
+          padding: 0px 18px;
+          transform: scale(0.5);
+          transform-origin: 0 32px;
         }
       }
       &-desc {
@@ -235,14 +242,25 @@ export default {
   &-item {
     display: flex;
     height: 24px;
+    justify-content: flex-start;
     align-items: center;
     margin-right: 39px;
-    > img {
-      width: 24px;
-      height: 24px;
-      margin-right: 13px;
+    &-img {
+      width: 48px;
+      height: 48px;
+      margin-right: -11px;
+      font-size: 0;
+      transform: scale(0.5);
+      transform-origin: 0px 24px;
+      > img {
+        width: 48px;
+        height: 48px;
+      }
     }
     &-content {
+      display: flex;
+      align-items: center;
+      height: 24px;
       font-size: 24px;
       font-weight: 400;
       color: #555555;

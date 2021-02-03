@@ -100,7 +100,7 @@
         </button>
       </div>
       <div class="seal-banner-form-tabs">
-        <div v-for="(item, index) of tabs" :key="index">
+        <div v-for="(item, index) of tabs" :key="index" class="center">
           <i
             :style="{ backgroundImage: 'url(' + tabsBg + ')' }"
             class="seal-banner-form-tabs-i"
@@ -449,6 +449,10 @@ a {
       }
     }
   }
+}
+.center {
+  display: flex;
+  align-items: center;
 }
 ::v-deep .sp-swipe__indicators {
   bottom: 102px;

@@ -20,7 +20,7 @@
       </div>
       <div class="serve-card-promise">
         <div
-          v-for="(item, index) of promise"
+          v-for="(val, index) of promise"
           :key="index"
           class="serve-card-promise-item"
         >
@@ -28,7 +28,7 @@
             src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
             alt=""
           />
-          <p class="serve-card-promise-item-text">{{ item }}</p>
+          <p class="serve-card-promise-item-text">{{ val }}</p>
         </div>
       </div>
       <div class="serve-card-first">
