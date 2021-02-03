@@ -14,7 +14,7 @@
         <ul>
           <li v-for="(item, index) in oneself" :key="index">
             <span>{{ item }}</span>
-            <div class="contentright-dian"><div></div></div>
+            <div class="contentright-dian"></div>
           </li>
           <img
             src="https://cdn.shupian.cn/sp-pt/wap/images/dun26d2e9y80000.png"
@@ -150,18 +150,12 @@ export default {
             white-space: pre-wrap;
           }
           .contentright-dian {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-            > div {
-              width: 12px;
-              height: 12px;
-              background: #cdcdcd;
-              border-radius: 12px;
-            }
+            width: 24px;
+            height: 24px;
+            transform: scale(0.5);
+            background: #cdcdcd;
+            border-radius: 12px;
+            margin-top: -3px;
           }
         }
         > img {
@@ -205,18 +199,12 @@ export default {
             white-space: pre-wrap;
           }
           .contentright-dian {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            > div {
-              width: 12px;
-              height: 12px;
-              background: #92acf9;
-              border-radius: 12px;
-            }
+            width: 24px;
+            height: 24px;
+            transform: scale(0.5);
+            background: #92acf9;
+            border-radius: 12px;
+            margin-top: -3px;
           }
         }
         > img {

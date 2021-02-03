@@ -47,17 +47,21 @@
             <!-- 场所设备 -->
             <div class="handleType_content_detail_box_head_standard">
               <div class="imgbox">
-                <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                  alt=""
-                />
+                <div class="imgbox-img">
+                  <img
+                    src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                    alt=""
+                  />
+                </div>
                 <span>{{ title.operating.standard }}</span>
               </div>
               <div class="imgbox">
-                <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                  alt=""
-                />
+                <div class="imgbox-img">
+                  <img
+                    src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                    alt=""
+                  />
+                </div>
                 <span>{{ title.operating.flow }}</span>
               </div>
             </div>
@@ -257,14 +261,16 @@ export default {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                height: 32px;
-                font-size: 18px;
+                height: 64px;
+                font-size: 36px;
                 font-weight: 400;
                 color: #ffffff;
                 background: linear-gradient(90deg, #ff7e3b 0%, #ff3433 100%);
-                border-radius: 10px 3px 10px 3px;
-                padding: 0px 9px;
+                border-radius: 20px 6px 20px 6px;
+                padding: 0px 18px;
                 margin-left: 9px;
+                transform: scale(0.5);
+                transform-origin: 0 32px;
               }
             }
             > p {
@@ -284,14 +290,23 @@ export default {
               justify-content: space-evenly;
               align-items: center;
               padding: 32px 0 0px 32px;
-              img {
+              &-img {
                 display: block;
-                width: 24px;
-                height: 24px;
-                margin-right: 12px;
+                width: 48px;
+                height: 48px;
+                margin-right: -12px;
+                font-size: 0;
+                transform: scale(0.5);
+                transform-origin: 0 24px;
+                > img {
+                  width: 100%;
+                  height: 100%;
+                }
               }
               span {
-                display: block;
+                display: flex;
+                align-items: center;
+                height: 24px;
                 font-size: 24px;
                 font-family: PingFang SC;
                 font-weight: 400;
