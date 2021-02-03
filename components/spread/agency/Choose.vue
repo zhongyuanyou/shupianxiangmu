@@ -134,12 +134,12 @@ export default {
             line-height: 34px;
             text-align: right;
             margin-right: 12px;
-            margin-top: -6px;
+            margin-top: -4px;
           }
           > img {
-            width: 10px;
-            height: 10px;
-            margin-top: 8px;
+            width: 20px;
+            height: 20px;
+            transform: scale(0.5);
           }
         }
       }
@@ -156,9 +156,9 @@ export default {
           }
           display: flex;
           > img {
-            width: 10px;
-            height: 10px;
-            margin-top: 8px;
+            width: 20px;
+            height: 20px;
+            transform: scale(0.5);
           }
           > span {
             width: 100%;
@@ -169,7 +169,7 @@ export default {
             line-height: 34px;
             display: block;
             margin-left: 13px;
-            margin-top: -6px;
+            margin-top: -4px;
           }
         }
       }
