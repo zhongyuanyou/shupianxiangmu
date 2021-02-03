@@ -411,6 +411,7 @@ export default {
       margin-right: 12px;
     }
     > span {
+      display: block;
       font-size: 24px;
       font-weight: 400;
       color: #555555;

@@ -106,12 +106,10 @@
       <!-- e 按钮 -->
       <div class="bottom-lables">
         <div v-for="(item, index) in lables" :key="index">
-          <div class="img-box">
-            <img
-              src="https://cdn.shupian.cn/sp-pt/wap/images/5q17nyoc9pw0000.png"
-              alt=""
-            />
-          </div>
+          <img
+            src="https://cdn.shupian.cn/sp-pt/wap/images/5q17nyoc9pw0000.png"
+            alt=""
+          />
           <span>{{ item }}</span>
         </div>
       </div>
@@ -478,25 +476,19 @@ export default {
     display: block;
   }
   .bottom-lables {
-    margin: 32px 0;
+    margin: 24px 0;
     display: flex;
     align-items: center;
-    padding: 0 21px 0 18px;
+    padding: 0 21px 0 6px;
     justify-content: space-between;
     > div {
       display: flex;
       align-items: center;
-      .img-box {
-        width: 24px;
-        height: 24px;
-        padding-top: 1px;
-        position: relative;
-        margin-right: 10px;
-        > img {
-          position: absolute;
-          width: 23px;
-          height: 23px;
-        }
+
+      > img {
+        width: 48px;
+        height: 48px;
+        transform: scale(0.5);
       }
       > span {
         display: block;
@@ -504,6 +496,7 @@ export default {
         font-family: PingFang SC;
         font-weight: 400;
         color: #555555;
+        margin-top: -2px;
       }
     }
   }

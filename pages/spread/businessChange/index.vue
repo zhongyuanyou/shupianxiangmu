@@ -93,6 +93,20 @@ export default {
   },
   data() {
     return {
+      labels: [
+        {
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
+          label: '7个工作日',
+        },
+        {
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
+          label: '绿色通道',
+        },
+        {
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
+          label: '一对一全程服务',
+        },
+      ],
       title: '工商变更',
       plannersTitle: {
         title: '咨询规划师',
@@ -270,14 +284,19 @@ export default {
         data.forEach((item, index) => {
           const obj = {
             id: item.materialList[0].productDetail.id,
+            productName: item.materialList[0].productDetail.operating.showName,
+            productDescribe:
+              item.materialList[0].productDetail.operating.productDescribe,
             actualViews:
               item.materialList[0].productDetail.operating.actualViews,
             defaultSales:
               item.materialList[0].productDetail.operating.defaultSales,
             actualSales:
               item.materialList[0].productDetail.operating.actualSales,
+            productLabels: this.labels,
             price: item.materialList[0].productDetail.referencePrice,
-            bgimage: this.serviceBG[index],
+            bgimage:
+              'https://cdn.shupian.cn/sp-pt/wap/images/er1q9gbfbjs0000.jpg',
             planner: this.plannersList[
               `${
                 index < this.plannersList.length

@@ -369,7 +369,7 @@ export default {
     }
   }
   .lable-row-box {
-    padding: 0 32px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     .lable-row-content {
@@ -380,9 +380,9 @@ export default {
       margin-left: 40px;
     }
     .lable-row-content-img {
-      width: 24px;
-      height: 24px;
-      margin-top: -1px;
+      width: 48px;
+      height: 48px;
+      transform: scale(0.5);
       flex-shrink: 0;
     }
     .lable-row-content-msg {
@@ -393,7 +393,8 @@ export default {
       color: #555555;
       line-height: 23px;
       display: block;
-      margin-left: 13px;
+      margin-left: 1px;
+      margin-top: 8px;
     }
   }
   .serviceList-content-total {

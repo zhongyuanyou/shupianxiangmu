@@ -98,6 +98,20 @@ export default {
   },
   data() {
     return {
+      labels: [
+        {
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
+          label: '资深会计',
+        },
+        {
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
+          label: '直连税务系统',
+        },
+        {
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
+          label: '档案严格保密',
+        },
+      ],
       title: '代理记账',
       plannersTitle: {
         title: '咨询规划师',
@@ -246,6 +260,9 @@ export default {
         data.forEach((item, index) => {
           const obj = {
             id: item.materialList[0].productDetail.id,
+            productName: item.materialList[0].productDetail.operating.showName,
+            productDescribe:
+              item.materialList[0].productDetail.operating.productDescribe,
             actualViews:
               item.materialList[0].productDetail.operating.actualViews,
             defaultSales:
@@ -262,6 +279,7 @@ export default {
               }`
             ],
             plannerName: item.materialList[0].productDetail.operating.showName,
+            labels: this.labels,
           }
           fuWuList.push(obj)
         })

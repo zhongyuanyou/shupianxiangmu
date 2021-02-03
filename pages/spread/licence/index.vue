@@ -284,23 +284,23 @@ export default {
   width: @spread-page-width;
   margin: 0 auto;
   font-family: PingFang SC;
-  /deep/.fixed-head {
-    /deep/.my-head {
+  ::v-deep .fixed-head {
+    .my-head {
       width: 750px;
       left: 50%;
       margin-left: -375px;
     }
   }
 }
-/deep/ .sp-bottombar-info__sign {
+::v-deep .sp-bottombar-info__sign {
   display: flex;
   align-items: center;
 }
-/deep/.cousulttel-title[data-v-024b2072] {
+::v-deep .cousulttel-title[data-v-024b2072] {
   margin: 29px 0 31px 0;
   text-align: left;
 }
-/deep/ .back_icon {
+::v-deep .back_icon {
   margin-left: 40px;
 }
 </style>
