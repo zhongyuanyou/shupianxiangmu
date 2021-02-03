@@ -14,6 +14,7 @@
         <my-icon name="nav_ic_back" size="0.40rem" color="#1a1a1a"></my-icon>
       </div>
     </sp-top-nav-bar>
+
     <div class="banner-img">
       <sp-swipe :autoplay="3000" :show-indicators="false">
         <sp-swipe-item v-for="(image, index) in bannerImages" :key="index">
@@ -23,9 +24,14 @@
         </sp-swipe-item>
       </sp-swipe>
     </div>
+
+    <!-- S 表单 -->
     <div class="precontract">
       <Card />
     </div>
+    <!-- E 表单 -->
+
+    <!-- S 列表 -->
     <div class="introduction">
       <h5>服务介绍</h5>
       <RegisterList :list-count="listCount" :is-more="isMore" />
@@ -41,10 +47,13 @@
               :name="isMore ? 'tab_ic_all_s' : 'tab_ic_all_n'"
               size="13px"
               color="#555555"
-            ></my-icon></span
-        ></a>
+            ></my-icon>
+          </span>
+        </a>
       </p>
     </div>
+    <!-- E 列表 -->
+
     <div class="norm">
       <h5>办理标准</h5>
       <Standard />
@@ -325,9 +334,16 @@ export default {
     // listCout列表数据处理
     ListCount(data) {
       const listAll = data.adList[0].sortMaterialList || []
+      const title = [
+        '有限责任公司',
+        '个体注册',
+        '分公司注册',
+        '外资企业注册',
+        '合作企业注册',
+        '股份公司注册',
+      ]
       if (listAll.length !== 0) {
-        const listCount = []
-        listAll.forEach((elem, index) => {
+        const listCount = listAll.map((elem, index) => {
           const valueObj = elem.materialList[0].productDetail
           const obj = {
             pric: valueObj.referencePrice,
@@ -336,7 +352,7 @@ export default {
                 ? index
                 : Math.floor(Math.random() * this.imgPlanner.length)
             ].bgImg,
-            title: '有限责任',
+            title: title[index],
             label: ['免费刻名', '3天领取执照', '价格透明'],
             operating: valueObj.operating,
             id: '7862495547640840192',
@@ -361,7 +377,7 @@ export default {
             obj.telephone = subPlanner.userPhone
             obj.imgSrc = subPlanner.userHeadUrl
           }
-          listCount.push(obj)
+          return obj
         })
         this.listCount = listCount
       }

@@ -269,38 +269,38 @@ export default {
       // 其他服务
       sericeImg: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/fbnkmcxvxqg0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2a9jjyy6esis000.png',
           // img: '',
           name: '体系认证_还需要办理_许可证办理',
           url: '/spread/licence',
           title: ['许可证办理', '快速通道办理'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/2dv958uknitc000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/91z7vr0iihc0000.png',
           name: '体系认证_还需要办理_工商注销',
           url: '/spread/businessCancellation',
           title: ['工商注销', '免进黑名单'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/72gbx82vsnk0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2a9jjyy6esis000.png',
           name: '体系认证_还需要办理_工商变更',
           url: '/spread/businessChange',
           title: ['工商变更', '避免高额罚款'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/d4jmafpuy5s0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cn7slg6km080000.png',
           name: '体系认证_还需要办理_互联网资质',
           url: '/spread/internetQualification',
           title: ['互联网资质', '互联网企业必备'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/elaeb6is89s0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/g8uiqh64iu80000.png',
           name: '体系认证_还需要办理_代理记账',
           url: '/spread/agency',
           title: ['代理记账', '灵活制定节税方案'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/2ni7sgi4kii0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ece46ht1ha80000.png',
           name: '体系认证_还需要办理_银行服务',
           url: '/spread/bankService',
           title: ['银行服务', '银行业务一站解决'],
@@ -525,8 +525,8 @@ export default {
             font-size: 22px;
             font-weight: 400;
             color: #999999;
-            line-height: 22px;
-            padding-top: 16px;
+            line-height: 30px;
+            padding-top: 8px;
           }
         }
       }

@@ -37,13 +37,15 @@
           <!-- // -- -->
           <div class="list-label">
             <div
-              class="list-label-item"
               v-for="(labels, label) of listCounts.label"
               :key="label"
+              class="list-label-item"
             >
-              <img
-                src="https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png"
-                alt=""
+              <sp-image
+                width="0.24rem"
+                height="0.24rem"
+                fit="contain"
+                src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
               />
               <div class="list-label-item-content">{{ labels }}</div>
             </div>
@@ -221,8 +223,9 @@ export default {
             font-size: 22px;
             font-weight: bold;
             color: #ffffff;
-            line-height: 34px;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
         }
       }
@@ -242,12 +245,13 @@ export default {
           > img {
             width: 24px;
             height: 24px;
-            margin-right: 13px;
           }
           &-content {
             font-size: 24px;
             font-weight: 400;
+            line-height: 26px;
             color: #555555;
+            margin-left: 13px;
           }
         }
       }
@@ -255,7 +259,7 @@ export default {
       .list-count {
         display: flex;
         justify-content: space-between;
-        padding: 22px 82px 30px 70px;
+        padding: 8px 82px 20px 70px;
         position: relative;
         .list-count_item {
           font-size: 34px;
@@ -320,7 +324,7 @@ export default {
     max-height: 10000px;
   }
   .register-list_max--active {
-    max-height: 1450px;
+    max-height: 1374px;
   }
 }
 </style>

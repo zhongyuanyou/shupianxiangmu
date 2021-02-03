@@ -21,6 +21,7 @@
           </div>
           <p class="introduce-box-item-title-desc">{{ item.titleContent }}</p>
         </div>
+
         <!-- 标签 -->
         <div class="introduce-tags">
           <div
@@ -35,6 +36,7 @@
             <div class="introduce-tags-item-content">{{ value }}</div>
           </div>
         </div>
+
         <!-- 售卖数量 -->
         <div class="introduce-count">
           <div
@@ -48,6 +50,7 @@
             <div class="introduce-count-item-desc">{{ val.content }}</div>
           </div>
         </div>
+
         <!-- 价格、联系人 -->
         <div class="introduce-contact">
           <div class="price">
