@@ -6,4 +6,6 @@ const spreadApi = {
 const plannerApi = {
   planner: `${CHIPS_WAP_BASE_URL}/nk/spread/v1/planner.do`,
 }
-export { spreadApi, plannerApi }
+// 新推荐规划师
+const recPlaner = `${CHIPS_WAP_BASE_URL}/nk/spread2/v1/recPlanner.do`
+export { spreadApi, plannerApi, recPlaner }
