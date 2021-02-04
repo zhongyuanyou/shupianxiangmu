@@ -1,14 +1,11 @@
 <template>
   <div class="register-list">
-    <div
-      class="register-list_hidden"
-      :class="isMore ? 'register-list_max' : 'register-list_max--active'"
-    >
+    <div class="register-list_hidden">
       <div
         v-for="(listCounts, list) of listCount"
+        v-show="isMore ? true : list < 3"
         :key="list"
         class="list"
-        @click="onMessage('', list, $event)"
       >
         <a
           v-md-map
@@ -16,6 +13,7 @@
           data-even_name="在线咨询"
           data-im_type="售前"
           data-name="工商注册_服务介绍_在线咨询"
+          @click="onMessage(listCounts.url, list, $event)"
         >
           <div
             class="list-title"
@@ -34,7 +32,7 @@
             </span>
             <span class="list-title_icon"> </span>
           </div>
-          <!-- // -- -->
+
           <div class="list-label">
             <div
               v-for="(labels, label) of listCounts.label"
@@ -67,7 +65,7 @@
             </div>
           </div>
         </a>
-        <div class="list-advisory">
+        <div class="list-advisory" @click="onMessage('', list, $event)">
           <span
             v-md-map
             v-md:p_IMClick
@@ -75,6 +73,7 @@
             data-im_type="售前"
             data-name="工商注册_服务介绍_在线咨询"
             class="price"
+            @click="onMessage(listCounts.url, list, $event)"
             ><span>{{ listCounts.pric }}</span
             >元起</span
           >
@@ -96,12 +95,15 @@
               data-even_name="在线咨询"
               data-im_type="售前"
               data-name="工商注册_服务介绍_在线咨询"
-              ><my-icon
+            >
+              <my-icon
                 name="notify_ic_chat"
                 size="20px"
                 color="#4974F5"
-              ></my-icon
-            ></a>
+                data-stop="stop"
+              >
+              </my-icon>
+            </a>
             <a
               v-md-map
               v-md:webClick
@@ -109,6 +111,7 @@
               data-im_type="售前"
               data-name="工商注册_服务介绍_电话"
               type="primary"
+              data-stop="stop"
               @click="onPhone(list)"
             >
               <my-icon
@@ -173,9 +176,6 @@ export default {
 .register-list {
   .register-list_hidden {
     overflow-y: hidden;
-    .list:last-child {
-      margin-bottom: 0px;
-    }
     .list {
       width: 670px;
       border: 1px solid rgba(205, 205, 205, 0.3);
@@ -320,11 +320,11 @@ export default {
     }
   }
   // 选择更多高度
-  .register-list_max {
-    max-height: 10000px;
-  }
-  .register-list_max--active {
-    max-height: 1374px;
-  }
+  // .register-list_max {
+  //   max-height: 10000px;
+  // }
+  // .register-list_max--active {
+  //   max-height: 1374px;
+  // }
 }
 </style>

@@ -16,18 +16,23 @@
       </template>
     </Header>
     <!-- E头部Header -->
+
     <!-- S导航部-金刚区-->
     <NavBar class="nav-btn-margin" :data="dataList" />
     <!-- E导航部-金刚区-->
+
     <!-- S轮播图 -->
     <Banner class="laowu-banner" :data="imageBanner" />
     <!-- E轮播图 -->
+
     <!-- S表单 -->
     <Form class="laowu-form" :data="cardName" />
     <!-- E表单 -->
+
     <!-- S推荐专利 热门行业 专利转让分类-->
     <Advertising :page-planner="pagePlanner" />
     <!-- E推荐专利 热门行业 专利转让分类 -->
+
     <!-- S列表 -->
     <ProductList
       :data="dataNavBar"
@@ -38,9 +43,11 @@
       @swipeChange="swipeChange"
     />
     <!-- E列表 -->
+
     <!-- S底部咨询 -->
     <FooterBottom :planner="pagePlanner" :md="fixedMd" />
     <!-- E底部咨询 -->
+
     <!-- S IM在线咨询-->
     <DggImCompany />
     <!-- E IM在线咨询-->
