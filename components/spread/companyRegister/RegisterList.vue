@@ -65,7 +65,7 @@
             </div>
           </div>
         </a>
-        <div class="list-advisory" @click="onMessage('', list, $event)">
+        <div class="list-advisory">
           <span
             v-md-map
             v-md:p_IMClick
@@ -74,9 +74,9 @@
             data-name="工商注册_服务介绍_在线咨询"
             class="price"
             @click="onMessage(listCounts.url, list, $event)"
-            ><span>{{ listCounts.pric }}</span
-            >元起</span
-          >
+            ><span>{{ listCounts.pric }}</span>
+            元起
+          </span>
           <div class="advisory">
             <sp-image
               v-md-map
@@ -87,7 +87,9 @@
               round
               width="28px"
               height="28px"
+              data-stop="stop"
               :src="listCounts.imgSrc"
+              @click="onMessage('', list, $event)"
             />
             <a
               v-md-map
@@ -95,13 +97,9 @@
               data-even_name="在线咨询"
               data-im_type="售前"
               data-name="工商注册_服务介绍_在线咨询"
+              @click="onMessage('', list, $event)"
             >
-              <my-icon
-                name="notify_ic_chat"
-                size="20px"
-                color="#4974F5"
-                data-stop="stop"
-              >
+              <my-icon name="notify_ic_chat" size="20px" color="#4974F5">
               </my-icon>
             </a>
             <a
@@ -290,11 +288,13 @@ export default {
       .list-advisory {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         border-top: 1px dashed #f4f4f4;
         padding: 24px 32px 24px;
         .price {
           font-size: 24px;
           font-weight: bold;
+          width: 400px;
           color: #ec5330;
           span {
             font-size: 40px;

@@ -138,7 +138,7 @@ import { mapState } from 'vuex'
 import Dialog from '@/components/spread/common/Dialog'
 
 // import { foundApi } from '~/api'
-import { spreadApi } from '@/api/spread'
+import { spreadApi, spread2Api } from '@/api/spread'
 import { dataResult } from '@/assets/spread/companyRegister2'
 
 import Card from '@/components/spread/companyRegister/Card.vue'
@@ -176,7 +176,7 @@ export default {
     const type = 'extendBussineReg'
     const defaultRes = dataResult
     try {
-      const res = await $axios.get(spreadApi.list, {
+      const res = await $axios.get(spread2Api.list, {
         params: {
           pageCode: type,
           locations: 'ad113205',
@@ -362,13 +362,15 @@ export default {
             url:
               'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801',
             // label: ['免费刻名', '3天领取执照', '价格透明'],
-            label: ['免费刻名', '3天领取执照', '价格透明'],
-            // operating: valueObj.operating,
-            operating: {
-              actualViews: 6439,
-              defaultSales: 4932,
-              actualSales: 4930,
-            },
+            label: valueObj.tags.map((items) => {
+              return items.tagName
+            }),
+            operating: valueObj.operating,
+            // operating: {
+            //   actualViews: 6439,
+            //   defaultSales: 4932,
+            //   actualSales: 4930,
+            // },
             id: '7862495547640840192',
             name: '李劲',
             jobNum: '107547',
