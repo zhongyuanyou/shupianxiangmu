@@ -22,6 +22,7 @@
     <!-- S 表单 -->
     <Card :card-title="'体系认证 费用测算'" />
     <!-- E 表单 -->
+
     <!-- S 列表 -->
     <ServiceIntroduced
       class="system-list"
@@ -42,6 +43,7 @@
     <!-- S 认证好处 -->
     <Benefit />
     <!-- E 认证好处 -->
+
     <!-- S咨询规划师 -->
     <div class="refer">
       <PlannerSwipe
@@ -368,6 +370,7 @@ export default {
             defaultSales: titleList.operating.defaultSales,
             actualSales: titleList.operating.actualSales,
             price: titleList.referencePrice,
+            // bgImg: '',
             labelsType: 'row',
             rowLabels: {
               icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
@@ -470,7 +473,8 @@ export default {
   // 列表
   ::v-deep.system-list {
     .serviceList-content {
-      background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png);
+      background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png)
+        no-repeat;
       background-size: 101%;
       background-position-x: -1px;
     }

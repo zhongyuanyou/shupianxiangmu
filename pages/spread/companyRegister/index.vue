@@ -138,7 +138,9 @@ import { mapState } from 'vuex'
 import Dialog from '@/components/spread/common/Dialog'
 
 // import { foundApi } from '~/api'
-import { dataResult } from '@/assets/spread/companyRegister'
+import { spreadApi } from '@/api/spread'
+import { dataResult } from '@/assets/spread/companyRegister2'
+
 import Card from '@/components/spread/companyRegister/Card.vue'
 import RegisterList from '~/components/spread/companyRegister/RegisterList'
 import Standard from '@/components/spread/companyRegister/Standard'
@@ -148,7 +150,6 @@ import PlannerSwipe from '@/components/spread/common/PlannerSwipe'
 import ConsultTel from '@/components/spread/common/ConsultTel'
 import SPDescription from '@/components/spread/common/SPDescription'
 import DggImCompany from '@/components/spread/DggImCompany'
-import { spreadApi } from '@/api/spread'
 export default {
   name: 'Index',
   components: {
@@ -178,16 +179,18 @@ export default {
       const res = await $axios.get(spreadApi.list, {
         params: {
           pageCode: type,
+          locations: 'ad113205',
         },
       })
       if (res.code === 200) {
+        console.log(res)
         return {
           resultData: res,
         }
-      } else {
-        return {
-          resultData: defaultRes,
-        }
+      }
+      console.log('errer')
+      return {
+        resultData: defaultRes,
       }
     } catch (error) {
       console.log('error', error)
@@ -260,6 +263,8 @@ export default {
           imgSrc:
             'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
           title: '有限责任公司',
+          url:
+            'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801',
           label: ['免费刻名', '3天领取执照', '价格透明'],
           operating: {
             actualViews: 3291,
@@ -352,9 +357,18 @@ export default {
                 ? index
                 : Math.floor(Math.random() * this.imgPlanner.length)
             ].bgImg,
-            title: title[index],
+            // title: title[index],
+            title: valueObj.productDescription,
+            url:
+              'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801',
+            // label: ['免费刻名', '3天领取执照', '价格透明'],
             label: ['免费刻名', '3天领取执照', '价格透明'],
-            operating: valueObj.operating,
+            // operating: valueObj.operating,
+            operating: {
+              actualViews: 6439,
+              defaultSales: 4932,
+              actualSales: 4930,
+            },
             id: '7862495547640840192',
             name: '李劲',
             jobNum: '107547',
@@ -508,8 +522,9 @@ export default {
       font-size: 28px;
       font-weight: 400;
       color: #555555;
-      line-height: 44px;
-      padding: 12px 0 0 0;
+      line-height: 26px;
+      position: relative;
+      margin-top: -6px;
       span {
         color: #555555;
       }
