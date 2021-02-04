@@ -105,6 +105,7 @@
         v-md:webClick
         data-type="售前"
         data-name="工商注销业务介绍_更多服务"
+        v-show="serviceList.length > 3"
         class="more"
         @click="showMore"
       >
@@ -133,7 +134,7 @@ export default {
   data() {
     return {
       // 展示数据条数
-      showCount: 2,
+      showCount: 3,
       // 是否展示更多
       isMore: false,
     }
@@ -146,7 +147,7 @@ export default {
     // 展示更多、收起
     showMore() {
       if (this.isMore) {
-        this.showCount = 2
+        this.showCount = 3
         this.isMore = false
       } else {
         this.isMore = true
