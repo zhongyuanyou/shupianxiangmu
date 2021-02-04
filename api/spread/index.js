@@ -6,4 +6,7 @@ const spreadApi = {
 const plannerApi = {
   planner: `${CHIPS_WAP_BASE_URL}/nk/spread/v1/planner.do`,
 }
-export { spreadApi, plannerApi }
+const spread2Api = {
+  list: `${CHIPS_WAP_BASE_URL}/nk/spread2/v1/list.do`,
+}
+export { spreadApi, plannerApi, spread2Api }
