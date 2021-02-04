@@ -10,7 +10,7 @@
         {{ item.userName }}
       </p>
     </div>
-    <dggImCompany></dggImCompany>
+    <!-- <dggImCompany></dggImCompany> -->
   </div>
 </template>
 
@@ -22,7 +22,7 @@ import getUserSign from '~/utils/fingerprint'
 import { getPositonCity } from '@/utils/position'
 export default {
   components: {
-    dggImCompany,
+    // dggImCompany,
     [Button.name]: Button,
   },
   data() {
@@ -34,7 +34,51 @@ export default {
       planners: [],
     }
   },
+  mounted() {
+    // this.getList()
+    this.getUsers()
+  },
   methods: {
+    //  [
+    //           '596130226279193979',
+    //           '758743117435920144',
+    //           '758743976429378676',
+    //           '596130054480496895',
+    //           '596129264206513045',
+    //           '758742979996960615',
+    //           '758743289234609949',
+    //           '596129745242855445',
+    //           '732139814880821858',
+    //           '732139540002914748',
+    //         ]
+    getUsers() {
+      this.$axios
+        .get('https://spmicrouag.shupian.cn/merchant-center-manager/', {
+          params: {
+            mchUserIds: '596130226279193979',
+          },
+          headers: {
+            'x-auth-token': '822297329554427343',
+          },
+        })
+        .then((res) => {
+          console.log('用户信息', res)
+        })
+        .catch((err) => {
+          console.log('用户信息', err)
+        })
+    },
+    getList() {
+      this.$axios.get(
+        'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/spread2/v1/list.do',
+        {
+          params: {
+            pageCode: 'extendBussineHome',
+            locations: 'ad113205',
+          },
+        }
+      )
+    },
     login() {
       this.$axios
         .post(
@@ -68,7 +112,7 @@ export default {
       this.cityData = await getPositonCity()
       console.log('this.cityData', this.cityData)
       this.$axios
-        .get('http://172.16.133.7:7001/service/nk/spread2/v1/recPlanner.do', {
+        .get(recPlaner, {
           params: {
             limit: 10,
             page: 1,
