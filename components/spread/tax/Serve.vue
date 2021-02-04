@@ -12,8 +12,8 @@
     >
       <div class="serve-card-bg"></div>
       <div class="serve-card-text">
-        <p class="serve-card-text-title">增值税筹划</p>
-        <p class="serve-card-text-subtitle">增值税即征即退</p>
+        <p class="serve-card-text-title">{{ item.showName }}</p>
+        <p class="serve-card-text-subtitle">{{ item.slogan }}</p>
       </div>
       <div class="serve-card-activity">
         <p class="serve-card-activity-text">限时活动</p>

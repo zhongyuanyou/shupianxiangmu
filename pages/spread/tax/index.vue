@@ -203,6 +203,10 @@ export default {
           // bg: {
           //   backgroundImage: bgImg,
           // },
+          showName: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.operating.showName,
+          slogan: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.operating.slogan,
           num1: this.adList[0].sortMaterialList[i].materialList[0].productDetail
             .operating.actualViews,
           num2: this.adList[0].sortMaterialList[i].materialList[0].productDetail
