@@ -183,12 +183,12 @@ export default {
         },
       })
       if (res.code === 200) {
-        console.log(res)
+        console.log(res.message)
         return {
           resultData: res,
         }
       }
-      console.log('errer')
+      console.log(res.code)
       return {
         resultData: defaultRes,
       }
@@ -256,23 +256,7 @@ export default {
         telName: '工商注册_咨询规划师_电话',
       },
       // 列表
-      listCount: [
-        {
-          pric: 4000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          title: '有限责任公司',
-          url:
-            'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801',
-          label: ['免费刻名', '3天领取执照', '价格透明'],
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-      ],
+      listCount: [],
       imgPlanner: [
         // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/a0761uxgsiw0000.png' },
         // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/kbpgoqhkn58000.png' },
@@ -359,18 +343,15 @@ export default {
             ].bgImg,
             // title: title[index],
             title: valueObj.productDescription,
-            url:
-              'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801',
-            // label: ['免费刻名', '3天领取执照', '价格透明'],
-            label: valueObj.tags.map((items) => {
-              return items.tagName
-            }),
-            operating: valueObj.operating,
-            // operating: {
-            //   actualViews: 6439,
-            //   defaultSales: 4932,
-            //   actualSales: 4930,
-            // },
+            url: elem.materialList[0].materialLink,
+            serviceTag: [], // 服务标签
+            activityTag: '', // 活动标签
+            salesTag: '', // 销售标签
+            operating: {
+              actualViews: valueObj.operating.actualViews || 6439,
+              defaultSales: valueObj.operating.defaultSales || 4932,
+              actualSales: valueObj.operating.actualSales || 4930,
+            },
             id: '7862495547640840192',
             name: '李劲',
             jobNum: '107547',
@@ -378,6 +359,24 @@ export default {
             imgSrc:
               'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
           }
+          // 判断标签类型
+          if (valueObj.tags.length !== 0) {
+            valueObj.tags.filter((elem) => {
+              if (elem.tagType === 'PRO_SERVICE_TAG') {
+                // 服务标签
+                obj.serviceTag.push(elem.tagName)
+              }
+              if (elem.tagType === 'PRO_ACTIVITY_TAG') {
+                // 活动标签
+                obj.activityTag = elem.tagName
+              }
+              if (elem.tagType === 'PRO_SALES_TAG') {
+                // 销售标签
+                obj.salesTag = elem.tagName
+              }
+            })
+          }
+          // 判断规划师
           if (data.planlerList.length > 0) {
             const subPlanner =
               data.planlerList[

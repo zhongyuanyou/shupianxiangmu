@@ -68,7 +68,7 @@ const dataResult = {
                     {
                       tagType: 'PRO_ACTIVITY_TAG',
                       tagId: '826648681181121418',
-                      tagName: '热门商品',
+                      tagName: '',
                     },
                     {
                       tagType: 'PRO_PROMOTE_TAG',
@@ -153,7 +153,7 @@ const dataResult = {
                     {
                       tagType: 'PRO_SALES_TAG',
                       tagId: '822299356779007022',
-                      tagName: '特价优惠',
+                      tagName: '',
                     },
                   ],
                 },

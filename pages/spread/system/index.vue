@@ -200,38 +200,17 @@ export default {
       serviceList: [
         {
           title: '基本开户',
+          titleLabel: null,
           titleContent: '企事业单位进行日常转账结算和现金收付的主板账户',
           actualViews: '1402',
           defaultSales: '992',
           actualSales: '992',
           price: 600,
-          bgImg: '',
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
           labelsType: 'row',
           rowLabels: {
             icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
             text: ['公司成立3月以上', '有营业执照'],
-          },
-          planner: {
-            id: '7862495547640840192',
-            name: '李劲',
-            jobNum: '107547',
-            telephone: '18402858698',
-            imgSrc:
-              'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          },
-        },
-        {
-          title: '一般户开户',
-          titleContent: '企事业单位进行日常转账结算和现金收付的主板账户',
-          actualViews: '632',
-          defaultSales: '421',
-          actualSales: '416',
-          price: 600,
-          bgImg: '',
-          labelsType: 'row',
-          rowLabels: {
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
-            text: ['有效资质证明', '临时场所清单'],
           },
           planner: {
             id: '7862495547640840192',
@@ -471,22 +450,22 @@ export default {
     left: auto !important;
   }
   // 列表
-  ::v-deep.system-list {
-    .serviceList-content {
-      background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png)
-        no-repeat;
-      background-size: 101%;
-      background-position-x: -1px;
-    }
-    .show-more-btn {
-      border: none;
-      margin: 0 auto;
-      padding: 0px;
-      height: 26px;
-      margin-top: 20px;
-      line-height: 26px;
-    }
-  }
+  // ::v-deep.system-list {
+  //   .serviceList-content {
+  //     background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png)
+  //       no-repeat;
+  //     background-size: 101%;
+  //     background-position-x: -1px;
+  //   }
+  //   .show-more-btn {
+  //     border: none;
+  //     margin: 0 auto;
+  //     padding: 0px;
+  //     height: 26px;
+  //     margin-top: 20px;
+  //     line-height: 26px;
+  //   }
+  // }
   // 其他服务
   .service {
     padding-top: 22px;
