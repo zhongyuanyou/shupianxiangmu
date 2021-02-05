@@ -203,7 +203,8 @@ export default {
           }
           .list {
             display: flex !important;
-            width: 210px;
+            width: 206px;
+            // margin-right: 20px;
             flex-direction: column;
             height: 118px;
             flex-wrap: wrap-reverse;
@@ -216,6 +217,7 @@ export default {
               color: #222222;
               line-height: 73px;
               height: 58px;
+              white-space: nowrap;
             }
             div:last-child {
               line-height: 36px;
