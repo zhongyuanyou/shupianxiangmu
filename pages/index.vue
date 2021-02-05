@@ -2,7 +2,7 @@
   <div class="main">
     <sp-button @click="login">游客登录</sp-button>
     <sp-button @click="chat">im 聊天</sp-button>
-    <sp-button @click="getPlanner">获取规划师</sp-button>
+    <sp-button @click="getUsers">获取规划师</sp-button>
     <p>定位数据:{{ cityData.data.code || '无' }}</p>
     <div>
       规划师数据
@@ -36,7 +36,8 @@ export default {
   },
   mounted() {
     // this.getList()
-    this.getUsers()
+    // this.getUsers()
+    this.getPlanner()
   },
   methods: {
     //  [
@@ -53,14 +54,17 @@ export default {
     //         ]
     getUsers() {
       this.$axios
-        .get('https://spmicrouag.shupian.cn/merchant-center-manager/', {
-          params: {
-            mchUserIds: '596130226279193979',
+        .post(
+          'https://spmicrouag.shupian.cn/merchant-center-manager/yk/merchant/user/v1/get_mch_settled_info_list_two.do',
+          {
+            mchUserIds: ['596130226279193979', '758743117435920144'],
           },
-          headers: {
-            'x-auth-token': '822297329554427343',
-          },
-        })
+          {
+            headers: {
+              'x-auth-token': '840035544732569499',
+            },
+          }
+        )
         .then((res) => {
           console.log('用户信息', res)
         })
@@ -116,16 +120,17 @@ export default {
           params: {
             limit: 10,
             page: 1,
-            area: '120100',
+            area: '510000',
             // this.cityData.code === 200 ? this.cityData.data.code : '120100', // 区域编码
             deviceId, // 设备ID
             level_2_ID: 'FL20201211090003', // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
             // login_name: null, // 规划师ID(选填)
-            productType: 'FL20201116000002', // 产品类型 必须 产品类型	（交易：FL20201116000003，服务：FL20201116000002）写死
-            sceneId: 'app-cpxqye-01', // 场景ID
+            productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型 必须 产品类型	（交易：FL20201116000003，服务：FL20201116000002）写死
+            sceneId: 'app-ghsdgye-01', // 场景ID
             // user_id: this.$cookies.get('userId'), // 用户ID(选填)
             platform: 'app', // 平台（app,m,pc）
-            // productId: this.proDetail.id, // 产品id 非必填
+            // productId: this.proDetail.id, // 产品id 非必填pp"
+            // "productId":"607991482841724751"
           },
         })
         .then((res) => {
