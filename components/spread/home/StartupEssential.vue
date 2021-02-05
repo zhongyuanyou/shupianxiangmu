@@ -15,10 +15,28 @@
           href="javascript:void(0);"
           @click="jumpLink(product.url)"
         >
+          <div class="product-title">
+            {{ product.title }}
+            <img
+              v-if="product.id == 1"
+              class="product-label"
+              src="https://cdn.shupian.cn/sp-pt/wap/images/fy2fjzy9vg80000.png"
+            />
+          </div>
+          <div class="product-desc">{{ product.desc }}</div>
+
           <div v-if="product.id != 5" class="product-price-position">
             <div class="middle-transition">
               <span class="product-price">{{ product.price }}</span>
               <span class="product-price-suffix">元起</span>
+            </div>
+          </div>
+          <div v-if="product.id == 5" class="product-price-position">
+            <div class="middle-transition">
+              <img
+                class="product-label"
+                src="https://cdn.shupian.cn/sp-pt/wap/images/2l84k31ypjs0000.png"
+              />
             </div>
           </div>
         </a>
@@ -69,6 +87,33 @@ export default {
       margin-bottom: 12px;
       position: relative;
 
+      .product-title {
+        width: 100%;
+        margin-top: 22px;
+        padding: 0 10px 0 20px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #222222;
+        line-height: 48px;
+        // 超出省略号
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .product-label {
+        width: 44px;
+        height: 24px;
+      }
+      .product-desc {
+        width: 100%;
+        margin-top: 2px;
+        padding: 0 10px 0 20px;
+        font-size: 20px;
+        font-weight: 400;
+        color: #555555;
+        line-height: 26px;
+      }
+
       .middle-transition {
         display: flex;
         align-items: flex-end;
@@ -76,7 +121,6 @@ export default {
           display: block;
         }
       }
-
       .product-price-position {
         position: absolute;
         left: 20px;
