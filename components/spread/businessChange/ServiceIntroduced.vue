@@ -11,7 +11,7 @@
           v-md:webClick
           data-type="售前"
           :data-name="`变更服务介绍_${item.plannerName}_在线咨询`"
-          @click="plannerIm(item.planner)"
+          @click="openIM(item.detailsUrl, item.planner)"
         >
           <!-- 产品头部名称部分 -->
           <div
@@ -20,7 +20,9 @@
           >
             <div class="product-head-title">
               <span>{{ item.productName }}</span>
-              <div class="product-head-label">限时特惠</div>
+              <div class="product-head-label" v-show="item.salesTag">
+                {{ item.salesTag }}
+              </div>
             </div>
             <span class="product-head-subtitle">{{
               item.productDescribe
@@ -28,9 +30,12 @@
           </div>
           <!-- 产品标签 -->
           <div class="product-label">
-            <div v-for="(label, key) in item.productLabels" :key="key">
-              <img :src="label.icon" alt="" />
-              <span>{{ label.label }}</span>
+            <div v-for="(label, key) in item.label" :key="key" v-show="key < 3">
+              <img
+                src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                alt=""
+              />
+              <span>{{ label }}</span>
             </div>
           </div>
           <div class="total">
@@ -56,14 +61,7 @@
               <span>元起</span>
             </div>
             <div class="contact-btn">
-              <a
-                href="javascript:;"
-                @click="
-                  () => {
-                    $parent.openIM(item.url)
-                  }
-                "
-              >
+              <a href="javascript:;" @click="im(item.planner)">
                 <img :src="item.planner.avatarImg" alt="" />
               </a>
               <a
@@ -71,7 +69,7 @@
                 v-md:p_IMClick
                 data-type="售前"
                 :data-name="`变更服务介绍_${item.plannerName}_在线咨询`"
-                @click="im(item.url)"
+                @click="im(item.planner)"
               >
                 <my-icon
                   name="notify_ic_chat"
@@ -172,6 +170,16 @@ export default {
         this.num = 2
       }
     },
+    // 跳转产品详情
+    openIM(url, planner) {
+      // url不为空跳转详情页
+      if (url !== null) {
+        window.location.href = url
+      } else {
+        // url wei空唤起规划师
+        this.plannerIm(planner)
+      }
+    },
     // 服务列表对应的规划师
     plannerIm(planner) {
       const guiHuaShi = planner
@@ -183,9 +191,9 @@ export default {
         planner.imgSrc || ''
       )
     },
-    im(url) {
+    im(planner) {
+      this.plannerIm(planner)
       event.stopPropagation()
-      this.$parent.openIM(url)
     },
     call(tel) {
       window.location.href = `tel:${tel}`

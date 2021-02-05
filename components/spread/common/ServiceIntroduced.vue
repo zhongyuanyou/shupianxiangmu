@@ -14,7 +14,7 @@
           item.md ? item.md.imMd.name : `${serviceTitle}_${item.title}_在线咨询`
         "
         class="serviceList-content"
-        @click="plannerIm(item.planner)"
+        @click="openIM(item.detailsUrl, item.planner)"
       >
         <div
           class="serviceList-content-head"
@@ -22,30 +22,20 @@
         >
           <div class="serviceList-content-head-title">
             <span>{{ item.title }}</span>
-            <div>限时优惠</div>
+            <div v-show="item.salesTag">{{ item.salesTag }}</div>
           </div>
           <span>{{ item.titleContent }}</span>
         </div>
-        <div v-if="item.labelsType === col" class="lable-box">
-          <span class="lable-title">{{ item.colLabels.title }}</span>
+        <div class="lable-row-box">
           <div
-            v-for="(lable, nums) in item.colLabels.content"
-            :key="nums"
-            class="lable-content"
-          >
-            <img :src="item.colLabels.icon" alt="" />
-            <span>{{ lable }}</span>
-          </div>
-        </div>
-        <div v-else class="lable-row-box">
-          <div
-            v-for="(lable, nums) in item.rowLabels.text"
+            v-for="(lable, nums) in item.label"
             :key="nums"
             class="lable-row-content"
+            v-show="nums < 3"
           >
             <img
               class="lable-row-content-img"
-              :src="item.rowLabels.icon"
+              src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
               alt=""
             />
             <span class="lable-row-content-msg">{{ lable }}</span>
@@ -74,10 +64,10 @@
             <span>元起</span>
           </div>
           <div class="contact-btn">
-            <a href="javascript:;">
+            <a href="javascript:;" @click="im(item.planner)">
               <img :src="item.planner.imgSrc" alt="" />
             </a>
-            <a>
+            <a @click="im(item.planner)">
               <my-icon
                 v-md-map
                 v-md:p_IMClick
@@ -91,7 +81,6 @@
                 color="#4974F5"
                 size="0.4rem"
                 class="icon"
-                @click="im(item.url)"
               >
               </my-icon>
             </a>
@@ -187,16 +176,9 @@ export default {
               imgSrc:
                 'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
             },
-            labelsType: 'col',
-            rowLabels: {
-              title: '所需资料',
-              icon:
-                'https://cdn.shupian.cn/sp-pt/wap/images/f48bh6kpgm80000.png',
-              content: [
-                '由法人代表及直接出具销户报告',
-                '各种未使用的重要空白票据及结算凭证',
-              ],
-            },
+            lable: ['免费核验', '3天拿证', '一对一服务'],
+            salesTag: '特价优惠',
+            detailsUrl: '', // 详情页链接
             md: {
               telMd: {
                 name: '',
@@ -232,9 +214,20 @@ export default {
     }
   },
   methods: {
-    im(url) {
-      this.plannerIm(url)
+    // 唤起规划师
+    im(planner) {
+      this.plannerIm(planner)
       event.stopPropagation()
+    },
+    // 跳转产品详情
+    openIM(url, planner) {
+      // url不为空跳转详情页
+      if (url !== null) {
+        window.location.href = url
+      } else {
+        // url wei空唤起规划师
+        this.plannerIm(planner)
+      }
     },
     // 调起打电话
     call(telephone) {
@@ -263,6 +256,7 @@ export default {
         guiHuaShi.jobNum || '',
         planner.imgSrc || ''
       )
+      event.stopPropagation()
     },
   },
 }
@@ -337,38 +331,6 @@ export default {
       color: #999999;
       line-height: 23px;
       margin-top: 15px;
-    }
-  }
-  .lable-box {
-    width: 100%;
-    padding-left: 32px;
-    .lable-title {
-      font-size: 26px;
-      font-family: PingFang SC;
-      font-weight: 400;
-      color: #222222;
-      line-height: 25px;
-      display: block;
-    }
-    .lable-content {
-      display: flex;
-      align-items: center;
-      margin-top: 24px;
-      > img {
-        margin-top: -1px;
-        width: 24px;
-        height: 24px;
-        margin-right: 17px;
-        flex-shrink: 0;
-      }
-      > span {
-        font-size: 24px;
-        font-family: PingFang SC;
-        font-weight: 400;
-        color: #555555;
-        line-height: 24px;
-        display: block;
-      }
     }
   }
   .lable-row-box {

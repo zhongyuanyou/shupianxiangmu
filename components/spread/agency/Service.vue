@@ -5,12 +5,13 @@
       <ul>
         <li
           v-for="(item, index) in servicelist"
+          v-show="index > num ? false : true"
           :key="index"
           v-md-map
           v-md:webClick
           data-type="售前"
-          :data-name="`代理记账服务介绍_${item.plannerName}_在线咨询`"
-          @click="plannerIm(item.planner)"
+          :data-name="`代理记账服务介绍_${item.productName}_在线咨询`"
+          @click="openIM(item.detailsUrl, item.planner)"
         >
           <!-- 产品头部名称部分 -->
           <div
@@ -19,7 +20,9 @@
           >
             <div class="product-head-title">
               <span>{{ item.productName }}</span>
-              <div class="product-head-label" v-show="true">限时特惠</div>
+              <div v-show="item.salesTag" class="product-head-label">
+                {{ item.salesTag }}
+              </div>
             </div>
             <span class="product-head-subtitle">{{
               item.productDescribe
@@ -27,9 +30,12 @@
           </div>
           <!-- 产品标签 -->
           <div class="product-label">
-            <div v-for="(label, key) in item.labels" :key="key">
-              <img :src="label.icon" alt="" />
-              <span>{{ label.label }}</span>
+            <div v-for="(label, key) in item.label" :key="key" v-show="key < 3">
+              <img
+                src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                alt=""
+              />
+              <span>{{ label }}</span>
             </div>
           </div>
           <!-- 产品情况 -->
@@ -55,16 +61,16 @@
               <span>元起</span>
             </div>
             <div class="contact-btn">
-              <a href="javascript:;">
+              <a href="javascript:;" @click="im(item.planner)">
                 <img :src="item.planner.avatarImg" alt="" />
               </a>
               <a
                 v-md-map
                 v-md:p_IMClick
                 data-type="售前"
-                :data-name="`代理记账服务介绍_${item.plannerName}_在线咨询`"
+                :data-name="`代理记账服务介绍_${item.productName}_在线咨询`"
                 href="javascript:;"
-                @click="im(item.url)"
+                @click="im(item.planner)"
               >
                 <my-icon
                   name="notify_ic_chat"
@@ -78,7 +84,7 @@
                 v-md-map
                 v-md:webClick
                 data-type="售前"
-                :data-name="`代理记账服务介绍_${item.plannerName}_拨打电话`"
+                :data-name="`代理记账服务介绍_${item.productName}_拨打电话`"
                 href="javascript:;"
                 @click="call(item.planner.telephone)"
               >
@@ -151,6 +157,7 @@ export default {
       img: 'https://cdn.shupian.cn/sp-pt/wap/images/dwgqavngcq00000.jpg',
       more: true,
       close: false,
+      num: 2,
     }
   },
   created() {},
@@ -179,10 +186,20 @@ export default {
         planner.imgSrc
       )
     },
+    // 跳转产品详情
+    openIM(url, planner) {
+      // url不为空跳转详情页
+      if (url !== null) {
+        window.location.href = url
+      } else {
+        // url wei空唤起规划师
+        this.plannerIm(planner)
+      }
+    },
     // 阻止冒泡
-    im(url) {
+    im(planner) {
+      this.plannerIm(planner)
       event.stopPropagation()
-      this.$parent.openIM(url)
     },
     // 调起打电话
     call(tel) {
@@ -395,6 +412,30 @@ export default {
           }
         }
       }
+    }
+  }
+  .show-more-btn {
+    width: 278px;
+    height: 64px;
+    background: #ffffff;
+    border: 1px solid #cdcdcd;
+    border-radius: 32px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 19px 0;
+    margin-top: 40px;
+    > span {
+      display: block;
+      font-size: 28px;
+      font-family: PingFang SC;
+      font-weight: 400;
+      color: #999999;
+    }
+    .input-ic-open {
+      margin-left: 12px;
+      margin-top: 2px;
     }
   }
 }
