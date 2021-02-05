@@ -54,7 +54,7 @@ import Planners from '@/components/spread/common/PlannerSwipe'
 import Need from '@/components/spread/businessChange/Need'
 import Bottom from '@/components/spread/common/FixedBottom'
 import dggImCompany from '@/components/spread/DggImCompany'
-import { spreadApi } from '@/api/spread'
+import { spread2Api } from '@/api/spread'
 import dataResult from '@/assets/spread/businessChange.js'
 
 export default {
@@ -73,9 +73,10 @@ export default {
   async asyncData({ $axios }) {
     const result = dataResult
     const type = 'extendBussineChange'
+    const location = 'ad113205'
     try {
-      const res = await $axios.get(spreadApi.list, {
-        params: { pageCode: type },
+      const res = await $axios.get(spread2Api.list, {
+        params: { pageCode: type, locations: location },
       })
       // console.log(`Spread.Api 工商变更 : ${res.code} - ${res.message}`)
       if (res.code === 200) {
@@ -93,20 +94,6 @@ export default {
   },
   data() {
     return {
-      labels: [
-        {
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
-          label: '7个工作日',
-        },
-        {
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
-          label: '绿色通道',
-        },
-        {
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
-          label: '一对一全程服务',
-        },
-      ],
       title: '工商变更',
       plannersTitle: {
         title: '咨询规划师',
@@ -295,6 +282,8 @@ export default {
               item.materialList[0].productDetail.operating.actualSales,
             productLabels: this.labels,
             price: item.materialList[0].productDetail.referencePrice,
+            detailsUrl: item.materialList[0].materialLink,
+            // bgimage: item.materialList[0].materialUrl,
             bgimage:
               'https://cdn.shupian.cn/sp-pt/wap/images/er1q9gbfbjs0000.jpg',
             planner: this.plannersList[
@@ -306,6 +295,15 @@ export default {
             ],
             plannerName: item.materialList[0].productDetail.operating.showName,
           }
+          const serviceLabel = []
+          item.materialList[0].productDetail.tags.forEach((item) => {
+            if (item.tagType === 'PRO_SERVICE_TAG') {
+              serviceLabel.push(item.tagName)
+            } else if (item.tagType === 'PRO_SALES_TAG') {
+              obj.salesTag = item.tagName
+            }
+          })
+          obj.label = serviceLabel
           fuWuList.push(obj)
         })
         this.servicelist = fuWuList

@@ -52,7 +52,7 @@ import Planner from '@/components/spread/common/PlannerSwipe'
 import Need from '@/components/spread/bankService/MayNeed'
 import Bottom from '@/components/spread/common/FixedBottom'
 import dggImCompany from '@/components/spread/DggImCompany'
-import { spreadApi } from '@/api/spread'
+import { spread2Api } from '@/api/spread'
 import dataResult from '@/assets/spread/bankService.js'
 export default {
   components: {
@@ -69,9 +69,10 @@ export default {
   async asyncData({ $axios }) {
     const result = dataResult
     const type = 'extendBankServer'
+    const location = 'ad113205'
     try {
-      const res = await $axios.get(spreadApi.list, {
-        params: { pageCode: type },
+      const res = await $axios.get(spread2Api.list, {
+        params: { pageCode: type, locations: location },
       })
       if (res.code === 200) {
         console.log(res)
@@ -342,6 +343,8 @@ export default {
             actualSales:
               item.materialList[0].productDetail.operating.actualSales,
             price: item.materialList[0].productDetail.referencePrice,
+            detailsUrl: item.materialList[0].materialLink,
+            // bgImg: item.materialList[0].materialUrl,
             bgImg:
               'https://cdn.shupian.cn/sp-pt/wap/images/62j4vzw5ivk0000.png',
             planner: this.plannersList[
@@ -351,16 +354,16 @@ export default {
                   : Math.floor(Math.random() * this.plannersList.length)
               }`
             ],
-            labelsType: 'col',
-            colLabels:
-              vm.lables[
-                `${
-                  index < vm.lables.length
-                    ? index
-                    : Math.floor(Math.random() * vm.lables.length)
-                }`
-              ],
           }
+          const serviceLabel = []
+          item.materialList[0].productDetail.tags.forEach((item) => {
+            if (item.tagType === 'PRO_SERVICE_TAG') {
+              serviceLabel.push(item.tagName)
+            } else if (item.tagType === 'PRO_SALES_TAG') {
+              obj.salesTag = item.tagName
+            }
+          })
+          obj.label = serviceLabel
           serviceList.push(obj)
         })
         this.serviceList = serviceList

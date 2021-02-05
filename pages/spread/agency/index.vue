@@ -59,7 +59,7 @@ import Planners from '@/components/spread/common/PlannerSwipe'
 import Bottom from '@/components/spread/common/FixedBottom'
 import Need from '@/components/spread/agency/Need'
 import dggImCompany from '@/components/spread/DggImCompany'
-import { spreadApi } from '@/api/spread'
+import { spread2Api } from '@/api/spread'
 import dataResult from '@/assets/spread/agency.js'
 export default {
   components: {
@@ -80,15 +80,15 @@ export default {
     const type = 'extendAccount'
     const resultData = dataResult
     try {
-      const res = await $axios.get(spreadApi.list, {
-        params: { pageCode: type },
+      const res = await $axios.get(spread2Api.list, {
+        params: { pageCode: type, locations: 'ad113205' },
       })
       // console.log(`Spread.Api 代理记账: ${res.code} - ${res.message}`)
       if (res.code === 200) {
         return {
           result: res,
         }
-      } else {
+      } else if (res.code === 500) {
         return { result: resultData }
       }
     } catch (error) {
@@ -98,20 +98,6 @@ export default {
   },
   data() {
     return {
-      labels: [
-        {
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
-          label: '资深会计',
-        },
-        {
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
-          label: '直连税务系统',
-        },
-        {
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png',
-          label: '档案严格保密',
-        },
-      ],
       title: '代理记账',
       plannersTitle: {
         title: '咨询规划师',
@@ -256,7 +242,7 @@ export default {
       this.plannerHandleData(this.result.data.planlerList || [])
       if (data.length === 0) {
       } else {
-        const fuWuList = []
+        const servicelist = []
         data.forEach((item, index) => {
           const obj = {
             id: item.materialList[0].productDetail.id,
@@ -270,6 +256,8 @@ export default {
             actualSales:
               item.materialList[0].productDetail.operating.actualSales,
             price: item.materialList[0].productDetail.referencePrice,
+            detailsUrl: item.materialList[0].materialLink,
+            // bgimage: item.materialList[0].materialUrl,
             bgimage: this.serviceBg[index],
             planner: this.plannersList[
               `${
@@ -278,14 +266,22 @@ export default {
                   : Math.floor(Math.random() * this.plannersList.length)
               }`
             ],
-            plannerName: item.materialList[0].productDetail.operating.showName,
-            labels: this.labels,
           }
-          fuWuList.push(obj)
+          const serviceLabel = []
+          item.materialList[0].productDetail.tags.forEach((item) => {
+            if (item.tagType === 'PRO_SERVICE_TAG') {
+              serviceLabel.push(item.tagName)
+            } else if (item.tagType === 'PRO_SALES_TAG') {
+              obj.salesTag = item.tagName
+            }
+          })
+          obj.label = serviceLabel
+          servicelist.push(obj)
         })
-        this.servicelist = fuWuList
+        this.servicelist = servicelist
       }
     },
+
     // 跳转判断
     openIM(url) {
       if (url) {
