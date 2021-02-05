@@ -71,7 +71,7 @@ import dggImCompany from '~/components/spread/DggImCompany'
 import spDescription from '~/components/spread/common/SPDescription'
 import fixedBottom from '~/components/spread/common/FixedBottom'
 import consultTel from '~/components/spread/common/ConsultTel'
-import { spreadApi } from '@/api/spread'
+import { spread2Api } from '@/api/spread'
 import { adList, planlerList } from '~/assets/spread/tax.js'
 
 export default {
@@ -93,10 +93,12 @@ export default {
   // 服务端渲染请求数据
   async asyncData({ $axios }) {
     const type = 'extendTaxPlanning'
+    const location = 'ad113205'
     try {
-      const res = await $axios.get(spreadApi.list, {
+      const res = await $axios.get(spread2Api.list, {
         params: {
           pageCode: type,
+          locations: location,
         },
       })
       if (res.code === 200) {
@@ -189,16 +191,8 @@ export default {
     },
     // 服务模块数据处理
     getServeData() {
-      // const length = this.adList[0].sortMaterialList.length
-      for (let i = 0; i < 3; i++) {
-        // let bgImg
-        // if (i === 0) {
-        //   bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/21cjuvpuz5vk000.jpg)'
-        // } else if (i === 1) {
-        //   bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/3i3g8eyy7q20000.jpg)'
-        // } else if (i === 2) {
-        //   bgImg = 'url(https://cdn.shupian.cn/sp-pt/wap/fab76tq8cnk0000.jpg)'
-        // }
+      const length = this.adList[0].sortMaterialList.length
+      for (let i = 0; i < length; i++) {
         const obj = {
           // bg: {
           //   backgroundImage: bgImg,
@@ -215,13 +209,28 @@ export default {
             .operating.actualSales,
           price: this.adList[0].sortMaterialList[i].materialList[0]
             .productDetail.referencePrice,
-          person: this.planlerList[i % this.planlerList.length].userHeadUrl,
-          id: this.planlerList[i % this.planlerList.length].userCentreId,
-          name: this.planlerList[i % this.planlerList.length].realName,
-          jobNum: this.planlerList[i % this.planlerList.length].loginName,
+          detailsUrl: this.adList[0].sortMaterialList[i].materialList[0]
+            .materialLink,
           productName: '增值税筹划',
-          phone: this.planlerList[i % this.planlerList.length].userPhone,
+          planner: {
+            person: this.planlerList[i % this.planlerList.length].userHeadUrl,
+            id: this.planlerList[i % this.planlerList.length].userCentreId,
+            name: this.planlerList[i % this.planlerList.length].realName,
+            jobNum: this.planlerList[i % this.planlerList.length].loginName,
+            phone: this.planlerList[i % this.planlerList.length].userPhone,
+          },
         }
+        const serviceLabel = []
+        this.adList[0].sortMaterialList[
+          i
+        ].materialList[0].productDetail.tags.forEach((item) => {
+          if (item.tagType === 'PRO_SERVICE_TAG') {
+            serviceLabel.push(item.tagName)
+          } else if (item.tagType === 'PRO_SALES_TAG') {
+            obj.salesTag = item.tagName
+          }
+        })
+        obj.label = serviceLabel
         this.serveData.push(obj)
       }
     },
