@@ -15,6 +15,9 @@
           href="javascript:void(0);"
           @click="jumpLink(product.url)"
         >
+          <div class="product-title">{{ product.title }}</div>
+          <div class="product-desc">{{ product.desc }}</div>
+
           <div class="product-price-position">
             <div class="middle-transition">
               <span class="product-price">{{ product.price }}</span>
@@ -70,6 +73,29 @@ export default {
       margin-bottom: 12px;
       position: relative;
 
+      .product-title {
+        width: 100%;
+        margin-top: 22px;
+        padding: 0 10px 0 20px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #222222;
+        line-height: 48px;
+        // 超出省略号
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .product-desc {
+        width: 100%;
+        margin-top: 2px;
+        padding: 0 10px 0 20px;
+        font-size: 20px;
+        font-weight: 400;
+        color: #555555;
+        line-height: 26px;
+      }
+
       .middle-transition {
         display: flex;
         align-items: flex-end;
@@ -77,7 +103,6 @@ export default {
           display: block;
         }
       }
-
       .product-price-position {
         position: absolute;
         left: 20px;

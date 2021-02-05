@@ -27,16 +27,21 @@
           >
             <span class="list-title_name">
               <span>{{ listCounts.title }}</span>
-              <span class="list-title_icon">热门</span>
-              <i class="img">限时特惠</i>
+              <span v-show="listCounts.salesTag !== ''" class="list-title_icon">
+                {{ listCounts.salesTag }}
+              </span>
+              <i v-show="listCounts.activityTag !== ''" class="img">{{
+                listCounts.activityTag
+              }}</i>
             </span>
             <span class="list-title_icon"> </span>
           </div>
 
           <div class="list-label">
             <div
-              v-for="(labels, label) of listCounts.label"
-              :key="label"
+              v-for="(serviceTags, serviceTag) of listCounts.serviceTag"
+              v-show="serviceTag < 3"
+              :key="serviceTag"
               class="list-label-item"
             >
               <sp-image
@@ -45,7 +50,7 @@
                 fit="contain"
                 src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
               />
-              <div class="list-label-item-content">{{ labels }}</div>
+              <div class="list-label-item-content">{{ serviceTags }}</div>
             </div>
           </div>
           <div class="list-count">
@@ -65,7 +70,7 @@
             </div>
           </div>
         </a>
-        <div class="list-advisory" @click="onMessage('', list, $event)">
+        <div class="list-advisory">
           <span
             v-md-map
             v-md:p_IMClick
@@ -74,9 +79,9 @@
             data-name="工商注册_服务介绍_在线咨询"
             class="price"
             @click="onMessage(listCounts.url, list, $event)"
-            ><span>{{ listCounts.pric }}</span
-            >元起</span
-          >
+            ><span>{{ listCounts.pric }}</span>
+            元起
+          </span>
           <div class="advisory">
             <sp-image
               v-md-map
@@ -87,7 +92,9 @@
               round
               width="28px"
               height="28px"
+              data-stop="stop"
               :src="listCounts.imgSrc"
+              @click="onMessage('', list, $event)"
             />
             <a
               v-md-map
@@ -95,13 +102,9 @@
               data-even_name="在线咨询"
               data-im_type="售前"
               data-name="工商注册_服务介绍_在线咨询"
+              @click="onMessage('', list, $event)"
             >
-              <my-icon
-                name="notify_ic_chat"
-                size="20px"
-                color="#4974F5"
-                data-stop="stop"
-              >
+              <my-icon name="notify_ic_chat" size="20px" color="#4974F5">
               </my-icon>
             </a>
             <a
@@ -140,7 +143,30 @@ export default {
     listCount: {
       type: Array,
       default: () => {
-        return []
+        return [
+          {
+            pric: 4000,
+            bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
+            title: '有限责任公司',
+            url:
+              'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801', // 跳详情
+            serviceTag: [], // 服务标签
+            activityTag: '', // 活动标签
+            salesTag: '', // 销售标签
+            operating: {
+              actualViews: 3291,
+              defaultSales: 1837,
+              actualSales: 1832,
+            },
+            // im
+            id: '7862495547640840192',
+            name: '李劲',
+            jobNum: '107547',
+            telephone: '18402858698',
+            imgSrc:
+              'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+          },
+        ]
       },
     },
     isMore: {
@@ -215,8 +241,8 @@ export default {
             margin: 0px 0px 0 32px;
           }
           .list-title_icon {
-            width: 68px;
             height: 34px;
+            padding: 0 13px;
             margin-left: 16px;
             background: #fe8c29;
             border-radius: 8px 0px 8px 0px;
@@ -290,11 +316,13 @@ export default {
       .list-advisory {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         border-top: 1px dashed #f4f4f4;
         padding: 24px 32px 24px;
         .price {
           font-size: 24px;
           font-weight: bold;
+          width: 400px;
           color: #ec5330;
           span {
             font-size: 40px;
@@ -319,12 +347,5 @@ export default {
       }
     }
   }
-  // 选择更多高度
-  // .register-list_max {
-  //   max-height: 10000px;
-  // }
-  // .register-list_max--active {
-  //   max-height: 1374px;
-  // }
 }
 </style>
