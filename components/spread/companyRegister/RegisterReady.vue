@@ -193,6 +193,7 @@ export default {
           border: 1px solid rgba(205, 205, 205, 0.5);
           border-radius: 8px;
           margin-bottom: 24px;
+          position: relative;
           ::v-deep.sp-image {
             vertical-align: middle;
             margin: 0 0 0 24px;
@@ -206,7 +207,9 @@ export default {
             flex-direction: column;
             height: 118px;
             flex-wrap: wrap-reverse;
-            float: right;
+            position: absolute;
+            top: 0px;
+            right: 0px;
             > div {
               font-size: 30px;
               font-weight: bold;

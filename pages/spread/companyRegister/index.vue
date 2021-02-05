@@ -188,7 +188,7 @@ export default {
           resultData: res,
         }
       }
-      console.log(res.code)
+      console.log('请求失败')
       return {
         resultData: defaultRes,
       }

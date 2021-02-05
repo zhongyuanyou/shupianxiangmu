@@ -139,11 +139,13 @@ export default {
           pageCode: type,
         },
       })
-      if (res.code === 200) {
+      if (res.code === 600) {
+        console.log(res.message)
         return {
           resultData: res.data,
         }
       }
+      console.log('请求失败')
       return {
         resultData: defaultRes,
       }
@@ -212,6 +214,8 @@ export default {
             icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
             text: ['公司成立3月以上', '有营业执照'],
           },
+          lable: ['免费核验', '3天拿证', '一对一服务'],
+          salesTag: '特价优惠',
           planner: {
             id: '7862495547640840192',
             name: '李劲',
@@ -450,22 +454,22 @@ export default {
     left: auto !important;
   }
   // 列表
-  // ::v-deep.system-list {
-  //   .serviceList-content {
-  //     background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png)
-  //       no-repeat;
-  //     background-size: 101%;
-  //     background-position-x: -1px;
-  //   }
-  //   .show-more-btn {
-  //     border: none;
-  //     margin: 0 auto;
-  //     padding: 0px;
-  //     height: 26px;
-  //     margin-top: 20px;
-  //     line-height: 26px;
-  //   }
-  // }
+  ::v-deep.system-list {
+    .serviceList-content {
+      background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png)
+        no-repeat;
+      background-size: 101%;
+      background-position-x: -1px;
+    }
+    .show-more-btn {
+      border: none;
+      margin: 0 auto;
+      padding: 0px;
+      height: 26px;
+      margin-top: 20px;
+      line-height: 26px;
+    }
+  }
   // 其他服务
   .service {
     padding-top: 22px;
