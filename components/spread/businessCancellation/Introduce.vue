@@ -11,13 +11,21 @@
         data-type="售前"
         :data-name="`工商注销业务介绍_${item.title}_在线咨询`"
         class="introduce-box-item"
-        @click="plannerIm(item.planner)"
+        @click="plannerIm(item.planner, item.url)"
       >
         <!-- 标题框 -->
-        <div class="introduce-box-item-title">
+        <div
+          class="introduce-box-item-title"
+          :style="{
+            background:
+              'url(' + item.bgImg + ')' + 'top center/100% auto no-repeat',
+          }"
+        >
           <div class="introduce-box-item-title-box">
             <p class="introduce_title">{{ item.title }}</p>
-            <div class="introduce-tag-img-box">限时优惠</div>
+            <div v-show="item.activityTag !== ''" class="introduce-tag-img-box">
+              {{ item.activityTag }}
+            </div>
           </div>
           <p class="introduce-box-item-title-desc">{{ item.titleContent }}</p>
         </div>
@@ -25,7 +33,8 @@
         <!-- 标签 -->
         <div class="introduce-tags">
           <div
-            v-for="(value, index) of item.tags"
+            v-show="index < 3"
+            v-for="(value, index) of item.serviceTag"
             :key="index"
             class="introduce-tags-item"
           >
@@ -70,7 +79,7 @@
               data-im_type="售前"
               :data-name="`工商注销业务介绍_${item.title}_在线咨询`"
               href="javascript:;"
-              @click="plannerIm(item.planner)"
+              @click="plannerIm(item.planner, '')"
             >
               <Icon
                 name="notify_ic_chat"
@@ -101,11 +110,11 @@
     <!-- 查看更多 -->
     <a href="javascript:;" class="a-clear">
       <div
+        v-show="serviceList.length > 3"
         v-md-map
         v-md:webClick
         data-type="售前"
         data-name="工商注销业务介绍_更多服务"
-        v-show="serviceList.length > 3"
         class="more"
         @click="showMore"
       >
@@ -127,7 +136,34 @@ export default {
       type: Array,
       requried: true,
       default: () => {
-        return []
+        return [
+          {
+            title: '公司注销',
+            bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+            url: '',
+            // titlelable:
+            //   'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+            serviceTag: ['快至30个工作日', '成功率高，省心省钱'], // 服务标签
+            activityTag: '限时优惠', // 活动标签
+            salesTag: '', // 销售标签
+            titleContent: '当公司不经营时申请注销，终止公司法人资格。',
+            lowerPrice: 2500,
+            // tags: ['快至30个工作日', '成功率高，省心省钱'],
+            number: [
+              { content: '在线咨询', num: 484 },
+              { content: '累计成交', num: 302 },
+              { content: '成功案例', num: 293 },
+            ],
+            planner: {
+              id: 3394,
+              name: '刘琴',
+              jobNum: '2022554',
+              telephone: '13350072314',
+              imgSrc:
+                'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+            },
+          },
+        ]
       },
     },
   },
@@ -160,7 +196,11 @@ export default {
       event.stopPropagation()
     },
     // 调用IM
-    plannerIm(planner) {
+    plannerIm(planner, url) {
+      if (url !== '') {
+        window.location.href = url
+        return false
+      }
       this.$root.$emit(
         'openIMM',
         planner.id,

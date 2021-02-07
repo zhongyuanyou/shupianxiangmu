@@ -60,7 +60,7 @@ import Icon from '~/components/common/myIcon/MyIcon'
 import Chips from '~/components/spread/common/SPDescription'
 import FixedBottom from '~/components/spread/common/FixedBottom'
 
-import { spreadApi } from '~/api/spread'
+import { spread2Api } from '~/api/spread'
 
 export default {
   components: {
@@ -81,12 +81,18 @@ export default {
   async asyncData({ $axios }) {
     const type = 'extendBussineWithdraw'
     try {
-      const res = await $axios.get(spreadApi.list, {
-        params: { pageCode: type },
+      const res = await $axios.get(spread2Api.list, {
+        params: {
+          pageCode: type,
+          locations: 'ad113205',
+        },
       })
+      // 待
       if (res.code === 200) {
+        console.log('请求成功')
         return { resultData: res.data }
       }
+      console.log('请求错误')
       return { resultData: null }
     } catch (error) {
       return { resultData: null }
@@ -178,12 +184,19 @@ export default {
             : Math.floor(Math.random() * this.lables.length)
         }`
         const list = item.materialList[0].productDetail
+        console.log(list, 646546)
         const serviceObj = {
           title: list.operating.showName,
-          titlelable: 'https://cdn.shupian.cn/sp-pt/wap/fr83o22hz3s0000.png',
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+          url: item.materialList[0].materialLink,
+          // titlelable: 'https://cdn.shupian.cn/sp-pt/wap/fr83o22hz3s0000.png',
+          // titlelable: '限时优惠',
+          serviceTag: [], // 服务标签
+          activityTag: '', // 活动标签
+          salesTag: '', // 销售标签
           titleContent: list.operating.slogan,
           lowerPrice: list.referencePrice,
-          tags: this.lables[subscript],
+          // tags: this.lables[subscript],
           number: [
             { content: '在线咨询', num: list.operating.actualViews },
             { content: '累计成交', num: list.operating.defaultSales },
@@ -197,6 +210,26 @@ export default {
             imgSrc:
               'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.gw_defult/xdy-xcx/my/trueAndFalse/gw_defult.png',
           },
+        }
+        // 判断标签类型
+        // console.log(list, 646546)
+        if (list.tags.length !== 0) {
+          console.log(1111)
+          list.tags.filter((item) => {
+            if (item.tagType === 'PRO_SERVICE_TAG') {
+              // 服务标签
+              serviceObj.serviceTag.push(item.tagName)
+            }
+            if (item.tagType === 'PRO_ACTIVITY_TAG') {
+              // 活动标签
+              serviceObj.activityTag = item.tagName
+              console.log(item.tagName)
+            }
+            if (item.tagType === 'PRO_SALES_TAG') {
+              // 销售标签
+              serviceObj.salesTag = item.tagName
+            }
+          })
         }
         if (data.planlerList.length > 0) {
           const subPlanner =
