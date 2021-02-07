@@ -222,8 +222,20 @@ export default {
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: '代理记账' }, () => {})
     }
+    this.getList()
   },
   methods: {
+    getList() {
+      this.$axios.get(
+        'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/spread2/v1/list.do',
+        {
+          params: {
+            pageCode: 'extendAccount',
+            locations: 'ad113205',
+          },
+        }
+      )
+    },
     back() {
       // 返回上一页
       if (this.isInApp) {

@@ -2,7 +2,7 @@
   <div class="main">
     <sp-button @click="login">游客登录</sp-button>
     <sp-button @click="chat">im 聊天</sp-button>
-    <sp-button @click="getUsers">获取规划师</sp-button>
+    <sp-button @click="getPlanner">获取规划师</sp-button>
     <p>定位数据:{{ cityData.data.code || '无' }}</p>
     <div>
       规划师数据
@@ -18,8 +18,6 @@
 import { Button } from '@chipspc/vant-dgg'
 import dggImCompany from '@/components/spread/imNew'
 import { recPlaner } from '@/api/spread/'
-import getUserSign from '~/utils/fingerprint'
-import { getPositonCity } from '@/utils/position'
 export default {
   components: {
     // dggImCompany,
@@ -40,18 +38,6 @@ export default {
     this.getPlanner()
   },
   methods: {
-    //  [
-    //           '596130226279193979',
-    //           '758743117435920144',
-    //           '758743976429378676',
-    //           '596130054480496895',
-    //           '596129264206513045',
-    //           '758742979996960615',
-    //           '758743289234609949',
-    //           '596129745242855445',
-    //           '732139814880821858',
-    //           '732139540002914748',
-    //         ]
     getUsers() {
       this.$axios
         .post(
@@ -109,19 +95,20 @@ export default {
       // return Math.ceil(timeStamp + Math.random() * 1e12).toString(16)
     },
     async getPlanner() {
+      this.cityData = await this.$getPositonCity()
+      console.log('this.cityData', this.cityData)
       // 获取用户唯一标识
-      let deviceId = await getUserSign()
+      let deviceId = await this.$getFinger()
+      console.log('deviceId', deviceId)
       deviceId = '0022ef1a-f685-469a-93a8-5409892207a2'
       // console.log('deviceId', deviceId)
-      this.cityData = await getPositonCity()
-      console.log('this.cityData', this.cityData)
       this.$axios
         .get(recPlaner, {
           params: {
             limit: 10,
             page: 1,
-            area: '510000',
-            // this.cityData.code === 200 ? this.cityData.data.code : '120100', // 区域编码
+            area:
+              this.cityData.code === 200 ? this.cityData.data.code : '510000', // 区域编码
             deviceId, // 设备ID
             level_2_ID: 'FL20201211090003', // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
             // login_name: null, // 规划师ID(选填)
