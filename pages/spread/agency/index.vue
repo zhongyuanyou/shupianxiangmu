@@ -61,6 +61,9 @@ import Need from '@/components/spread/agency/Need'
 import dggImCompany from '@/components/spread/DggImCompany'
 import { spread2Api } from '@/api/spread'
 import dataResult from '@/assets/spread/agency.js'
+import { recPlaner } from '@/api/spread/'
+import getUserSign from '~/utils/fingerprint'
+import { getPositonCity } from '@/utils/position'
 export default {
   components: {
     Header,
@@ -98,6 +101,7 @@ export default {
   },
   data() {
     return {
+      plannerData: [],
       title: '代理记账',
       plannersTitle: {
         title: '咨询规划师',
@@ -157,7 +161,7 @@ export default {
           price: '1500',
           bgimage:
             'https://cdn.shupian.cn/sp-pt/wap/images/g9qto371i600000.jpg',
-          planner: '',
+          planner: [],
           plannerName: '',
         },
         {
@@ -168,7 +172,7 @@ export default {
           price: '6988',
           bgimage:
             'https://cdn.shupian.cn/sp-pt/wap/images/3nw97vec94s0000.jpg',
-          planner: '',
+          planner: [],
           plannerName: '',
         },
       ],
@@ -211,30 +215,49 @@ export default {
     }),
   },
   created() {
-    this.productDetail(this.result.data.adList[0].sortMaterialList)
-    this.nums = this.result.data.nums
-    if (this.result.data.planlerList !== 0) {
-      this.plannerHandleData(this.result.data.planlerList || [])
-    }
+    // await this.getPlanner()
+    // this.productDetail(this.result.data.adList[0].sortMaterialList)
+    // this.nums = this.result.data.nums
   },
   mounted() {
     // 设置嵌入app时头部title
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: '代理记账' }, () => {})
     }
-    this.getList()
+    this.getPlanner()
+    this.nums = this.result.data.nums
   },
   methods: {
-    getList() {
-      this.$axios.get(
-        'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/spread2/v1/list.do',
-        {
+    async getPlanner() {
+      // 获取用户唯一标识
+      const deviceId = await getUserSign()
+      this.cityData = await getPositonCity()
+      this.$axios
+        .get(recPlaner, {
           params: {
-            pageCode: 'extendAccount',
-            locations: 'ad113205',
+            limit: 10,
+            page: 1,
+            area: this.cityData.code === 200 ? this.cityData.code : '120100', // 区域编码
+            deviceId, // 设备ID
+            level_2_ID: 'FL20201224136034', // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
+            // login_name: null, // 规划师ID(选填)
+            productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型 必须
+            sceneId: 'app-cpxqye-01', // 场景ID
+            // user_id: this.$cookies.get('userId'), // 用户ID(选填)
+            platform: 'app', // 平台（app,m,pc）
+            // productId: this.proDetail.id, // 产品id 非必填
           },
-        }
-      )
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.plannerData = res.data.records
+            this.plannerHandleData(this.plannerData)
+            this.productDetail(this.result.data.adList[0].sortMaterialList)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     back() {
       // 返回上一页
@@ -251,11 +274,16 @@ export default {
     },
     // 商品数据处理
     productDetail(data) {
-      this.plannerHandleData(this.result.data.planlerList || [])
       if (data.length === 0) {
       } else {
         const servicelist = []
         data.forEach((item, index) => {
+          const a = this.plannersList
+          console.log(a)
+          const index1 =
+            index < this.plannersList.length
+              ? index
+              : Math.floor(Math.random() * this.plannersList.length)
           const obj = {
             id: item.materialList[0].productDetail.id,
             productName: item.materialList[0].productDetail.operating.showName,
@@ -269,15 +297,8 @@ export default {
               item.materialList[0].productDetail.operating.actualSales,
             price: item.materialList[0].productDetail.referencePrice,
             detailsUrl: item.materialList[0].materialLink,
-            // bgimage: item.materialList[0].materialUrl,
-            bgimage: this.serviceBg[index],
-            planner: this.plannersList[
-              `${
-                index < this.plannersList.length
-                  ? index
-                  : Math.floor(Math.random() * this.plannersList.length)
-              }`
-            ],
+            bgimage: item.materialList[0].materialUrl,
+            planner: this.plannersList[index1],
           }
           const serviceLabel = []
           item.materialList[0].productDetail.tags.forEach((item) => {
@@ -316,21 +337,27 @@ export default {
         const guiHuaShiList = []
         data.forEach((item) => {
           const obj = {
-            id: item.userCentreId,
-            avatarImg: item.userHeadUrl,
-            name: item.realName,
-            shuPianFen: 11,
-            serverNum: 250,
+            id: item.userCenterId,
+            avatarImg: item.portrait,
+            name: item.userName,
+            shuPianFen: item.point,
+            serverNum: item.serveNum,
             telephone: item.userPhone,
             labels: ['工商注册', '财税咨询', '税务筹划'],
-            jobNum: item.loginName,
-            imgSrc: item.userHeadUrl,
+            jobNum: item.userCenterNo,
+            imgSrc: item.portrait,
+            im: {
+              id: item.userCenterId,
+              name: item.userName,
+              num: item.userCenterNo,
+            },
           }
           guiHuaShiList.push(obj)
         })
         this.plannersList = guiHuaShiList
         // 转站规划师
         this.planner = this.plannersList[0]
+        return this.plannersList
       } else {
         return this.planner
       }

@@ -5,8 +5,8 @@
       <ul>
         <li
           v-for="(item, index) in servicelist"
-          v-show="index > num ? false : true"
           :key="index"
+          v-show="index > num ? false : true"
           v-md-map
           v-md:webClick
           data-type="售前"
@@ -20,7 +20,7 @@
           >
             <div class="product-head-title">
               <span>{{ item.productName }}</span>
-              <div class="product-head-label" v-show="item.salesTag">
+              <div v-show="item.salesTag" class="product-head-label">
                 {{ item.salesTag }}
               </div>
             </div>
@@ -30,7 +30,7 @@
           </div>
           <!-- 产品标签 -->
           <div class="product-label">
-            <div v-for="(label, key) in item.label" :key="key" v-show="key < 3">
+            <div v-for="(label, key) in item.label" v-show="key < 3" :key="key">
               <img
                 src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
                 alt=""

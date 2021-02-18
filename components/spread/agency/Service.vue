@@ -30,7 +30,7 @@
           </div>
           <!-- 产品标签 -->
           <div class="product-label">
-            <div v-for="(label, key) in item.label" :key="key" v-show="key < 3">
+            <div v-for="(label, key) in item.label" v-show="key < 3" :key="key">
               <img
                 src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
                 alt=""
