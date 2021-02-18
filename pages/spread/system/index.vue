@@ -97,7 +97,7 @@
 <script>
 import { Image } from '@chipspc/vant-dgg'
 import { mapState } from 'vuex'
-import { spreadApi } from '@/api/spread'
+import { spread2Api } from '@/api/spread'
 import { dataResult } from '@/assets/spread/system.js'
 
 import Header from '@/components/common/head/header'
@@ -134,12 +134,13 @@ export default {
     const type = 'extendSysAuth'
     const defaultRes = dataResult
     try {
-      const res = await $axios.get(spreadApi.list, {
+      const res = await $axios.get(spread2Api.list, {
         params: {
           pageCode: type,
+          locations: 'ad113205',
         },
       })
-      if (res.code === 600) {
+      if (res.code === 200) {
         console.log(res.message)
         return {
           resultData: res.data,

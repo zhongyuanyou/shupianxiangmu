@@ -138,7 +138,7 @@ import { mapState } from 'vuex'
 import Dialog from '@/components/spread/common/Dialog'
 
 // import { foundApi } from '~/api'
-import { spreadApi, spread2Api } from '@/api/spread'
+import { spreadApi, spread2Api, recPlaner } from '@/api/spread'
 import { dataResult } from '@/assets/spread/companyRegister2'
 
 import Card from '@/components/spread/companyRegister/Card.vue'
@@ -285,6 +285,11 @@ export default {
           type: '售前',
         },
       },
+      // 城市
+      cityData: {
+        code: 500,
+        data: {},
+      },
     }
   },
   computed: {
@@ -310,7 +315,8 @@ export default {
     try {
       if (JSON.stringify(this.resultData.data) !== '{}') {
         this.ListCount(this.resultData.data || [])
-        this.plannerData(this.resultData.data.planlerList || [])
+        // this.plannerData(this.resultData.data.planlerList || [])
+        // this.plannerData(this.resultData.data.planlerList || [])
       }
     } catch (error) {
       console.log(error)
@@ -320,7 +326,46 @@ export default {
     this.$appFn.dggHideNav((res) => {})
   },
   methods: {
-    // listCout列表数据处理
+    // 封装请求规划师
+    async getPlanner(getObj) {
+      this.cityData = await this.$getPositonCity()
+      console.log('this.cityData', this.cityData)
+      // 获取用户唯一标识
+      const deviceId = await this.$getFinger()
+      // deviceId = '0022ef1a-f685-469a-93a8-5409892207a2'
+      console.log('deviceId', deviceId)
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .get(recPlaner, {
+            params: {
+              limit: getObj.limit || 10,
+              page: 1,
+              area:
+                this.cityData.code === 200 ? this.cityData.data.code : '510000', // 区域编码
+              deviceId, // 设备ID
+              level_2_ID: getObj.level_2_ID, // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
+              // login_name: null, // 规划师ID(选填)
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型 必须 产品类型	（交易：FL20201116000003，服务：FL20201116000002）写死
+              sceneId: getObj.sceneId || 'app-ghsdgye-01', // 场景ID
+              // user_id: this.$cookies.get('userId'), // 用户ID(选填)
+              platform: 'app', // 平台（app,m,pc）
+              // productId: this.proDetail.id, // 产品id 非必填pp"
+              // "productId":"607991482841724751"
+              productId: getObj.productId || '',
+            },
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              resolve(res.data.records)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+    },
+
+    // listCout列表和规划师轮播数据处理
     ListCount(data) {
       const listAll = data.adList[0].sortMaterialList || []
       const title = [
@@ -332,99 +377,151 @@ export default {
         '股份公司注册',
       ]
       if (listAll.length !== 0) {
-        const listCount = listAll.map((elem, index) => {
-          const valueObj = elem.materialList[0].productDetail
-          const obj = {
-            pric: valueObj.referencePrice,
-            bgImg: this.imgPlanner[
-              index < this.imgPlanner.length
-                ? index
-                : Math.floor(Math.random() * this.imgPlanner.length)
-            ].bgImg,
-            // title: title[index],
-            title: valueObj.productDescription,
-            url: elem.materialList[0].materialLink,
-            serviceTag: [], // 服务标签
-            activityTag: '', // 活动标签
-            salesTag: '', // 销售标签
-            operating: {
-              actualViews: valueObj.operating.actualViews || 6439,
-              defaultSales: valueObj.operating.defaultSales || 4932,
-              actualSales: valueObj.operating.actualSales || 4930,
-            },
-            id: '7862495547640840192',
-            name: '李劲',
-            jobNum: '107547',
-            telephone: '18402858698',
-            imgSrc:
-              'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          }
-          // 判断标签类型
-          if (valueObj.tags.length !== 0) {
-            valueObj.tags.filter((elem) => {
-              if (elem.tagType === 'PRO_SERVICE_TAG') {
-                // 服务标签
-                obj.serviceTag.push(elem.tagName)
-              }
-              if (elem.tagType === 'PRO_ACTIVITY_TAG') {
-                // 活动标签
-                obj.activityTag = elem.tagName
-              }
-              if (elem.tagType === 'PRO_SALES_TAG') {
-                // 销售标签
-                obj.salesTag = elem.tagName
+        const levelId = listAll[0].materialList[0].productDetail.parentClassCode.split(
+          ','
+        )[1]
+        // 根据id查询钻展规划师
+        const plannerObj = {
+          limit: 3,
+          level_2_ID: levelId,
+          sceneId: 'app-cpxqye-02',
+          productId: data.adList[0].locationId,
+        }
+        this.plannerData(plannerObj)
+
+        // 根据id请求列表轮播规划师并绑定列表
+        const getObj = { level_2_ID: levelId }
+        this.getPlanner(getObj).then((plannersRes) => {
+          // 列表数据
+          const listCount = listAll.map((elem, index) => {
+            const valueObj = elem.materialList[0].productDetail
+            const obj = {
+              pric: valueObj.referencePrice,
+              bgImg: this.imgPlanner[
+                index < this.imgPlanner.length
+                  ? index
+                  : Math.floor(Math.random() * this.imgPlanner.length)
+              ].bgImg,
+              // title: title[index],
+              title: valueObj.productDescription,
+              url: elem.materialList[0].materialLink,
+              serviceTag: [], // 服务标签
+              activityTag: '', // 活动标签
+              salesTag: '', // 销售标签
+              operating: {
+                actualViews: valueObj.operating.actualViews || 6439,
+                defaultSales: valueObj.operating.defaultSales || 4932,
+                actualSales: valueObj.operating.actualSales || 4930,
+              },
+              id: '7862495547640840192',
+              name: '李劲',
+              jobNum: '107547',
+              telephone: '18402858698',
+              imgSrc:
+                'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+            }
+            // 判断标签类型
+            if (valueObj.tags.length !== 0) {
+              valueObj.tags.filter((elem) => {
+                if (elem.tagType === 'PRO_SERVICE_TAG') {
+                  // 服务标签
+                  obj.serviceTag.push(elem.tagName)
+                }
+                if (elem.tagType === 'PRO_ACTIVITY_TAG') {
+                  // 活动标签
+                  obj.activityTag = elem.tagName
+                }
+                if (elem.tagType === 'PRO_SALES_TAG') {
+                  // 销售标签
+                  obj.salesTag = elem.tagName
+                }
+              })
+            }
+            // 列表对应规划师
+            if (plannersRes.length > 0) {
+              const subPlanner =
+                plannersRes[
+                  `${
+                    index < data.planlerList.length
+                      ? index
+                      : Math.floor(Math.random() * data.planlerList.length)
+                  }`
+                ]
+              obj.id = subPlanner.userCentreId
+              obj.name = subPlanner.userName
+              obj.jobNum = subPlanner.userCenterNo
+              obj.telephone = subPlanner.phone
+              obj.imgSrc = subPlanner.portrait
+            }
+
+            //   obj.id = subPlanner.userCentreId
+            //   obj.name = subPlanner.realName
+            //   obj.jobNum = subPlanner.loginName
+            //   obj.telephone = subPlanner.userPhone
+            //   obj.imgSrc = subPlanner.userHeadUrl
+
+            return obj
+          })
+          this.listCount = listCount
+
+          // 规划师轮播列表
+          if (plannersRes.length > 0) {
+            const guiHuaShiList = plannersRes.map((item) => {
+              return {
+                id: item.userCentreId,
+                name: item.userName,
+                jobNum: item.userCenterNo,
+                telephone: item.phone,
+                avatarImg: item.portrait,
+
+                shuPianFen: item.point,
+                serverNum: item.serveNum,
+                labels: ['工商注册', '财税咨询', '税务筹划'],
               }
             })
+            this.guiHuaShiList = guiHuaShiList
           }
-          // 判断规划师
-          if (data.planlerList.length > 0) {
-            const subPlanner =
-              data.planlerList[
-                `${
-                  index < data.planlerList.length
-                    ? index
-                    : Math.floor(Math.random() * data.planlerList.length)
-                }`
-              ]
-            obj.id = subPlanner.userCentreId
-            obj.name = subPlanner.realName
-            obj.jobNum = subPlanner.loginName
-            obj.telephone = subPlanner.userPhone
-            obj.imgSrc = subPlanner.userHeadUrl
-          }
-          return obj
         })
-        this.listCount = listCount
       }
     },
     // 规划师数据
     plannerData(data) {
-      if (data.length !== 0) {
-        this.planner = data[0] && {
-          id: data[0].userCentreId,
-          name: data[0].realName,
-          jobNum: data[0].loginName,
-          telephone: data[0].userPhone,
-          imgSrc: data[0].userHeadUrl,
-        }
-        // 规划师轮播列表
-        const guiHuaShiList = []
-        data.forEach((item) => {
-          const obj = {
-            id: item.userCentreId,
-            avatarImg: item.userHeadUrl,
-            name: item.realName,
-            shuPianFen: 11,
-            serverNum: 250,
-
-            telephone: item.userPhone,
-            labels: ['工商注册', '财税咨询', '税务筹划'],
-            jobNum: item.loginName,
+      this.getPlanner(data).then((res) => {
+        console.log(666666, res)
+        if (res.length > 0) {
+          this.planner = res[0] && {
+            id: res[0].userCentreId,
+            name: res[0].userName,
+            jobNum: res[0].userCenterNo,
+            telephone: res[0].phone,
+            imgSrc: res[0].portrait,
           }
-          guiHuaShiList.push(obj)
-        })
-        this.guiHuaShiList = guiHuaShiList
-      }
+        }
+      })
+      // if (data.length !== 0) {
+      //   this.planner = data[0] && {
+      //     id: data[0].userCentreId,
+      //     name: data[0].realName,
+      //     jobNum: data[0].loginName,
+      //     telephone: data[0].userPhone,
+      //     imgSrc: data[0].userHeadUrl,
+      //   }
+      // // 规划师轮播列表
+      // const guiHuaShiList = data.map((item) => {
+      //   const obj = {
+      //     id: item.userCentreId,
+      //     avatarImg: item.userHeadUrl,
+      //     name: item.realName,
+      //     shuPianFen: 11,
+      //     serverNum: 250,
+      //     telephone: item.userPhone,
+      //     labels: ['工商注册', '财税咨询', '税务筹划'],
+      //     jobNum: item.loginName,
+      //   }
+      //   guiHuaShiList.push(obj)
+      // })
+      // this.guiHuaShiList = guiHuaShiList
+      // }
     },
     onClickLeft() {
       if (this.isInApp) {
