@@ -3,8 +3,8 @@
     <div class="serve-text">税筹服务介绍</div>
     <div
       v-for="(item, i) of serveData"
-      :key="i"
       v-show="i > num ? false : true"
+      :key="i"
       v-md-map
       v-md:webClick
       :data-name="`税筹服务介绍_${item.productName}_在线咨询`"

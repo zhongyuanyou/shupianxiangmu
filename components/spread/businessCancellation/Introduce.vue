@@ -33,8 +33,8 @@
         <!-- 标签 -->
         <div class="introduce-tags">
           <div
-            v-show="index < 3"
             v-for="(value, index) of item.serviceTag"
+            v-show="index < 3"
             :key="index"
             class="introduce-tags-item"
           >
