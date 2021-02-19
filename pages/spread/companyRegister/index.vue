@@ -485,8 +485,8 @@ export default {
       }
     },
     // 规划师数据
-    plannerData(data) {
-      this.getPlanner(data).then((res) => {
+    async plannerData(data) {
+      await this.getPlanner(data).then((res) => {
         console.log(666666, res)
         if (res.length > 0) {
           this.planner = res[0] && {
