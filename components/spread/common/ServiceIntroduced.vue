@@ -29,9 +29,9 @@
         <div class="lable-row-box">
           <div
             v-for="(lable, nums) in item.label"
+            v-show="nums < 3"
             :key="nums"
             class="lable-row-content"
-            v-show="nums < 3"
           >
             <img
               class="lable-row-content-img"

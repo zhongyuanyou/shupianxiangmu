@@ -194,9 +194,6 @@ export default {
       const length = this.adList[0].sortMaterialList.length
       for (let i = 0; i < length; i++) {
         const obj = {
-          // bg: {
-          //   backgroundImage: bgImg,
-          // },
           showName: this.adList[0].sortMaterialList[i].materialList[0]
             .productDetail.operating.showName,
           slogan: this.adList[0].sortMaterialList[i].materialList[0]

@@ -5,8 +5,8 @@
       <ul>
         <li
           v-for="(item, index) in servicelist"
-          :key="index"
           v-show="index > num ? false : true"
+          :key="index"
           v-md-map
           v-md:webClick
           data-type="售前"
