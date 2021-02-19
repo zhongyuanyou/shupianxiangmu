@@ -282,7 +282,6 @@ export default {
     productDetail(data) {
       if (data.length === 0) {
       } else {
-        console.log(data)
         const servicelist = []
         data.forEach((item, index) => {
           const index1 =
