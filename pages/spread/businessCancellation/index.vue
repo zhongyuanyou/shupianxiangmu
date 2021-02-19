@@ -90,7 +90,7 @@ export default {
         },
       })
       // 待改
-      if (res.code === 300) {
+      if (res.code === 200) {
         console.log('请求成功')
         return { resultData: res.data }
       }
