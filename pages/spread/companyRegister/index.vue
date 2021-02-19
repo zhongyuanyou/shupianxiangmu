@@ -406,7 +406,7 @@ export default {
               title: valueObj.productDescription,
               url: elem.materialList[0].materialLink,
               serviceTag: [], // 服务标签
-              activityTag: '', // 活动标签
+              activityTag: '', // 右上角标签
               salesTag: '', // 销售标签
               operating: {
                 actualViews: valueObj.operating.actualViews || 6439,
@@ -428,7 +428,7 @@ export default {
                   obj.serviceTag.push(elem.tagName)
                 }
                 if (elem.tagType === 'PRO_ACTIVITY_TAG') {
-                  // 活动标签
+                  // 右上角标签
                   obj.activityTag = elem.tagName
                 }
                 if (elem.tagType === 'PRO_SALES_TAG') {

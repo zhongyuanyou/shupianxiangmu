@@ -25,6 +25,10 @@
             <div v-show="item.salesTag">{{ item.salesTag }}</div>
           </div>
           <span>{{ item.titleContent }}</span>
+          <!-- 右上角标签 -->
+          <i v-show="item.activityTag && item.activityTag !== ''" class="img">{{
+            item.activityTag
+          }}</i>
         </div>
         <div class="lable-row-box">
           <div
@@ -176,8 +180,9 @@ export default {
               imgSrc:
                 'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
             },
-            lable: ['免费核验', '3天拿证', '一对一服务'],
-            salesTag: '特价优惠',
+            lable: ['免费核验', '3天拿证', '一对一服务'], // 标签
+            salesTag: '特价优惠', // 活动标签
+            activityTag: '热门商品', // 右上角标签
             detailsUrl: '', // 详情页链接
             md: {
               telMd: {
@@ -299,6 +304,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-bottom: 32px;
+    position: relative;
     .serviceList-content-head-title {
       display: flex;
       > span {
@@ -331,6 +337,24 @@ export default {
       color: #999999;
       line-height: 23px;
       margin-top: 15px;
+    }
+    // 右上角标签
+    .img {
+      position: absolute;
+      display: inline-block;
+      top: 0px;
+      right: 0px;
+      width: 64px;
+      height: 72px;
+      background-image: url(https://cdn.shupian.cn/sp-pt/wap/images/312ntaxb9au0000.png);
+      background-size: 100%;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: bold;
+      color: #ffffff;
+      line-height: 24px;
+      padding: 6px 4px 0 6px;
+      text-align: center;
     }
   }
   .lable-row-box {

@@ -46,11 +46,11 @@
 
     <!-- S咨询规划师 -->
     <div class="refer">
-      <plannerSwipe
+      <PlannerSwipe
         :planners-data="plannerSwipe"
         :planners-common="plannersCommon"
         md-type="new"
-      ></plannerSwipe>
+      ></PlannerSwipe>
     </div>
     <!-- E咨询规划师 -->
 
@@ -98,7 +98,7 @@
 import { Image } from '@chipspc/vant-dgg'
 import { mapState } from 'vuex'
 import { spread2Api, recPlaner } from '@/api/spread'
-import { dataResult } from '@/assets/spread/system.js'
+import { dataResult } from '@/assets/spread/system2.js'
 
 import Header from '@/components/common/head/header'
 import BannerSwipe from '@/components/spread/system/BannerSwiper'
@@ -107,7 +107,7 @@ import ServiceIntroduced from '@/components/spread/common/ServiceIntroduced.vue'
 import SidebarNavbar from '@/components/spread/system/SidebarNavbar'
 import ConsultPhone from '@/components/spread/system/ConsultPhone'
 import Benefit from '@/components/spread/system/Benefit'
-import plannerSwipe from '@/components/spread/common/plannerSwipe'
+import PlannerSwipe from '@/components/spread/common/PlannerSwipe'
 import ConsultTel from '@/components/spread/common/ConsultTel'
 import Chips from '@/components/spread/common/SPDescription'
 import FixedBottom from '@/components/spread/common/FixedBottom'
@@ -124,7 +124,7 @@ export default {
     SidebarNavbar,
     ConsultPhone,
     Benefit,
-    plannerSwipe,
+    PlannerSwipe,
     ConsultTel,
     Chips,
     FixedBottom,
@@ -205,20 +205,15 @@ export default {
       serviceList: [
         {
           title: '基本开户',
-          titleLabel: null,
           titleContent: '企事业单位进行日常转账结算和现金收付的主板账户',
-          actualViews: '1402',
-          defaultSales: '992',
-          actualSales: '992',
+          actualViews: '402',
+          defaultSales: '192',
+          actualSales: '193',
           price: 600,
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
-          labelsType: 'row',
-          rowLabels: {
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
-            text: ['公司成立3月以上', '有营业执照'],
-          },
-          lable: ['免费核验', '3天拿证', '一对一服务'],
-          salesTag: '特价优惠',
+          label: ['免费核验', '3天拿证', '一对一服务'], // 标签
+          salesTag: '特价优惠', // 活动标签
+          activityTag: '热门商品', // 右上角标签
           detailsUrl: '', // 详情页链接
           planner: {
             id: '7862495547640840192',
@@ -310,7 +305,7 @@ export default {
     // 处理后台数据
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
-        // this.serverList(this.resultData || [])
+        this.serverList(this.resultData || [])
         // this.plannerData(this.resultData.planlerList || [])
       }
     } catch (error) {
@@ -396,22 +391,19 @@ export default {
                 ? index
                 : Math.floor(Math.random() * this.labels.length)
             }`
-            const titleList = eleme.materialList[0].productDetail
+            const valueObj = eleme.materialList[0].productDetail
             const obj = {
-              title: titleList.operating.showName,
-              titleLabel: 'sfs',
-              titleContent: titleList.operating.slogan,
-
-              actualViews: titleList.operating.actualViews,
-              defaultSales: titleList.operating.defaultSales,
-              actualSales: titleList.operating.actualSales,
-              price: titleList.referencePrice,
-              // bgImg: '',
-              labelsType: 'row',
-              rowLabels: {
-                icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
-                text: this.labels[subscript],
-              },
+              title: valueObj.operating.showName,
+              titleContent: valueObj.operating.slogan,
+              actualViews: valueObj.operating.actualViews,
+              defaultSales: valueObj.operating.defaultSales,
+              actualSales: valueObj.operating.actualSales,
+              price: valueObj.referencePrice,
+              bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
+              label: ['免费核验', '3天拿证', '一对一服务'], // 服务标签
+              salesTag: '特价优惠', // 销售标签
+              activityTag: '热门商品', // 右上角标签
+              detailsUrl: '', // 详情页链接
               planner: {
                 id: '66475',
                 name: '钟霞',
@@ -421,6 +413,24 @@ export default {
                   'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
               },
             }
+            // 判断标签类型
+            if (valueObj.tags.length !== 0) {
+              valueObj.tags.filter((elem) => {
+                if (elem.tagType === 'PRO_SERVICE_TAG') {
+                  // 服务标签
+                  obj.label.push(elem.tagName)
+                }
+                if (elem.tagType === 'PRO_ACTIVITY_TAG') {
+                  // 右上角标签
+                  obj.activityTag = elem.tagName
+                }
+                if (elem.tagType === 'PRO_SALES_TAG') {
+                  // 销售标签
+                  obj.salesTag = elem.tagName
+                }
+              })
+            }
+            // 列表对应规划师
             if (data.planlerList.length > 0) {
               const subPlanner =
                 plannersRes[

@@ -215,10 +215,10 @@ export default {
     /** 规划师数据处理 */
     plannerHandle(data) {
       // 待改
-      const getObj = { level_2_ID: 'ad113205' }
-      this.getPlanner(getObj).then((res) => {
-        console.log('planner33333', res)
-      })
+      // const getObj = { level_2_ID: 'ad113205' }
+      // this.getPlanner(getObj).then((res) => {
+      //   console.log('planner33333', res)
+      // })
       if (data.length !== 0) {
         const guihuashiList = []
         data.forEach((item, i) => {
