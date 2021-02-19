@@ -46,11 +46,11 @@
 
     <!-- S咨询规划师 -->
     <div class="refer">
-      <PlannerSwipe
-        :planners-data="PlannerSwipe"
+      <plannerSwipe
+        :planners-data="plannerSwipe"
         :planners-common="plannersCommon"
         md-type="new"
-      ></PlannerSwipe>
+      ></plannerSwipe>
     </div>
     <!-- E咨询规划师 -->
 
@@ -97,7 +97,7 @@
 <script>
 import { Image } from '@chipspc/vant-dgg'
 import { mapState } from 'vuex'
-import { spread2Api } from '@/api/spread'
+import { spread2Api, recPlaner } from '@/api/spread'
 import { dataResult } from '@/assets/spread/system.js'
 
 import Header from '@/components/common/head/header'
@@ -107,7 +107,7 @@ import ServiceIntroduced from '@/components/spread/common/ServiceIntroduced.vue'
 import SidebarNavbar from '@/components/spread/system/SidebarNavbar'
 import ConsultPhone from '@/components/spread/system/ConsultPhone'
 import Benefit from '@/components/spread/system/Benefit'
-import PlannerSwipe from '@/components/spread/common/PlannerSwipe'
+import plannerSwipe from '@/components/spread/common/plannerSwipe'
 import ConsultTel from '@/components/spread/common/ConsultTel'
 import Chips from '@/components/spread/common/SPDescription'
 import FixedBottom from '@/components/spread/common/FixedBottom'
@@ -124,7 +124,7 @@ export default {
     SidebarNavbar,
     ConsultPhone,
     Benefit,
-    PlannerSwipe,
+    plannerSwipe,
     ConsultTel,
     Chips,
     FixedBottom,
@@ -137,6 +137,8 @@ export default {
       const res = await $axios.get(spread2Api.list, {
         params: {
           pageCode: type,
+          // 待改
+          // locations:'ad113212',
           locations: 'ad113205',
         },
       })
@@ -169,7 +171,7 @@ export default {
         },
       ],
       // 规划师
-      PlannerSwipe: [
+      plannerSwipe: [
         {
           id: '7862495547640840192',
           avatarImg:
@@ -217,6 +219,7 @@ export default {
           },
           lable: ['免费核验', '3天拿证', '一对一服务'],
           salesTag: '特价优惠',
+          detailsUrl: '', // 详情页链接
           planner: {
             id: '7862495547640840192',
             name: '李劲',
@@ -300,14 +303,6 @@ export default {
     }),
   },
   mounted() {
-    // const param = {
-    //   platform_type: 'wap端', // 平台类型：App，H5，Web
-    //   app_name: '薯片wap端', // 应用名称
-    //   product_line: 'wap端体系认证推广页',
-    //   current_url: location.href,
-    //   referrer: document.referrer,
-    // }
-    // window.sensors.registerPage(param) // 设置公共属性
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: '体系认证' }, () => {})
       console.log('dsdad')
@@ -315,8 +310,8 @@ export default {
     // 处理后台数据
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
-        this.serverList(this.resultData || [])
-        this.plannerData(this.resultData.planlerList || [])
+        // this.serverList(this.resultData || [])
+        // this.plannerData(this.resultData.planlerList || [])
       }
     } catch (error) {
       console.log(error)
@@ -335,83 +330,147 @@ export default {
         this.$router.back()
       }
     },
+
+    // 封装请求规划师
+    async getPlanner(getObj) {
+      this.cityData = await this.$getPositonCity()
+      console.log('this.cityData', this.cityData)
+      // 获取用户唯一标识
+      const deviceId = await this.$getFinger()
+      // deviceId = '0022ef1a-f685-469a-93a8-5409892207a2'
+      console.log('deviceId', deviceId)
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .get(recPlaner, {
+            params: {
+              limit: getObj.limit || 10,
+              page: 1,
+              area:
+                this.cityData.code === 200 ? this.cityData.data.code : '510000', // 区域编码
+              deviceId, // 设备ID
+              level_2_ID: getObj.level_2_ID, // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
+              // login_name: null, // 规划师ID(选填)
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型 必须 产品类型	（交易：FL20201116000003，服务：FL20201116000002）写死
+              sceneId: getObj.sceneId || 'app-ghsdgye-01', // 场景ID
+              // user_id: this.$cookies.get('userId'), // 用户ID(选填)
+              platform: 'app', // 平台（app,m,pc）
+              // productId: this.proDetail.id, // 产品id 非必填pp"
+              // "productId":"607991482841724751"
+              productId: getObj.productId || '',
+            },
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              resolve(res.data.records)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+    },
+
     // 处理后台列表数据
     serverList(data) {
       const listAll = data.adList[0].sortMaterialList || []
       if (listAll.length !== 0) {
-        this.serviceList = listAll.map((eleme, index) => {
-          // 随机下标
-          const subscript = `${
-            index < this.labels.length
-              ? index
-              : Math.floor(Math.random() * this.labels.length)
-          }`
-          const titleList = eleme.materialList[0].productDetail
-          const obj = {
-            title: titleList.operating.showName,
-            titleContent: titleList.operating.slogan,
-            actualViews: titleList.operating.actualViews,
-            defaultSales: titleList.operating.defaultSales,
-            actualSales: titleList.operating.actualSales,
-            price: titleList.referencePrice,
-            // bgImg: '',
-            labelsType: 'row',
-            rowLabels: {
-              icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
-              text: this.labels[subscript],
-            },
-            planner: {
-              id: '66475',
-              name: '钟霞',
-              jobNum: '38798340',
-              telephone: '13730634929',
-              imgSrc:
-                'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-            },
+        const levelId = listAll[0].materialList[0].productDetail.parentClassCode.split(
+          ','
+        )[1]
+        // 根据id查询钻展规划师
+        const plannerObj = {
+          limit: 3,
+          level_2_ID: levelId,
+          sceneId: 'app-cpxqye-02',
+          productId: data.adList[0].locationId,
+        }
+        this.plannerData(plannerObj)
+
+        // 根据id请求列表轮播规划师并绑定列表
+        const getObj = { level_2_ID: levelId }
+        this.getPlanner(getObj).then((plannersRes) => {
+          this.serviceList = listAll.map((eleme, index) => {
+            // 随机下标
+            const subscript = `${
+              index < this.labels.length
+                ? index
+                : Math.floor(Math.random() * this.labels.length)
+            }`
+            const titleList = eleme.materialList[0].productDetail
+            const obj = {
+              title: titleList.operating.showName,
+              titleLabel: 'sfs',
+              titleContent: titleList.operating.slogan,
+
+              actualViews: titleList.operating.actualViews,
+              defaultSales: titleList.operating.defaultSales,
+              actualSales: titleList.operating.actualSales,
+              price: titleList.referencePrice,
+              // bgImg: '',
+              labelsType: 'row',
+              rowLabels: {
+                icon: 'https://cdn.shupian.cn/sp-pt/wap/8xzqfak5fos0000.png',
+                text: this.labels[subscript],
+              },
+              planner: {
+                id: '66475',
+                name: '钟霞',
+                jobNum: '38798340',
+                telephone: '13730634929',
+                imgSrc:
+                  'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+              },
+            }
+            if (data.planlerList.length > 0) {
+              const subPlanner =
+                plannersRes[
+                  `${
+                    index < data.planlerList.length
+                      ? index
+                      : Math.floor(Math.random() * data.planlerList.length)
+                  }`
+                ]
+              obj.planner.id = subPlanner.userCentreId
+              obj.planner.name = subPlanner.userName
+              obj.planner.jobNum = subPlanner.userCenterNo
+              obj.planner.telephone = subPlanner.phone
+              obj.planner.imgSrc = subPlanner.portrait
+            }
+            return obj
+          })
+
+          // 规划师轮播列表
+          if (plannersRes !== 0) {
+            this.plannerSwipe = plannersRes.map((item) => {
+              return {
+                id: item.userCenterId,
+                name: item.userName,
+                jobNum: item.userCenterNo,
+                telephone: item.phone,
+                avatarImg: item.portrait,
+
+                shuPianFen: item.point,
+                serverNum: item.serveNum,
+                labels: ['工商注册', '财税咨询', '税务筹划'],
+              }
+            })
           }
-          if (data.planlerList.length > 0) {
-            const subPlanner =
-              data.planlerList[
-                `${
-                  index < data.planlerList.length
-                    ? index
-                    : Math.floor(Math.random() * data.planlerList.length)
-                }`
-              ]
-            obj.planner.id = subPlanner.userCentreId
-            obj.planner.name = subPlanner.realName
-            obj.planner.jobNum = subPlanner.loginName
-            obj.planner.telephone = subPlanner.userPhone
-            obj.planner.imgSrc = subPlanner.userHeadUrl
-          }
-          return obj
         })
       }
     },
     // 处理后台规划师数据
-    plannerData(data) {
-      if (data.length !== 0) {
-        this.planner = data[0] && {
-          id: data[0].userCentreId,
-          name: data[0].realName,
-          jobNum: data[0].loginName,
-          telephone: data[0].userPhone,
-          imgSrc: data[0].userHeadUrl,
-        }
-        // 规划师轮播列表
-        this.PlannerSwipe = data.map((item) => {
-          return {
-            id: item.userCentreId,
-            avatarImg: item.userHeadUrl,
-            name: item.realName,
-            shuPianFen: 22,
-            serverNum: 250,
-            telephone: item.userPhone,
-            labels: ['工商注册', '财税咨询', '税务筹划'],
-            jobNum: item.loginName,
+    async plannerData(data) {
+      await this.getPlanner(data).then((res) => {
+        if (res.length > 0) {
+          this.planner = res[0] && {
+            id: res[0].userCenterId,
+            name: res[0].userName,
+            jobNum: res[0].userCenterNo,
+            telephone: res[0].phone,
+            imgSrc: res[0].portrait,
           }
-        })
-      }
+        }
+      })
     },
     // 其他服务的跳转判断
     onService(url) {
@@ -455,22 +514,22 @@ export default {
     left: auto !important;
   }
   // 列表
-  ::v-deep.system-list {
-    .serviceList-content {
-      background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png)
-        no-repeat;
-      background-size: 101%;
-      background-position-x: -1px;
-    }
-    .show-more-btn {
-      border: none;
-      margin: 0 auto;
-      padding: 0px;
-      height: 26px;
-      margin-top: 20px;
-      line-height: 26px;
-    }
-  }
+  // ::v-deep.system-list {
+  //   .serviceList-content {
+  //     background: url(https://cdn.shupian.cn/sp-pt/wap/1pyws4fkw79c000.png)
+  //       no-repeat;
+  //     background-size: 101%;
+  //     background-position-x: -1px;
+  //   }
+  //   .show-more-btn {
+  //     border: none;
+  //     margin: 0 auto;
+  //     padding: 0px;
+  //     height: 26px;
+  //     margin-top: 20px;
+  //     line-height: 26px;
+  //   }
+  // }
   // 其他服务
   .service {
     padding-top: 22px;

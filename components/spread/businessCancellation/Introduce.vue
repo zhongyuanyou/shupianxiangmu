@@ -70,7 +70,7 @@
           </div>
 
           <div class="contact-btn">
-            <a href="javascript:;">
+            <a href="javascript:;" @click="plannerIm(item.planner, '')">
               <img :src="item.planner.imgSrc" alt="" />
             </a>
             <a

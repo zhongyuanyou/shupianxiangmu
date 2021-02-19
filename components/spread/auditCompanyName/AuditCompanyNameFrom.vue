@@ -48,9 +48,9 @@
               data-type="咨询表单"
               data-name="核名表单_公司名称"
               label="公司名称"
-              :maxlength="5"
-              :formatter="companyTest"
+              :maxlength="20"
               :readonly="isOverlay"
+              :formatter="companyTest"
               placeholder="3-5个"
             />
             <!-- e公司名称 -->
@@ -80,6 +80,7 @@
             :display="isOverlay"
             :details="details"
             @DisplayNone="Dis"
+            @DisNone="None"
           />
           <!-- e 手机号弹窗 -->
           <!-- s 核名数据 -->
@@ -302,11 +303,15 @@ export default {
         if (versions.length <= 13 && !!phoneValue.match(/Quark/)) {
           setTimeout(() => {
             this.isShowCity = true
+            this.isOverlay = false
           }, 600)
         } else {
           this.isShowCity = true
+          this.isOverlay = false
         }
       } else {
+        this.isOverlay = false
+
         this.isShowCity = true
       }
     },
@@ -320,16 +325,22 @@ export default {
         if (versions.length <= 12 && !!phoneValue.match(/Quark/)) {
           setTimeout(() => {
             this.isShow = true
+            this.isOverlay = false
           }, 600)
         } else {
+          this.isOverlay = false
           this.isShow = true
         }
       } else {
+        this.isOverlay = false
         this.isShow = true
       }
     },
+    None(data) {
+      this.isOverlay = false
+    },
     Dis(data) {
-      this.isOverlay = data.Dis
+      this.isOverlay = false
       this.cityName = '成都'
       this.cityCode = 'cd'
       this.industry = ''
@@ -365,7 +376,7 @@ export default {
       const inputValue = this.companyName.split('')
       if (this.companyName === '') {
         Toast('请填写公司名')
-      } else if (inputValue.length < 3) {
+      } else if (inputValue.length < 1) {
         Toast('公司名格式不正确')
       } else if (this.industry === '') {
         Toast('请选择行业')

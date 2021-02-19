@@ -77,7 +77,7 @@
     <!-- S咨询规划师 -->
     <div class="refer">
       <PlannerSwipe
-        :planners-data="guiHuaShiList"
+        :planners-data="plannerSwipe"
         :planners-common="plannersCommon"
       ></PlannerSwipe>
     </div>
@@ -237,7 +237,7 @@ export default {
         },
       ],
       // 规划师轮播列表
-      guiHuaShiList: [
+      plannerSwipe: [
         {
           id: '7862495547640840192',
           avatarImg:
@@ -447,7 +447,7 @@ export default {
                       : Math.floor(Math.random() * data.planlerList.length)
                   }`
                 ]
-              obj.id = subPlanner.userCentreId
+              obj.id = subPlanner.userCenterId
               obj.name = subPlanner.userName
               obj.jobNum = subPlanner.userCenterNo
               obj.telephone = subPlanner.phone
@@ -466,9 +466,9 @@ export default {
 
           // 规划师轮播列表
           if (plannersRes.length > 0) {
-            const guiHuaShiList = plannersRes.map((item) => {
+            const plannerSwipe = plannersRes.map((item) => {
               return {
-                id: item.userCentreId,
+                id: item.userCenterId,
                 name: item.userName,
                 jobNum: item.userCenterNo,
                 telephone: item.phone,
@@ -479,7 +479,7 @@ export default {
                 labels: ['工商注册', '财税咨询', '税务筹划'],
               }
             })
-            this.guiHuaShiList = guiHuaShiList
+            this.plannerSwipe = plannerSwipe
           }
         })
       }
@@ -487,10 +487,9 @@ export default {
     // 规划师数据
     async plannerData(data) {
       await this.getPlanner(data).then((res) => {
-        console.log(666666, res)
         if (res.length > 0) {
           this.planner = res[0] && {
-            id: res[0].userCentreId,
+            id: res[0].userCenterId,
             name: res[0].userName,
             jobNum: res[0].userCenterNo,
             telephone: res[0].phone,
@@ -507,7 +506,7 @@ export default {
       //     imgSrc: data[0].userHeadUrl,
       //   }
       // // 规划师轮播列表
-      // const guiHuaShiList = data.map((item) => {
+      // const plannerSwipe = data.map((item) => {
       //   const obj = {
       //     id: item.userCentreId,
       //     avatarImg: item.userHeadUrl,
@@ -518,9 +517,9 @@ export default {
       //     labels: ['工商注册', '财税咨询', '税务筹划'],
       //     jobNum: item.loginName,
       //   }
-      //   guiHuaShiList.push(obj)
+      //   plannerSwipe.push(obj)
       // })
-      // this.guiHuaShiList = guiHuaShiList
+      // this.plannerSwipe = plannerSwipe
       // }
     },
     onClickLeft() {

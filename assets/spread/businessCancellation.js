@@ -2,8 +2,7 @@ const plannersData = [
   {
     id: '3394',
     type: '金牌规划师',
-    imgSrc:
-      'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+    // imgSrc:'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     avatarImg:
       'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     name: '刘琴',
@@ -16,8 +15,7 @@ const plannersData = [
   {
     id: '7704199733711282176',
     type: '金牌规划师',
-    imgSrc:
-      'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+    // imgSrc:'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     avatarImg:
       'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     name: '岳雪冬',
@@ -73,8 +71,8 @@ const plannersData = [
 const serviceListData = [
   {
     title: '公司注销',
-    // titlelable:
-    //   'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+    // titlelable:'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
     serviceTag: ['快至30个工作日', '成功率高，省心省钱'], // 服务标签
     activityTag: '限时优惠', // 活动标签
     salesTag: '', // 销售标签
@@ -171,8 +169,6 @@ const planner = {
   id: '3394',
   type: '金牌规划师',
   imgSrc:
-    'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-  avatarImg:
     'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
   name: '刘琴',
   shupianfen: 11,
