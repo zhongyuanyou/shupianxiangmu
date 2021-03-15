@@ -286,7 +286,7 @@ export default {
         )
       }
     },
-    // 金刚区数据处理
+    // 金刚区数据处
     navDetail(data) {
       if (data.length === 0) {
       } else {
