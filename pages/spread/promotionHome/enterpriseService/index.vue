@@ -433,6 +433,7 @@ export default {
   methods: {
     // 请求数据
     onChange(changeObj) {
+      this.changeState = changeObj
       this.$refs.enterprise.initialize(changeObj)
       // if (obj.type === 1) {
       //   this.list = defaultList
@@ -502,8 +503,9 @@ export default {
           code: data[0].code,
           name: data[0].name,
         }
-        // 初始化请求数据
         this.onChange(this.changeState)
+        // this.$refs.enterprise.initialize(this.changeState)
+        // 初始化请求数据
         this.titleName = data.map((elem, index) => {
           return {
             type: index,

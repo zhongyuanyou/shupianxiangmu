@@ -146,12 +146,15 @@ export default {
   mounted() {
     // 初始化推介数据
     // this.list = this.defaultList
+    // this.initialize(this.changeState)
   },
   methods: {
     initialize(changeObj) {
       this.pageNumber = 1
       this.list = []
-      this.selectTab(this.changeState)
+      this.finished = false
+      this.loading = true
+      this.selectTab(changeObj)
     },
     onLoad(e) {
       // // 异步更新数据
@@ -165,7 +168,6 @@ export default {
     },
     // 请求数据
     selectTab(item) {
-      console.log(item)
       const api = '/service/nk/chipSpread/v1/productList.do'
       const cdn = 'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api'
       // const cdn = 'http://172.16.132.70:7001'
@@ -183,11 +185,12 @@ export default {
         })
         .then((res) => {
           // 调用回调函数处理数据
-          console.log(res, 13156)
           const result = res.data.records
           if (res.code !== 200) {
-            this.list = this.defaultList
-            this.finished = true
+            // this.list = this.defaultList
+            this.loading = false
+            this.error = true
+            this.finished = false
           }
           if (result.length !== 0 && res.code === 200) {
             this.pageNumber += 1
