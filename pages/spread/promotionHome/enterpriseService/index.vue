@@ -2,7 +2,7 @@
   <div class="enterprise-service">
     <!-- S 头部和金刚区 -->
     <div class="top-background">
-      <NavTop title="企业服务" />
+      <NavTop title="企业服务" @searchKeydownHandle="searchKeydownHandle" />
       <Nav :roll-nav="rollNav" class="navs" />
     </div>
     <!-- E 头部和金刚区 -->
@@ -431,6 +431,10 @@ export default {
     }
   },
   methods: {
+    // 搜索
+    searchKeydownHandle(e) {
+      console.log(e)
+    },
     // 请求数据
     onChange(changeObj) {
       this.changeState = changeObj
@@ -446,7 +450,8 @@ export default {
           return {
             code: index,
             name: elem.name,
-            url: elem.url,
+            // url: elem.url,
+            url: '',
             size: 'small',
             label: '',
             imageUrl: elem.navigationImageUrl,

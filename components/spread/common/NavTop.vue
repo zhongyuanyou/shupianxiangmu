@@ -111,7 +111,7 @@ export default {
     // 回车 事件
     searchKeydownHandle(e) {
       if (e.keyCode === 13) {
-        this.$refs.inputRef.blur()
+        // this.$refs.inputRef.blur()
         this.$emit('searchKeydownHandle', this.inputVal)
       }
     },
