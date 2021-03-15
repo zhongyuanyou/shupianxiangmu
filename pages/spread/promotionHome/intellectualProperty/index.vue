@@ -1,0 +1,375 @@
+<template>
+  <div class="intellectual-property">
+    <!-- S 头部和金刚区 -->
+    <div class="top-background">
+      <NavTop />
+      <Nav :roll-nav="rollNav" class="navs" />
+    </div>
+    <!-- E 头部和金刚区 -->
+
+    <!-- S 新人专属 -->
+    <Exclusive :pro-title="proTitle" />
+    <!-- E 新人专属 -->
+
+    <!--S 免费体验 薯片课程 -->
+    <Choiceness :content="content" />
+    <!--E 免费体验 薯片课程-->
+
+    <!-- S 列表 -->
+    <TabServiceItem :title-name="titleName" @change="onChange">
+      <template v-slot:list>
+        <KnowledgeList :default-list="defaultList" />
+      </template>
+    </TabServiceItem>
+    <!-- E 列表 -->
+  </div>
+</template>
+
+<script>
+import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+
+import NavTop from '@/components/spread/common/NavTop'
+import Nav from '@/components/spread/common/Nav'
+import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive'
+import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness'
+import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
+import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList'
+export default {
+  name: 'IntellectualProperty',
+  components: {
+    NavTop,
+    Exclusive,
+    Choiceness,
+    TabServiceItem,
+    KnowledgeList,
+    Nav,
+  },
+  async asyncData({ $axios }) {
+    const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+    const locations = 'ad113236,ad113238,ad113240,ad113241'
+    const code = 'nav100057'
+    const centerCode = 'TradingPlatform'
+    const dataRes = defaultRes
+    try {
+      const res = await $axios.get(url, {
+        params: {
+          locationCodes: locations,
+          navCodes: code,
+          productCenterCode: centerCode,
+        },
+      })
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      return {
+        resultData: dataRes.data,
+      }
+    } catch (error) {
+      console.log('请求错误', error)
+      return {
+        resultData: dataRes.data,
+      }
+    }
+  },
+  data() {
+    return {
+      // 金刚区
+      rollNav: [
+        {
+          code: 1,
+          name: '商标注册',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/5cr9u33ml600000.png',
+        },
+        {
+          code: 2,
+          name: '专利申请',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/11ilq5lopx0w000.png',
+        },
+        {
+          code: 3,
+          name: '模板建站',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/dwy0w0z6k1c0000.png',
+        },
+        {
+          code: 4,
+          name: '国际商标注册',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/ersf9xyup880000.png',
+        },
+        {
+          code: 5,
+          name: '商标维权',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/4n2bre5pb760000.png',
+        },
+        {
+          code: 6,
+          name: '商标变更',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/d17z33159zk0000.png',
+        },
+        {
+          code: 7,
+          name: '版权设计',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/eva77z0w6xs0000.png',
+        },
+        {
+          code: 8,
+          name: '高企认定',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/etof55jpw6o0000.png',
+        },
+        {
+          code: 9,
+          name: '项目审报',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/e76lj960syo0000.png',
+        },
+        {
+          code: 10,
+          name: '全部服务',
+          url: 'https://www.baidu.com/',
+          size: 'small',
+          label: '',
+          imageUrl:
+            'https://cdn.shupian.cn/sp-pt/wap/images/fhngcdfde0o0000.png',
+        },
+      ],
+      // 新人专属
+      proTitle: [
+        {
+          title: '[企业必备] 商标注...',
+          price: 488,
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/19k5aeu2fsdc000.png',
+          url: '',
+        },
+        {
+          title: '[企业必备] 商标注...',
+          price: 488,
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/np4823u4b1c000.png',
+          url: '',
+        },
+      ],
+      // 体验 课程
+      content: {
+        experience: {
+          title: '免费体验',
+          imgVal: [
+            {
+              img:
+                'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+              imgNmae: '商标查询',
+            },
+            {
+              img:
+                'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+              imgNmae: '版权服务',
+            },
+          ],
+        },
+        curriculum: {
+          title: '薯片课程',
+          imgVal: [
+            {
+              img:
+                'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+              imgNmae: '商标案件如...',
+            },
+            {
+              img:
+                'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+              imgNmae: '高企认定政...',
+            },
+          ],
+        },
+      },
+      // 列表导航
+      titleName: [
+        {
+          code: 1,
+          type: 1,
+          name: '为你推介',
+        },
+        {
+          code: 2,
+          type: 1,
+          name: '工商服务',
+        },
+        {
+          code: 3,
+          type: 1,
+          name: '会计服务',
+        },
+        {
+          code: 4,
+          type: 1,
+          name: '知识服务',
+        },
+        {
+          code: 5,
+          type: 1,
+          name: '资质服务',
+        },
+      ],
+      // 默认的推介列表列表
+      defaultList: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/r9alg2mdugw000.png',
+          title: '高企认定',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: '688',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ce1od1ainhc0000.png',
+          title: '高企认定高企 认定高企认定高企...',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: 699,
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
+          title: '商标查询',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: 688,
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ce1od1ainhc0000.png',
+          title: '商标注册',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: 688,
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/4234scxtivw0000.png',
+          title: '高企认定高企 认定高企认定高企...',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: 688,
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/r9alg2mdugw000.png',
+          title: '高企认定高企 认定高企认定高企...',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: 688,
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ce1od1ainhc0000.png',
+          title: '高企认定',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: 688,
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
+          title: '高企认定',
+          label: ['套餐优惠', '热销好品', '金牌团队'],
+          price: 688,
+        },
+      ],
+    }
+  },
+  mounted() {
+    // 初始化数据
+    // this.onChange({ type: 1 })
+    // 处理后台数据
+    const resData = this.resultData
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        console.log(resData)
+        this.navList(resData.navs.nav100057 || [])
+        // this.productTitle(this.resultData.productClassList || [])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  methods: {
+    // 请求数据
+    onChange(name, title) {
+      console.log(name, title)
+    },
+    // 金刚区导航栏
+    navList(data) {
+      // console.log(data)
+      if (data.length !== 0) {
+        this.rollNav = data.map((elem, index) => {
+          return {
+            code: index,
+            name: elem.name,
+            url: elem.url,
+            size: 'small',
+            label: '',
+            imageUrl: elem.navigationImageUrl,
+          }
+        })
+      }
+    },
+    // 列表导航
+    productTitle(data) {
+      if (data.length !== 0) {
+        this.titleName = data.map((elem, index) => {
+          return {
+            code: index,
+            type: index,
+            name: elem.name,
+          }
+        })
+        console.log(this.titleName)
+      }
+    },
+  },
+  head() {
+    return {
+      title: '知识产权',
+    }
+  },
+}
+</script>
+
+<style lang="less">
+.intellectual-property {
+  width: @spread-page-width;
+  background: #f5f5f5;
+  margin: 0 auto;
+  .top-background {
+    height: 344px;
+    // background: linear-gradient(0deg, #f5f5f5, #4974f5);
+    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png);
+    margin-bottom: 113px;
+  }
+  .navs {
+    position: relative;
+  }
+}
+</style>
