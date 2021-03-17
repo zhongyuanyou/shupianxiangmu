@@ -1,7 +1,7 @@
 <template>
   <div class="internet">
     <!-- 头部 -->
-    <div class="head"><Header title="IT/互联网" /></div>
+    <div class="head"><Header title="IT互联网" /></div>
     <!-- 金刚区 -->
     <Nav :roll-nav="rollNav" class="nav"></Nav>
     <!-- 新人红包 -->
@@ -32,29 +32,29 @@ export default {
     Advertising,
     Recommended,
   },
-  async asyncData({ $axios }) {
-    const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-    try {
-      const res = await $axios.get(url, {
-        params: {
-          locationCodes: 'ad113229,ad113230,ad113231,ad113232,ad113233',
-          navCodes: '',
-          productCenterCode: 'LawService',
-        },
-      })
-      if (res.code === 200) {
-        return {
-          result: res,
-        }
-      } else if (res.code === 500) {
-        console.log(222)
-      }
-    } catch (error) {
-      // 请求出错也要保证页面正常显示
+  //   async asyncData({ $axios }) {
+  //     const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+  //     try {
+  //       const res = await $axios.get(url, {
+  //         params: {
+  //           locationCodes: 'ad113229,ad113230,ad113231,ad113232,ad113233',
+  //           navCodes: '',
+  //           productCenterCode: 'LawService',
+  //         },
+  //       })
+  //       if (res.code === 200) {
+  //         return {
+  //           result: res,
+  //         }
+  //       } else if (res.code === 500) {
+  //         console.log(222)
+  //       }
+  //     } catch (error) {
+  //       // 请求出错也要保证页面正常显示
 
-      return { error }
-    }
-  },
+  //       return { error }
+  //     }
+  //   },
   data() {
     return {
       rollNav: [
