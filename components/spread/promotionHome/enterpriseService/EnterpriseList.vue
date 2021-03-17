@@ -3,16 +3,15 @@
     <sp-list
       v-model="loading"
       :finished="finished"
-      :error.sync="error"
-      error-text="请求失败，点击重新加载"
+      finished-text="没有更多了"
       offset="100"
       @load="onLoad"
     >
       <div class="content">
         <div
+          class="content-list"
           v-for="(item, proKey) of list"
           :key="proKey"
-          class="content-list"
           @click="onMore(item.url)"
         >
           <div class="imge"><img :src="item.img" alt="" /></div>
@@ -138,7 +137,6 @@ export default {
     return {
       loading: false, // 显示加载过程的文案
       finished: false, // 加载完毕的文案
-      error: false,
       pageNumber: 1,
       list: [],
     }
@@ -154,12 +152,14 @@ export default {
       this.list = []
       this.finished = false
       this.loading = true
-      this.selectTab(changeObj)
+      this.onLoad()
     },
     onLoad(e) {
       // // 异步更新数据
       // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      this.selectTab(this.changeState)
+      if (this.loading === true && this.finished === false) {
+        this.selectTab(this.changeState)
+      }
     },
     onMore(url) {
       if (url !== '') {
@@ -173,7 +173,6 @@ export default {
       // const cdn = 'http://172.16.132.70:7001'
       const type = item.code
       // 2、调用接口
-      if (this.loading && this.finished) return
       this.loading = true
       this.$axios
         .get(cdn + api, {
@@ -189,8 +188,7 @@ export default {
           if (res.code !== 200) {
             // this.list = this.defaultList
             this.loading = false
-            this.error = true
-            this.finished = false
+            this.finished = true
           }
           if (result.length !== 0 && res.code === 200) {
             this.pageNumber += 1

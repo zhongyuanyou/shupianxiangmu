@@ -2,7 +2,7 @@
   <div class="intellectual-property">
     <!-- S 头部和金刚区 -->
     <div class="top-background">
-      <NavTop />
+      <NavTop title="知识产权" @searchKeydownHandle="searchKeydownHandle" />
       <Nav :roll-nav="rollNav" class="navs" />
     </div>
     <!-- E 头部和金刚区 -->
@@ -18,7 +18,11 @@
     <!-- S 列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
       <template v-slot:list>
-        <KnowledgeList :default-list="defaultList" />
+        <KnowledgeList
+          ref="intellectual"
+          :default-list="defaultList"
+          :change-state="changeState"
+        />
       </template>
     </TabServiceItem>
     <!-- E 列表 -->
@@ -27,6 +31,7 @@
 
 <script>
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop'
 import Nav from '@/components/spread/common/Nav'
@@ -45,13 +50,13 @@ export default {
     Nav,
   },
   async asyncData({ $axios }) {
-    const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
     const locations = 'ad113236,ad113238,ad113240,ad113241'
     const code = 'nav100057'
     const centerCode = 'TradingPlatform'
     const dataRes = defaultRes
     try {
-      const res = await $axios.get(url, {
+      const res = await $axios.get(chipSpread.list, {
         params: {
           locationCodes: locations,
           navCodes: code,
@@ -246,55 +251,77 @@ export default {
           name: '资质服务',
         },
       ],
+      // 当前列表状态
+      changeState: {
+        code: 'FL20201224136019',
+        name: '许可证',
+        type: 0,
+      },
       // 默认的推介列表列表
       defaultList: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/r9alg2mdugw000.png',
           title: '高企认定',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: '688',
+          currentPrice: '688',
+          originalPrice: '2000',
+          url: '15645',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/ce1od1ainhc0000.png',
           title: '高企认定高企 认定高企认定高企...',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: 699,
+          currentPrice: 699,
+          originalPrice: '2000',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
           title: '商标查询',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: 688,
+          currentPrice: 688,
+          originalPrice: '2000',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/ce1od1ainhc0000.png',
           title: '商标注册',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: 688,
+          currentPrice: 688,
+          originalPrice: '2000',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/4234scxtivw0000.png',
           title: '高企认定高企 认定高企认定高企...',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: 688,
+          currentPrice: 688,
+          originalPrice: '2000',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/r9alg2mdugw000.png',
           title: '高企认定高企 认定高企认定高企...',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: 688,
+          currentPrice: 688,
+          originalPrice: '2000',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/ce1od1ainhc0000.png',
           title: '高企认定',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: 688,
+          currentPrice: 688,
+          originalPrice: '2000',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
           title: '高企认定',
           label: ['套餐优惠', '热销好品', '金牌团队'],
-          price: 688,
+          currentPrice: 688,
+          originalPrice: '2000',
+          url: '',
         },
       ],
     }
@@ -308,16 +335,24 @@ export default {
       if (JSON.stringify(resData) !== '{}') {
         console.log(resData)
         this.navList(resData.navs.nav100057 || [])
-        // this.productTitle(this.resultData.productClassList || [])
+        this.productTitle(resData.productClassList || [])
       }
     } catch (error) {
       console.log(error)
     }
   },
   methods: {
+    // 搜索
+    searchKeydownHandle(e) {
+      console.log(e)
+    },
     // 请求数据
-    onChange(name, title) {
-      console.log(name, title)
+    onChange(changeObj) {
+      this.changeState = changeObj
+      this.$refs.intellectual.initialize(changeObj)
+      // if (obj.type === 1) {
+      //   this.list = defaultList
+      // }
     },
     // 金刚区导航栏
     navList(data) {
@@ -338,14 +373,21 @@ export default {
     // 列表导航
     productTitle(data) {
       if (data.length !== 0) {
+        this.changeState = {
+          type: 0,
+          code: data[0].code,
+          name: data[0].name,
+        }
+        this.onChange(this.changeState)
+        // this.$refs.enterprise.initialize(this.changeState)
+        // 初始化请求数据
         this.titleName = data.map((elem, index) => {
           return {
-            code: index,
             type: index,
+            code: elem.code,
             name: elem.name,
           }
         })
-        console.log(this.titleName)
       }
     },
   },

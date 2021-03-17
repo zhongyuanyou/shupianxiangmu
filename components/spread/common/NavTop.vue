@@ -136,7 +136,7 @@ export default {
 
     .search-content {
       width: @spread-page-width;
-      padding: 20px 20px 20px 28px;
+      padding: 20px 20px 26px 28px;
       display: flex;
       align-items: center;
       .serch-left {
@@ -163,7 +163,7 @@ export default {
       .input-box {
         height: 72px;
         background: #ededed;
-        border-radius: 16px;
+        border-radius: 8px;
         border: none;
         input {
           background: #ededed;
