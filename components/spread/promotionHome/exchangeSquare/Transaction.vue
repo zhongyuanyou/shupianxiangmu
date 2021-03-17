@@ -598,8 +598,8 @@ export default {
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: bold;
             color: #555555;
-            line-height: 24px;
-            margin-top: 15px;
+            line-height: 26px;
+            margin-top: 16px;
             .textOverflow(1);
           }
           .price-box {

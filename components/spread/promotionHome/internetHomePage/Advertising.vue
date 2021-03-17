@@ -90,7 +90,7 @@
       <div class="advertising-course">
         <div class="advertising-course-title">
           <span class="course-title">{{ advertisingList.course.title }}</span>
-          <span class="course-label">先到先得</span>
+          <span class="course-label">品质推荐</span>
         </div>
         <span class="advertising-course-describe">{{
           advertisingList.course.describe
