@@ -42,6 +42,7 @@
 <script>
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
 import ProductItem from '@/components/spread/promotionHome/financingLoan/ProductItem.vue'
+import { chipSpread } from '~/api/spread'
 
 export default {
   name: 'Products',
@@ -84,14 +85,16 @@ export default {
   },
   created() {},
   mounted() {
-    this.getProductData()
+    // this.getProductData()
   },
   methods: {
     // 滚动触底后，调用接口获取更多数据
     getMoreData() {
       if (this.isNoMoreData) return
       this.pageNumber++
-      this.getProductData()
+      // this.getProductData()
+      this.isLoading = false
+
       // setTimeout(() => {
       //   for (let i = 0; i < 10; i++) {
       //     this.tabList[0].productList.push({
@@ -111,18 +114,17 @@ export default {
     },
     async getProductData() {
       if (this.isNoMoreData) return
-      const url =
-        'http://172.16.132.70:7001/service/nk/chipSpread/v1/productList.do'
+      // const url =
+      //   'http://172.16.132.70:7001/service/nk/chipSpread/v1/productList.do'
       try {
-        // const res = await this.$axios.get(`${spreadApi.list}`, {
-        const res = await this.$axios.get(url, {
+        const res = await this.$axios.get(`${chipSpread.list}`, {
+          // const res = await this.$axios.get(url, {
           params: {
             classCodes: 'FL20201224136207',
             pageNumber: this.pageNumber,
             pageSize: this.pageSize,
           },
         })
-        console.log(res.data.records)
         this.isLoading = false
         if (res.code === 200) {
           const arr = res.data.records
@@ -151,7 +153,9 @@ export default {
             }
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        this.isLoading = false
+      }
     },
   },
 }

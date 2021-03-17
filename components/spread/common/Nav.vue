@@ -14,7 +14,7 @@
           :data-name="`${item.name}`"
         >
           <div v-if="item.label">{{ item.label }}</div>
-          <a :href="item.url">
+          <a href="javascript:;">
             <img
               v-if="item.size === 'small'"
               v-lazy="item.imageUrl + $ossImgSet(48, 48)"

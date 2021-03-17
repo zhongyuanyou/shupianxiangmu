@@ -109,7 +109,7 @@ export default {
         {
           code: 1,
           name: '企业贷',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'big',
           imageUrl:
@@ -118,7 +118,7 @@ export default {
         {
           code: 2,
           name: '有抵押贷',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'big',
           imageUrl:
@@ -127,7 +127,7 @@ export default {
         {
           code: 3,
           name: '无抵押贷',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'big',
           imageUrl:
@@ -136,7 +136,7 @@ export default {
         {
           code: 4,
           name: '我有车',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'big',
           imageUrl:
@@ -145,7 +145,7 @@ export default {
         {
           code: 5,
           name: '我有房',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'big',
           imageUrl:
@@ -154,7 +154,7 @@ export default {
         {
           code: 6,
           name: '大额借款',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'small',
           imageUrl:
@@ -163,7 +163,7 @@ export default {
         {
           code: 7,
           name: '快速借钱',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'small',
           imageUrl:
@@ -172,7 +172,7 @@ export default {
         {
           code: 8,
           name: '信用贷款',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'small',
           imageUrl:
@@ -181,7 +181,7 @@ export default {
         {
           code: 9,
           name: '免费咨询',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'small',
           imageUrl:
@@ -190,7 +190,7 @@ export default {
         {
           code: 10,
           name: '全部',
-          url: 'https://www.baidu.com/',
+          url: '',
           label: '',
           size: 'small',
           imageUrl:

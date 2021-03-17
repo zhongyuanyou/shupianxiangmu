@@ -31,8 +31,8 @@ export default {
   //       const res = await $axios.get(url, {
   //         params: {
   //           locationCodes: 'ad113215',
-  //           navCode: 'nav100042',
-  //           productCenterCode: 'CRISPS-C-GG-TYPE',
+  //           navCode: 'nav100059',
+  //           productCenterCode: 'TradingPlatform',
   //         },
   //       })
   //       if (res.code === 200) {
