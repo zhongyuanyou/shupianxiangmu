@@ -44,7 +44,6 @@
 
 <script>
 import { List } from '@chipspc/vant-dgg'
-import { chipSpread } from '@/api/spread'
 export default {
   name: 'EnterpriseList',
   components: {
@@ -222,6 +221,7 @@ export default {
 
 <style lang="less">
 .enterprise-list {
+  min-height: 1224px;
   padding-left: 20px;
   .content {
     .content-list {

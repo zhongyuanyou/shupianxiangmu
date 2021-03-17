@@ -212,6 +212,7 @@ export default {
 
 <style lang="less">
 .knowledge-list {
+  min-height: 1224px;
   padding-left: 20px;
   .content {
     display: flex;
