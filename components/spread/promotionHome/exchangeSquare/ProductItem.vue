@@ -1,14 +1,14 @@
 <template>
   <div class="product-item">
-    <div v-for="product in product" :key="product.code" class="product-box">
+    <div v-for="products in product" :key="products.code" class="product-box">
       <div class="product-left">
         <img :src="product.img" alt="" />
       </div>
       <div class="product-right">
-        <span class="title">{{ product.title }}</span>
+        <span class="title">{{ products.title }}</span>
         <div class="label-box">
           <span
-            v-for="labels in product.labels"
+            v-for="labels in products.labels"
             :key="labels.code"
             class="label"
             :class="labels.type === 'saleTag' ? 'saleTag' : 'label'"
@@ -17,7 +17,7 @@
         </div>
         <div class="describe-box">
           <span
-            v-for="describe in product.describe"
+            v-for="describe in products.describe"
             :key="describe.code"
             class="describe-msg"
             >{{ describe.msg }}</span

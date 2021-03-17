@@ -412,13 +412,11 @@ export default {
   watch: {
     isFixed(newval, oldval) {
       this.isFixed = newval
-      console.log(this.isFixed)
     },
   },
   methods: {
     scroll(e) {
       this.isFixed = e.isFixed
-      console.log(this.isFixed)
     },
     onLoad() {
       // 异步更新数据
