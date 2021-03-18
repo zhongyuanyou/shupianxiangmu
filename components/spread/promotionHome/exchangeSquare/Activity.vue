@@ -5,8 +5,9 @@
         v-for="(item, index) in activityList"
         :key="index"
         class="active-content"
+        @click="prompt"
       >
-        <a :href="item.url">
+        <a href="javascript:;">
           <span class="name">{{ item.name }}</span>
           <div class="image-box"><img :src="item.image" alt="" /></div>
         </a>
@@ -16,13 +17,22 @@
 </template>
 
 <script>
+import { Toast } from '@chipspc/vant-dgg'
 export default {
+  components: {
+    [Toast.name]: Toast,
+  },
   props: {
     activityList: {
       type: Array,
       default: () => {
         return []
       },
+    },
+  },
+  methods: {
+    prompt() {
+      Toast('功能正在建设中，敬请期待')
     },
   },
 }

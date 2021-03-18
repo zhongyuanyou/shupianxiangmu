@@ -33,16 +33,18 @@ export default {
     Recommended,
   },
   //   async asyncData({ $axios }) {
-  //     const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
   //     try {
-  //       const res = await $axios.get(url, {
+  //       const res = await $axios.get(chipSpread.list, {
   //         params: {
-  //           locationCodes: 'ad113229,ad113230,ad113231,ad113232,ad113233',
-  //           navCodes: '',
-  //           productCenterCode: 'LawService',
+  //           locationCodes:
+  //             'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
+  //           navCodes: 'nav100061',
+  //           productCenterCode: 'Internet',
   //         },
   //       })
+  //       console.log(res)
   //       if (res.code === 200) {
+  //         console.log(res)
   //         return {
   //           result: res,
   //         }
@@ -264,7 +266,6 @@ export default {
   mounted() {
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
-        this.navDetail(this.result.data.navList)
       }
     } catch (error) {
       console.log(error)

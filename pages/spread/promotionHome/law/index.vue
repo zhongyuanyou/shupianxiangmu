@@ -18,9 +18,9 @@
     <!-- 金刚区 -->
     <Nav :roll-nav="rollNav" class="nav"></Nav>
     <!-- banner -->
-    <Banner :swipe-list="swipeList"></Banner>
+    <Banner :swipe-list="swipeList" v-if="swipeList.length !== 0"></Banner>
     <!-- vip礼包 -->
-    <GiftBag :gift-list="giftList"></GiftBag>
+    <GiftBag :gift-list="giftList" v-if="giftList.length !== 0"></GiftBag>
     <!-- 律师直播 -->
     <LawyerLive :lawyer-live="lawyerLive" />
     <!-- 推荐律师 -->
@@ -78,12 +78,10 @@ export default {
         },
       })
       if (res.code === 200) {
-        console.log(111)
         return {
           result: res,
         }
       } else if (res.code === 500) {
-        console.log(322)
         return { result: defaultList }
       }
     } catch (error) {

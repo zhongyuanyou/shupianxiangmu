@@ -90,8 +90,8 @@
             <KnowledgeList
               v-for="reads in readList"
               :key="reads.code"
-              :knowledgeArr="reads"
-              activeName="搜知识"
+              :knowledge-arr="reads"
+              active-name="搜知识"
               class="reads"
             ></KnowledgeList>
           </div>

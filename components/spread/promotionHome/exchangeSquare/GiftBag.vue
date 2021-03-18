@@ -17,13 +17,19 @@
         <div
           class="giftbag-content-left"
           :style="{ backgroundImage: 'url(' + bg + ')' }"
+          @click="prompt"
         >
           <!-- <span class="title">新人红包</span>
           <span class="title-describe">立享多重优惠</span> -->
         </div>
         <div class="giftbag-content-right">
-          <div v-for="item in giftBagList" :key="item.code" class="product">
-            <a :href="item.url">
+          <div
+            v-for="item in giftBagList"
+            :key="item.code"
+            class="product"
+            @click="prompt"
+          >
+            <a href="javascript:;">
               <div class="img-box"><img :src="item.img" alt="" /></div>
               <span class="product-title">{{ item.title }}</span>
               <span class="product-price">{{ item.price }}元</span>
@@ -37,7 +43,11 @@
 </template>
 
 <script>
+import { Toast } from '@chipspc/vant-dgg'
 export default {
+  components: {
+    [Toast.name]: Toast,
+  },
   props: {
     giftBagList: {
       type: Array,
@@ -50,6 +60,11 @@ export default {
     return {
       bg: 'https://cdn.shupian.cn/sp-pt/wap/images/chyvr74rti80000.png',
     }
+  },
+  methods: {
+    prompt() {
+      Toast('功能正在建设中，敬请期待')
+    },
   },
 }
 </script>

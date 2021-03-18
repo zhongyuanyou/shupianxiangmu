@@ -10,8 +10,8 @@
           <div class="item-tabs">
             <span
               v-for="(tab, index) in product.tabs"
-              :key="index"
               v-show="index < 3"
+              :key="index"
               class="item-tab"
               >{{ tab }}</span
             >

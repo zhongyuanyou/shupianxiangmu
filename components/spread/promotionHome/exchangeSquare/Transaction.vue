@@ -49,7 +49,7 @@
                 v-show="productcode < max"
                 :key="productcode"
               >
-                <a :href="product.url">
+                <a href="javascript:;">
                   <span class="product-title">{{ product.title }}</span>
                   <div class="label-box">
                     <span
@@ -593,7 +593,6 @@ export default {
           }
           .product-describe {
             display: block;
-            height: 22px;
             font-size: 22px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: bold;
