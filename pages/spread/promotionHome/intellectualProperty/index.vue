@@ -248,17 +248,17 @@ export default {
         {
           code: 1,
           type: 1,
-          name: '为你推介',
+          name: '热门服务',
         },
         {
           code: 2,
           type: 1,
-          name: '工商服务',
+          name: '商标服务',
         },
         {
           code: 3,
           type: 1,
-          name: '会计服务',
+          name: '专利服务',
         },
         {
           code: 4,
@@ -268,7 +268,7 @@ export default {
         {
           code: 5,
           type: 1,
-          name: '资质服务',
+          name: '版权服务',
         },
       ],
       // 当前列表状态

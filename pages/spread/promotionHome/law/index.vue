@@ -85,6 +85,8 @@ export default {
         }
       } else if (res.code === 500) {
         return { result: defaultList }
+      } else if (res.code === 404) {
+        return { result: defaultList }
       }
     } catch (error) {
       // 请求出错也要保证页面正常显示
