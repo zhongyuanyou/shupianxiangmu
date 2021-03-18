@@ -593,7 +593,6 @@ export default {
           }
           .product-describe {
             display: block;
-            height: 22px;
             font-size: 22px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: bold;

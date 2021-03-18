@@ -32,29 +32,30 @@ export default {
     Advertising,
     Recommended,
   },
-  //   async asyncData({ $axios }) {
-  //     const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-  //     try {
-  //       const res = await $axios.get(url, {
-  //         params: {
-  //           locationCodes: 'ad113229,ad113230,ad113231,ad113232,ad113233',
-  //           navCodes: '',
-  //           productCenterCode: 'LawService',
-  //         },
-  //       })
-  //       if (res.code === 200) {
-  //         return {
-  //           result: res,
-  //         }
-  //       } else if (res.code === 500) {
-  //         console.log(222)
-  //       }
-  //     } catch (error) {
-  //       // 请求出错也要保证页面正常显示
+  async asyncData({ $axios }) {
+    try {
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes:
+            'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
+          navCodes: 'nav100061',
+          productCenterCode: 'Internet',
+        },
+      })
+      if (res.code === 200) {
+        console.log(res)
+        return {
+          result: res,
+        }
+      } else if (res.code === 500) {
+        console.log(222)
+      }
+    } catch (error) {
+      // 请求出错也要保证页面正常显示
 
-  //       return { error }
-  //     }
-  //   },
+      return { error }
+    }
+  },
   data() {
     return {
       rollNav: [
@@ -264,13 +265,14 @@ export default {
   mounted() {
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
-        this.navDetail(this.result.data.navList)
       }
     } catch (error) {
       console.log(error)
     }
   },
   methods: {
+    getMsg() {},
+
     // 跳转判断
     openIM(url) {
       if (url) {

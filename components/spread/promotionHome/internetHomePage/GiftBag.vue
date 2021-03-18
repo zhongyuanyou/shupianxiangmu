@@ -17,6 +17,7 @@
         <div
           class="new-people-giftbag"
           :style="{ backgroundImage: 'url(' + bg + ')' }"
+          @click="prompt"
         >
           <!-- <span class="new-people-giftbag-title">新人红包</span>
           <span class="new-people-giftbag-price">100<span>元</span></span> -->
@@ -34,8 +35,9 @@
             <li
               v-for="(item, index) in giftBagList"
               :key="index"
-              @click="jump(item.url)"
+              @click="prompt"
             >
+              <!-- @click="jump(item.url)" -->
               <div class="head-img"><img :src="item.headImage" alt="" /></div>
               <span class="title">{{ item.title }}</span>
               <span class="price">{{ item.price }}</span>
@@ -49,8 +51,10 @@
 </template>
 
 <script>
+import { Toast } from '@chipspc/vant-dgg'
 export default {
   name: 'GiftBag',
+  components: { [Toast.name]: Toast },
   props: {
     giftBagList: {
       type: Array,
@@ -67,6 +71,9 @@ export default {
   methods: {
     jump(url) {
       window.location.href = url
+    },
+    prompt() {
+      Toast('功能正在建设中，敬请期待')
     },
   },
 }
