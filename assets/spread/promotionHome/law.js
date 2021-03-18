@@ -624,4 +624,4 @@ const defaultList = {
     ],
   },
 }
-export default defaultList
+module.exports = { defaultList }
