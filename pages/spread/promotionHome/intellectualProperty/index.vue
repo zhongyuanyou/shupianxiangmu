@@ -386,9 +386,8 @@ export default {
     },
     // 金刚区导航栏
     navList(data) {
-      console.log(data, 55555)
       if (data.length !== 0) {
-        const navList = data.map((elem, index) => {
+        this.rollNav = data.map((elem, index) => {
           return {
             code: index,
             name: elem.name,
@@ -398,7 +397,7 @@ export default {
             imageUrl: elem.navigationImageUrl,
           }
         })
-        this.rollNav = navList
+        this.rollNav.reverse()
       }
     },
     // 新人专属
