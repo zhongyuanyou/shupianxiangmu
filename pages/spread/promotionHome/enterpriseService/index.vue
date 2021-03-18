@@ -463,7 +463,7 @@ export default {
     // 薯片推广企业服务新人专属礼页面
     giftData(data) {
       if (data.length !== 0) {
-        this.gift = data.map((elem, index) => {
+        this.gift = data.map((elem) => {
           return {
             img: elem.materialList[0].materialUrl,
             url: '',
@@ -471,6 +471,8 @@ export default {
             price: elem.materialList[0].materialDescription.split(',')[1],
           }
         })
+      } else {
+        this.gift = []
       }
     },
     // 直播 补贴

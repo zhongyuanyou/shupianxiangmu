@@ -1,7 +1,7 @@
 <template>
   <div class="advertising">
     <!-- 新人专属 -->
-    <div class="exclusive-floor">
+    <div class="exclusive-floor" v-show="gift.length > 0">
       <div class="exclusive-floor-top">
         <span class="title">新人专属礼</span>
         <a class="more" href="javascript:;">
@@ -444,7 +444,7 @@ export default {
   .introduce {
     display: flex;
     flex-wrap: wrap;
-    width: 710px;
+    width: 720px;
     height: 268px;
     border-radius: 24px;
     &-item {
@@ -495,7 +495,7 @@ export default {
     }
     .introduce-item:last-child {
       border-radius: 0 0 24px 0;
-      margin: 1px 0 0 1px;
+      margin: 0 0 0 1px;
     }
   }
 }

@@ -53,7 +53,7 @@ export default {
     // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
     const locations = 'ad113236,ad113238,ad113240,ad113241'
     const code = 'nav100057'
-    const centerCode = 'TradingPlatform'
+    const centerCode = 'IntellectualProperty'
     const dataRes = defaultRes
     try {
       const res = await $axios.get(chipSpread.list, {

@@ -1,7 +1,7 @@
 <template>
   <div class="exclusive">
     <!-- 新人专属 -->
-    <div class="exclusive-floor">
+    <div class="exclusive-floor" v-show="proTitle.length > 0">
       <div class="exclusive-floor-top">
         <span class="title">新人专属礼</span>
         <a class="more" href="javascript:;">
