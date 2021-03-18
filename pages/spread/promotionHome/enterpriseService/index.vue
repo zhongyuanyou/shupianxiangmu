@@ -448,10 +448,10 @@ export default {
       if (data.length !== 0) {
         this.rollNav = data.map((elem, index) => {
           return {
-            code: index,
+            code: elem.sort,
             name: elem.name,
-            // url: elem.url,
-            url: '',
+            url: elem.url,
+            // url: '',
             size: 'small',
             label: '',
             imageUrl: elem.navigationImageUrl,

@@ -38,9 +38,11 @@
             <div class="product-title">{{ item.title }}</div>
             <div class="product-price">
               {{ item.price }} <span>元</span>
-              <span>新人价<i></i></span>
+              <span>{{ item.label || '新人价' }}<i></i></span>
             </div>
-            <div class="product-quantity">192人已购买</div>
+            <div class="product-quantity">
+              {{ item.count || '192人已购买' }}
+            </div>
           </div>
         </div>
       </div>

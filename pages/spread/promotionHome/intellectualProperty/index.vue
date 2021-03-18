@@ -181,7 +181,7 @@ export default {
         },
         {
           title: '[企业必备] 商标注...',
-          price: 488,
+          price: 199,
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/np4823u4b1c000.png',
           url: '',
         },
@@ -360,6 +360,7 @@ export default {
             this.proTitleData(elem.sortMaterialList)
           }
           if (elem.locationCode === 'ad113279') {
+            console.log('ad113279')
             this.imgContentData(elem.sortMaterialList)
           }
           if (elem.locationCode === 'ad113265') {
@@ -401,6 +402,7 @@ export default {
     },
     // 新人专属
     proTitleData(data) {
+      console.log(data[0], 4444444444)
       if (data.length !== 0) {
         this.proTitle = data.map((elem, index) => {
           return {
@@ -473,7 +475,7 @@ export default {
           }
         })
         // if (this.$refs.intellectual !== undefined) {
-        this.$refs.intellectual.initialize(this.changeState)
+        // this.$refs.intellectual.initialize(this.changeState)
         // }
 
         // this.onChange(this.changeState)
