@@ -129,7 +129,7 @@ export default {
                 code: 2,
                 imageUrl:
                   'https://cdn.shupian.cn/sp-pt/wap/images/adwjgxcjzc80000.png',
-                title: '商品名称商品名称商品名称…',
+                title: '商品名称商品名称',
                 score: '',
                 activeTag: '',
                 sales: '1200',
@@ -172,7 +172,7 @@ export default {
             ],
           },
           {
-            title: '严选',
+            title: '电商运营',
             describe: '品质保障',
             list: [
               {
@@ -200,7 +200,7 @@ export default {
             ],
           },
           {
-            title: '好品',
+            title: '营销推广',
             describe: '品质保障',
             list: [
               {
@@ -219,7 +219,7 @@ export default {
                 code: 2,
                 imageUrl:
                   'https://cdn.shupian.cn/sp-pt/wap/images/adwjgxcjzc80000.png',
-                title: '商品名称商品名称商品名称…',
+                title: '商品名称商品名称',
                 score: '',
                 activeTag: '',
                 sales: '1200',
@@ -229,14 +229,14 @@ export default {
             ],
           },
           {
-            title: '解决方案',
+            title: '小程序建设',
             describe: '品质保障',
             list: [
               {
                 code: 2,
                 imageUrl:
                   'https://cdn.shupian.cn/sp-pt/wap/images/adwjgxcjzc80000.png',
-                title: '商品名称商品名称商品名称…',
+                title: '商品名称商品名称',
                 score: '',
                 activeTag: '',
                 sales: '1200',
@@ -372,6 +372,7 @@ export default {
     padding: 0 20px;
     margin-top: 20px;
     width: 100%;
+
     display: flex;
     flex-flow: row wrap;
     align-content: flex-start;
@@ -383,6 +384,7 @@ export default {
       display: flex;
       flex-direction: column;
       background: #ffffff;
+      height: 100%;
       border-radius: 24px;
       padding: 20px 20px 24px;
       .img-box {
