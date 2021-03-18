@@ -32,30 +32,31 @@ export default {
     Advertising,
     Recommended,
   },
-  async asyncData({ $axios }) {
-    try {
-      const res = await $axios.get(chipSpread.list, {
-        params: {
-          locationCodes:
-            'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
-          navCodes: 'nav100061',
-          productCenterCode: 'Internet',
-        },
-      })
-      if (res.code === 200) {
-        console.log(res)
-        return {
-          result: res,
-        }
-      } else if (res.code === 500) {
-        console.log(222)
-      }
-    } catch (error) {
-      // 请求出错也要保证页面正常显示
+  //   async asyncData({ $axios }) {
+  //     try {
+  //       const res = await $axios.get(chipSpread.list, {
+  //         params: {
+  //           locationCodes:
+  //             'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
+  //           navCodes: 'nav100061',
+  //           productCenterCode: 'Internet',
+  //         },
+  //       })
+  //       console.log(res)
+  //       if (res.code === 200) {
+  //         console.log(res)
+  //         return {
+  //           result: res,
+  //         }
+  //       } else if (res.code === 500) {
+  //         console.log(222)
+  //       }
+  //     } catch (error) {
+  //       // 请求出错也要保证页面正常显示
 
-      return { error }
-    }
-  },
+  //       return { error }
+  //     }
+  //   },
   data() {
     return {
       rollNav: [
@@ -271,8 +272,6 @@ export default {
     }
   },
   methods: {
-    getMsg() {},
-
     // 跳转判断
     openIM(url) {
       if (url) {

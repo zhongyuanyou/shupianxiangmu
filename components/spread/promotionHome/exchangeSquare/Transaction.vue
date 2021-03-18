@@ -49,7 +49,7 @@
                 v-show="productcode < max"
                 :key="productcode"
               >
-                <a :href="product.url">
+                <a href="javascript:;">
                   <span class="product-title">{{ product.title }}</span>
                   <div class="label-box">
                     <span

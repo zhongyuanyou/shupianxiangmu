@@ -78,12 +78,10 @@ export default {
         },
       })
       if (res.code === 200) {
-        console.log(111)
         return {
           result: res,
         }
       } else if (res.code === 500) {
-        console.log(322)
         return { result: defaultList }
       }
     } catch (error) {
