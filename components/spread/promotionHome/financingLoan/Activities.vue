@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="my-component">
-      <div v-for="(item, index) in list" :key="index" class="item">
+      <div
+        v-for="(item, index) in list"
+        :key="index"
+        class="item"
+        @click="() => $parent.toast()"
+      >
         <div class="item-title">{{ item.title }}</div>
         <div class="item-desc">{{ item.desc }}</div>
         <div class="item-img">

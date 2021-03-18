@@ -5,7 +5,7 @@
         <span class="header-title">新人专属礼</span>
         <button class="header-btn">更多></button>
       </div>
-      <div class="content">
+      <div class="content" @click="() => $parent.toast()">
         <div class="content-left">
           <img
             src="https://cdn.shupian.cn/sp-pt/wap/images/bxe8tldrtk00000.png"
