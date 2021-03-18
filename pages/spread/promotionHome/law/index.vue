@@ -18,9 +18,9 @@
     <!-- 金刚区 -->
     <Nav :roll-nav="rollNav" class="nav"></Nav>
     <!-- banner -->
-    <Banner :swipe-list="swipeList" v-if="swipeList.length !== 0"></Banner>
+    <Banner v-if="swipeList.length !== 0" :swipe-list="swipeList"></Banner>
     <!-- vip礼包 -->
-    <GiftBag :gift-list="giftList" v-if="giftList.length !== 0"></GiftBag>
+    <GiftBag v-if="giftList.length !== 0" :gift-list="giftList"></GiftBag>
     <!-- 律师直播 -->
     <LawyerLive :lawyer-live="lawyerLive" />
     <!-- 推荐律师 -->
@@ -53,7 +53,7 @@ import LawService from '@/components/spread/promotionHome/law/LawService.vue'
 import RecommendList from '@/components/spread/promotionHome/law/RecommendList.vue'
 import LawyerLive from '@/components/spread/promotionHome/law/LawyerLive'
 import { chipSpread } from '@/api/spread'
-import defaultList from '@/assets/spread/promotionHome/law.js'
+import { defaultList } from '@/assets/spread/promotionHome/law.js'
 // import Bottom from '@/components/spread/common/FixedBottom.vue'
 export default {
   components: {
@@ -77,7 +77,9 @@ export default {
           productCenterCode: 'LawService',
         },
       })
+      console.log(res, '2121')
       if (res.code === 200) {
+        console.log('连接成功')
         return {
           result: res,
         }
@@ -446,7 +448,6 @@ export default {
             })
             this.serviceList = serviceList
           } else {
-            console.log('p2')
           }
         })
         .catch((err) => {

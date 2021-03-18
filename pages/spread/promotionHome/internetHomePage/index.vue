@@ -24,6 +24,8 @@ import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.
 import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '@/components/spread/promotionHome/internetHomePage/Recommended.vue'
 import { chipSpread } from '@/api/spread'
+import { internetData } from '@/assets/spread/promotionHome/internetHomePage.js'
+
 export default {
   components: {
     Header,
@@ -32,31 +34,37 @@ export default {
     Advertising,
     Recommended,
   },
-  //   async asyncData({ $axios }) {
-  //     try {
-  //       const res = await $axios.get(chipSpread.list, {
-  //         params: {
-  //           locationCodes:
-  //             'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
-  //           navCodes: 'nav100061',
-  //           productCenterCode: 'Internet',
-  //         },
-  //       })
-  //       console.log(res)
-  //       if (res.code === 200) {
-  //         console.log(res)
-  //         return {
-  //           result: res,
-  //         }
-  //       } else if (res.code === 500) {
-  //         console.log(222)
-  //       }
-  //     } catch (error) {
-  //       // 请求出错也要保证页面正常显示
+  async asyncData({ $axios }) {
+    try {
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes:
+            'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
+          navCodes: 'nav100061',
+          productCenterCode: 'Internet',
+        },
+      })
 
-  //       return { error }
-  //     }
-  //   },
+      if (res.code === 200) {
+        return {
+          result: res,
+        }
+      } else if (res.code === 500) {
+        return {
+          result: internetData,
+        }
+      } else if (res.code === 404) {
+        console.log(111)
+        return {
+          result: internetData,
+        }
+      }
+    } catch (error) {
+      // 请求出错也要保证页面正常显示
+
+      return { error }
+    }
+  },
   data() {
     return {
       rollNav: [
@@ -152,33 +160,33 @@ export default {
         },
       ],
       giftBagList: [
-        {
-          code: 1,
-          headImage:
-            'https://cdn.shupian.cn/sp-pt/wap/images/5p96k2nhcbk0000.png',
-          label: '新人礼',
-          title: '有限公司注册',
-          price: '0元',
-          url: 'https://www.baidu.com/',
-        },
-        {
-          code: 2,
-          headImage:
-            'https://cdn.shupian.cn/sp-pt/wap/images/3q9xm3k8tti0000.png',
-          label: '新人礼',
-          title: '一般纳税人一般纳税人',
-          price: '1元/月',
-          url: 'https://www.baidu.com/',
-        },
-        {
-          code: 3,
-          headImage:
-            'https://cdn.shupian.cn/sp-pt/wap/images/5lqtjec7rm40000.png',
-          label: '新人礼',
-          title: '服务代金券',
-          price: '600元',
-          url: 'https://www.baidu.com/',
-        },
+        // {
+        //   code: 1,
+        //   headImage:
+        //     'https://cdn.shupian.cn/sp-pt/wap/images/5p96k2nhcbk0000.png',
+        //   label: '新人礼',
+        //   title: '有限公司注册',
+        //   price: '0元',
+        //   url: 'https://www.baidu.com/',
+        // },
+        // {
+        //   code: 2,
+        //   headImage:
+        //     'https://cdn.shupian.cn/sp-pt/wap/images/3q9xm3k8tti0000.png',
+        //   label: '新人礼',
+        //   title: '一般纳税人一般纳税人',
+        //   price: '1元/月',
+        //   url: 'https://www.baidu.com/',
+        // },
+        // {
+        //   code: 3,
+        //   headImage:
+        //     'https://cdn.shupian.cn/sp-pt/wap/images/5lqtjec7rm40000.png',
+        //   label: '新人礼',
+        //   title: '服务代金券',
+        //   price: '600元',
+        //   url: 'https://www.baidu.com/',
+        // },
       ],
       advertisingList: {
         limitedTime: {
@@ -266,6 +274,8 @@ export default {
   mounted() {
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
+        this.navDetail(this.result.data.navs.nav100061)
+        this.getGiftBag(this.result.data.adList)
       }
     } catch (error) {
       console.log(error)
@@ -303,8 +313,83 @@ export default {
           }
           navList.push(obj)
         })
-        this.rollNav = navList
+        this.rollNav = navList.reverse()
       }
+    },
+    // 新人红包数据处理
+    getGiftBag(data) {
+      data.forEach((item, idx) => {
+        if (item.locationCode === 'ad113229') {
+          const bagList = []
+          item.sortMaterialList.forEach((elem, index) => {
+            const msg = elem.materialList[0].materialDescription.split('#')
+            const obj = {
+              code: index + 1,
+              headImage: elem.materialList[0].materialUrl,
+              label: msg[0],
+              title: elem.materialList[0].materialName.split('#')[1],
+              price: msg[1],
+              url: elem.materialList[0].materialLink,
+            }
+            bagList.push(obj)
+          })
+          this.giftBagList = bagList
+        }
+        if (item.locationCode === 'ad113280') {
+          const seckill = []
+          item.sortMaterialList.forEach((elem, index) => {
+            const obj = {
+              code: index + 1,
+              imgUrl: elem.materialList[0].materialUrl,
+              label: elem.materialList[0].materialDescription,
+              name: elem.materialList[0].materialName,
+              url: elem.materialList[0].materialLink,
+            }
+            seckill.push(obj)
+          })
+          this.advertisingList.limitedTime.product = seckill
+        }
+        if (item.locationCode === 'ad113271') {
+          const live = []
+          item.sortMaterialList.forEach((elem, index) => {
+            const obj = {
+              code: index + 1,
+              url: elem.materialList[0].materialLink,
+              imgUrl: elem.materialList[0].materialUrl,
+            }
+            live.push(obj)
+          })
+          this.advertisingList.live.product = live
+        }
+        if (item.locationCode === 'ad113272') {
+          const freeTrial = []
+          item.sortMaterialList.forEach((elem, index) => {
+            const obj = {
+              code: index + 1,
+              imgUrl: elem.materialList[0].materialUrl,
+              label: elem.materialList[0].materialDescription,
+              name: elem.materialList[0].materialName.split('#')[1],
+              url: elem.materialList[0].materialLink,
+            }
+            freeTrial.push(obj)
+          })
+          this.advertisingList.freeTrial.product = freeTrial
+        }
+        if (item.locationCode === 'ad113274') {
+          const course = []
+          item.sortMaterialList.forEach((elem, index) => {
+            const obj = {
+              code: index + 1,
+              imgUrl: elem.materialList[0].materialUrl,
+              label: elem.materialList[0].materialDescription,
+              name: elem.materialList[0].materialName.split('#')[1],
+              url: elem.materialList[0].materialLink,
+            }
+            course.push(obj)
+          })
+          this.advertisingList.course.product = course
+        }
+      })
     },
   },
   head() {
