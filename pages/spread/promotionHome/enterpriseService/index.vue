@@ -255,7 +255,7 @@ export default {
         {
           code: 1,
           type: 1,
-          name: '为你推介',
+          name: '为你推荐',
         },
         {
           code: 2,
