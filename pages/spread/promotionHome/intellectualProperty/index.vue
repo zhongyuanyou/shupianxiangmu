@@ -354,13 +354,12 @@ export default {
     try {
       if (JSON.stringify(resData) !== '{}') {
         this.navList(resData.navs.nav100060 || [])
-        this.productTitle(resData.productClassList || [])
+        // this.productTitle(resData.productClassList || [])
         resData.adList.filter((elem) => {
           if (elem.locationCode === 'ad113236') {
             this.proTitleData(elem.sortMaterialList)
           }
           if (elem.locationCode === 'ad113279') {
-            console.log('ad113279')
             this.imgContentData(elem.sortMaterialList)
           }
           if (elem.locationCode === 'ad113265') {
@@ -387,10 +386,11 @@ export default {
     },
     // 金刚区导航栏
     navList(data) {
+      console.log(data, 55555)
       if (data.length !== 0) {
-        this.rollNav = data.map((elem, index) => {
+        const navList = data.map((elem, index) => {
           return {
-            code: elem.sort,
+            code: index,
             name: elem.name,
             url: elem.url,
             size: 'small',
@@ -398,11 +398,11 @@ export default {
             imageUrl: elem.navigationImageUrl,
           }
         })
+        this.rollNav = navList
       }
     },
     // 新人专属
     proTitleData(data) {
-      console.log(data[0], 4444444444)
       if (data.length !== 0) {
         this.proTitle = data.map((elem, index) => {
           return {

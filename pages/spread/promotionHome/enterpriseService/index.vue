@@ -413,7 +413,7 @@ export default {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
         this.navList(resData.navs.nav100057 || [])
-        this.productTitle(resData.productClassList || [])
+        // this.productTitle(resData.productClassList || [])
         resData.adList.filter((elem) => {
           if (elem.locationCode === 'ad113250') {
             this.giftData(elem.sortMaterialList)
@@ -457,6 +457,8 @@ export default {
             imageUrl: elem.navigationImageUrl,
           }
         })
+        this.rollNav.reverse()
+        // console.log(this.rollNav)
       }
     },
 
