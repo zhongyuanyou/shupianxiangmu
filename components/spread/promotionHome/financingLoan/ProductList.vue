@@ -71,9 +71,36 @@ export default {
             {
               title: '社保贷',
               desc: '手续简单，审批快',
+              price: 100000,
+              img:
+                'https://cdn.shupian.cn/sp-pt/wap/images/ffstsanrd2w0000.png',
+              url: '',
+              labels: ['月利率低至0.35%', '贷款期限最长24期'],
+            },
+            {
+              title: '房产贷',
+              desc: '手续简单，审批快',
+              price: 1000000,
+              img:
+                'https://cdn.shupian.cn/sp-pt/wap/images/1is1vs26hzmo000.png',
+              url: '',
+              labels: ['月利率低至0.35%', '贷款期限最长24期'],
+            },
+            {
+              title: '抵押贷',
+              desc: '手续简单，审批快',
+              price: 10000000,
+              img:
+                'https://cdn.shupian.cn/sp-pt/wap/images/2c2r7yl5vesk000.png',
+              url: '',
+              labels: ['月利率低至0.35%', '贷款期限最长24期'],
+            },
+            {
+              title: '信用贷',
+              desc: '手续简单，审批快',
               price: 1000,
               img:
-                'https://cdn.shupian.cn/sp-pt/wap/images/6671aj4ro3g0000.png',
+                'https://cdn.shupian.cn/sp-pt/wap/images/bi7cv8pjm7s0000.png',
               url: '',
               labels: ['月利率低至0.35%', '贷款期限最长24期'],
             },
