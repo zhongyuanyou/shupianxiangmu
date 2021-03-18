@@ -23,13 +23,13 @@ import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
 import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
+import { chipSpread } from '@/api/spread'
 
 export default {
   components: { Header, Nav, Activity, Banner, GiftBag, Transaction },
   async asyncData({ $axios }) {
-    const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
     try {
-      const res = await $axios.get(url, {
+      const res = await $axios.get(chipSpread.list, {
         params: {
           locationCodes: 'ad113246,ad113244,ad113281',
           navCode: 'nav100059',
