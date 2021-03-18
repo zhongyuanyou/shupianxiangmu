@@ -43,7 +43,7 @@
           @load="onLoad"
         >
           <div class="product-box">
-            <ul>
+            <ul v-if="item.title === '商标交易'">
               <li
                 v-for="(product, productcode) in item.product"
                 v-show="productcode < max"
@@ -93,6 +93,7 @@
                 ></a>
               </li>
             </ul>
+            <ProductItem v-else :product="item.product"></ProductItem>
           </div>
         </sp-list>
       </sp-tab>
@@ -102,8 +103,14 @@
 
 <script>
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
+import ProductItem from '@/components/spread/promotionHome/exchangeSquare/ProductItem'
 export default {
-  components: { [Tab.name]: Tab, [Tabs.name]: Tabs, [List.name]: List },
+  components: {
+    [Tab.name]: Tab,
+    [Tabs.name]: Tabs,
+    [List.name]: List,
+    ProductItem,
+  },
   props: {
     productList: {
       type: Array,
@@ -252,42 +259,72 @@ export default {
             title: '公司交易',
             product: [
               {
-                title: '青稞乐园商标',
-                score: '3.9',
-                sales: '折',
-                activeTag: '千万补贴',
-                saleImg:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2dmktflkbxc0000.png',
-                list: ['人气商标排行榜TOP3', '8折优惠'],
-                describe:
-                  '该商标属于第18类商标，包含旅行箱、钱包、手提包、皮带等商品',
-                originalPrice: '998元',
-                price: '698',
-                images: [
-                  'https://cdn.shupian.cn/sp-pt/wap/images/e3bd49hdl6g0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dv444eenu3c0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7jgtavtu8eo0000.png',
+                code: 1,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '成都****有限责任公司成都****有限责任公司',
+                labels: [
+                  { code: 1, label: '精选资质TOP1', type: 'saleTag' },
+                  { code: 2, label: '公司干净无异常', type: 'tag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
                 ],
-                url: '',
+                descride: '电子贸易｜1-5年｜100W-500W',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 500,
+                originalPrice: 998,
+                priceUnit: '元',
               },
               {
-                title: '青稞乐园商标',
-                score: '3.9',
-                sales: '折',
-                activeTag: '千万补贴',
-                saleImg:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2dmktflkbxc0000.png',
-                list: ['人气商标排行榜TOP3', '8折优惠'],
-                describe:
-                  '该商标属于第18类商标，包含旅行箱、钱包、手提包、皮带等商品',
-                originalPrice: '998元',
-                price: '698',
-                images: [
-                  'https://cdn.shupian.cn/sp-pt/wap/images/e3bd49hdl6g0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dv444eenu3c0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7jgtavtu8eo0000.png',
+                code: 2,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '成都****有限责任公司成都****有限责任公司',
+                labels: [
+                  { code: 1, label: '限时秒杀', type: 'sactiveTag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                  { code: 2, label: '公司干净无异常', type: 'tag' },
                 ],
-                url: '',
+                descride: '电子贸易 | 一般纳税人 | 1-5年',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 499.9,
+                originalPrice: 998,
+                priceUnit: '元',
+              },
+              {
+                code: 3,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '成都****有限责任公司',
+                labels: [
+                  { code: 1, label: '可领优惠券', type: 'saleTag' },
+                  { code: 2, label: '公司干净无异常', type: 'tag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                ],
+                descride: '一般纳税人 | 1-5年 | 100W-500W',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 499,
+                originalPrice: 998,
+                priceUnit: '元',
+              },
+              {
+                code: 4,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '成都****有限责任公司成都****有限责任公司',
+                labels: [
+                  { code: 1, label: '千万补贴', type: 'sactiveTag' },
+                  { code: 2, label: '9折优惠', type: 'saleTag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                ],
+                descride: '电子贸易｜一般纳税人｜1-5年｜100W-…',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 500,
+                originalPrice: 998,
+                priceUnit: '元',
               },
             ],
           },
@@ -296,42 +333,72 @@ export default {
             title: '专利交易',
             product: [
               {
-                title: '青稞乐园商标',
-                score: '3.9',
-                sales: '折',
-                activeTag: '千万补贴',
-                saleImg:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2dmktflkbxc0000.png',
-                list: ['人气商标排行榜TOP3', '8折优惠'],
-                describe:
-                  '该商标属于第18类商标，包含旅行箱、钱包、手提包、皮带等商品',
-                originalPrice: '998元',
-                price: '698',
-                images: [
-                  'https://cdn.shupian.cn/sp-pt/wap/images/e3bd49hdl6g0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dv444eenu3c0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7jgtavtu8eo0000.png',
+                code: 1,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '一种用于预处理农作一种用于预处理农作…',
+                labels: [
+                  { code: 1, label: '精选资质TOP1', type: 'saleTag' },
+                  { code: 2, label: '支持当面交易', type: 'tag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
                 ],
-                url: '',
+                descride: '发明专利｜包装印刷｜已下证',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 30,
+                originalPrice: 35,
+                priceUnit: '万元',
               },
               {
-                title: '青稞乐园商标',
-                score: '3.9',
-                sales: '折',
-                activeTag: '千万补贴',
-                saleImg:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2dmktflkbxc0000.png',
-                list: ['人气商标排行榜TOP3', '8折优惠'],
-                describe:
-                  '该商标属于第18类商标，包含旅行箱、钱包、手提包、皮带等商品',
-                originalPrice: '998元',
-                price: '698',
-                images: [
-                  'https://cdn.shupian.cn/sp-pt/wap/images/e3bd49hdl6g0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dv444eenu3c0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7jgtavtu8eo0000.png',
+                code: 2,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '一种用于预处理农作…一种用于预处理农作…',
+                labels: [
+                  { code: 1, label: '限时秒杀', type: 'sactiveTag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                  { code: 2, label: '支持当面交易', type: 'tag' },
                 ],
-                url: '',
+                descride: '发明专利｜包装印刷｜已下证',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 11.3,
+                originalPrice: 12.5,
+                priceUnit: '万元',
+              },
+              {
+                code: 3,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '一种用于预处理农作',
+                labels: [
+                  { code: 1, label: '可领优惠券', type: 'saleTag' },
+                  { code: 2, label: '支持当面交易', type: 'tag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                ],
+                descride: '发明专利｜包装印刷｜已下证',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 2.54,
+                originalPrice: 3,
+                priceUnit: '万元',
+              },
+              {
+                code: 4,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '一种用于预处理农作一种用于预处理农作…',
+                labels: [
+                  { code: 1, label: '千万补贴', type: 'sactiveTag' },
+                  { code: 2, label: '9折优惠', type: 'saleTag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                ],
+                descride: '发明专利｜包装印刷｜已下证',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 1.3,
+                originalPrice: 1.5,
+                priceUnit: '万元',
               },
             ],
           },
@@ -340,42 +407,72 @@ export default {
             title: '资质交易',
             product: [
               {
-                title: '青稞乐园商标',
-                score: '3.9',
-                sales: '折',
-                activeTag: '千万补贴',
-                saleImg:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2dmktflkbxc0000.png',
-                list: ['人气商标排行榜TOP3', '8折优惠'],
-                describe:
-                  '该商标属于第18类商标，包含旅行箱、钱包、手提包、皮带等商品',
-                originalPrice: '998元',
-                price: '698',
-                images: [
-                  'https://cdn.shupian.cn/sp-pt/wap/images/e3bd49hdl6g0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dv444eenu3c0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7jgtavtu8eo0000.png',
+                code: 1,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '房建市政公路三级+四专三级',
+                labels: [
+                  { code: 1, label: '精选资质TOP1', type: 'saleTag' },
+                  { code: 2, label: '可线下', type: 'tag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
                 ],
-                url: '',
+                descride: '施工总承包三级标准资质｜带安许｜500…',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 33,
+                originalPrice: 34,
+                priceUnit: '万元',
               },
               {
-                title: '青稞乐园商标',
-                score: '3.9',
-                sales: '折',
-                activeTag: '千万补贴',
-                saleImg:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2dmktflkbxc0000.png',
-                list: ['人气商标排行榜TOP3', '8折优惠'],
-                describe:
-                  '该商标属于第18类商标，包含旅行箱、钱包、手提包、皮带等商品',
-                originalPrice: '998元',
-                price: '698',
-                images: [
-                  'https://cdn.shupian.cn/sp-pt/wap/images/e3bd49hdl6g0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dv444eenu3c0000.png',
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7jgtavtu8eo0000.png',
+                code: 2,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '房建市政公路三级+四专三级房建市政公路三级+四专…',
+                labels: [
+                  { code: 1, label: '限时秒杀', type: 'sactiveTag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                  { code: 2, label: '可线下', type: 'tag' },
                 ],
-                url: '',
+                descride: '带安许｜500万-1000万',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 33.3,
+                originalPrice: 34,
+                priceUnit: '万元',
+              },
+              {
+                code: 3,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '房建市政公路三级+四专三级房建市政公路三级+四专…',
+                labels: [
+                  { code: 1, label: '可领优惠券', type: 'saleTag' },
+                  { code: 2, label: '可线下', type: 'tag' },
+                  { code: 2, label: '热门行业', type: 'tag' },
+                ],
+                descride: '施工总承包三级标准资质｜带安许',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 33.99,
+                originalPrice: 34,
+                priceUnit: '万元',
+              },
+              {
+                code: 4,
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                title: '房建市政公路三级+四专三级房建市政公路三级+四专…',
+                labels: [
+                  { code: 1, label: '千万补贴', type: 'sactiveTag' },
+                  { code: 2, label: '9折优惠', type: 'saleTag' },
+                  { code: 2, label: '可线下', type: 'tag' },
+                ],
+                descride: '施工总承包三级标准资质｜带安许｜500…',
+                discountTag:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
+                salePrice: 33,
+                originalPrice: 34,
+                priceUnit: '万元',
               },
             ],
           },
@@ -434,7 +531,6 @@ export default {
     },
     change(index) {
       this.isActive = index
-      console.log(this.isActive)
     },
   },
 }

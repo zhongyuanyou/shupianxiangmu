@@ -22,203 +22,51 @@ import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
 import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
+import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 
 export default {
   components: { Header, Nav, Activity, Banner, GiftBag, Transaction },
-  //   async asyncData({ $axios }) {
-  //     const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-  //     try {
-  //       const res = await $axios.get(url, {
-  //         params: {
-  //           locationCodes: 'ad113215',
-  //           navCode: 'nav100059',
-  //           productCenterCode: 'TradingPlatform',
-  //         },
-  //       })
-  //       if (res.code === 200) {
-  //         return {
-  //           result: res,
-  //         }
-  //       } else if (res.code === 500) {
-  //         console.log(222)
-  //       }
-  //     } catch (error) {
-  //       // 请求出错也要保证页面正常显示
-  //       return { error }
-  //     }
-  //   },
+  async asyncData({ $axios }) {
+    const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+    try {
+      const res = await $axios.get(url, {
+        params: {
+          locationCodes: 'ad113246,ad113244,ad113281',
+          navCode: 'nav100059',
+          productCenterCode: 'TradingPlatform',
+        },
+      })
+      if (res.code === 200) {
+        return {
+          result: res,
+        }
+      } else if (res.code === 500) {
+        return {
+          result: squareData,
+        }
+      } else if (res.code === 404) {
+        return {
+          result: squareData,
+        }
+      }
+    } catch (error) {
+      // 请求出错也要保证页面正常显示
+      return { error }
+    }
+  },
   data() {
     return {
-      rollNav: [
-        {
-          code: 1,
-          name: '专利交易',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/hydg90tse6g000.png',
-        },
-        {
-          code: 2,
-          name: '公司交易',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/7bruwywz4180000.png',
-        },
-        {
-          code: 3,
-          name: '商标交易',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/2coipzbrfh7o000.png',
-        },
-        {
-          code: 4,
-          name: '资质服务',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/c3920lciads0000.png',
-        },
-        {
-          code: 5,
-          name: '免费咨询',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/62r574txu500000.png',
-        },
-        {
-          code: 6,
-          name: '交易排行榜',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/a05vlejyaw00000.png',
-        },
-        {
-          code: 7,
-          name: '独家资源',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/dotigsqsbeo0000.png',
-        },
-        {
-          code: 8,
-          name: '我要出售',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/1r6tu787vybk000.png',
-        },
-        {
-          code: 9,
-          name: '企知道',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/283jenvgpack000.png',
-        },
-        {
-          code: 10,
-          name: '全部交易',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/fhngcdfde0o0000.png',
-        },
-      ],
-      activityList: [
-        {
-          code: 1,
-          name: '超值代金券',
-          image: 'https://cdn.shupian.cn/sp-pt/wap/images/9bx6gknv8wk0000.png',
-          url: '',
-        },
-        {
-          code: 2,
-          name: '99元特价',
-          image: 'https://cdn.shupian.cn/sp-pt/wap/images/8w63dgy0wu80000.png',
-          url: '',
-        },
-        {
-          code: 3,
-          name: '限时秒杀',
-          image: 'https://cdn.shupian.cn/sp-pt/wap/images/6832vy6dwmc0000.png',
-          url: '',
-        },
-        {
-          code: 4,
-          name: '千万补贴',
-          image: 'https://cdn.shupian.cn/sp-pt/wap/images/dnrhzcqyt9k0000.png',
-          url: '',
-        },
-      ],
-      swipeList: [
-        {
-          code: 1,
-          title: '薯片新春福气献礼',
-          describe: '限量3000份新人好礼 立即领取',
-          bg: 'https://cdn.shupian.cn/sp-pt/wap/images/6th0ikipz4k0000.png',
-        },
-        {
-          code: 2,
-          title: '薯片新春福气献礼',
-          describe: '限量3000份新人好礼 立即领取',
-          bg: 'https://cdn.shupian.cn/sp-pt/wap/images/6th0ikipz4k0000.png',
-        },
-        {
-          code: 3,
-          title: '薯片新春福气献礼',
-          describe: '限量3000份新人好礼 立即领取',
-          bg: 'https://cdn.shupian.cn/sp-pt/wap/images/6th0ikipz4k0000.png',
-        },
-      ],
-      giftBagList: [
-        {
-          code: 1,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/3bn8rm88ieo0000.png',
-          label: '新人价',
-          title: '天樽宝坊',
-          price: '2000',
-          url: '',
-        },
-        {
-          code: 2,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/395qixemsq60000.png',
-          label: '新人价',
-          title: '沁芳泉 QIN…',
-          price: '1688',
-          url: '',
-        },
-        {
-          code: 3,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/5dd0jek3ne40000.png',
-          label: '新人价',
-          title: '町月小筑',
-          price: '1888',
-          url: '',
-        },
-      ],
+      rollNav: [],
+      activityList: [],
+      swipeList: [],
+      giftBagList: [],
     }
   },
   mounted() {
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
-        this.navDetail(this.result.data.navList)
+        this.navDetail(this.result.data.navs.nav100059)
+        this.getData(this.result.data.adList)
       }
     } catch (error) {
       console.log(error)
@@ -241,8 +89,58 @@ export default {
           }
           navList.push(obj)
         })
-        this.rollNav = navList
+        this.rollNav = navList.reverse()
       }
+    },
+    // 处理数据
+    getData(data) {
+      data.forEach((item, index) => {
+        // 活动标签广告位
+        if (item.locationCode === 'ad113244') {
+          const activity = []
+          item.sortMaterialList.forEach((elem, idx) => {
+            const obj = {
+              code: idx + 1,
+              name: elem.materialList[0].materialName.split('#')[1],
+              image: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+            }
+            activity.push(obj)
+          })
+          this.activityList = activity
+        }
+        // banner广告位
+        if (item.locationCode === 'ad113281') {
+          const swiper = []
+          item.sortMaterialList.forEach((elem, idx) => {
+            const obj = {
+              code: idx + 1,
+              title: '',
+              describe: '',
+              bg: elem.materialList[0].materialUrl,
+            }
+            swiper.push(obj)
+          })
+          this.swipeList = swiper
+        }
+        // 新人红包广告位
+        if (item.locationCode === 'ad113246') {
+          const giftBag = []
+          item.sortMaterialList.forEach((elem, idx) => {
+            const msg = elem.materialList[0].materialDescription.split('#')
+            const obj = {
+              code: idx + 1,
+              img: elem.materialList[0].materialUrl,
+              label: msg[0],
+              title: elem.materialList[0].materialName.split('#')[1],
+              price: msg[1],
+              url: elem.materialList[0].materialLink,
+            }
+            giftBag.push(obj)
+          })
+          this.giftBagList = giftBag
+        }
+      })
     },
   },
   head() {

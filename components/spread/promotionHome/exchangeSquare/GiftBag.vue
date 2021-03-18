@@ -32,7 +32,7 @@
             <a href="javascript:;">
               <div class="img-box"><img :src="item.img" alt="" /></div>
               <span class="product-title">{{ item.title }}</span>
-              <span class="product-price">{{ item.price }}元</span>
+              <span class="product-price">{{ item.price }}</span>
               <span class="product-label">{{ item.label }}</span>
             </a>
           </div>

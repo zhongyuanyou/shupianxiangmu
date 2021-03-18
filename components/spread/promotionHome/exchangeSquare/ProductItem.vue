@@ -44,43 +44,16 @@
 
 <script>
 export default {
+  props: {
+    product: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
-    return {
-      product: [
-        {
-          code: 1,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
-          title: '房建市政公路三级+四专三级',
-          labels: [
-            { code: 1, label: '精选资质TOP1', type: 'saleTag' },
-            { code: 2, label: '可线下', type: 'tag' },
-            { code: 2, label: '热门行业', type: 'tag' },
-          ],
-          descride: '施工总承包三级标准资质｜带安许｜500万-1000万',
-          discountTag:
-            'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
-          salePrice: 33.99,
-          originalPrice: 34,
-          priceUnit: '万元',
-        },
-        {
-          code: 1,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
-          title: '房建市政公路三级+四专三级房建市政公路三级+四专…',
-          labels: [
-            { code: 1, label: '精选资质TOP1', type: 'activeTag' },
-            { code: 2, label: '可线下', type: 'tag' },
-            { code: 2, label: '热门行业', type: 'tag' },
-          ],
-          descride: '带安许｜500万-1000万',
-          discountTag:
-            'https://cdn.shupian.cn/sp-pt/wap/images/4vykkg0vo480000.png',
-          salePrice: 33.3,
-          originalPrice: 34,
-          priceUnit: '万元',
-        },
-      ],
-    }
+    return {}
   },
 }
 </script>
@@ -88,7 +61,7 @@ export default {
 <style lang="less" scoped>
 .product-item {
   width: 100%;
-  padding: 0 20px;
+
   .product-box {
     width: 100%;
     height: 276px;
@@ -96,7 +69,7 @@ export default {
     border-radius: 24px;
     padding: 28px 23px 28px 20px;
     display: flex;
-
+    margin-top: 20px;
     .product-left {
       width: 220px;
       height: 220px;
@@ -185,16 +158,17 @@ export default {
           > span:first-child {
             font-size: 36px;
             font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
+            font-weight: bold;
             color: #ec5330;
             line-height: 36px;
           }
           > span:nth-child(2) {
             font-size: 22px;
             font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
+            font-weight: bold;
             color: #ec5330;
             line-height: 22px;
+            margin-left: ;
           }
         }
         .originalPrice {
