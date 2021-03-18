@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { Toast } from '@chipspc/vant-dgg'
 import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
 import Activities from '@/components/spread/promotionHome/financingLoan/Activities.vue'
@@ -68,6 +69,7 @@ export default {
     Tools,
     ProductList,
     BottomNotes,
+    [Toast.name]: Toast,
   },
   async asyncData({ $axios }) {
     // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
@@ -296,6 +298,9 @@ export default {
     }
   },
   methods: {
+    toast() {
+      Toast('功能正在建设中，敬请期待')
+    },
     // 处理导航数据
     handleNavData(navsData) {
       if (!navsData) return
