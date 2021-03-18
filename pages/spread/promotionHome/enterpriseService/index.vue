@@ -510,7 +510,7 @@ export default {
           code: data[0].code,
           name: data[0].name,
         }
-        this.onChange(this.changeState)
+        // this.onChange(this.changeState)
         // this.$refs.enterprise.initialize(this.changeState)
         // 初始化请求数据
         this.titleName = data.map((elem, index) => {

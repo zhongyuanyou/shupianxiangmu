@@ -113,16 +113,16 @@ export default {
         ]
       },
     },
-    changeState: {
-      type: Object,
-      default: () => {
-        return {
-          code: 'FL20201224136019',
-          name: '许可证',
-          type: 0,
-        }
-      },
-    },
+    // changeState: {
+    //   type: Object,
+    //   default: () => {
+    //     return {
+    //       code: 'FL20201224136019',
+    //       name: '许可证',
+    //       type: 0,
+    //     }
+    //   },
+    // },
   },
   data() {
     return {
@@ -130,14 +130,22 @@ export default {
       finished: false, // 加载完毕的文案
       pageNumber: 1,
       list: [],
+      changeState: {
+        code: 'FL20201224136019',
+        name: '许可证',
+        type: 0,
+      },
     }
   },
   mounted() {
     // 初始化推介数据
     // this.list = this.defaultList
+    // this.initialize(changeState)
   },
   methods: {
     initialize(changeObj) {
+      this.changeState = changeObj
+      console.log(this.changeState, '子组件')
       this.pageNumber = 1
       this.list = []
       this.finished = false

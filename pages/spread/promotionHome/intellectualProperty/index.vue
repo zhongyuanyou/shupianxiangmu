@@ -8,7 +8,7 @@
     <!-- E 头部和金刚区 -->
 
     <!-- S 新人专属 -->
-    <Exclusive :pro-title="proTitle" />
+    <Exclusive :pro-title="proTitle" :img-content="imgContent" />
     <!-- E 新人专属 -->
 
     <!--S 免费体验 薯片课程 -->
@@ -18,11 +18,7 @@
     <!-- S 列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
       <template v-slot:list>
-        <KnowledgeList
-          ref="intellectual"
-          :default-list="defaultList"
-          :change-state="changeState"
-        />
+        <KnowledgeList ref="intellectual" :default-list="defaultList" />
       </template>
     </TabServiceItem>
     <!-- E 列表 -->
@@ -30,7 +26,7 @@
 </template>
 
 <script>
-import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { chipSpread } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop'
@@ -51,8 +47,8 @@ export default {
   },
   async asyncData({ $axios }) {
     // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-    const locations = 'ad113236,ad113238,ad113240,ad113241'
-    const code = 'nav100057'
+    const locations = 'ad113279,ad113277,ad113265,ad113236,ad113235,ad113224'
+    const code = 'nav100060'
     const centerCode = 'IntellectualProperty'
     const dataRes = defaultRes
     try {
@@ -190,6 +186,29 @@ export default {
           url: '',
         },
       ],
+      // 广告说明
+      imgContent: [
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/84tta2vzooc0000.png',
+          title: '先服务后收费',
+          assistantTitle: '',
+        },
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/co9djdht52g0000.png',
+          title: '千万补贴',
+          assistantTitle: '精选好服务',
+        },
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/2cxu5ow9hmhw000.png',
+          title: '政府补贴',
+          assistantTitle: '政策解析',
+        },
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/e0b8ph3n46o0000.png',
+          title: '快速通道',
+          assistantTitle: '加急办理',
+        },
+      ],
       // 体验 课程
       content: {
         experience: {
@@ -223,6 +242,7 @@ export default {
           ],
         },
       },
+
       // 列表导航
       titleName: [
         {
@@ -333,9 +353,22 @@ export default {
     const resData = this.resultData
     try {
       if (JSON.stringify(resData) !== '{}') {
-        console.log(resData)
-        this.navList(resData.navs.nav100057 || [])
+        this.navList(resData.navs.nav100060 || [])
         this.productTitle(resData.productClassList || [])
+        resData.adList.filter((elem) => {
+          if (elem.locationCode === 'ad113236') {
+            this.proTitleData(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad113279') {
+            this.imgContentData(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad113265') {
+            this.experience(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad113277') {
+            this.curriculum(elem.sortMaterialList)
+          }
+        })
       }
     } catch (error) {
       console.log(error)
@@ -348,19 +381,15 @@ export default {
     },
     // 请求数据
     onChange(changeObj) {
-      this.changeState = changeObj
+      // this.changeState = changeObj
       this.$refs.intellectual.initialize(changeObj)
-      // if (obj.type === 1) {
-      //   this.list = defaultList
-      // }
     },
     // 金刚区导航栏
     navList(data) {
-      // console.log(data)
       if (data.length !== 0) {
         this.rollNav = data.map((elem, index) => {
           return {
-            code: index,
+            code: elem.sort,
             name: elem.name,
             url: elem.url,
             size: 'small',
@@ -370,6 +399,61 @@ export default {
         })
       }
     },
+    // 新人专属
+    proTitleData(data) {
+      if (data.length !== 0) {
+        this.proTitle = data.map((elem, index) => {
+          return {
+            title: elem.materialList[0].materialName,
+            price: parseInt(
+              elem.materialList[0].materialDescription.split('#')[0]
+            ),
+            label: elem.materialList[0].materialDescription.split('#')[1],
+            count: elem.materialList[0].materialDescription.split('#')[2],
+            img: elem.materialList[0].materialUrl,
+            url: '',
+          }
+        })
+      }
+    },
+    // 广告说明
+    imgContentData(data) {
+      if (data.length !== 0) {
+        this.imgContent = data.map((elem, index) => {
+          return {
+            bgImg: elem.materialList[0].materialUrl,
+            title: elem.materialList[0].materialName,
+            assistantTitle: elem.materialList[0].materialDescription,
+          }
+        })
+      }
+    },
+    // 体验 课程
+    experience(data) {
+      if (data.length !== 0) {
+        this.content.experience.imgVal = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            imgNmae: elem.materialList[0].materialDescription.split('#')[0],
+            label: elem.materialList[0].materialDescription.split('#')[1],
+            url: '',
+          }
+        })
+      }
+    },
+    curriculum(data) {
+      if (data.length !== 0) {
+        this.content.curriculum.imgVal = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            imgNmae: elem.materialList[0].materialDescription.split('#')[0],
+            label: elem.materialList[0].materialDescription.split('#')[1],
+            url: '',
+          }
+        })
+      }
+    },
+
     // 列表导航
     productTitle(data) {
       if (data.length !== 0) {
@@ -378,8 +462,8 @@ export default {
           code: data[0].code,
           name: data[0].name,
         }
-        this.onChange(this.changeState)
-        // this.$refs.enterprise.initialize(this.changeState)
+        // this.$refs.intellectual.initialize(this.changeState)
+
         // 初始化请求数据
         this.titleName = data.map((elem, index) => {
           return {
@@ -388,6 +472,11 @@ export default {
             name: elem.name,
           }
         })
+        // if (this.$refs.intellectual !== undefined) {
+        this.$refs.intellectual.initialize(this.changeState)
+        // }
+
+        // this.onChange(this.changeState)
       }
     },
   },
