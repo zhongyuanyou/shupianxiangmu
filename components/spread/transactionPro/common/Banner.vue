@@ -9,6 +9,7 @@
             :data-name="item.md.name"
             fit="cover"
             :src="item.img"
+            @click="onUrl(item.url)"
           />
         </sp-swipe-item>
       </sp-swipe>
@@ -53,17 +54,39 @@ export default {
       current: 0, // banner下标
     }
   },
+  methods: {
+    // 跳转链接-IM规划师
+    onUrl(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.open(url)
+          // window.open(`${url}?code=${code}`)
+        } else {
+          this.$router.push(url)
+        }
+      }
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
 .my-component {
-  width: 100%;
-  height: 228px;
+  width: 710px;
+  // height: 228px;
+  // height: 180px;
+  margin: 0 auto;
   .banner-swipe {
-    height: 228px;
+    // height: 228px;
+    // width: 710px;
+    height: 180px;
+    border-radius: 24px;
     ::v-deep .sp-swipe__indicator--active {
       background: #ffffff;
+    }
+    .sp-image {
+      // width: 710px;
+      height: 180px;
     }
   }
 }

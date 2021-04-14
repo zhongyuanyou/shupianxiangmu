@@ -21,7 +21,7 @@
     <!-- 表单区 -->
     <Form class="my-form" :data="FormMsg" />
     <!-- 广告位 -->
-    <Advertising />
+    <ADList :data="ADList" class="ad-margin" />
     <!-- 热门商标 -->
     <HotTrademark />
     <!-- 商标服务 -->
@@ -43,7 +43,7 @@ import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
 import Banner from '~/components/spread/transactionPro/common/Banner'
 import Form from '~/components/spread/transactionPro/common/Form'
-import Advertising from '~/components/spread/transactionPro/trademark/Advertising'
+import ADList from '@/components/spread/transactionPro/common/ADList'
 import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark'
 import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService'
 import ProductList from '~/components/spread/transactionPro/trademark/ProductList'
@@ -57,7 +57,7 @@ export default {
     NavBar,
     Banner,
     Form,
-    Advertising,
+    ADList,
     HotTrademark,
     TrademarkService,
     ProductList,
@@ -181,75 +181,7 @@ export default {
         },
       ],
       FormMsg: {
-        title: '只需5秒 一键为您适配商标',
-        // 我需要公司类型下拉
-        needList: [
-          '01类化学原料',
-          '02类颜料油漆',
-          '03类化妆日用',
-          '04类燃料油脂',
-          '05类医药药品',
-          '06类五金金属',
-          '07类机械设备',
-          '08类手工器械',
-          '09类电子电脑',
-          '10类医疗器械',
-          '11类家用电器',
-          '12类运输工具',
-          '13类军火烟火',
-          '14类珠宝钟表',
-          '15类乐器',
-          '16类办公文具',
-          '17类橡胶制品',
-          '18类皮革箱包',
-          '19类建筑材料',
-          '20类家具',
-          '21类厨房洁具',
-          '22类绳网袋篷',
-          '23类纺织纱线',
-          '24类布料床单',
-          '25类服装鞋帽',
-          '26类花边配饰',
-          '27类地毯席垫',
-          '28类体育玩具',
-          '29类食品鱼肉',
-          '30类小食配料',
-          '31类水果花木',
-          '32类啤酒饮料',
-          '33类酒',
-          '34类烟草烟具',
-          '35类广告贸易',
-          '36类金融管理',
-          '37类建筑修理',
-          '38类通讯传媒',
-          '39类运输旅行',
-          '40类材料加工',
-          '41类教育娱乐',
-          '42类技术服务',
-          '43列餐饮酒店',
-          '44类医疗园艺',
-          '45类法律',
-        ],
-        needTitle: '商标类型',
-        cityList: [
-          '全国',
-          '重庆',
-          '长沙',
-          '武汉',
-          '上海',
-          '北京',
-          '深圳',
-          '广州',
-          '成都',
-          '杭州',
-          '郑州',
-          '佛山',
-          '东莞',
-          '宜昌',
-          '石家庄',
-          '河北',
-          '北京海淀',
-        ],
+        title: '海量精品商标  免费为您推荐',
         buttonName: '立即获取',
         subInfo: ['价格透明', '信息安全', '专业保障'],
         type: 'sbjy', // 业态编码。固定几个业态编码。
@@ -276,6 +208,22 @@ export default {
           md: {
             type: '',
             name: '商标交易聚合页_商标授权使用',
+          },
+        },
+      ],
+      ADList: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/c8w39clg7go0000.jpg',
+          url: '',
+          md: {
+            name: '商标交易聚合页_优质资质',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/e5vqunicu000000.jpg',
+          url: '',
+          md: {
+            name: '商标交易聚合页_热销资质',
           },
         },
       ],
@@ -321,6 +269,7 @@ export default {
   background: #ffffff;
   width: @spread-page-width;
   margin: 0 auto;
+  background: #f5f5f5;
   ::v-deep.my-head {
     box-shadow: 0 0 0 0;
   }
@@ -342,10 +291,14 @@ export default {
     }
   }
   .my-banner {
-    margin-top: 32px;
+    margin: 20px auto;
+  }
+  .ad-margin {
+    margin-top: 18px;
+    margin-bottom: 20px;
   }
   .my-form {
-    margin-top: 64px;
+    // margin-top: 64px;
   }
   .box {
     height: 148px;

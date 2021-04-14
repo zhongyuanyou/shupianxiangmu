@@ -9,7 +9,7 @@
         v-md:webClick
         :data-name="`商标交易聚合页_热门商标_${item.name}`"
         href="javascript:;"
-        @click="chat(item)"
+        @click="jumpLink(item.url)"
         ><img :src="item.img" alt=""
       /></a>
     </div>
@@ -55,8 +55,17 @@ export default {
     }
   },
   methods: {
-    chat(item) {
-      this.$parent.jumpLink(item.url)
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.open(url)
+          // window.open(`${url}?code=${code}`)
+        } else {
+          this.$router.push(url)
+        }
+      } else {
+        this.$parent.jumpLink(url)
+      }
     },
   },
 }
@@ -64,18 +73,20 @@ export default {
 
 <style lang="less" scoped>
 .hot-trademark {
-  margin-top: 63px;
-  padding: 0 40px;
+  margin: 0 20px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px 20px;
   .hot-trademark-title {
     display: block;
-    font-size: 40px;
-    line-height: 39px;
+    font-size: 32px;
+    line-height: 33px;
     font-family: PingFang SC;
-    font-weight: bold;
+    font-weight: 500;
     color: #1a1a1a;
   }
   .hot-trademark-content {
-    margin-top: 31px;
+    margin-top: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;

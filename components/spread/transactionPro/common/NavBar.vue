@@ -9,11 +9,11 @@
         :data-name="item.md.name"
         class="item"
         :class="index > 4 ? 'item-no-margin' : ''"
-        @click="jumpLink(item.url)"
+        @click="jumpLink(item.url.item.text)"
       >
         <div
           class="item-img-big"
-          :class="index > 4 ? 'item-img-small' : 'item-img-big'"
+          :class="index > -1 ? 'item-img-small' : 'item-img-big'"
         >
           <img :src="item.img" />
         </div>
@@ -140,10 +140,11 @@ export default {
   },
   methods: {
     // 跳转链接-IM规划师
-    jumpLink(url) {
+    jumpLink(url, code) {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.open(url)
+          // window.open(`${url}?code=${code}`)
         } else {
           this.$router.push(url)
         }
@@ -158,14 +159,18 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: 100%;
+  // width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 0 40px;
+  width: 710px;
+  padding: 40px 25px;
+  background: #ffffff;
+  border-radius: 24px;
+  margin: 0 auto;
   .item {
     width: 104px;
-    margin-bottom: 36px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -209,7 +214,7 @@ export default {
     }
   }
   .item:not(:first-child) {
-    margin-left: 34px;
+    margin-left: 20px;
   }
   .item:nth-child(6) {
     margin-left: 0px;

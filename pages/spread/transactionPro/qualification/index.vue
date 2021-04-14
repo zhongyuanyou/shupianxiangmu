@@ -68,7 +68,7 @@ import ProductList from '@/components/spread/transactionPro/common/ProductList'
 import FooterBottom from '@/components/spread/transactionPro/common/FooterBottom'
 
 import GoodQualification from '@/components/spread/transactionPro/qualification/GoodQualification'
-import ADList from '@/components/spread/transactionPro/qualification/ADList'
+import ADList from '@/components/spread/transactionPro/common/ADList'
 
 export default {
   name: 'Index',
@@ -195,12 +195,14 @@ export default {
       bannerList: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/f7f7sk45vfc0000.png',
+          url: '',
           md: {
             name: '资质交易聚合页_全类目资质转让',
           },
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/2kcy4kojwlw0000.png',
+          url: '',
           md: {
             name: '资质交易聚合页_资质转让就上薯片',
           },
@@ -209,36 +211,6 @@ export default {
       // 表单数据
       formData: {
         title: '只需5秒 一键进行资质匹配',
-        needList: [
-          '消防设施',
-          '桥梁工程',
-          '城市及道路照明',
-          '电力工程',
-          '冶金工程',
-          '环境工程',
-          '环卫资质',
-          '九大员',
-          '安防资质',
-          '建筑机电',
-          '隧道工程',
-          '环保工程',
-          '机电工程',
-          '市政公用工程',
-          '室内设计',
-          '信息系统',
-          '安全员',
-          '房地产',
-          '地基基础',
-          '建筑装修装饰',
-          '特种工程',
-          '建筑工程',
-          '石油化工工程',
-          '园林设计',
-          '室内装修',
-          '各类职称',
-          '其他资质',
-        ],
-        needTitle: '资质类型',
         buttonName: '免费查找资质资源',
         subInfo: ['涵盖面广', '便利快捷', '服务优质'],
         md: {
@@ -498,6 +470,7 @@ export default {
 .page-content {
   width: @spread-page-width;
   margin: 0 auto;
+  background: #f5f5f5;
 
   // 自定义头部组件右侧样式
   .my-customize-header {
@@ -514,18 +487,19 @@ export default {
 
   // 各个板块的上下边距
   .nav-margin {
-    margin-top: 24px;
+    margin-top: 20px;
   }
   .banner-margin {
-    margin-top: 64px;
-    margin-bottom: 64px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   .ad-margin {
-    margin-top: 32px;
+    margin-top: 18px;
+    margin-bottom: 20px;
   }
   .good-qua-margin {
-    margin-top: 64px;
-    margin-bottom: 32px;
+    // margin-top: 64px;
+    // margin-bottom: 32px;
   }
 
   // 样式穿透

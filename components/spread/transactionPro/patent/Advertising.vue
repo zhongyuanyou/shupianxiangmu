@@ -151,13 +151,17 @@ export default {
   },
   methods: {
     onMessage(url, e) {
-      if (e.target.dataset.stop !== 'stop') {
-        if (url !== '') {
-          window.location.href = url
+      // 待改
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.open(url)
+          // window.open(`${url}?code=${code}`)
         } else {
-          //  在线咨询IM美恰
-          window.spptMqMi.showPanel()
+          this.$router.push(url)
         }
+      } else {
+        //  在线咨询IM美恰
+        window.spptMqMi.showPanel()
       }
     },
   },
@@ -167,33 +171,39 @@ export default {
 .advertising {
   p {
     display: inline-block;
-    color: red;
-    font-size: 40px;
+    font-size: 32px;
+    line-height: 32px;
     font-family: PingFang SC;
-    font-weight: bold;
+    font-weight: 500;
     color: #1a1a1a;
-    padding: 64px 0px 32px 40px !important;
+    margin-bottom: 24px;
+    margin-left: 21px;
   }
   &-patent {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
     height: 154px;
-    padding: 0 40px;
-    padding-top: 32px;
+    padding: 13px 20px 20px 20px;
     /deep/.sp-image {
-      width: 327px;
+      width: 347px;
       height: 124px;
-      border: 1px solid rgba(205, 205, 205, 0.3);
-      box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
     }
   }
   &-Hot {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 24px 20px 30px 20px;
+    display: flex;
+    flex-direction: column;
+    width: calc(@spread-page-width - 30px);
+    margin: 0 auto;
     > div {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      padding: 0px 40px;
+      // padding: 0px 40px;
       a {
         display: inline-block;
         height: 182px;
@@ -211,8 +221,15 @@ export default {
     }
   }
   &-make-over {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 30px 17px 24px 20px;
+    display: flex;
+    flex-direction: column;
+    width: calc(@spread-page-width - 30px);
+    margin: 0 auto;
+    margin-top: 20px;
     /deep/.content {
-      padding: 0px 40px;
       display: flex;
       justify-content: space-between;
       height: 340px;

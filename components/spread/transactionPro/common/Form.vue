@@ -16,7 +16,7 @@
 
         <div class="form-inputs">
           <!-- S 公司类型下拉菜单-->
-          <div class="dropdown-menu">
+          <div v-if="data.needList" class="dropdown-menu">
             <a
               v-md-map
               v-md:webClick
@@ -193,7 +193,7 @@ export default {
       default: () => {
         return {
           title: '只需5秒 一键为您适配公司',
-          // @--我需要公司类型下拉
+          // @--我需要公司类型下拉 有该下拉，则传，无则不传
           needList: ['有限责任公司', '股份有限公司', '无限公司'],
           needTitle: '公司类型',
 
@@ -348,7 +348,7 @@ export default {
       const _tel = this.telephone
       const _code = this.sms
       const _telReg = /^1[3,4,5,6,7,8,9]\d{9}$/
-      if (this.dropdownValue === '') {
+      if (this.dropdownValue === '' && this.data.needTitle === '') {
         Toast('请输入您需要的' + this.data.needTitle)
         return
       }
@@ -466,10 +466,11 @@ export default {
     width: 670px;
     margin: 0 auto;
     background: #ffffff;
-    border: 1px solid rgba(205, 205, 205, 0.3);
-    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
-    border-radius: 8px;
+    // border: 1px solid rgba(205, 205, 205, 0.3);
+    // box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
     padding: 47px 40px 32px 40px;
+    width: 710px;
+    border-radius: 24px;
     .form-box-title {
       margin-bottom: 47px;
       display: flex;

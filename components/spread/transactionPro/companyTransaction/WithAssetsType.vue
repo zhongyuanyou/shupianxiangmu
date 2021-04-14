@@ -82,15 +82,17 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: calc(@spread-page-width - 80px);
+  width: calc(@spread-page-width - 30px);
   margin: 0 auto;
-
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px 20px;
   .title {
-    font-size: 40px;
-    line-height: 40px;
+    font-size: 31px;
+    line-height: 32px;
     font-weight: 600;
     color: #1a1a1a;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
   }
 
   .content {

@@ -29,31 +29,37 @@ export default {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/cpp9g1qgodc0000.png',
           title: '科技信息',
           desc: '精选热门',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/8beaoar79pk0000.png',
           title: '电子贸易',
           desc: '性价首选',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/7rvae8wpmpw0000.png',
           title: '广告传媒',
           desc: '用心甄选',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/dnhkv7no5eo0000.png',
           title: '教育培训',
           desc: '人气推荐',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/3bhu9wogvpc0000.png',
           title: '餐饮美容',
           desc: '严选商品',
+          url: '',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/2t50oct5pig0000.png',
           title: '物业地产',
           desc: '爆款热销',
+          url: '',
         },
       ],
     }
@@ -68,14 +74,18 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: calc(@spread-page-width - 80px);
+  width: calc(@spread-page-width - 30px);
   margin: 0 auto;
+  padding: 24px 21px;
+  background: #ffffff;
+  border-radius: 24px;
   .title {
-    font-size: 40px;
-    line-height: 40px;
+    line-height: 32px;
+    font-size: 32px;
+    font-family: PingFang SC;
     font-weight: 600;
     color: #1a1a1a;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
   }
 
   .content {

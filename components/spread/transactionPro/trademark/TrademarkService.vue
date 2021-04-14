@@ -59,6 +59,14 @@ export default {
   },
   methods: {
     chat(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.open(url)
+        } else {
+          this.$router.push(url)
+        }
+        return
+      }
       this.$parent.jumpLink(url)
     },
   },
@@ -67,19 +75,21 @@ export default {
 <style lang="less" scoped>
 .trademark-service {
   width: 100%;
-  margin-top: 63px;
-  padding: 0 40px;
-  margin-bottom: 26px;
+  padding: 24 20px;
+  background: #fff;
+  margin: 0 20px;
+  margin-top: 20px;
+  border-radius: 24px;
   .trademark-service-title {
     display: block;
-    font-size: 40px;
-    line-height: 39px;
+    font-size: 32px;
+    line-height: 33px;
     font-family: PingFang SC;
-    font-weight: bold;
+    font-weight: 500;
     color: #1a1a1a;
   }
   .trademark-service-content {
-    margin-top: 31px;
+    margin-top: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;

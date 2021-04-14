@@ -181,6 +181,7 @@ export default {
       imageBanner: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/54q7m9eaits0000.jpg',
+          url: '',
           md: {
             type: '',
             name: '',
@@ -188,6 +189,7 @@ export default {
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/9be47ctsu4w0000.jpg',
+          url: '',
           md: {
             type: '',
             name: '',
@@ -195,6 +197,7 @@ export default {
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/5ylf4rhztr80000.jpg',
+          url: '',
           md: {
             type: '',
             name: '',
@@ -202,6 +205,7 @@ export default {
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/adksug9df8w0000.png',
+          url: '',
           md: {
             type: '',
             name: '',
@@ -209,6 +213,7 @@ export default {
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/4xln8f1dbwo0000.jpg',
+          url: '',
           md: {
             type: '',
             name: '',
@@ -218,9 +223,6 @@ export default {
       // 表单
       cardName: {
         title: '只需5秒 一键为您适配专利',
-        // 我需要公司类型下拉
-        needList: ['发明专利', '实用新型专利', '外观设计专利'],
-        needTitle: '专利类型',
         buttonName: '立即获取',
         subInfo: ['价格透明', '信息安全', '官方保障'],
         type: 'zljy', // 业态编码。固定几个业态编码。
@@ -456,6 +458,7 @@ export default {
   width: @spread-page-width;
   margin: 0 auto;
   font-family: PingFang SC;
+  background: #f5f5f5;
   // 自定义头部组件右侧样式
   /deep/.my-head {
     font-size: 0.24rem;
@@ -477,14 +480,11 @@ export default {
     margin-top: 24px;
   }
   .laowu-banner {
-    margin-top: 64px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   .patent-card {
     position: relative;
-    margin-top: 64px;
-  }
-  .laowu-form {
-    margin-top: 64px;
   }
   // 列表组件样式
   /deep/.my-component {
