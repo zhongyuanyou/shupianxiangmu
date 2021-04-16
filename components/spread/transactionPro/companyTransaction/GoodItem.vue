@@ -43,7 +43,7 @@
           <span class="item-price-unit">元</span>
         </p>
         <div class="item-divide"></div>
-        <div class="item-recommend">
+        <div v-if="false" class="item-recommend">
           <img
             class="item-recommend-img"
             src="https://cdn.shupian.cn/sp-pt/wap/images/e8pqebimcbs0000.png"
@@ -287,18 +287,22 @@ export default {
   width: 100%;
   display: flex;
   align-items: flex-start;
-  padding: 40px 0px 20px 0px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px 20px;
+  margin-top: 20px;
   .item-img {
     flex: none;
-    width: 190px;
-    height: 190px;
-    margin-right: 28px;
+    width: 160px;
+    height: 160px;
+    margin-right: 32px;
+    border-radius: 4px;
     img {
-      width: 190px;
-      height: 190px;
+      width: 160px;
+      height: 160px;
+      border-radius: 4px;
     }
   }
-
   .item-content {
     flex: none;
     width: calc(100% - 200px);
@@ -306,13 +310,14 @@ export default {
       font-size: 32px;
       font-weight: bold;
       color: #222222;
-      line-height: 38px;
+      line-height: 42px;
+      width: 476px;
+      font-family: PingFang SC;
     }
-
     .item-tabs {
       display: flex;
       flex-wrap: wrap;
-      margin-top: 12px;
+      margin-top: 10px;
       .item-tab {
         font-size: 22px;
         font-weight: 400;
@@ -322,12 +327,11 @@ export default {
         background: #f0f2f5;
         border-radius: 4px;
         display: flex;
-        padding: 6px 8px;
+        padding: 5px 10px 6px 8px;
         margin-right: 12px;
         margin-bottom: 6px;
       }
     }
-
     .item-notes {
       width: 100%;
       margin-top: 10px;
@@ -343,7 +347,6 @@ export default {
         line-height: 22px;
       }
     }
-
     .item-price {
       font-size: 22px;
       font-weight: 400;
@@ -351,16 +354,14 @@ export default {
       line-height: 36px;
       .item-price-num {
         font-size: 36px;
+        line-height: 36px;
+
+        font-weight: bold;
       }
     }
-
     .item-divide {
       height: 1px;
-      background: #f4f4f4;
-      margin-top: 15px;
-      margin-bottom: 20px;
     }
-
     .item-recommend {
       display: flex;
       align-items: center;

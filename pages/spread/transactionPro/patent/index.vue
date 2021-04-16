@@ -8,7 +8,7 @@
       :fixed="false"
       head-class="head-icon"
     >
-      <template v-slot:right>
+      <template v-if="false" v-slot:right>
         <span class="my-customize-header" @click="choiceCity">
           <span class="my-customize-header-text">{{ currentCity }}</span>
           <my-icon name="sear_ic_open" size="0.18rem" color="#cccccc"></my-icon>
@@ -302,15 +302,20 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
+  created() {
+    if (process.client) {
+      // 请求
+      this.getGoodList()
+      this.getPagePlanner()
+    }
+  },
   mounted() {
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
-
-    // 请求后台
-    this.getGoodList()
-    this.getPagePlanner()
+    // this.getGoodList()
+    // this.getPagePlanner()
   },
   methods: {
     // 选择城市
@@ -335,9 +340,8 @@ export default {
       this.$axios
         .get(cdn + api + params)
         .then((res) => {
-          console.log(res)
           // 调用回调函数处理数据
-          const result = res.data.list
+          const result = res.data.list || []
           if (result.length > 0 && res.code === 'SYS_0000') {
             this.more.loading = false
             result.forEach((elem) => {
@@ -384,6 +388,7 @@ export default {
             if (result.length < 10) {
               this.more.noMore = true
             }
+            console.log(this.goodList)
           }
         })
         .catch((err) => {

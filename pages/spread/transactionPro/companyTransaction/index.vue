@@ -45,7 +45,7 @@
     <!-- END   推荐公司-->
 
     <!-- START 固定底部-->
-    <FixedBottom
+    <!-- <FixedBottom
       v-md-map
       v-md:p_plannerBoothClick
       data-name="推荐规划师点击"
@@ -54,7 +54,8 @@
       :data-planner_number="pagePlanner.jobNum"
       :data-planner_name="pagePlanner.name"
       :planner="pagePlanner"
-    />
+    /> -->
+    <BtnPlanner />
     <!-- END 固定底部-->
 
     <!-- START IM在线咨询-->
@@ -69,6 +70,7 @@ import { plannerApi } from '@/api/spread'
 import Header from '@/components/common/head/header'
 import DggImCompany from '@/components/spread/DggImCompany'
 import FixedBottom from '@/components/spread/common/FixedBottom'
+import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar'
 import Banner from '@/components/spread/transactionPro/common/Banner'
@@ -86,7 +88,8 @@ export default {
     HotIndustry,
     WithAssetsType,
     RecommendCompany,
-    FixedBottom,
+    // FixedBottom,
+    BtnPlanner,
     DggImCompany,
     NavBar,
   },
@@ -346,7 +349,7 @@ export default {
     margin: 20px auto;
   }
   .with-assets-type-margin {
-    margin-bottom: 32px;
+    // margin-bottom: 32px;
   }
 
   // @--穿透修改样式

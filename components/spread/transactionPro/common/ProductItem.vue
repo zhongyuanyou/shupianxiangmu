@@ -75,15 +75,18 @@ export default {
   width: 100%;
   display: flex;
   align-items: flex-start;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px 20px;
   .item-img {
     flex: none;
-    width: 190px;
-    height: 190px;
-    margin-right: 28px;
+    width: 160px;
+    height: 160px;
+    margin-right: 32px;
     border-radius: 4px;
     img {
-      width: 190px;
-      height: 190px;
+      width: 160px;
+      height: 160px;
       border-radius: 4px;
     }
   }
@@ -95,11 +98,13 @@ export default {
       font-weight: bold;
       color: #222222;
       line-height: 42px;
+      width: 476px;
+      font-family: PingFang SC;
     }
     .item-tabs {
       display: flex;
       flex-wrap: wrap;
-      margin-top: 11px;
+      margin-top: 10px;
       .item-tab {
         font-size: 22px;
         font-weight: 400;
@@ -109,7 +114,7 @@ export default {
         background: #f0f2f5;
         border-radius: 4px;
         display: flex;
-        padding: 6px 8px;
+        padding: 5px 10px 6px 8px;
         margin-right: 12px;
         margin-bottom: 6px;
       }

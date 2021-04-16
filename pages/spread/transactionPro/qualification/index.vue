@@ -335,96 +335,99 @@ export default {
       const api = '/xdy-portal-product-api/aptitude/getRelatedRecommendations'
       const cdn = 'https://microuag.dgg188.cn'
       // 2、调用接口
-      this.$axios.get(cdn + api + param).then((res) => {
-        console.log(res.data)
-        this.more.loading = false
-        if (res.code === 200) {
+      this.$axios
+        .get(cdn + api + param)
+        .then((res) => {
+          this.more.loading = false
           // 1、获取商品后，处理商品数据
-          const data = res.data.list
+          const data = res.data.list || []
+          if (res.code === 200 && res.data.list.length > 0) {
+            data.forEach((obj) => {
+              // 进行类型图片处理：截取数组第一个值得第一个字段
+              let type = ''
+              const index = obj.aptitudes[0].name.indexOf('-')
+              if (index > -1) {
+                type = obj.aptitudes[0].name.slice(0, index)
+              } else {
+                type = obj.aptitudes[0].name
+              }
+              let img = ''
+              switch (type) {
+                case '施工总承包': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/dmw1eqwpz5c0000.png'
+                  break
+                }
+                case '施工专业承包': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/fnrnbp54bm00000.png'
+                  break
+                }
+                case '其他资质': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/7k86445axyw0000.png'
+                  break
+                }
+                case '勘察': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/8q40o2nqbmo0000.png'
+                  break
+                }
+                case '施工劳务': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/43iipcpfwm20000.png'
+                  break
+                }
+                case '工程设计': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/2p0q0971ccw0000.png'
+                  break
+                }
+                case '房地产开发': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/d1hxxmkv5kg0000.png'
+                  break
+                }
+                case '招标代理': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/22k7vyj0zy80000.png'
+                  break
+                }
+                case '监理': {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/7g003aqqas00000.png'
+                  break
+                }
+                default: {
+                  img =
+                    'https://cdn.shupian.cn/sp-pt/wap/images/2zqf2fldtmk0000.png'
+                }
+              }
 
-          data.forEach((obj) => {
-            // 进行类型图片处理：截取数组第一个值得第一个字段
-            let type = ''
-            const index = obj.aptitudes[0].name.indexOf('-')
-            if (index > -1) {
-              type = obj.aptitudes[0].name.slice(0, index)
-            } else {
-              type = obj.aptitudes[0].name
+              // 全部数据处理
+              const item = {
+                img,
+                industryName: '',
+                price: Number(obj.capital),
+                name: obj.comName,
+                tabs: this.getArrayItems(this.slogans, 3),
+                notes: [
+                  obj.cityName,
+                  obj.endYear,
+                  obj.safety === '1' ? '有安全许可证' : null,
+                ],
+              }
+              this.goodList.push(item)
+            })
+            // 2、当展示的商品列表和商品总条数相等时，显示'无更多数据啦'
+            if (this.goodList.length === res.data.total) {
+              this.more.noMore = true
             }
-            let img = ''
-            switch (type) {
-              case '施工总承包': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dmw1eqwpz5c0000.png'
-                break
-              }
-              case '施工专业承包': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/fnrnbp54bm00000.png'
-                break
-              }
-              case '其他资质': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7k86445axyw0000.png'
-                break
-              }
-              case '勘察': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/8q40o2nqbmo0000.png'
-                break
-              }
-              case '施工劳务': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/43iipcpfwm20000.png'
-                break
-              }
-              case '工程设计': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2p0q0971ccw0000.png'
-                break
-              }
-              case '房地产开发': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/d1hxxmkv5kg0000.png'
-                break
-              }
-              case '招标代理': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/22k7vyj0zy80000.png'
-                break
-              }
-              case '监理': {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/7g003aqqas00000.png'
-                break
-              }
-              default: {
-                img =
-                  'https://cdn.shupian.cn/sp-pt/wap/images/2zqf2fldtmk0000.png'
-              }
-            }
-
-            // 全部数据处理
-            const item = {
-              img,
-              industryName: '',
-              price: Number(obj.capital),
-              name: obj.comName,
-              tabs: this.getArrayItems(this.slogans, 3),
-              notes: [
-                obj.cityName,
-                obj.endYear,
-                obj.safety === '1' ? '有安全许可证' : null,
-              ],
-            }
-            this.goodList.push(item)
-          })
-          // 2、当展示的商品列表和商品总条数相等时，显示'无更多数据啦'
-          if (this.goodList.length === res.data.total) {
-            this.more.noMore = true
           }
-        }
-      })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     // 随机生成三条数据
     getArrayItems(recent, num) {

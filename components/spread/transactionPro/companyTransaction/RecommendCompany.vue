@@ -6,6 +6,7 @@
         ref="tabCurveRef"
         v-model="currentItem"
         class="tab-curve"
+        bg-color="#f5f5f5"
         :offset-top="searchDomHeight"
         :tab-list="tabBtnList"
         :need-fixed="true"
@@ -109,7 +110,7 @@ import TabCurve from '~/components/common/tab/TabCurve'
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
 
-import GoodItem from '~/components/spread/transaction/companyTransaction/GoodItem'
+import GoodItem from '~/components/spread/transactionPro/companyTransaction/GoodItem'
 export default {
   components: {
     [Swipe.name]: Swipe,
@@ -227,8 +228,7 @@ export default {
     width: 100%;
     height: 1px;
     background: #f4f4f4;
-    margin-bottom: 24px;
-    margin-top: 12px;
+    margin-top: 1px;
   }
 
   .my-swipe {
@@ -238,38 +238,43 @@ export default {
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
-      .scroll-recommend::-webkit-scrollbar {
+      &::-webkit-scrollbar {
         /*滚动条整体样式*/
         display: none;
       }
-
       .marks {
         width: 100%;
         display: flex;
         padding-left: 40px;
+
         .mark {
           flex: none;
           height: 68px;
-          background: #f8f8f8;
-          border-radius: 4px;
+          background: #ffffff;
+          border-radius: 8px;
           font-size: 26px;
           line-height: 68px;
           font-weight: 400;
-          color: #222222;
+          color: #555555;
           padding: 0 20px;
-          margin-right: 24px;
+          margin-right: 12px;
         }
       }
     }
     .goods-list {
       position: relative;
-      width: 100%;
-      padding: 0 40px;
+      width: 710px;
+      margin: 0 auto;
+      border-radius: 24px;
+      .good-item-margin {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
     }
   }
 
   .btn {
-    margin: 0 auto;
+    margin: 10px auto;
     width: calc(100% - 80px);
     height: 0.88rem;
     background: #ebf2ff;
@@ -290,6 +295,7 @@ export default {
     margin-top: 20px;
   }
 
+  // @--穿透更改样式
   ::v-deep .sp-skeleton {
     padding: 32px 0;
   }

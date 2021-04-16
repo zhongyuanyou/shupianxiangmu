@@ -174,7 +174,7 @@ export default {
     font-size: 32px;
     line-height: 32px;
     font-family: PingFang SC;
-    font-weight: 500;
+    font-weight: bold;
     color: #1a1a1a;
     margin-bottom: 24px;
   }
