@@ -74,10 +74,10 @@ export default {
 </script>
 <style lang="less" scoped>
 .trademark-service {
-  width: 100%;
-  padding: 24 20px;
+  width: calc(@spread-page-width - 40px);
+  padding: 24px 20px;
   background: #fff;
-  margin: 0 20px;
+  margin: 0 auto;
   margin-top: 20px;
   border-radius: 24px;
   .trademark-service-title {

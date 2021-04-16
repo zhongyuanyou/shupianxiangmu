@@ -159,7 +159,6 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  // width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

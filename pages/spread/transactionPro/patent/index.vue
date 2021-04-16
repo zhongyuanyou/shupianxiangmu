@@ -33,13 +33,12 @@
       :data="dataNavBar"
       :good-list="goodList"
       :more="more"
-      @selectTab="selectTab"
       @getMore="getMore"
       @swipeChange="swipeChange"
     />
     <!-- E列表 -->
     <!-- S底部咨询 -->
-    <FooterBottom :planner="pagePlanner" :md="fixedMd" />
+    <!-- <FooterBottom :planner="pagePlanner" :md="fixedMd" /> -->
     <!-- E底部咨询 -->
     <!-- S IM在线咨询-->
     <DggImCompany />
@@ -69,7 +68,7 @@ export default {
     Form,
     ProductList,
     Advertising,
-    FooterBottom,
+    // FooterBottom,
   },
   data() {
     return {
@@ -222,7 +221,7 @@ export default {
       ],
       // 表单
       cardName: {
-        title: '只需5秒 一键为您适配专利',
+        title: '免费查找专利  一键解决专利难题',
         buttonName: '立即获取',
         subInfo: ['价格透明', '信息安全', '官方保障'],
         type: 'zljy', // 业态编码。固定几个业态编码。
@@ -290,7 +289,7 @@ export default {
         'https://cdn.shupian.cn/sp-pt/wap/cs4dlk7fo800000.jpg',
       ],
       // 当前分类下标
-      pageObj: {},
+      params: { type: 'patentStatuse=1', index: 0 },
       // 当前页
       pageNum: 1,
     }
@@ -310,8 +309,8 @@ export default {
     }
 
     // 请求后台
+    this.getGoodList()
     this.getPagePlanner()
-    this.selectTab({ type: 'patentStatuse=1', index: 0 })
   },
   methods: {
     // 选择城市
@@ -322,34 +321,25 @@ export default {
       if (url) {
         window.open(url, '_blank')
       } else {
+        // 待改
         window.spptMqMi.showPanel()
       }
     },
     // 请求列表参数
-    selectTab(item) {
-      console.log(item)
-      this.pageObj = item
-      const api = '/xdy-portal-product-api/patent/list?'
-      const cdn = 'https://microuag.dgg188.cn'
-      const type = item.type
-      if (item.index < 3) {
-        this.more.noMore = false
-        this.pageNum = 1
-        this.goodList = []
-      } else {
-        this.pageNum++
-      }
-      // 2、调用接口
+    getGoodList() {
       this.more.loading = true
+      const api = '/xdy-portal-product-api/patent/list'
+      const cdn = 'https://microuag.dgg188.cn'
+      const params = `?${this.params.type}&pageSize=10&pageNum=${this.pageNum}`
+      // 2、调用接口
       this.$axios
-        .get(cdn + api + type + '&pageSize=10' + '&pageNum=' + this.pageNum)
+        .get(cdn + api + params)
         .then((res) => {
+          console.log(res)
           // 调用回调函数处理数据
           const result = res.data.list
-          if (result.length < 10) {
-            this.more.noMore = true
-          }
           if (result.length > 0 && res.code === 'SYS_0000') {
+            this.more.loading = false
             result.forEach((elem) => {
               const tabs = [
                 '人气商品',
@@ -390,8 +380,10 @@ export default {
                 obj.notes.push(elem.patentStatusName)
               }
               this.goodList.push(obj)
-              this.more.loading = false
             })
+            if (result.length < 10) {
+              this.more.noMore = true
+            }
           }
         })
         .catch((err) => {
@@ -402,20 +394,24 @@ export default {
       if (this.more.noMore) {
         return false
       } else {
-        const obj = { type: this.pageObj.type, index: 5 }
-        this.selectTab(obj)
+        this.pageNum++
+        this.params = { type: this.params.type, index: 5 }
+        this.getGoodList()
       }
     },
     // 轮播切换触发
     swipeChange(item) {
-      const obj = { type: item.type, index: 1 }
-      this.selectTab(obj)
+      this.goodList = []
+      this.pageNum = 1
+      this.params = { type: item.type, index: 1 }
+      this.getGoodList()
     },
     async getPagePlanner() {
       try {
         const res = await this.$axios.get(`${plannerApi.planner}`)
         console.log('plannerApi.planner succes:', res.code + '--' + res.message)
         if (res.code === 200) {
+          console.log(res, 4561)
           this.pagePlanner = this.dataNavBar.planner = {
             id: res.data.list[0].userCentreId,
             name: res.data.list[0].realName,
@@ -433,21 +429,21 @@ export default {
     return {
       title: '专利交易',
       script: [
-        {
-          src: 'https://tgform.dgg.cn/form/new_form/promotion-sdk-v1.0.min.js',
-        },
-        {
-          src: '/js/dgg-md-sdk-conf.js',
-          ssr: false,
-          type: 'text/javascript',
-          charset: 'utf-8',
-        },
-        {
-          src: 'https://ptcdn.dgg.cn/md/dgg-md-sdk.min.js',
-          ssr: false,
-          type: 'text/javascript',
-          charset: 'utf-8',
-        },
+        // {
+        //   src: 'https://tgform.dgg.cn/form/new_form/promotion-sdk-v1.0.min.js',
+        // },
+        // {
+        //   src: '/js/dgg-md-sdk-conf.js',
+        //   ssr: false,
+        //   type: 'text/javascript',
+        //   charset: 'utf-8',
+        // },
+        // {
+        //   src: 'https://ptcdn.dgg.cn/md/dgg-md-sdk.min.js',
+        //   ssr: false,
+        //   type: 'text/javascript',
+        //   charset: 'utf-8',
+        // },
       ],
     }
   },

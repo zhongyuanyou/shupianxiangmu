@@ -177,7 +177,6 @@ export default {
     font-weight: 500;
     color: #1a1a1a;
     margin-bottom: 24px;
-    margin-left: 21px;
   }
   &-patent {
     display: flex;
