@@ -8,7 +8,7 @@
       :fixed="false"
       head-class="head-icon"
     >
-      <template v-slot:right>
+      <template v-if="false" v-slot:right>
         <span class="my-customize-header" @click="choiceCity">
           <span class="my-customize-header-text">{{ currentCity }}</span>
           <my-icon name="sear_ic_open" size="0.18rem" color="#cccccc"></my-icon>
@@ -44,19 +44,9 @@
     <RecommendCompany />
     <!-- END   推荐公司-->
 
-    <!-- START 固定底部-->
-    <!-- <FixedBottom
-      v-md-map
-      v-md:p_plannerBoothClick
-      data-name="推荐规划师点击"
-      data-track_code="SPTG000007"
-      data-recommend_number=""
-      :data-planner_number="pagePlanner.jobNum"
-      :data-planner_name="pagePlanner.name"
-      :planner="pagePlanner"
-    /> -->
-    <BtnPlanner />
-    <!-- END 固定底部-->
+    <!-- START 规划师-->
+    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
     <DggImCompany></DggImCompany>
@@ -67,9 +57,9 @@
 <script>
 import { mapState } from 'vuex'
 import { plannerApi } from '@/api/spread'
+
 import Header from '@/components/common/head/header'
 import DggImCompany from '@/components/spread/DggImCompany'
-import FixedBottom from '@/components/spread/common/FixedBottom'
 import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar'
@@ -88,7 +78,6 @@ export default {
     HotIndustry,
     WithAssetsType,
     RecommendCompany,
-    // FixedBottom,
     BtnPlanner,
     DggImCompany,
     NavBar,
@@ -103,72 +92,26 @@ export default {
         telephone: '18402858698',
         imgSrc: '',
       }, // 页面规划师y
-
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: '公司交易聚合页_底部展位_在线咨询',
+          type: '售前',
+        },
+      },
       dataList: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7ry6zqnzmtg0000.png',
-          text: '热门公司',
-          marketingImg: '',
-          url: '',
-          md: {
-            type: '',
-            name: '公司交易聚合页_总包资质',
-          },
-        },
-
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/fg2ksxx000o0000.png',
-          text: '优质公司',
-          marketingImg: '',
-          url: '',
-          md: {
-            type: '',
-            name: '',
-          },
-        },
-
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8jhr24e0irw000.png',
-          text: '特价公司',
-          marketingImg: '',
-          url: '',
-          md: {
-            type: '',
-            name: '',
-          },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/1zjw4j2cor34000.png',
-          text: '精品公司',
-          marketingImg: '',
-          url: '',
-          md: {
-            type: '',
-            name: '',
-          },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/1887y4q19x9c000.png',
-          text: '人气公司',
-          marketingImg: '',
-          url: '',
-          md: {
-            type: '',
-            name: '',
-          },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7ry6zqnzmtg0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7016kj24ig80000.png',
           text: '科技信息',
           marketingImg: '',
           url: '',
           md: {
             type: '',
-            name: '',
+            name: '公司交易聚合页_科技信息',
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/5fly9lt75bs0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/3t3d2v50wh40000.png',
           text: '电子贸易',
           marketingImg: '',
           url: '',
@@ -178,7 +121,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6ral3star6s0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/5nxy60t3ws40000.png',
           text: '广告传媒',
           marketingImg: '',
           url: '',
@@ -188,7 +131,17 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/4dn7hmjqqcq0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/btrdq3woqmg0000.png',
+          text: '餐饮美容',
+          marketingImg: '',
+          url: '',
+          md: {
+            type: '',
+            name: '',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cq53947ri680000.png',
           text: '教育培训',
           marketingImg: '',
           url: '',
@@ -198,7 +151,47 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/44l5cj3uoxk0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8qxck4s2ths0000.png',
+          text: '独家公司',
+          marketingImg: '',
+          url: '',
+          md: {
+            type: '',
+            name: '',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7eepdyi865o0000.png',
+          text: '急售公司',
+          marketingImg: '',
+          url: '',
+          md: {
+            type: '',
+            name: '',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/5fyvsexbkk80000.png',
+          text: '特价公司',
+          marketingImg: '',
+          url: '',
+          md: {
+            type: '',
+            name: '',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/627j38quyds0000.png',
+          text: '优质公司',
+          marketingImg: '',
+          url: '',
+          md: {
+            type: '',
+            name: '',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ayznk0l5egk0000.png',
           text: '出售公司',
           marketingImg: '',
           url: '',
@@ -212,7 +205,7 @@ export default {
       // 轮播banner
       imageBanner: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/f7ijmltazq00000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/787oq80qehk0000.png',
           url: '',
           md: {
             type: '',
@@ -220,7 +213,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/5x2uvrt99dw0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/eso9k9cjzzk0000.png',
           url: '',
           md: {
             type: '',
@@ -277,6 +270,7 @@ export default {
       this.$router.push({ path: '/city/choiceCity' })
     },
     jumpLink(url) {
+      console.log(132132132)
       if (url) {
         if (url.indexOf('http') > -1) {
           window.open(url)

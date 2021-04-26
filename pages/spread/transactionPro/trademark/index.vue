@@ -7,7 +7,7 @@
       :fixed="false"
       head-class="head-icon"
     >
-      <template v-slot:right>
+      <template v-if="false" v-slot:right>
         <div class="city-btn" @click="chooseCity">
           <span class="city-btn-text">{{ currentCity }}</span>
           <my-icon name="sear_ic_open" size="0.14rem" color="#232323"></my-icon>
@@ -39,13 +39,16 @@
     <div class="box"></div>
     <!-- 底部按钮 -->
     <!-- <FixedBottom :planner="pagePlanner" :md="bottomMd" /> -->
+    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
     <!-- START IM在线咨询-->
-    <!-- <DggImCompany></DggImCompany> -->
+    <DggImCompany></DggImCompany>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { plannerApi } from '@/api/spread'
+
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
 import Banner from '~/components/spread/transactionPro/common/Banner'
@@ -54,9 +57,10 @@ import ADList from '@/components/spread/transactionPro/common/ADList'
 import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark'
 import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
-import FixedBottom from '~/components/spread/transactionPro/common/FooterBottom'
+// import FixedBottom from '~/components/spread/transactionPro/common/FooterBottom'
+import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
 
-// import DggImCompany from '~/components/spread/DggImCompany'
+import DggImCompany from '~/components/spread/DggImCompany'
 
 export default {
   components: {
@@ -68,26 +72,31 @@ export default {
     HotTrademark,
     TrademarkService,
     ProductList,
-    // DggImCompany,
+    BtnPlanner,
+    DggImCompany,
     // FixedBottom,
   },
 
   data() {
     return {
       pageTitle: '商标交易',
-      bottomMd: {
-        telMd: {
-          name: '商标交易聚合页_底部_电话联系',
-          type: '售前',
-        },
+      pagePlanner: {
+        id: '7862495547640840192',
+        name: '张毅',
+        jobNum: '107547',
+        telephone: '18402858698',
+        imgSrc: '',
+      },
+      // 底部规划师埋点
+      fixedMd: {
         imMd: {
-          name: '商标交易聚合页_底部_在线咨询',
+          name: '商标交易聚合页_底部展位_在线咨询',
           type: '售前',
         },
       },
       NavBtns: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7fmckl476940000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/3v8zphmmlyc0000.png',
           text: '精品商标',
           marketingImg: '',
           url: '',
@@ -97,7 +106,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bmgtxjry9j40000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/40f59dhj5pg0000.png',
           text: '热门商标',
           marketingImg: '',
           url: '',
@@ -107,7 +116,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/56cv6ghini80000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/citewdawylk0000.png',
           text: '特价商标',
           marketingImg: '',
           url: '',
@@ -117,7 +126,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/41sjydgbrl20000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9totr7jo7x80000.png',
           text: '新品商标',
           marketingImg: '',
           url: '',
@@ -127,7 +136,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/5h9ffxku1iw0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2so335ov8n20000.png',
           text: '商标服务',
           marketingImg: '',
           url: '',
@@ -196,14 +205,14 @@ export default {
       },
       images: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bzg562278t40000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8tsmiv55cgk0000.png',
           md: {
             type: '',
             name: '商标交易聚合页_商标无忧注册',
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cvno719yvu80000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bleczr4x81c0000.png',
           md: {
             type: '',
             name: '商标交易聚合页_商标授权使用',
@@ -289,18 +298,14 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
-  created() {
-    if (process.client) {
-      // 请求
-      this.getGoodList()
-      // this.getPagePlanner()
-    }
-  },
+  created() {},
   mounted() {
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
+    this.getGoodList()
+    this.getPagePlanner()
   },
   methods: {
     // 根据接口获取商品列表
@@ -394,6 +399,23 @@ export default {
         window.open(url, '_blank')
       } else {
         window.spptMqMi.showPanel()
+      }
+    },
+    // @--获取规划师
+    async getPagePlanner() {
+      try {
+        const res = await this.$axios.get(`${plannerApi.planner}`)
+        if (res.code === 200) {
+          this.pagePlanner = {
+            id: res.data.list[0].userCentreId,
+            name: res.data.list[0].realName,
+            jobNum: res.data.list[0].loginName,
+            telephone: res.data.list[0].userPhone,
+            imgSrc: res.data.list[0].userHeadUrl,
+          }
+        }
+      } catch (error) {
+        console.log('plannerApi.planner error：', error.message)
       }
     },
   },

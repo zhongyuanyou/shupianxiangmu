@@ -39,6 +39,7 @@
     <!-- E列表 -->
     <!-- S底部咨询 -->
     <!-- <FooterBottom :planner="pagePlanner" :md="fixedMd" /> -->
+    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
     <!-- E底部咨询 -->
     <!-- S IM在线咨询-->
     <DggImCompany />
@@ -56,7 +57,8 @@ import Banner from '~/components/spread/transactionPro/common/Banner'
 import Form from '~/components/spread/transactionPro/common/Form'
 import ProductList from '~/components/spread/transactionPro/common/ProductList'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising'
-import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
+// import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
+import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
 import DggImCompany from '~/components/spread/DggImCompany'
 export default {
   name: 'Index',
@@ -69,6 +71,7 @@ export default {
     ProductList,
     Advertising,
     // FooterBottom,
+    BtnPlanner,
   },
   data() {
     return {
@@ -76,7 +79,7 @@ export default {
       // 导航金刚区
       dataList: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ds5k78o62w80000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8ixby4ouz9c0000.png',
           text: '发明专利',
           marketingImg: '',
           url: '',
@@ -86,7 +89,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2fash08kuxz4000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2irczoxzo1m0000.png',
           text: '实用新型专利',
           marketingImg: '',
           url: '',
@@ -96,7 +99,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/uu84dykkqsw000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/d789v2nhd8w0000.png',
           text: '设计专利',
           marketingImg: '',
           url: '',
@@ -106,7 +109,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9x7xbu411280000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/175xyyc8xhy8000.png',
           text: '精选专利',
           marketingImg: '',
           url: '',
@@ -116,7 +119,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/69h85fp1c0g0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/1dcyv5h20y00000.png',
           text: '独家专利',
           marketingImg: '',
           url: '',
@@ -179,7 +182,7 @@ export default {
       // 轮播
       imageBanner: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/54q7m9eaits0000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9ztbm1lgoso0000.png',
           url: '',
           md: {
             type: '',
@@ -187,31 +190,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9be47ctsu4w0000.jpg',
-          url: '',
-          md: {
-            type: '',
-            name: '',
-          },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/5ylf4rhztr80000.jpg',
-          url: '',
-          md: {
-            type: '',
-            name: '',
-          },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/adksug9df8w0000.png',
-          url: '',
-          md: {
-            type: '',
-            name: '',
-          },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/4xln8f1dbwo0000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ef92o7m2a140000.png',
           url: '',
           md: {
             type: '',
@@ -274,10 +253,6 @@ export default {
       },
       // 底部规划师埋点
       fixedMd: {
-        telMd: {
-          name: '专利交易聚合页_底部展位_拨打电话',
-          type: '售前',
-        },
         imMd: {
           name: '专利交易聚合页_底部展位_在线咨询',
           type: '售前',

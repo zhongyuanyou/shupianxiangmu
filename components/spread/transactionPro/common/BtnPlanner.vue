@@ -1,26 +1,71 @@
 <template>
   <div class="btn-planner">
-    <div class="btn-planner_item">
+    <div
+      v-md-map
+      v-md:p_IMClick
+      class="btn-planner_item"
+      :data-name="`${md.imMd.name}`"
+      :data-im_type="`${md.imMd.type}`"
+      @click="onlineConsult"
+    >
       <div class="btn-planner_item_img"></div>
       <div class="btn-planner_item_con">
         <p class="name">规划师</p>
-        <p class="title">- 在线咨询 -</p>
+        <span class="title">在线咨询</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    planner: {
+      type: Object,
+      default: () => {
+        return {
+          id: '7862495547640840192',
+          name: '张毅',
+          jobNum: '107547',
+          telephone: '18402858698',
+          imgSrc:
+            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+        }
+      },
+    },
+    md: {
+      type: Object,
+      default: () => {
+        return {
+          imMd: {
+            name: '交易聚合页_底部_在线咨询',
+            type: '售前',
+          },
+        }
+      },
+    },
+  },
+  methods: {
+    onlineConsult() {
+      this.$root.$emit(
+        'openIMM',
+        this.planner.id,
+        this.planner.name,
+        this.planner.jobNum,
+        this.planner.avatarImg
+      )
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
 .btn-planner {
-  width: 126px;
+  width: 186px;
   height: 136px;
-  //   border: 1px solid red;
+  // border: 1px solid red;
   position: fixed;
-  top: 1000px;
+  bottom: 100px;
   right: 40px;
   &_item {
     position: relative;
@@ -37,20 +82,19 @@ export default {}
       border-radius: 50%;
     }
     &_con {
+      width: 126px;
       position: absolute;
+      right: 0;
       z-index: 2;
       bottom: 0;
-      width: 126px;
       height: 56px;
       background: #4974f5;
-      //   padding: 8px 0;
       border-radius: 28px;
       text-align: center;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
       .name {
         display: block;
         font-size: 20px;
@@ -58,9 +102,7 @@ export default {}
         font-weight: 500;
         color: #ffffff;
         line-height: 21px;
-        // margin: 8px auto;
         margin-bottom: 4px;
-        // box-sizing: content-box;
       }
       .title {
         font-size: 18px;
@@ -69,6 +111,27 @@ export default {}
         color: #ffffff;
         line-height: 19px;
         opacity: 0.6;
+        display: inline-block;
+        &:after {
+          content: '';
+          display: inline-block;
+          width: 8px;
+          height: 1px;
+          background: #ffffff;
+          opacity: 0.6;
+          vertical-align: middle;
+          margin-right: 4px;
+        }
+        &:before {
+          content: '';
+          display: inline-block;
+          width: 8px;
+          height: 1px;
+          background: #ffffff;
+          vertical-align: middle;
+          opacity: 0.6;
+          margin-left: 4px;
+        }
       }
     }
   }

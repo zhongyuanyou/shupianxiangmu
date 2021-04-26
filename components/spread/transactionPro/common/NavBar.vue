@@ -9,7 +9,7 @@
         :data-name="item.md.name"
         class="item"
         :class="index > 4 ? 'item-no-margin' : ''"
-        @click="jumpLink(item.url.item.text)"
+        @click="jumpLink(item.url, item.text)"
       >
         <div
           class="item-img-big"
@@ -150,7 +150,8 @@ export default {
         }
       } else {
         // IM美恰客服
-        window.spptMqMi.showPanel()
+        // window.spptMqMi.showPanel()
+        this.$parent.jumpLink(url)
       }
     },
   },

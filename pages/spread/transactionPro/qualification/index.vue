@@ -8,7 +8,7 @@
       :fixed="false"
       head-class="head-icon"
     >
-      <template v-slot:right>
+      <template v-if="false" v-slot:right>
         <span class="my-customize-header" @click="choiceCity">
           <span class="my-customize-header-text">{{ currentCity }}</span>
           <my-icon name="sear_ic_open" size="0.18rem" color="#232323"></my-icon>
@@ -45,8 +45,7 @@
     <!--END   推荐公司-->
 
     <!--START 固定底部-->
-    <!--    <FixedBottom :planner="pagePlanner" />-->
-    <FooterBottom :md="fixedBottomMd" />
+    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
     <!--END   固定底部-->
 
     <!--START IM在线咨询-->
@@ -59,13 +58,12 @@
 import { mapState } from 'vuex'
 import Header from '@/components/common/head/header'
 import DggImCompany from '@/components/spread/DggImCompany'
-// import FixedBottom from '@/components/spread/common/FixedBottom'
+import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar'
 import Banner from '@/components/spread/transactionPro/common/Banner'
 import Form from '@/components/spread/transactionPro/common/Form'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
-import FooterBottom from '@/components/spread/transactionPro/common/FooterBottom'
 
 import GoodQualification from '@/components/spread/transactionPro/qualification/GoodQualification'
 import ADList from '@/components/spread/transactionPro/common/ADList'
@@ -79,19 +77,18 @@ export default {
     Form,
     ProductList,
     DggImCompany,
-    // FixedBottom,
-    FooterBottom,
+    BtnPlanner,
     GoodQualification,
     ADList,
   },
   data() {
     return {
-      pageTitle: '资质转让',
+      pageTitle: '劳务资质',
       // @--页面板块数据
       // 导航金刚区数据
       navBarList: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7wgmyfycvm40000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/c91zxekp1c00000.png',
           text: '总包资质',
           marketingImg: '',
           url: '',
@@ -101,7 +98,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/a34ww59t74k0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2ukxm1nuc840000.png',
           text: '专包资质',
           marketingImg: '',
           url: '',
@@ -111,7 +108,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8ez1u2xns5g0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cawnujakriw0000.png',
           text: '设计资质',
           marketingImg: '',
           url: '',
@@ -121,7 +118,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/f1nrgbj4tw00000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/26zino9ks1es000.png',
           text: '环卫资质',
           marketingImg: '',
           url: '',
@@ -131,7 +128,7 @@ export default {
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/3y47fi4dx020000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6p39wrpg9fc0000.png',
           text: '协助资质',
           marketingImg: '',
           url: '',
@@ -194,14 +191,14 @@ export default {
       // 轮播图数据
       bannerList: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/f7f7sk45vfc0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2oqs0r2zfbo000.png',
           url: '',
           md: {
             name: '资质交易聚合页_全类目资质转让',
           },
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2kcy4kojwlw0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2ahwvzklivr4000.png',
           url: '',
           md: {
             name: '资质交易聚合页_资质转让就上薯片',
@@ -228,10 +225,7 @@ export default {
       },
 
       // @--S 埋点数据
-      fixedBottomMd: {
-        telMd: {
-          name: '资质交易聚合页_底部展位_电话联系',
-        },
+      fixedMd: {
         imMd: {
           name: '资质交易聚合页_底部展位_在线咨询',
           type: '售前',
@@ -463,7 +457,7 @@ export default {
   },
   head() {
     return {
-      title: '资质转让',
+      title: '劳务资质',
     }
   },
 }
