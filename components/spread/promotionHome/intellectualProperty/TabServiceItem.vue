@@ -119,7 +119,7 @@ export default {
     font-weight: bold;
     line-height: 64px;
     .sp-tab__text {
-      font-weight: bold;
+      font-weight: 400;
     }
   }
   .sp-tab:first-child {

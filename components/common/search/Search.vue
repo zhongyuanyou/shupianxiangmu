@@ -9,7 +9,7 @@
 <template>
   <div
     class="search-content"
-    :style="{ backgroundColor: 'rgba(255,255,255,' + opacity + ')' }"
+    :style="{ backgroundColor: 'rgba(73,116,245,' + opacity + ')' }"
   >
     <slot name="left"></slot>
     <div class="input-box">

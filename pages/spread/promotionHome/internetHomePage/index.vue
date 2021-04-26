@@ -235,7 +235,7 @@ export default {
     height: 399px;
   }
   .nav {
-    margin-top: -277px;
+    margin-top: -270px;
   }
   .gift-bag {
     margin-top: 20px;

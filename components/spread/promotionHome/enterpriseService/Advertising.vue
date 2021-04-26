@@ -1,7 +1,7 @@
 <template>
   <div class="advertising">
     <!-- 新人专属 -->
-    <div class="exclusive-floor" v-show="gift.length > 0">
+    <div v-show="gift.length > 0" class="exclusive-floor">
       <div class="exclusive-floor-top">
         <span class="title">新人专属礼</span>
         <a class="more" href="javascript:;">
@@ -357,7 +357,7 @@ export default {
         align-items: center;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        font-weight: bold;
         color: #222222;
         line-height: 32px;
         > .title-live {

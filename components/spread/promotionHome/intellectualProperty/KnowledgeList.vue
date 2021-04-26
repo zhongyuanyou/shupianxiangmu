@@ -3,7 +3,9 @@
     <sp-list
       v-model="loading"
       :finished="finished"
-      finished-text="没有更多了"
+      :error.sync="error"
+      :finished-text="finishedText"
+      error-text=""
       @load="onLoad"
     >
       <div class="content">
@@ -36,6 +38,8 @@
 
 <script>
 import { List } from '@chipspc/vant-dgg'
+import { chipSpread } from '@/api/spread'
+
 export default {
   name: 'KnowledgeList',
   components: {
@@ -128,6 +132,8 @@ export default {
     return {
       loading: false, // 显示加载过程的文案
       finished: false, // 加载完毕的文案
+      finishedText: '没有更多数据啦',
+      error: false,
       pageNumber: 1,
       list: [],
       changeState: {
@@ -150,14 +156,13 @@ export default {
       this.list = []
       this.finished = false
       this.loading = true
-      this.onLoad()
+      this.selectTab()
     },
     onLoad(e) {
       // // 异步更新数据
       // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      if (this.loading === true && this.finished === false) {
-        this.selectTab(this.changeState)
-      }
+      this.list.length === 0 && (this.pageNumber = 1)
+      this.selectTab(this.changeState)
     },
     onMore(url) {
       if (url !== '') {
@@ -166,12 +171,14 @@ export default {
     },
     // 请求数据
     selectTab(item) {
+      // 当前无数据不执行
+      if (this.finished && !this.loading) return
       const api = '/service/nk/chipSpread/v1/productList.do'
       const cdn = 'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api'
       // const cdn = 'http://172.16.132.70:7001'
       const type = item.code
       // 2、调用接口
-      this.loading = true
+      // this.loading = true
       this.$axios
         .get(cdn + api, {
           params: {
@@ -189,7 +196,7 @@ export default {
             this.finished = true
           }
           if (result.length !== 0 && res.code === 200) {
-            this.pageNumber += 1
+            ++this.pageNumber
             result.filter((elem, index) => {
               this.list.push({
                 code: index + 1,
@@ -205,12 +212,22 @@ export default {
                 url: '',
               })
             })
-            if (result.length < 15) this.finished = true
+            this.loading = false
+            if (result.length < 15) {
+              this.finishedText = '没有更多了'
+              this.finished = true
+            }
+            return
           }
           this.loading = false
+          this.error = true
+          this.list = this.defaultList
         })
         .catch((err) => {
           this.list = this.defaultList
+          this.loading = false
+          this.error = true
+          this.error = true
           console.log(err)
         })
     },

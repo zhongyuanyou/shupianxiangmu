@@ -60,7 +60,7 @@ import Header from '@/components/common/head/header'
 import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
 
-import NavBar from '@/components/spread/transactionPro/common/NavBar'
+import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '@/components/spread/transactionPro/common/Banner'
 import Form from '@/components/spread/transactionPro/common/Form'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'

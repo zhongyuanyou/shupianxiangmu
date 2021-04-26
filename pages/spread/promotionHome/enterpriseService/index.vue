@@ -36,7 +36,7 @@ import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { chipSpread } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop.vue'
-import Nav from '@/components/spread/common/Nav'
+import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
 import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList'
@@ -438,6 +438,7 @@ export default {
     // 请求数据
     onChange(changeObj) {
       this.changeState = changeObj
+      // console.log(this.$refs.enterprise.initialize())
       this.$refs.enterprise.initialize(changeObj)
       // if (obj.type === 1) {
       //   this.list = defaultList
@@ -540,9 +541,11 @@ export default {
   margin: 0 auto;
   .top-background {
     height: 344px;
-    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png);
+    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
+      no-repeat;
+
     background-size: 100%;
-    margin-bottom: 113px;
+    margin-bottom: 110px;
   }
   .navs {
     position: relative;
