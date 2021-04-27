@@ -64,7 +64,7 @@
               v-model="phone"
               v-md-map
               v-md:webClick
-              type="text"
+              type="tel"
               data-form_name="工商聚合页_表单_手机号码"
               placeholder="留下手机号，接收合同文件"
               maxlength="11"
@@ -82,7 +82,7 @@
               v-model="sms"
               v-md-map
               v-md:webClick
-              type="text"
+              type="tel"
               data-form_name="工商聚合页_表单_验证码"
               placeholder="请输入验证码"
               maxlength="6"

@@ -417,10 +417,9 @@ export default {
           position: relative;
           .dropdown-menu-content-prefix {
             flex: none;
-            font-size: 28px;
-            font-weight: 400;
-            color: #1a1a1a;
             margin-right: 33px;
+            width: 32px;
+            height: 32px;
           }
           .dropdown-menu-content-val {
             flex: none;

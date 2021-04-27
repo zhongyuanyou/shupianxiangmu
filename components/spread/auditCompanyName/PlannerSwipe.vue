@@ -3,7 +3,7 @@
     <div class="planner-title">{{ plannersCommon.title }}</div>
     <div class="planner-flex">
       <sp-swipe
-        :autoplay="3000"
+        :autoplay="300000"
         indicator-color="white"
         :show-indicators="false"
         class="planner-content my-swipe"

@@ -135,7 +135,7 @@ export default {
         this.$appFn.dggSetTitle({ title: '公司注册标准' }, () => {})
       }
     },
-    /** 将异步数据修改成需要的样子 */
+    /** 异步数据修改成需要的样子 */
     plannerHandle(data) {
       if (data.length !== 0) {
         const plannerList = []
