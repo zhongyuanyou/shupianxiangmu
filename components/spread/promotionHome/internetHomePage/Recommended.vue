@@ -322,7 +322,8 @@ export default {
   ::v-deep.sp-tab__text {
     font-size: 32px;
     font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: bold;
+    font-weight: 400;
+    color: #999999;
   }
 
   ::v-deep.sp-tabs__line {
@@ -533,6 +534,15 @@ export default {
     }
     > div:nth-child(2) ~ div {
       margin-top: 20px;
+    }
+  }
+  ::v-deep.sp-tab--active {
+    // line-height: 32px;
+    .sp-tab__text {
+      // font-size: 32px;
+      font-weight: bold;
+      font-family: PingFangSC-Regular, PingFang SC;
+      color: #222222;
     }
   }
 }

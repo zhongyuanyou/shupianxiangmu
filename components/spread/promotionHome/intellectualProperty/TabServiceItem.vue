@@ -83,23 +83,6 @@ export default {
 
 <style lang="less" scoped>
 .tab-service-item {
-  // .sp-tabs__line {
-  //   // width: 60px;
-  //   // height: 12px;
-  //   // background-image: linear-gradient(to right, #4974f5, transparent);
-  //   // background-color: transparent;
-  //   // opacity: 0.8;
-  //   // border-radius: 6px 0 0 6px;
-  //   // position: absolute;
-  //   // top: 46px;
-  //   // left: 15px;
-  //   width: 60px;
-  //   height: 12px;
-  //   background: linear-gradient(90deg, rgba(73, 116, 245, 0.8), #dbe4fc);
-  //   border-radius: 6px;
-  //   top: 47px;
-  //   left: 20px;
-  // }
   .sp-tabs__nav--complete {
     padding: 0px;
     padding-left: 0px;
@@ -111,24 +94,8 @@ export default {
       margin: 0 auto;
       // padding-left: 20px;
     }
-  } // 导航内容
-  // ::v-deep.sp-tab {
-  // -webkit-box-flex: 1;
-  // -webkit-flex: 1 0 auto;
-  // flex: 1 0 auto;
-  // padding: 0;
-  // padding-right: 40px;
-  // // justify-content: flex-start;
-  // // -webkit-justify-content: flex-start;
-  // font-size: 32px;
-  // font-family: PingFang SC;
-  // font-weight: bold;
-  // line-height: 64px;
-  // .sp-tab__text {
-  //   font-weight: 400;
-  //   color: #999999;
-  // }
-  // }
+  }
+
   .sp-tab:first-child {
     padding-left: 20px;
   }
