@@ -1,7 +1,7 @@
 <template>
   <div>
     <sp-popup
-      v-model="display"
+      v-model="isDisplay"
       :lazy-render="false"
       @click-overlay="displayNone"
       ><div class="wrapper">
@@ -123,10 +123,15 @@ export default {
       // 验证码定时器
       countdownTimer: null,
       cityName: '成都',
+      isDisplay: false,
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    display(e) {
+      this.isDisplay = e
+    },
+  },
   created() {},
   mounted() {},
   methods: {
@@ -227,7 +232,7 @@ export default {
       const vla = {
         Dis: false,
       }
-      this.$emit('DisplayNone', vla)
+      this.$emit('DisNone')
     },
     // 选中样式
     onStyle(data, value) {

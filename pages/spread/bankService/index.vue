@@ -52,8 +52,11 @@ import Planner from '@/components/spread/common/PlannerSwipe'
 import Need from '@/components/spread/bankService/MayNeed'
 import Bottom from '@/components/spread/common/FixedBottom'
 import dggImCompany from '@/components/spread/DggImCompany'
-import { spreadApi } from '@/api/spread'
+import { spread2Api } from '@/api/spread'
 import dataResult from '@/assets/spread/bankService.js'
+import { recPlaner } from '@/api/spread/'
+import getUserSign from '~/utils/fingerprint'
+import { getPositonCity } from '@/utils/position'
 export default {
   components: {
     Header,
@@ -69,12 +72,12 @@ export default {
   async asyncData({ $axios }) {
     const result = dataResult
     const type = 'extendBankServer'
+    const location = 'ad113205'
     try {
-      const res = await $axios.get(spreadApi.list, {
-        params: { pageCode: type },
+      const res = await $axios.get(spread2Api.list, {
+        params: { pageCode: type, locations: location },
       })
       if (res.code === 200) {
-        console.log(res)
         return {
           result: res,
         }
@@ -90,6 +93,7 @@ export default {
   },
   data() {
     return {
+      classCode: '',
       title: '银行服务',
       serviceTitle: '银行服务介绍',
       // banner图列表
@@ -280,18 +284,53 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
-  created() {
-    this.productDetail(this.result.data.adList[0].sortMaterialList)
-    this.planner = this.plannersList[0]
-    this.plannerHandleData(this.result.data.planlerList || [])
-  },
+  created() {},
   mounted() {
     // 设置嵌入app时头部title
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: '银行服务' }, () => {})
     }
+    this.getPlanner('app-cpxqye-02') // 获取钻展规划师
+    this.getPlanner('app-ghsdgye-01') // 获取规划师列表
+    this.classCode = this.result.data.adList[0].sortMaterialList[0].materialList[0].productDetail.parentClassCode
   },
   methods: {
+    async getPlanner(id) {
+      // 获取用户唯一标识
+      const deviceId = await getUserSign()
+      this.cityData = await getPositonCity()
+      const parentClassName = this.classCode.split(',')[1]
+      this.$axios
+        .get(recPlaner, {
+          params: {
+            limit: 10,
+            page: 1,
+            area: this.cityData.code === 200 ? this.cityData.code : '120100', // 区域编码
+            deviceId, // 设备ID
+            level_2_ID: parentClassName, // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
+            // login_name: null, // 规划师ID(选填)
+            productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型 必须
+            sceneId: id, // 场景ID
+            // user_id: this.$cookies.get('userId'), // 用户ID(选填)
+            platform: 'app', // 平台（app,m,pc）
+            // productId: this.proDetail.id, // 产品id 非必填
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.plannerData = res.data.records
+            if (id === 'app-cpxqye-02') {
+              this.plannerHandleData(this.plannerData, id)
+            } else if (id === 'app-ghsdgye-01') {
+              this.plannerHandleData(this.plannerData, id)
+              this.productDetail(this.result.data.adList[0].sortMaterialList)
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     back() {
       // 返回上一页
       if (this.isInApp) {
@@ -322,8 +361,6 @@ export default {
     },
     // 处理服务列表数据
     productDetail(data) {
-      const vm = this
-      this.plannerHandleData(this.result.data.planlerList || [])
       if (data.length === 0) {
       } else {
         const serviceList = []
@@ -342,6 +379,8 @@ export default {
             actualSales:
               item.materialList[0].productDetail.operating.actualSales,
             price: item.materialList[0].productDetail.referencePrice,
+            detailsUrl: item.materialList[0].materialLink,
+            // bgImg: item.materialList[0].materialUrl,
             bgImg:
               'https://cdn.shupian.cn/sp-pt/wap/images/62j4vzw5ivk0000.png',
             planner: this.plannersList[
@@ -351,45 +390,53 @@ export default {
                   : Math.floor(Math.random() * this.plannersList.length)
               }`
             ],
-            labelsType: 'col',
-            colLabels:
-              vm.lables[
-                `${
-                  index < vm.lables.length
-                    ? index
-                    : Math.floor(Math.random() * vm.lables.length)
-                }`
-              ],
           }
+          const serviceLabel = []
+          item.materialList[0].productDetail.tags.forEach((item) => {
+            if (item.tagType === 'PRO_SERVICE_TAG') {
+              serviceLabel.push(item.tagName)
+            } else if (item.tagType === 'PRO_SALES_TAG') {
+              obj.salesTag = item.tagName
+            }
+          })
+          obj.label = serviceLabel
           serviceList.push(obj)
         })
         this.serviceList = serviceList
       }
     },
     // 规划师处理
-    plannerHandleData(data) {
+    plannerHandleData(data, id) {
       // 规划师列表
       if (data.length !== 0) {
         const guiHuaShiList = []
         data.forEach((item) => {
           const obj = {
-            id: item.userCentreId,
-            type: '金牌规划师',
-            avatarImg: item.userHeadUrl,
-            imgSrc: item.userHeadUrl,
-            name: item.realName,
-            shuPianFen: 11,
-            serverNum: 250,
-            telephone: item.userPhone,
+            id: item.userCenterId,
+            avatarImg: item.portrait,
+            name: item.userName,
+            shuPianFen: item.point,
+            serverNum: item.serveNum,
+            telephone: item.phone,
             labels: ['工商注册', '财税咨询', '税务筹划'],
-            jobNum: item.loginName,
+            jobNum: item.userCenterNo,
+            imgSrc: item.portrait,
+            im: {
+              id: item.userCenterId,
+              name: item.userName,
+              num: item.userCenterNo,
+            },
           }
           guiHuaShiList.push(obj)
         })
         this.plannersList = guiHuaShiList
-        this.planner = this.plannersList[0]
+        if (id === 'app-cpxqye-02') {
+          this.planner = this.plannersList[
+            Math.floor(Math.random() * this.plannersList.length)
+          ]
+        }
       } else {
-        return this.plannersList
+        return this.planner
       }
     },
   },

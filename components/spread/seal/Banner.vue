@@ -100,7 +100,7 @@
         </button>
       </div>
       <div class="seal-banner-form-tabs">
-        <div v-for="(item, index) of tabs" :key="index">
+        <div v-for="(item, index) of tabs" :key="index" class="center">
           <i
             :style="{ backgroundImage: 'url(' + tabsBg + ')' }"
             class="seal-banner-form-tabs-i"
@@ -171,44 +171,44 @@ export default {
     },
     // 验证 电话号码
     testTel() {
-      const _tel = this.tel
-      const _reg = /^1[3,4,5,6,7,8,9]\d{9}$/
-      if (_tel === '') {
-        return Toast('请输入手机号码')
+      if (this.text === '获取验证码' || this.text === '重新发送') {
+        const _tel = this.tel
+        const _reg = /^1[3,4,5,6,7,8,9]\d{9}$/
+        if (_tel === '') {
+          return Toast('请输入手机号码')
+        }
+        if (!_reg.test(_tel)) {
+          return Toast('请输入正确的手机号码')
+        }
+        const data = {
+          tel: _tel,
+          type: 'gs',
+        }
+        this.sendCode(data)
       }
-      if (!_reg.test(_tel)) {
-        return Toast('请输入正确的手机号码')
-      }
-      const data = {
-        tel: _tel,
-        type: 'gs',
-      }
-      this.sendCode(data)
     },
     // 验证后 发送验证码
     sendCode(data) {
-      if (this.text === '获取验证码' || this.text === '重新发送') {
-        window.promotion.privat.getSmsCode(data, (res) => {
-          if (res.error === 0) {
-            // 发送成功后的操作
-            clearInterval(this.time)
-            let i = 59
-            this.text = i + 's'
-            this.time = setInterval(() => {
-              if (i > 1) {
-                i--
-                this.text = i + 's'
-              } else {
-                this.text = '重新发送'
-                clearInterval(this.time)
-              }
-            }, 1000)
-            return false
-          }
-          // 没成功的时候调用
-          Toast(res.msg)
-        })
-      }
+      window.promotion.privat.getSmsCode(data, (res) => {
+        if (res.error === 0) {
+          // 发送成功后的操作
+          clearInterval(this.time)
+          let i = 59
+          this.text = i + 's'
+          this.time = setInterval(() => {
+            if (i > 1) {
+              i--
+              this.text = i + 's'
+            } else {
+              this.text = '重新发送'
+              clearInterval(this.time)
+            }
+          }, 1000)
+          return false
+        }
+        // 没成功的时候调用
+        Toast(res.msg)
+      })
     },
     // 获取当前时间作为 后台判断唯一标识
     getDate() {
@@ -449,6 +449,10 @@ a {
       }
     }
   }
+}
+.center {
+  display: flex;
+  align-items: center;
 }
 ::v-deep .sp-swipe__indicators {
   bottom: 102px;

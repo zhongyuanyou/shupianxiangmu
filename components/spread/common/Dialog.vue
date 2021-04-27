@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show" class="dialog-overlay">
+  <sp-popup v-model="show" position="center" class="dialog-overlay">
     <div class="dialog-content">
       <div class="content-img">
         <img
@@ -12,23 +12,21 @@
       <div class="line"></div>
       <button class="confirm-btn" @click="close">确定</button>
     </div>
-  </div>
+  </sp-popup>
 </template>
 
 <script>
+import { Popup } from '@chipspc/vant-dgg'
+
 export default {
+  components: {
+    [Popup.name]: Popup,
+  },
   data() {
     return {
       show: false,
-      dialogMsg: '您的信息已提交，我们的规划师将在5分钟之内联系您',
+      dialogMsg: '您的信息已提交，我们的规划师 将在5分钟之内联系您',
     }
-  },
-  watch: {
-    show(newval, oldval) {
-      if (newval) {
-        document.querySelector('.default-layout').style.position = 'fixed'
-      }
-    },
   },
   created() {
     this.$root.$on('Dialog', (dialogMsg) => {
@@ -38,38 +36,28 @@ export default {
       }
     })
   },
-  mounted() {
-    // 调起提示框后 遮罩成后面的内容不滚动
-  },
   methods: {
     close() {
       this.show = false
-      document.querySelector('.default-layout').style.position = 'static '
     },
   },
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+::v-deep .sp-overlay {
+  width: @spread-page-width;
+  left: 50%;
+  right: auto;
+  margin-left: calc(-@spread-page-width / 2);
+}
+
 .dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1111;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  width: 540px;
+  border-radius: 24px;
   .dialog-content {
-    position: fixed;
-    top: 45%;
-    left: 50%;
-    width: 540px;
-    height: 461px;
     background: #ffffff;
-    border-radius: 24px;
-    overflow: hidden;
     font-size: 16px;
-    transform: translate3d(-50%, -50%, 0);
     backface-visibility: hidden;
     transition: 0.3s;
     transition-property: transform, opacity, -webkit-transform;

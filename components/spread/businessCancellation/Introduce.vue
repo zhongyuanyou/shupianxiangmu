@@ -11,30 +11,43 @@
         data-type="售前"
         :data-name="`工商注销业务介绍_${item.title}_在线咨询`"
         class="introduce-box-item"
-        @click="plannerIm(item.planner)"
+        @click="plannerIm(item.planner, item.url)"
       >
         <!-- 标题框 -->
-        <div class="introduce-box-item-title">
+        <div
+          class="introduce-box-item-title"
+          :style="{
+            background:
+              'url(' + item.bgImg + ')' + 'top center/100% auto no-repeat',
+          }"
+        >
           <div class="introduce-box-item-title-box">
             <p class="introduce_title">{{ item.title }}</p>
-            <img :src="item.titlelable" alt="" />
+            <div v-show="item.activityTag !== ''" class="introduce-tag-img-box">
+              {{ item.activityTag }}
+            </div>
           </div>
           <p class="introduce-box-item-title-desc">{{ item.titleContent }}</p>
         </div>
+
         <!-- 标签 -->
         <div class="introduce-tags">
           <div
-            v-for="(value, index) of item.tags"
+            v-for="(value, index) of item.serviceTag"
+            v-show="index < 3"
             :key="index"
             class="introduce-tags-item"
           >
-            <img
-              src="https://cdn.shupian.cn/sp-pt/wap/4zncfqtj0u80000.png"
-              alt=""
-            />
+            <div class="introduce-tags-item-img">
+              <img
+                src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                alt=""
+              />
+            </div>
             <div class="introduce-tags-item-content">{{ value }}</div>
           </div>
         </div>
+
         <!-- 售卖数量 -->
         <div class="introduce-count">
           <div
@@ -48,6 +61,7 @@
             <div class="introduce-count-item-desc">{{ val.content }}</div>
           </div>
         </div>
+
         <!-- 价格、联系人 -->
         <div class="introduce-contact">
           <div class="price">
@@ -56,7 +70,7 @@
           </div>
 
           <div class="contact-btn">
-            <a href="javascript:;">
+            <a href="javascript:;" @click="plannerIm(item.planner, '')">
               <img :src="item.planner.imgSrc" alt="" />
             </a>
             <a
@@ -65,7 +79,7 @@
               data-im_type="售前"
               :data-name="`工商注销业务介绍_${item.title}_在线咨询`"
               href="javascript:;"
-              @click="plannerIm(item.planner)"
+              @click="plannerIm(item.planner, '')"
             >
               <Icon
                 name="notify_ic_chat"
@@ -96,6 +110,7 @@
     <!-- 查看更多 -->
     <a href="javascript:;" class="a-clear">
       <div
+        v-show="serviceList.length > 3"
         v-md-map
         v-md:webClick
         data-type="售前"
@@ -121,14 +136,41 @@ export default {
       type: Array,
       requried: true,
       default: () => {
-        return []
+        return [
+          {
+            title: '公司注销',
+            bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+            url: '',
+            // titlelable:
+            //   'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+            serviceTag: ['快至30个工作日', '成功率高，省心省钱'], // 服务标签
+            activityTag: '限时优惠', // 活动标签
+            salesTag: '', // 销售标签
+            titleContent: '当公司不经营时申请注销，终止公司法人资格。',
+            lowerPrice: 2500,
+            // tags: ['快至30个工作日', '成功率高，省心省钱'],
+            number: [
+              { content: '在线咨询', num: 484 },
+              { content: '累计成交', num: 302 },
+              { content: '成功案例', num: 293 },
+            ],
+            planner: {
+              id: 3394,
+              name: '刘琴',
+              jobNum: '2022554',
+              telephone: '13350072314',
+              imgSrc:
+                'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+            },
+          },
+        ]
       },
     },
   },
   data() {
     return {
       // 展示数据条数
-      showCount: 2,
+      showCount: 3,
       // 是否展示更多
       isMore: false,
     }
@@ -141,7 +183,7 @@ export default {
     // 展示更多、收起
     showMore() {
       if (this.isMore) {
-        this.showCount = 2
+        this.showCount = 3
         this.isMore = false
       } else {
         this.isMore = true
@@ -154,7 +196,11 @@ export default {
       event.stopPropagation()
     },
     // 调用IM
-    plannerIm(planner) {
+    plannerIm(planner, url) {
+      if (url !== '') {
+        window.location.href = url
+        return false
+      }
       this.$root.$emit(
         'openIMM',
         planner.id,
@@ -202,9 +248,19 @@ export default {
           line-height: 31px;
           margin-right: 15px;
         }
-        > img {
-          width: 88px;
-          height: 32px;
+        .introduce-tag-img-box {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 64px;
+          font-size: 36px;
+          font-weight: 400;
+          color: #ffffff;
+          background: linear-gradient(90deg, #ff7e3b 0%, #ff3433 100%);
+          border-radius: 20px 6px 20px 6px;
+          padding: 0px 18px;
+          transform: scale(0.5);
+          transform-origin: 0 32px;
         }
       }
       &-desc {
@@ -227,14 +283,25 @@ export default {
   &-item {
     display: flex;
     height: 24px;
+    justify-content: flex-start;
     align-items: center;
     margin-right: 39px;
-    > img {
-      width: 24px;
-      height: 24px;
-      margin-right: 13px;
+    &-img {
+      width: 48px;
+      height: 48px;
+      margin-right: -11px;
+      font-size: 0;
+      transform: scale(0.5);
+      transform-origin: 0px 24px;
+      > img {
+        width: 48px;
+        height: 48px;
+      }
     }
     &-content {
+      display: flex;
+      align-items: center;
+      height: 24px;
       font-size: 24px;
       font-weight: 400;
       color: #555555;

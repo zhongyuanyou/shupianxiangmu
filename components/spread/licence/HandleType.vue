@@ -40,28 +40,28 @@
             <div class="handleType_content_detail_box_head_title">
               <h3>
                 {{ title.operating.showName }}
-                <span
-                  ><img
-                    src="https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png"
-                    alt=""
-                /></span>
+                <span>限时优惠</span>
               </h3>
               <p>{{ title.operating.slogan }}</p>
             </div>
             <!-- 场所设备 -->
             <div class="handleType_content_detail_box_head_standard">
               <div class="imgbox">
-                <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/images/q1hyl5ug50g000.png"
-                  alt=""
-                />
+                <div class="imgbox-img">
+                  <img
+                    src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                    alt=""
+                  />
+                </div>
                 <span>{{ title.operating.standard }}</span>
               </div>
               <div class="imgbox">
-                <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/images/q1hyl5ug50g000.png"
-                  alt=""
-                />
+                <div class="imgbox-img">
+                  <img
+                    src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
+                    alt=""
+                  />
+                </div>
                 <span>{{ title.operating.flow }}</span>
               </div>
             </div>
@@ -250,19 +250,27 @@ export default {
             border-radius: 6.5px 6.5px 0px 0px;
             // height: 160px;
             > h3 {
+              display: flex;
+              align-items: center;
               font-size: 32px;
               font-family: PingFang SC;
               font-weight: bold;
               color: #ffffff;
               padding: 40px 0 0 33px;
               > span {
-                > img {
-                  display: inline-block;
-                  width: 88px;
-                  height: 32px;
-                  border-radius: 10px 3px 10px 3px;
-                  margin: -5px 0 0 20px;
-                }
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 64px;
+                font-size: 36px;
+                font-weight: 400;
+                color: #ffffff;
+                background: linear-gradient(90deg, #ff7e3b 0%, #ff3433 100%);
+                border-radius: 20px 6px 20px 6px;
+                padding: 0px 18px;
+                margin-left: 9px;
+                transform: scale(0.5);
+                transform-origin: 0 32px;
               }
             }
             > p {
@@ -282,14 +290,23 @@ export default {
               justify-content: space-evenly;
               align-items: center;
               padding: 32px 0 0px 32px;
-              img {
+              &-img {
                 display: block;
-                width: 24px;
-                height: 24px;
-                margin-right: 12px;
+                width: 48px;
+                height: 48px;
+                margin-right: -12px;
+                font-size: 0;
+                transform: scale(0.5);
+                transform-origin: 0 24px;
+                > img {
+                  width: 100%;
+                  height: 100%;
+                }
               }
               span {
-                display: block;
+                display: flex;
+                align-items: center;
+                height: 24px;
                 font-size: 24px;
                 font-family: PingFang SC;
                 font-weight: 400;

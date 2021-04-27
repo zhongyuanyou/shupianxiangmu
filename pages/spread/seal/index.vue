@@ -82,7 +82,7 @@ import maby from '~/components/spread/seal/Maby'
 import spDescription from '~/components/spread/common/SPDescription'
 import fixedBottom from '~/components/spread/common/FixedBottom'
 import dggImCompany from '~/components/spread/DggImCompany'
-import { spreadApi } from '~/api/spread'
+import { spread2Api } from '~/api/spread'
 import { adList, planlerList } from '~/assets/spread/seal.js'
 
 export default {
@@ -104,10 +104,12 @@ export default {
   // 服务端渲染请求数据
   async asyncData({ $axios }) {
     const type = 'extendSealEngraving'
+    const location = 'ad113205'
     try {
-      const res = await $axios.get(spreadApi.list, {
+      const res = await $axios.get(spread2Api.list, {
         params: {
           pageCode: type,
+          locations: location,
         },
       })
       if (res.code === 200) {
@@ -218,6 +220,9 @@ export default {
             .productDetail.operating.actualSales,
           price: this.adList[0].sortMaterialList[i].materialList[0]
             .productDetail.referencePrice,
+          detailsUrl: this.adList[0].sortMaterialList[i].materialList[0]
+            .materialLink,
+          // bgImg: this.adList[0].sortMaterialList[i].materialList[0].materialUrl,
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/8jllc0prmmw0000.jpg',
           planner: {
             id: this.planlerList[i % this.planlerList.length].userCentreId,
@@ -226,19 +231,18 @@ export default {
             telephone: this.planlerList[i % this.planlerList.length].userPhone,
             imgSrc: this.planlerList[i % this.planlerList.length].userHeadUrl,
           },
-          labelsType: 'row',
-          colLabels: [
-            {
-              icon: '',
-              title: '',
-              content: [],
-            },
-          ],
-          rowLabels: {
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/5rm0wj4crok0000.png',
-            text: ['办理快至2小时', '新公司必备', '送章上门'],
-          },
         }
+        const serviceLabel = []
+        this.adList[0].sortMaterialList[
+          i
+        ].materialList[0].productDetail.tags.forEach((item) => {
+          if (item.tagType === 'PRO_SERVICE_TAG') {
+            serviceLabel.push(item.tagName)
+          } else if (item.tagType === 'PRO_SALES_TAG') {
+            obj.salesTag = item.tagName
+          }
+        })
+        obj.label = serviceLabel
         this.serviceList.push(obj)
       }
     },

@@ -14,7 +14,7 @@
           item.md ? item.md.imMd.name : `${serviceTitle}_${item.title}_在线咨询`
         "
         class="serviceList-content"
-        @click="plannerIm(item.planner)"
+        @click="openIM(item.detailsUrl, item.planner)"
       >
         <div
           class="serviceList-content-head"
@@ -22,34 +22,24 @@
         >
           <div class="serviceList-content-head-title">
             <span>{{ item.title }}</span>
-            <img
-              v-show="item.titleLabel !== undefined"
-              :src="item.titleLabel"
-              alt=""
-            />
+            <div v-show="item.salesTag">{{ item.salesTag }}</div>
           </div>
           <span>{{ item.titleContent }}</span>
+          <!-- 右上角标签 -->
+          <i v-show="item.activityTag && item.activityTag !== ''" class="img">{{
+            item.activityTag
+          }}</i>
         </div>
-        <div v-if="item.labelsType === col" class="lable-box">
-          <span class="lable-title">{{ item.colLabels.title }}</span>
+        <div class="lable-row-box">
           <div
-            v-for="(lable, nums) in item.colLabels.content"
-            :key="nums"
-            class="lable-content"
-          >
-            <img :src="item.colLabels.icon" alt="" />
-            <span>{{ lable }}</span>
-          </div>
-        </div>
-        <div v-else class="lable-row-box">
-          <div
-            v-for="(lable, nums) in item.rowLabels.text"
+            v-for="(lable, nums) in item.label"
+            v-show="nums < 3"
             :key="nums"
             class="lable-row-content"
           >
             <img
               class="lable-row-content-img"
-              :src="item.rowLabels.icon"
+              src="https://cdn.shupian.cn/sp-pt/wap/images/f7ec4mvmvrk0000.png"
               alt=""
             />
             <span class="lable-row-content-msg">{{ lable }}</span>
@@ -78,10 +68,10 @@
             <span>元起</span>
           </div>
           <div class="contact-btn">
-            <a href="javascript:;">
+            <a href="javascript:;" @click="im(item.planner)">
               <img :src="item.planner.imgSrc" alt="" />
             </a>
-            <a>
+            <a @click="im(item.planner)">
               <my-icon
                 v-md-map
                 v-md:p_IMClick
@@ -95,7 +85,6 @@
                 color="#4974F5"
                 size="0.4rem"
                 class="icon"
-                @click="im(item.url)"
               >
               </my-icon>
             </a>
@@ -191,16 +180,10 @@ export default {
               imgSrc:
                 'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
             },
-            labelsType: 'col',
-            rowLabels: {
-              title: '所需资料',
-              icon:
-                'https://cdn.shupian.cn/sp-pt/wap/images/f48bh6kpgm80000.png',
-              content: [
-                '由法人代表及直接出具销户报告',
-                '各种未使用的重要空白票据及结算凭证',
-              ],
-            },
+            lable: ['免费核验', '3天拿证', '一对一服务'], // 标签
+            salesTag: '特价优惠', // 活动标签
+            activityTag: '热门商品', // 右上角标签
+            detailsUrl: '', // 详情页链接
             md: {
               telMd: {
                 name: '',
@@ -236,9 +219,20 @@ export default {
     }
   },
   methods: {
-    im(url) {
-      this.plannerIm(url)
+    // 唤起规划师
+    im(planner) {
+      this.plannerIm(planner)
       event.stopPropagation()
+    },
+    // 跳转产品详情
+    openIM(url, planner) {
+      // url不为空跳转详情页
+      if (url !== null) {
+        window.location.href = url
+      } else {
+        // url wei空唤起规划师
+        this.plannerIm(planner)
+      }
     },
     // 调起打电话
     call(telephone) {
@@ -267,6 +261,7 @@ export default {
         guiHuaShi.jobNum || '',
         planner.imgSrc || ''
       )
+      event.stopPropagation()
     },
   },
 }
@@ -309,9 +304,9 @@ export default {
     display: flex;
     flex-direction: column;
     margin-bottom: 32px;
+    position: relative;
     .serviceList-content-head-title {
       display: flex;
-
       > span {
         font-size: 32px;
         font-family: PingFang SC;
@@ -320,11 +315,19 @@ export default {
         line-height: 31px;
         display: block;
       }
-      > img {
-        width: 96px;
+      > div {
         height: 32px;
+        background: #fa5741;
+        border: 1px solid #fa5741;
+        border-radius: 10px 0px 10px 0px;
         margin-left: 15px;
-        margin-top: -3px;
+        padding: 0px 8px 0px 9px;
+        font-size: 20px;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #ffffff;
+        line-height: 31px;
+        margin-top: -5px;
       }
     }
     > span {
@@ -335,41 +338,27 @@ export default {
       line-height: 23px;
       margin-top: 15px;
     }
-  }
-  .lable-box {
-    width: 100%;
-    padding-left: 32px;
-    .lable-title {
-      font-size: 26px;
-      font-family: PingFang SC;
-      font-weight: 400;
-      color: #222222;
-      line-height: 25px;
-      display: block;
-    }
-    .lable-content {
-      display: flex;
-      align-items: center;
-      margin-top: 24px;
-      > img {
-        margin-top: -1px;
-        width: 24px;
-        height: 24px;
-        margin-right: 17px;
-        flex-shrink: 0;
-      }
-      > span {
-        font-size: 24px;
-        font-family: PingFang SC;
-        font-weight: 400;
-        color: #555555;
-        line-height: 24px;
-        display: block;
-      }
+    // 右上角标签
+    .img {
+      position: absolute;
+      display: inline-block;
+      top: 0px;
+      right: 0px;
+      width: 64px;
+      height: 72px;
+      background-image: url(https://cdn.shupian.cn/sp-pt/wap/images/312ntaxb9au0000.png);
+      background-size: 100%;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: bold;
+      color: #ffffff;
+      line-height: 24px;
+      padding: 6px 4px 0 6px;
+      text-align: center;
     }
   }
   .lable-row-box {
-    padding: 0 32px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     .lable-row-content {
@@ -380,9 +369,9 @@ export default {
       margin-left: 40px;
     }
     .lable-row-content-img {
-      width: 24px;
-      height: 24px;
-      margin-top: -1px;
+      width: 48px;
+      height: 48px;
+      transform: scale(0.5);
       flex-shrink: 0;
     }
     .lable-row-content-msg {
@@ -393,7 +382,8 @@ export default {
       color: #555555;
       line-height: 23px;
       display: block;
-      margin-left: 13px;
+      margin-left: 1px;
+      margin-top: 8px;
     }
   }
   .serviceList-content-total {

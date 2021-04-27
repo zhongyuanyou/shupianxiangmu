@@ -57,6 +57,7 @@
           data-name="许可证表单_手机号"
           label="手机号"
           maxlength="11"
+          type="tel"
           placeholder="留下手机号，接收行业报价"
           :formatter="formatterTel"
         />
@@ -428,7 +429,7 @@ export default {
     }
   }
 }
-/deep/ .sp-cell {
+::v-deep .sp-cell {
   background: #f8f8f8;
   border-radius: 8px;
   margin-bottom: 24px;
@@ -436,19 +437,20 @@ export default {
     display: none;
   }
 }
-/deep/ .sp-field__label {
-  width: 85px;
+::v-deep .sp-field__label {
+  width: 95px;
   font-size: 28px;
   color: #1a1a1a;
+  margin-right: 7px;
 }
-/deep/ .sp-field__control {
+::v-deep .sp-field__control {
   margin-left: 5px;
   font-size: 28px;
   font-family: PingFang SC;
   font-weight: bold;
   color: #1a1a1a;
   line-height: 44px;
-  /deep/.sp-field__body {
+  ::v-deep .sp-field__body {
     width: 100%;
   }
   &::-webkit-input-placeholder {
@@ -456,16 +458,16 @@ export default {
     font-weight: normal;
   }
 }
-/deep/ .sp-cell__title {
+::v-deep .sp-cell__title {
   flex: none;
 }
-/deep/ .sp-popup--round {
+::v-deep .sp-popup--round {
   width: @spread-page-width;
   max-height: 80%;
   left: 50%;
   margin-left: -3.75rem;
 }
-/deep/ .sp-overlay {
+::v-deep .sp-overlay {
   width: @spread-page-width;
   max-height: 80%;
   left: 50%;

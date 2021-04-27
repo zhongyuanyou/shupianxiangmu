@@ -305,7 +305,7 @@ export default {
     z-index: 1;
   }
 }
-/deep/ .planner_title {
+::v-deep .planner_title {
   display: flex;
   justify-content: left;
   align-items: center;

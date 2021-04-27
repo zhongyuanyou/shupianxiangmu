@@ -4,11 +4,11 @@
       <div class="content">
         <div class="title">
           <div class="title-line"></div>
-          <p class="title-name">顶呱呱</p>
+          <p class="title-name">薯片找人</p>
           <div class="title-line"></div>
         </div>
-        <p class="content">顶呱呱企业服务平台，2800万用户的选择</p>
-        <p class="footer">顶呱呱科技股份版权所有</p>
+        <p class="desc">薯片找人企业服务平台，2800万用户的选择</p>
+        <p class="footer">薯片找人科技股份版权所有</p>
       </div>
       <div class="bottom-height"></div>
     </div>
@@ -50,7 +50,7 @@ export default {
         margin: 0 12px;
       }
     }
-    .content {
+    .desc {
       font-size: 24px;
       line-height: 24px;
       font-weight: 400;

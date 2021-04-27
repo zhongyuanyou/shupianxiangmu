@@ -193,6 +193,7 @@ export default {
           border: 1px solid rgba(205, 205, 205, 0.5);
           border-radius: 8px;
           margin-bottom: 24px;
+          position: relative;
           ::v-deep.sp-image {
             vertical-align: middle;
             margin: 0 0 0 24px;
@@ -202,17 +203,21 @@ export default {
           }
           .list {
             display: flex !important;
-            width: 210px;
+            width: 206px;
+            // margin-right: 20px;
             flex-direction: column;
             height: 118px;
             flex-wrap: wrap-reverse;
-            float: right;
+            position: absolute;
+            top: 0px;
+            right: 0px;
             > div {
               font-size: 30px;
               font-weight: bold;
               color: #222222;
               line-height: 73px;
               height: 58px;
+              white-space: nowrap;
             }
             div:last-child {
               line-height: 36px;
