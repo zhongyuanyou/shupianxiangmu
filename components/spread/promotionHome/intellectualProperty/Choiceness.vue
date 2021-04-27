@@ -207,7 +207,7 @@ export default {
         display: inline-block;
         top: 0;
         right: 0;
-        background: rgba(73, 116, 245, 0.1);
+        // background: rgba(73, 116, 245, 0.1);
         border-radius: 18px;
         font-size: 22px;
         font-weight: bold;

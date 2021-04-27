@@ -28,7 +28,7 @@
             />
             <span
               :style="{
-                fontWeight: `${item.size === 'small' ? 'bold' : '400'}`,
+                fontWeight: `${item.size === 'small' ? '400' : 'bold'}`,
               }"
               >{{ item.name }}</span
             >

@@ -13,11 +13,11 @@
           <div class="content-list">
             <div class="imge"><img :src="item.img" alt="" /></div>
             <p class="title">{{ item.title }}</p>
-            <label>
+            <div class="item">
               <span v-for="(labels, labelKey) of item.label" :key="labelKey">
                 {{ labels }}
               </span>
-            </label>
+            </div>
             <div
               v-show="item.currentPrice !== '' && item.currentPrice"
               class="price"
@@ -150,13 +150,14 @@ export default {
   },
   methods: {
     initialize(changeObj) {
+      console.log(changeObj, 46)
       this.changeState = changeObj
       console.log(this.changeState, '子组件')
       this.pageNumber = 1
       this.list = []
       this.finished = false
       this.loading = true
-      this.selectTab()
+      this.selectTab(this.changeState)
     },
     onLoad(e) {
       // // 异步更新数据
@@ -221,6 +222,8 @@ export default {
           }
           this.loading = false
           this.error = true
+          this.finished = true
+          this.finishedText = '没有更多了'
           this.list = this.defaultList
         })
         .catch((err) => {
@@ -228,6 +231,8 @@ export default {
           this.loading = false
           this.error = true
           this.error = true
+          this.finished = true
+          this.finishedText = '没有更多了'
           console.log(err)
         })
     },
@@ -240,12 +245,30 @@ export default {
   min-height: 1224px;
   padding-left: 20px;
   .content {
-    display: flex;
-    flex-wrap: wrap;
+    // display: flex;
+    // flex-wrap: wrap;
+
+    // margin: 10px;
+    // column-count: 2;
+    // column-gap: 10px;
+
+    -moz-column-count: 2;
+    /* Firefox */
+    -webkit-column-count: 2;
+    /* Safari 和 Chrome */
+    column-count: 2;
+    // -moz-column-gap: 1em;
+    // -webkit-column-gap: 1em;
+    // column-gap: 1em;
+    width: 620px;
     .content-list {
+      -moz-page-break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      break-inside: avoid;
+
       width: 345px;
       min-height: 592px;
-      padding: 20px 20px 32px 20px;
+      padding: 20px 0 32px 20px;
       background: #ffffff;
       border-radius: 24px;
       margin: 0 20px 20px 0;
@@ -276,20 +299,30 @@ export default {
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
       }
-      label {
+      .item {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: nowrap;
+        // justify-content: center;
+        width: 100%;
         margin-bottom: 60px;
-        span {
+        display: inline-block;
+        line-height: 28px;
+        > span {
+          display: inline-block;
+
+          // align-items: center;
+          // justify-content: center;
           // width: 92px;
-          height: 28px;
+          // height: 28px;
+          margin-right: 8px;
+          padding: 3px 6px;
           background: #f0f2f5;
           border-radius: 4px;
-
+          text-align: center;
           font-size: 20px;
           font-weight: 400;
           color: #5c7499;
-          line-height: 32px;
+          // line-height: 28px;
         }
       }
       .price {

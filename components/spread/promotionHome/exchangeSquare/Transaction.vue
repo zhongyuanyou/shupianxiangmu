@@ -608,14 +608,25 @@ export default {
     width: 60px;
     height: 12px;
     background-color: transparent;
-    background-image: linear-gradient(to right, #4974f5, transparent);
+    // background-image: linear-gradient(to right, #4974f5, transparent);
+    background: linear-gradient(90deg, rgba(73, 116, 245, 0.8), #dbe4fc);
     top: 48px;
     left: 16px;
   }
   ::v-deep.sp-tab__text {
     font-size: 32px;
     font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+  }
+  ::v-deep.sp-tab--active {
     font-weight: bold;
+    line-height: 32px;
+    .sp-tab__text {
+      font-weight: bold;
+      font-size: 32px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      color: #222222;
+    }
   }
   ::v-deep.sp-tabs__wrap {
     margin-bottom: 11px;

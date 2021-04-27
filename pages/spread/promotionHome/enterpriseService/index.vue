@@ -39,7 +39,7 @@ import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
-import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList'
+import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
 // import { resultData } from '~/assets/spread/licence'
 export default {
   name: 'Index',

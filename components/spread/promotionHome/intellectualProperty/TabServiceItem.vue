@@ -81,19 +81,25 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .tab-service-item {
-  .sp-tabs__line {
-    width: 60px;
-    height: 12px;
-    background-image: linear-gradient(to right, #4974f5, transparent);
-    background-color: transparent;
-    opacity: 0.8;
-    border-radius: 6px 0 0 6px;
-    position: absolute;
-    top: 46px;
-    left: 15px;
-  }
+  // .sp-tabs__line {
+  //   // width: 60px;
+  //   // height: 12px;
+  //   // background-image: linear-gradient(to right, #4974f5, transparent);
+  //   // background-color: transparent;
+  //   // opacity: 0.8;
+  //   // border-radius: 6px 0 0 6px;
+  //   // position: absolute;
+  //   // top: 46px;
+  //   // left: 15px;
+  //   width: 60px;
+  //   height: 12px;
+  //   background: linear-gradient(90deg, rgba(73, 116, 245, 0.8), #dbe4fc);
+  //   border-radius: 6px;
+  //   top: 47px;
+  //   left: 20px;
+  // }
   .sp-tabs__nav--complete {
     padding: 0px;
     padding-left: 0px;
@@ -106,29 +112,59 @@ export default {
       // padding-left: 20px;
     }
   } // 导航内容
-  .sp-tab {
-    -webkit-box-flex: 1;
-    -webkit-flex: 1 0 auto;
-    flex: 1 0 auto;
-    padding: 0;
-    padding-right: 40px;
-    // justify-content: flex-start;
-    // -webkit-justify-content: flex-start;
-    font-size: 32px;
-    font-family: PingFang SC;
-    font-weight: bold;
-    line-height: 64px;
-    .sp-tab__text {
-      font-weight: 400;
-    }
-  }
+  // ::v-deep.sp-tab {
+  // -webkit-box-flex: 1;
+  // -webkit-flex: 1 0 auto;
+  // flex: 1 0 auto;
+  // padding: 0;
+  // padding-right: 40px;
+  // // justify-content: flex-start;
+  // // -webkit-justify-content: flex-start;
+  // font-size: 32px;
+  // font-family: PingFang SC;
+  // font-weight: bold;
+  // line-height: 64px;
+  // .sp-tab__text {
+  //   font-weight: 400;
+  //   color: #999999;
+  // }
+  // }
   .sp-tab:first-child {
     padding-left: 20px;
   }
-  /deep/.sp-tab--active {
+  ::v-deep.sp-tab--active {
     font-weight: bold;
-    color: #222222;
     line-height: 32px;
+    .sp-tab__text {
+      font-size: 32px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      color: #222222;
+    }
   }
+  ::v-deep.sp-tab {
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+  }
+  ::v-deep.sp-tabs__line {
+    width: 60px;
+    height: 12px;
+    background: linear-gradient(90deg, rgba(73, 116, 245, 0.8), #dbe4fc);
+    border-radius: 6px;
+    top: 47px;
+    left: 34px;
+  }
+  ::v-deep.sp-tab__text {
+    font-size: 32px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    color: #999999;
+  }
+  ::v-deep.sp-tabs__wrap {
+    margin-bottom: 11px;
+  }
+  // ::v-deep.sp-tabs__nav {
+  //   width: 750px;
+  //   padding: 0 20px;
+  //   margin: 0 auto;
+  // }
 }
 </style>

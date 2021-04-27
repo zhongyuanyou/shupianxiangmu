@@ -34,7 +34,7 @@ import Nav from '@/components/spread/common/Nav'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
-import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList'
+import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList.vue'
 export default {
   name: 'IntellectualProperty',
   components: {
@@ -45,37 +45,37 @@ export default {
     KnowledgeList,
     Nav,
   },
-  // async asyncData({ $axios }) {
-  //   // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-  //   const locations = 'ad113279,ad113277,ad113265,ad113236,ad113235,ad113224'
-  //   const code = 'nav100060'
-  //   const centerCode = 'IntellectualProperty'
-  //   const dataRes = defaultRes
-  //   try {
-  //     const res = await $axios.get(chipSpread.list, {
-  //       params: {
-  //         locationCodes: locations,
-  //         navCodes: code,
-  //         productCenterCode: centerCode,
-  //       },
-  //     })
-  //     if (res.code === 200) {
-  //       console.log('请求成功')
-  //       return {
-  //         resultData: res.data,
-  //       }
-  //     }
-  //     console.log('请求失败')
-  //     return {
-  //       resultData: dataRes.data,
-  //     }
-  //   } catch (error) {
-  //     console.log('请求错误', error)
-  //     return {
-  //       resultData: dataRes.data,
-  //     }
-  //   }
-  // },
+  async asyncData({ $axios }) {
+    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+    const locations = 'ad113279,ad113277,ad113265,ad113236,ad113235,ad113224'
+    const code = 'nav100060'
+    const centerCode = 'IntellectualProperty'
+    const dataRes = defaultRes
+    try {
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: code,
+          productCenterCode: centerCode,
+        },
+      })
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      return {
+        resultData: dataRes.data,
+      }
+    } catch (error) {
+      console.log('请求错误', error)
+      return {
+        resultData: dataRes.data,
+      }
+    }
+  },
   data() {
     return {
       // 金刚区
@@ -346,34 +346,34 @@ export default {
       ],
     }
   },
-  // mounted() {
-  //   // 初始化数据
-  //   // this.onChange({ type: 1 })
-  //   // 处理后台数据
-  //   const resData = this.resultData
-  //   try {
-  //     if (JSON.stringify(resData) !== '{}') {
-  //       this.navList(resData.navs.nav100060 || [])
-  //       // this.productTitle(resData.productClassList || [])
-  //       resData.adList.filter((elem) => {
-  //         if (elem.locationCode === 'ad113236') {
-  //           this.proTitleData(elem.sortMaterialList)
-  //         }
-  //         if (elem.locationCode === 'ad113279') {
-  //           this.imgContentData(elem.sortMaterialList)
-  //         }
-  //         if (elem.locationCode === 'ad113265') {
-  //           this.experience(elem.sortMaterialList)
-  //         }
-  //         if (elem.locationCode === 'ad113277') {
-  //           this.curriculum(elem.sortMaterialList)
-  //         }
-  //       })
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // },
+  mounted() {
+    // 初始化数据
+    // this.onChange({ type: 1 })
+    // 处理后台数据
+    const resData = this.resultData
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        this.navList(resData.navs.nav100060 || [])
+        // this.productTitle(resData.productClassList || [])
+        resData.adList.filter((elem) => {
+          if (elem.locationCode === 'ad113236') {
+            this.proTitleData(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad113279') {
+            this.imgContentData(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad113265') {
+            this.experience(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad113277') {
+            this.curriculum(elem.sortMaterialList)
+          }
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
   methods: {
     // 搜索
     searchKeydownHandle(e) {

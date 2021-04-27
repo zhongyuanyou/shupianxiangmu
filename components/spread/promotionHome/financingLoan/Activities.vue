@@ -80,10 +80,14 @@ export default {
     }
 
     .item-desc {
+      width: 170px;
       font-size: 22px;
       font-weight: bold;
       color: #999999;
       line-height: 26px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
     }
 
     .item-img {
