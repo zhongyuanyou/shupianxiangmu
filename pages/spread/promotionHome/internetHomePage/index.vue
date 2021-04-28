@@ -46,23 +46,21 @@ export default {
       })
 
       if (res.code === 200) {
+        console.log('请求成功')
         return {
           result: res,
         }
-      } else if (res.code === 500) {
-        return {
-          result: internetData,
-        }
-      } else if (res.code === 404) {
-        console.log(111)
-        return {
-          result: internetData,
-        }
+      }
+      console.log('请求失败')
+      return {
+        result: internetData,
       }
     } catch (error) {
+      console.log('请求错误')
       // 请求出错也要保证页面正常显示
-
-      return { error }
+      return {
+        result: internetData,
+      }
     }
   },
   data() {
@@ -98,7 +96,11 @@ export default {
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)
-        this.getData(this.result.data.adList)
+        if (this.result.data.adList.length > 0) {
+          this.getData(this.result.data.adList)
+        } else {
+          this.getData(internetData.data.adList)
+        }
       }
     } catch (error) {
       console.log(error)

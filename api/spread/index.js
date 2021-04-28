@@ -8,8 +8,8 @@ const plannerApi = {
 }
 
 const chipSpread = {
-  // list: `${CHIPS_WAP_BASE_URL}/nk/chipSpread/v1/list.do`,
-  list: `http://172.16.132.116:7001/service/nk/chipSpread/v1/list.do`,
+  list: `${CHIPS_WAP_BASE_URL}/nk/chipSpread/v1/list.do`,
+  // list: `http://172.16.132.116:7001/service/nk/chipSpread/v1/list.do`,
   // productList: `${CHIPS_WAP_BASE_URL}/nk/chipSpread/v1/productList.do`,
 }
 

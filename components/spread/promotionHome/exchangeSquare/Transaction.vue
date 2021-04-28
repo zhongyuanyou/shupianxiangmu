@@ -9,14 +9,15 @@
       :background="isFixed === true ? fixedColor : bgColor"
       @scroll="scroll"
     >
-      <sp-tab v-for="(item, index) of productList" :key="index">
-        <template #title>
-          <div class="title">
-            <span>{{ item.title }}</span>
-          </div>
-        </template>
-        <!-- 二级分类 -->
-        <!-- <div class="secondary-label">
+      <div class="list">
+        <sp-tab v-for="(item, index) of productList" :key="index">
+          <template #title>
+            <div class="title">
+              <span>{{ item.title }}</span>
+            </div>
+          </template>
+          <!-- 二级分类 -->
+          <!-- <div class="secondary-label">
           <div class="labels">
             <ul>
               <li
@@ -36,67 +37,68 @@
             />
           </div>
         </div> -->
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <div class="product-box">
-            <ul v-if="item.title === '商标交易'">
-              <li
-                v-for="(product, productcode) in item.product"
-                v-show="productcode < max"
-                :key="productcode"
-              >
-                <a href="javascript:;">
-                  <span class="product-title">{{ product.title }}</span>
-                  <div class="label-box">
-                    <span
-                      v-if="product.activeTag && product.activeTag !== ''"
-                      class="activeTag"
-                      >{{ product.activeTag }}</span
-                    >
-                    <div class="product-labels">
+          <sp-list
+            v-model="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <div class="product-box">
+              <ul v-if="item.title === '商标交易'">
+                <li
+                  v-for="(product, productcode) in item.product"
+                  v-show="productcode < max"
+                  :key="productcode"
+                >
+                  <a href="javascript:;">
+                    <span class="product-title">{{ product.title }}</span>
+                    <div class="label-box">
                       <span
-                        v-for="(label, labelCode) in product.list"
-                        v-show="index < 3"
-                        :key="labelCode"
-                        >{{ label }}</span
+                        v-if="product.activeTag && product.activeTag !== ''"
+                        class="activeTag"
+                        >{{ product.activeTag }}</span
                       >
+                      <div class="product-labels">
+                        <span
+                          v-for="(label, labelCode) in product.list"
+                          v-show="index < 3"
+                          :key="labelCode"
+                          >{{ label }}</span
+                        >
+                      </div>
                     </div>
-                  </div>
-                  <span class="product-describe">{{ product.describe }}</span>
-                  <div class="price-box">
-                    <img
-                      v-show="product.saleImg && product.saleImg !== ''"
-                      :src="product.saleImg"
-                      alt=""
-                    />
-                    <div class="price">
-                      <span>{{ product.price }}</span>
-                      <span>元</span>
+                    <span class="product-describe">{{ product.describe }}</span>
+                    <div class="price-box">
+                      <img
+                        v-show="product.saleImg && product.saleImg !== ''"
+                        :src="product.saleImg"
+                        alt=""
+                      />
+                      <div class="price">
+                        <span>{{ product.price }}</span>
+                        <span>元</span>
+                      </div>
+                      <span class="original-price">{{
+                        product.originalPrice
+                      }}</span>
                     </div>
-                    <span class="original-price">{{
-                      product.originalPrice
-                    }}</span>
-                  </div>
-                  <div class="product-image">
-                    <ul>
-                      <li
-                        v-for="(imgs, imgCode) in product.images"
-                        :key="imgCode"
-                      >
-                        <img :src="imgs" alt="" />
-                      </li>
-                    </ul></div
-                ></a>
-              </li>
-            </ul>
-            <ProductItem v-else :product="item.product"></ProductItem>
-          </div>
-        </sp-list>
-      </sp-tab>
+                    <div class="product-image">
+                      <ul>
+                        <li
+                          v-for="(imgs, imgCode) in product.images"
+                          :key="imgCode"
+                        >
+                          <img :src="imgs" alt="" />
+                        </li>
+                      </ul></div
+                  ></a>
+                </li>
+              </ul>
+              <ProductItem v-else :product="item.product"></ProductItem>
+            </div>
+          </sp-list>
+        </sp-tab>
+      </div>
     </sp-tabs>
   </div>
 </template>
@@ -539,6 +541,9 @@ export default {
 .transaction {
   width: 100%;
   margin-top: 11px;
+  .list {
+    min-height: 1000px;
+  }
   .secondary-label {
     width: 100%;
     position: relative;
@@ -636,6 +641,7 @@ export default {
     padding: 0 20px;
     margin: 0 auto;
   }
+
   .product-box {
     width: 100%;
     padding: 0 20px;
