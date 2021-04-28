@@ -28,30 +28,29 @@ import { chipSpread } from '@/api/spread'
 export default {
   components: { Header, Nav, Activity, Banner, GiftBag, Transaction },
   async asyncData({ $axios }) {
+    console.log(123456)
     try {
       const res = await $axios.get(chipSpread.list, {
         params: {
           locationCodes: 'ad113246,ad113244,ad113281',
-          navCode: 'nav100059',
+          navCodes: 'nav100059',
           productCenterCode: 'TradingPlatform',
         },
       })
       if (res.code === 200) {
+        console.log('请求成功')
         return {
           result: res,
         }
-      } else if (res.code === 500) {
-        return {
-          result: squareData,
-        }
-      } else if (res.code === 404) {
-        return {
-          result: squareData,
-        }
+      }
+      console.log('请求失败')
+      return {
+        result: squareData,
       }
     } catch (error) {
+      console.log('请求出错')
       // 请求出错也要保证页面正常显示
-      return { error }
+      return { result: squareData }
     }
   },
   data() {
@@ -64,7 +63,7 @@ export default {
   },
   mounted() {
     try {
-      if (JSON.stringify(this.resultData) !== '{}') {
+      if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100059)
         this.getData(this.result.data.adList)
       }

@@ -84,7 +84,7 @@ export default {
         resultData: dataRes.data,
       }
     } catch (error) {
-      console.log(error)
+      console.log('请求错误')
       return {
         resultData: dataRes.data,
       }

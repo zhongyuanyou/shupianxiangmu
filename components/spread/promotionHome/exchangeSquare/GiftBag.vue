@@ -3,7 +3,7 @@
     <div class="gift-bag-box">
       <div class="giftbag-box-title">
         <div class="giftbag-box-title-left">新人专属礼</div>
-        <a href="javascrpt:;" class="giftbag-box-title-right">
+        <a class="giftbag-box-title-right" @click="prompt">
           <span>更多</span>
           <my-icon
             class="next-icon"

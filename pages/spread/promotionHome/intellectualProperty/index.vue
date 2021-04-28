@@ -70,7 +70,7 @@ export default {
         resultData: dataRes.data,
       }
     } catch (error) {
-      console.log('请求错误', error)
+      console.log('请求错误')
       return {
         resultData: dataRes.data,
       }
@@ -386,6 +386,9 @@ export default {
     },
     // 金刚区导航栏
     navList(data) {
+      data.sort((a, b) => {
+        return a.sort - b.sort
+      })
       if (data.length !== 0) {
         this.rollNav = data.map((elem, index) => {
           return {
@@ -397,7 +400,7 @@ export default {
             imageUrl: elem.navigationImageUrl,
           }
         })
-        this.rollNav.reverse()
+        // this.rollNav.reverse()
       }
     },
     // 新人专属
