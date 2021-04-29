@@ -1,9 +1,12 @@
 <template>
   <div class="internet">
     <!-- 头部 -->
-    <div class="head"><Header title="IT互联网" /></div>
+    <div class="head">
+      <Header title="IT互联网" />
+      <Nav :roll-nav="rollNav" class="nav"></Nav>
+    </div>
     <!-- 金刚区 -->
-    <Nav :roll-nav="rollNav" class="nav"></Nav>
+
     <!-- 新人红包 -->
     <GiftBag
       v-show="giftBagList.length"
@@ -18,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
 import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
@@ -65,6 +69,7 @@ export default {
   },
   data() {
     return {
+      // marginTop: -120,
       rollNav: [],
       giftBagList: [],
       advertisingList: {
@@ -91,7 +96,12 @@ export default {
       },
     }
   },
-
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   mounted() {
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
@@ -234,10 +244,9 @@ export default {
     background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/8un99iso7e40000.png');
     background-repeat: no-repeat;
     background-size: 100%, 100%;
-    height: 399px;
   }
   .nav {
-    margin-top: -270px;
+    // margin-top: -270px;
   }
   .gift-bag {
     margin-top: 20px;

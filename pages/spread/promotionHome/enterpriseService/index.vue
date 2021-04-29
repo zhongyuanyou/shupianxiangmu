@@ -3,7 +3,11 @@
     <!-- S 头部和金刚区 -->
     <div class="top-background">
       <NavTop title="企业服务" @searchKeydownHandle="searchKeydownHandle" />
-      <Nav :roll-nav="rollNav" class="navs" />
+      <Nav
+        :roll-nav="rollNav"
+        class="navs"
+        :style="{ 'margin-top': marginTop + 'px' }"
+      />
     </div>
     <!-- E 头部和金刚区 -->
 
@@ -92,6 +96,7 @@ export default {
   },
   data() {
     return {
+      // marginTop: 10,
       // 金刚区
       rollNav: [
         {
@@ -540,12 +545,11 @@ export default {
   background: #f5f5f5;
   margin: 0 auto;
   .top-background {
-    height: 344px;
+    // height: 450px;
     background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
       no-repeat;
-
-    background-size: 100%;
-    margin-bottom: 110px;
+    background-size: 100% 450px;
+    margin-bottom: 20px;
   }
   .navs {
     position: relative;

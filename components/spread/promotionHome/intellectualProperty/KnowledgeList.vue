@@ -245,109 +245,105 @@ export default {
   min-height: 1224px;
   padding-left: 20px;
   .content {
-    // display: flex;
-    // flex-wrap: wrap;
-
-    // margin: 10px;
-    // column-count: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
     // column-gap: 10px;
 
-    -moz-column-count: 2;
-    /* Firefox */
-    -webkit-column-count: 2;
-    /* Safari 和 Chrome */
-    column-count: 2;
+    // -moz-column-count: 2;
+    // /* Firefox */
+    // -webkit-column-count: 2;
+    // /* Safari 和 Chrome */
+    // column-count: 2;
     // -moz-column-gap: 1em;
     // -webkit-column-gap: 1em;
     // column-gap: 1em;
-    width: 620px;
-    .content-list {
-      -moz-page-break-inside: avoid;
-      -webkit-column-break-inside: avoid;
-      break-inside: avoid;
-
-      width: 345px;
-      min-height: 592px;
-      padding: 20px 0 32px 20px;
-      background: #ffffff;
-      border-radius: 24px;
-      margin: 0 20px 20px 0;
-      position: relative;
-      .imge {
-        width: 305px;
-        height: 305px;
-        background: #b2b2b2;
-        border-radius: 12px;
-        img {
-          width: 305px;
+    > div {
+      width: 48%;
+      .content-list {
+        -moz-page-break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        break-inside: avoid;
+        min-height: 592px;
+        padding: 20px 20px 32px 20px;
+        background: #ffffff;
+        border-radius: 24px;
+        margin: 0 20px 20px 0;
+        position: relative;
+        .imge {
+          width: 100%;
           height: 305px;
+          background: #b2b2b2;
+          border-radius: 12px;
+          img {
+            width: 100%;
+            height: 305px;
+          }
         }
-      }
 
-      .title {
-        //   height: 31px;
-        font-size: 32px;
-        font-family: PingFang;
-        font-weight: bold;
-        color: #222222;
-        line-height: 40px;
-        margin: 20px 0;
-
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-      }
-      .item {
-        display: flex;
-        flex-wrap: nowrap;
-        // justify-content: center;
-        width: 100%;
-        margin-bottom: 60px;
-        display: inline-block;
-        line-height: 28px;
-        > span {
-          display: inline-block;
-
-          // align-items: center;
+        .title {
+          //   height: 31px;
+          font-size: 32px;
+          font-family: PingFang;
+          font-weight: bold;
+          color: #222222;
+          line-height: 40px;
+          margin: 20px 0 0 0;
+          max-height: 42px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .item {
+          display: flex;
+          flex-wrap: nowrap;
           // justify-content: center;
-          // width: 92px;
-          // height: 28px;
-          margin-right: 8px;
-          padding: 3px 6px;
-          background: #f0f2f5;
-          border-radius: 4px;
-          text-align: center;
-          font-size: 20px;
-          font-weight: 400;
-          color: #5c7499;
-          // line-height: 28px;
+          width: 100%;
+          margin-bottom: 60px;
+          display: inline-block;
+          line-height: 28px;
+          > span {
+            display: inline-block;
+
+            // align-items: center;
+            // justify-content: center;
+            // width: 92px;
+            // height: 28px;
+            margin-right: 8px;
+            padding: 3px 6px;
+            background: #f0f2f5;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 400;
+            color: #5c7499;
+            // line-height: 28px;
+          }
         }
-      }
-      .price {
-        height: 30px;
-        line-height: 30px;
-        font-size: 36px;
-        font-weight: bold;
-        color: #ec5330;
-        // margin-top: 28px;
-        position: absolute;
-        bottom: 32px;
-        left: 20px;
-        > span {
-          height: 20px;
-          font-size: 22px;
+        .price {
+          height: 30px;
+          line-height: 30px;
+          font-size: 36px;
           font-weight: bold;
           color: #ec5330;
-          line-height: 20px;
-        }
-        .original-price {
-          font-size: 22px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #999999;
-          line-height: 22px;
+          // margin-top: 28px;
+          position: absolute;
+          bottom: 32px;
+          left: 20px;
+          > span {
+            height: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ec5330;
+            line-height: 20px;
+          }
+          .original-price {
+            font-size: 22px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #999999;
+            line-height: 22px;
+          }
         }
       }
     }

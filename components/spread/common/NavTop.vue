@@ -2,55 +2,39 @@
   <div class="search">
     <sp-sticky>
       <div
-        :class="{ 'fixed-head': fixed, 'safe-area-top': useSafeAreaClass }"
         :style="{
-          height: headHeight,
-          'padding-top': safeTop + 'px',
+          backgroundColor: bgColor,
         }"
+        class="nav-top"
       >
-        <div
-          class="my-head"
-          :class="{ 'safe-area-top': useSafeAreaClass }"
+        <Search
           :style="{
-            height: headHeight,
-            'padding-top': safeTop + 'px',
+            'padding-top': safeTop + 20 + 'px',
+            'padding-bottom': 28 + 'px',
           }"
+          :opacity="opacity"
+          :icon-left="0.25"
+          :type="type"
+          :placeholder="placeholder"
+          :maxlength="maxlength"
+          @valChangeHandle="searchInputHandle"
+          @searchKeydownHandle="searchKeydownHandle"
         >
-          <div :style="{ backgroundColor: bgColor }" class="nav-top">
-            <Search
-              :style="{
-                'padding-top': 20 + safeTop + 'px',
-                paddingBottom: 28 + 'px',
-              }"
-              :opacity="opacity"
-              :icon-left="0.25"
-              :type="type"
-              :placeholder="placeholder"
-              :maxlength="maxlength"
-              @valChangeHandle="searchInputHandle"
-              @searchKeydownHandle="searchKeydownHandle"
+          <template v-slot:left>
+            <span class="serch-left" @click="onClickLeft"
+              ><my-icon
+                size="0.32rem"
+                name="order_ic_listnext"
+                :style="{ color: `rgba(${colorVal},${colorVal},${colorVal})` }"
+              />
+              <span
+                class="title"
+                :style="{ color: `rgba(${colorVal},${colorVal},${colorVal})` }"
+                >{{ title }}
+              </span></span
             >
-              <template v-slot:left>
-                <span class="serch-left" @click="onClickLeft"
-                  ><my-icon
-                    size="0.32rem"
-                    name="order_ic_listnext"
-                    :style="{
-                      color: `rgba(${colorVal},${colorVal},${colorVal})`,
-                    }"
-                  />
-                  <span
-                    class="title"
-                    :style="{
-                      color: `rgba(${colorVal},${colorVal},${colorVal})`,
-                    }"
-                    >{{ title }}
-                  </span></span
-                >
-              </template>
-            </Search>
-          </div>
-        </div>
+          </template>
+        </Search>
       </div>
     </sp-sticky>
     <div v-for="(item, index) of 120" :key="index"></div>
@@ -181,10 +165,6 @@ export default {
 </script>
 
 <style lang="less">
-.safe-area-top {
-  padding-top: constant(safe-area-inset-top);
-  padding-top: env(safe-area-inset-top);
-}
 .search {
   .nav-top {
     width: @spread-page-width;

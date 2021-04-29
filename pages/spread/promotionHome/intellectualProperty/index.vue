@@ -3,7 +3,11 @@
     <!-- S 头部和金刚区 -->
     <div class="top-background">
       <NavTop title="知识产权" @searchKeydownHandle="searchKeydownHandle" />
-      <Nav :roll-nav="rollNav" class="navs" />
+      <Nav
+        :roll-nav="rollNav"
+        class="navs"
+        :style="{ 'margin-top': marginTop + 'px' }"
+      />
     </div>
     <!-- E 头部和金刚区 -->
 
@@ -498,10 +502,11 @@ export default {
   background: #f5f5f5;
   margin: 0 auto;
   .top-background {
-    height: 344px;
     // background: linear-gradient(0deg, #f5f5f5, #4974f5);
-    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png);
-    margin-bottom: 113px;
+    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
+      no-repeat;
+    background-size: cover;
+    margin-bottom: 20px;
   }
   .navs {
     position: relative;

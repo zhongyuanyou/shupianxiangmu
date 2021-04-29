@@ -5,7 +5,7 @@
       sticky
       title-active-color="#222222"
       title-inactive-color="#999999"
-      offset-top="1.28rem"
+      :offset-top="offsetTop"
       :background="isFixed === true ? fixedColor : bgColor"
       @scroll="scroll"
     >
@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
 import ProductItem from '@/components/spread/promotionHome/exchangeSquare/ProductItem'
 export default {
@@ -484,6 +485,7 @@ export default {
   },
   data() {
     return {
+      offsetTop: 0,
       fixedColor: '#ffffff',
       bgColor: '#f5f5f5',
       isFixed: false,
@@ -508,10 +510,23 @@ export default {
       ],
     }
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   watch: {
     isFixed(newval, oldval) {
       this.isFixed = newval
     },
+  },
+  mounted() {
+    if (this.isInApp) {
+      this.offsetTop = this.appInfo.statusBarHeight + 58 + 'px'
+    } else {
+      this.offsetTop = 58 + 'px'
+    }
   },
   methods: {
     scroll(e) {

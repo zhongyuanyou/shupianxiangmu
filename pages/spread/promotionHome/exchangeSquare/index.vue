@@ -1,9 +1,16 @@
 <template>
   <div class="exchange-square">
     <!-- 头部搜索 -->
-    <div class="head"><Header title="交易广场" /></div>
+    <div class="head">
+      <Header title="交易广场" />
+      <Nav
+        class="nav"
+        :roll-nav="rollNav"
+        :style="{ 'margin-top': marginTop + 'px' }"
+      ></Nav>
+    </div>
     <!-- 金刚区 -->
-    <Nav class="nav" :roll-nav="rollNav"></Nav>
+
     <!-- 活动区 -->
     <Activity :activity-list="activityList"></Activity>
     <!-- banner -->
@@ -217,13 +224,13 @@ export default {
   margin: 0 auto;
   background: #f5f5f5;
   .head {
-    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/8un99iso7e40000.png');
-    background-repeat: no-repeat;
-    background-size: 100%, 100%;
-    height: 399px;
+    background: url('https://cdn.shupian.cn/sp-pt/wap/images/8un99iso7e40000.png')
+      no-repeat;
+    background-size: cover;
+    margin-bottom: 20px;
   }
   .nav {
-    margin-top: -270px;
+    // margin-top: -270px;
   }
 }
 </style>

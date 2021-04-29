@@ -6,7 +6,7 @@
         sticky
         title-active-color="#222222"
         title-inactive-color="#555555"
-        offset-top="1.28rem"
+        :offset-top="offsetTop"
         background="#f5f5f5"
       >
         <sp-tab v-for="(item, index) of tabList" :key="index">
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
 import ProductItem from '@/components/spread/promotionHome/financingLoan/ProductItem.vue'
 import { chipSpread } from '~/api/spread'
@@ -108,11 +109,21 @@ export default {
         },
       ],
       activeTabIndex: '',
+      offsetTop: 0,
     }
   },
-  created() {},
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   mounted() {
-    // this.getProductData()
+    if (this.isInApp) {
+      this.offsetTop = this.appInfo.statusBarHeight + 58 + 'px'
+    } else {
+      this.offsetTop = 58 + 'px'
+    }
   },
   methods: {
     // 滚动触底后，调用接口获取更多数据
