@@ -1,13 +1,12 @@
 import qs from 'qs'
+import gatewaySign from '@fe/gateway-sign'
 import { saveAxiosInstance } from '@/utils/request'
-
 import xToast from '@/components/common/spToast'
-
-const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
+// const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 const BASE = require('~/config/index.js')
-
 export default function ({ $axios, redirect, app, store }) {
   $axios.defaults.withCredentials = false
+  $axios.defaults.timeout = 12000
   // 设置基本URL
   if (process.server) {
     $axios.defaults.baseURL = BASE.baseURL
@@ -24,36 +23,39 @@ export default function ({ $axios, redirect, app, store }) {
         config.data = qs.stringify(config.data)
       }
       config.params = config.params || {}
-      if (DGG_SERVER_ENV === 'development') {
-        // 本地根据自己的需求进行配置
-        config.headers.sysCode = 'crisps-app-wap-bff-tgapi'
-      } else {
-        // 在app正式上线未做负载前,此sysCode不修改
-        config.headers.sysCode = 'crisps-app-wap-bff-tgapi'
-      }
-      if (
-        app.$cookies.get('token', {
-          path: '/',
-        })
-      ) {
-        config.headers['X-Auth-Token'] = app.$cookies.get('token', {
-          path: '/',
-        })
+      config.headers.platformCode = BASE.platformCode // 平台code
+      config.headers.terminalCode = BASE.terminalCode // 终端code
+      const data = config.method === 'post' ? config.data : config.params
+      const token = app.$cookies.get('token', {
+        path: '/',
+      })
+      // // 签名
+      const signData = gatewaySign.handleSign({
+        method: config.method,
+        rawData: data,
+        sysCode: BASE.SYS_CODE,
+        secret: BASE.SECRET,
+        token,
+        contentType: config.headers['Content-Type'],
+      })
+      config.headers = { ...signData }
+      //   config.headers.sysCode = 'crisps-app-wap-bff-api'
+      // 获取token
+      if (token) {
+        config.headers['X-Auth-Token'] = token
         config.headers['X-Req-UserId'] = app.$cookies.get('userId', {
           path: '/',
         })
       }
-      // config.headers['X-Auth-Token'] = '607991860798845556'
-      // config.headers['X-Req-UserId'] = '607991757719633892'
-
-      // 请求头设置站点code
-      const cityCode = app.$cookies.get('currentCity', {
-        path: '/',
-      })
-      if (cityCode && cityCode !== '{}') {
-        config.headers.areaCode = JSON.parse(cityCode).code
-      } else {
-        config.headers.areaCode = store.state.city.defaultCity.code
+      // 获取用户信息
+      if (
+        app.$cookies.get('userNo', {
+          path: '/',
+        })
+      ) {
+        config.headers['X-Req-UserNo'] = app.$cookies.get('userNo', {
+          path: '/',
+        })
       }
       return config
     },
@@ -73,30 +75,29 @@ export default function ({ $axios, redirect, app, store }) {
         if (!store.state.app.isInApp) {
           if (process && process.client) {
             xToast.error('登录失效，请重新登录')
-            setTimeout(() => {
+            const timer = setTimeout(() => {
               redirect('/my')
+              clearTimeout(timer)
             }, 1500)
           } else {
             redirect('/my')
           }
         }
+      } else {
+        return result
       }
-
-      return result
     },
     (error) => {
       return Promise.reject(error)
     }
   )
   $axios.onError((error) => {
-    return Promise.reject(error)
-    // const code = parseInt(error.response && error.response.status)
-    // if (code === 400) {
-    //   redirect()
-    //   redirect('/404')
-    // } else if (code === 500) {
-    //   redirect('/500')
-    // }
+    const code = parseInt(error.response && error.response.status)
+    if (code === 400) {
+      redirect('/404')
+    } else if (code === 500) {
+      redirect('/500')
+    }
   })
   saveAxiosInstance($axios)
 }
