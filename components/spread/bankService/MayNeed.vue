@@ -8,25 +8,28 @@
           v-md:webClick
           data-type="售前"
           :data-name="`银行服务_您可能还需要办理_${item.title}`"
+          :style="{ backgroundImage: 'url(' + item.bgimage + ')' }"
           href="javascript:;"
           @click="
             () => {
               $parent.openIM(item.url)
             }
           "
-          ><img :src="item.img" alt=""
-        /></a>
+        >
+          <span>{{ item.title }}</span>
+          <span>{{ item.subtitle }}</span>
+        </a>
       </li>
     </ul>
     <ConsultTel title="还有疑问？企服专家为您免费解答" tel="4000-962540" />
     <div class="chips">
       <div>
         <div></div>
-        <span>顶呱呱</span>
+        <span>薯片找人</span>
         <div></div>
       </div>
-      <span class="service">顶呱呱企业服务平台，2800万用户的选择</span>
-      <span>顶呱呱科技股份版权所有</span>
+      <span class="service">薯片找人企业服务平台，2800万用户的选择</span>
+      <span>薯片科技版权所有</span>
     </div>
     <div class="positionbox"></div>
   </div>
@@ -43,39 +46,51 @@ export default {
       ProductList: [
         {
           code: 1,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6rs29o764540000.png',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/c4i1tfnxq480000.jpg',
           url: '/spread/system',
           title: '体系认证',
+          subtitle: '快速办理ISO认证',
         },
         {
           code: 2,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/82vsavebgnk0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/7avb7ebu0f80000.jpg',
           url: '/spread/agency/',
           title: '代理记账',
+          subtitle: '灵活制定节税方\n案',
         },
         {
           code: 3,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/30xrqmq3bey0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/bqge2bn2kig0000.jpg',
           url: '/spread/licence',
           title: '许可证办理',
+          subtitle: '各大热门许可证',
         },
         {
           code: 4,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/akgnqp1al0g0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/98bazm8myg40000.jpg',
           url: '/spread/internetQualification',
           title: '互联网资质',
+          subtitle: '专业团队，快捷\n无忧',
         },
         {
           code: 5,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6f1d205sae40000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/ar5rgy4768o0000.jpg',
           url: '/spread/tax',
           title: '财务税筹',
+          subtitle: '各大服务包，随\n心选择',
         },
         {
           code: 6,
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/fazszc8imvk0000.jpg',
+          bgimage:
+            'https://cdn.shupian.cn/sp-pt/wap/images/dfta5shx4rc0000.jpg',
           url: '/spread/businessCancellation',
           title: '工商注销',
+          subtitle: '一键注销，快捷\n无忧',
         },
       ],
     }
@@ -111,7 +126,8 @@ export default {
     margin-top: 31px;
     justify-content: space-between;
     > li {
-      flex-basis: 32%;
+      width: 215px;
+      height: 164px;
       background: #f8f8f8;
       border-radius: 8px;
       &:nth-child(3) ~ li {
@@ -120,10 +136,29 @@ export default {
       > a {
         width: 100%;
         height: 100%;
-
-        > img {
-          width: 100%;
-          border-radius: 8px;
+        display: block;
+        background-repeat: no-repeat;
+        background-position: 0px 0px;
+        background-size: 100% 100%;
+        border-radius: 8px;
+        padding: 32px 0 0 24px;
+        > span:first-child {
+          display: block;
+          font-size: 28px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+        }
+        > span:last-child {
+          font-size: 22px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #555555;
+          line-height: 30px;
+          display: block;
+          margin-top: 19px;
+          white-space: pre-wrap;
         }
       }
     }

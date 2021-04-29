@@ -3,7 +3,11 @@
     <!-- S 头部和金刚区 -->
     <div class="top-background">
       <NavTop title="知识产权" @searchKeydownHandle="searchKeydownHandle" />
-      <Nav :roll-nav="rollNav" class="navs" />
+      <Nav
+        :roll-nav="rollNav"
+        class="navs"
+        :style="{ 'margin-top': marginTop + 'px' }"
+      />
     </div>
     <!-- E 头部和金刚区 -->
 
@@ -34,7 +38,7 @@ import Nav from '@/components/spread/common/Nav'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
-import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList'
+import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList.vue'
 export default {
   name: 'IntellectualProperty',
   components: {
@@ -70,7 +74,7 @@ export default {
         resultData: dataRes.data,
       }
     } catch (error) {
-      console.log('请求错误', error)
+      console.log('请求错误')
       return {
         resultData: dataRes.data,
       }
@@ -386,6 +390,9 @@ export default {
     },
     // 金刚区导航栏
     navList(data) {
+      data.sort((a, b) => {
+        return a.sort - b.sort
+      })
       if (data.length !== 0) {
         this.rollNav = data.map((elem, index) => {
           return {
@@ -397,7 +404,7 @@ export default {
             imageUrl: elem.navigationImageUrl,
           }
         })
-        this.rollNav.reverse()
+        // this.rollNav.reverse()
       }
     },
     // 新人专属
@@ -495,10 +502,11 @@ export default {
   background: #f5f5f5;
   margin: 0 auto;
   .top-background {
-    height: 344px;
     // background: linear-gradient(0deg, #f5f5f5, #4974f5);
-    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png);
-    margin-bottom: 113px;
+    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
+      no-repeat;
+    background-size: cover;
+    margin-bottom: 20px;
   }
   .navs {
     position: relative;

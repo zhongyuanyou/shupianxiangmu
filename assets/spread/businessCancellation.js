@@ -2,8 +2,7 @@ const plannersData = [
   {
     id: '3394',
     type: '金牌规划师',
-    imgSrc:
-      'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+    // imgSrc:'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     avatarImg:
       'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     name: '刘琴',
@@ -16,8 +15,7 @@ const plannersData = [
   {
     id: '7704199733711282176',
     type: '金牌规划师',
-    imgSrc:
-      'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+    // imgSrc:'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     avatarImg:
       'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
     name: '岳雪冬',
@@ -73,10 +71,13 @@ const plannersData = [
 const serviceListData = [
   {
     title: '公司注销',
-    titlelable: 'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+    // titlelable:'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    serviceTag: ['快至30个工作日', '成功率高，省心省钱'], // 服务标签
+    activityTag: '限时优惠', // 活动标签
+    salesTag: '', // 销售标签
     titleContent: '当公司不经营时申请注销，终止公司法人资格。',
     lowerPrice: 2500,
-    tags: ['快至30个工作日', '成功率高，省心省钱'],
     number: [
       { content: '在线咨询', num: 484 },
       { content: '累计成交', num: 302 },
@@ -93,10 +94,14 @@ const serviceListData = [
   },
   {
     title: '工商注销',
-    titlelable: 'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+    // titlelable: 'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    serviceTag: ['快至30个工作日', '成功率高，省心省钱'], // 服务标签
+    activityTag: '限时优惠', // 活动标签
+    salesTag: '', // 销售标签
     titleContent: '企业税务或税务已清税的情况下的营业执照注销。',
     lowerPrice: 1000,
-    tags: ['快至30个工作日', '流程手续正规化'],
+    // tags: ['快至30个工作日', '流程手续正规化'],
     number: [
       { content: '在线咨询', num: 370 },
       { content: '累计成交', num: 296 },
@@ -113,7 +118,11 @@ const serviceListData = [
   },
   {
     title: '个体注销',
-    titlelable: 'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+    // titlelable: 'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    serviceTag: ['快至30个工作日', '成功率高，省心省钱'], // 服务标签
+    activityTag: '限时优惠', // 活动标签
+    salesTag: '', // 销售标签
     titleContent: '个体工商户不再从事经营活动办理的注销登记。',
     lowerPrice: 2000,
     tags: ['快至30个工作日', '专业团队申请，快速高效'],
@@ -133,7 +142,11 @@ const serviceListData = [
   },
   {
     title: '简易注销',
-    titlelable: 'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d4ynsvxsx9c0000.png',
+    // titlelable: 'https://cdn.shupian.cn/sp-pt/wap/images/cr4yfd0fvhk0000.png',
+    serviceTag: ['快至30个工作日', '成功率高，省心省钱'], // 服务标签
+    activityTag: '限时优惠', // 活动标签
+    salesTag: '', // 销售标签
     titleContent: '企业无经营活动，无债权债务的企业注销。',
     lowerPrice: 998,
     tags: ['快至30个工作日', '流程透明化，节点清晰可查'],
@@ -156,8 +169,6 @@ const planner = {
   id: '3394',
   type: '金牌规划师',
   imgSrc:
-    'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-  avatarImg:
     'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
   name: '刘琴',
   shupianfen: 11,

@@ -3,15 +3,17 @@
     <sp-list
       v-model="loading"
       :finished="finished"
+      :error.sync="error"
       finished-text="没有更多了"
+      error-text=""
       offset="100"
       @load="onLoad"
     >
       <div class="content">
         <div
-          class="content-list"
           v-for="(item, proKey) of list"
           :key="proKey"
+          class="content-list"
           @click="onMore(item.url)"
         >
           <div class="imge"><img :src="item.img" alt="" /></div>
@@ -136,6 +138,7 @@ export default {
     return {
       loading: false, // 显示加载过程的文案
       finished: false, // 加载完毕的文案
+      error: false,
       pageNumber: 1,
       list: [],
     }
@@ -151,14 +154,13 @@ export default {
       this.list = []
       this.finished = false
       this.loading = true
-      this.onLoad()
+      this.selectTab(changeObj)
     },
     onLoad(e) {
       // // 异步更新数据
       // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      if (this.loading === true && this.finished === false) {
-        this.selectTab(this.changeState)
-      }
+      this.list.length === 0 && (this.pageNumber = 1)
+      this.selectTab(this.changeState)
     },
     onMore(url) {
       if (url !== '') {
@@ -167,12 +169,13 @@ export default {
     },
     // 请求数据
     selectTab(item) {
+      // 当前无数据不执行
+      if (this.finished && !this.loading) return
       const api = '/service/nk/chipSpread/v1/productList.do'
       const cdn = 'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api'
       // const cdn = 'http://172.16.132.70:7001'
       const type = item.code
       // 2、调用接口
-      this.loading = true
       this.$axios
         .get(cdn + api, {
           params: {
@@ -190,7 +193,7 @@ export default {
             this.finished = true
           }
           if (result.length !== 0 && res.code === 200) {
-            this.pageNumber += 1
+            ++this.pageNumber
             result.filter((elem, index) => {
               this.list.push({
                 code: index + 1,
@@ -206,12 +209,20 @@ export default {
                 url: '',
               })
             })
+            this.loading = false
             if (result.length < 15) this.finished = true
+
+            return
           }
           this.loading = false
+          this.error = true
+          this.list = this.defaultList
         })
         .catch((err) => {
           this.list = this.defaultList
+          this.loading = false
+          this.finished = true
+          this.error = true
           console.log(err)
         })
     },

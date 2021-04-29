@@ -26,7 +26,12 @@
               :style="{ width: '52px', height: '36px' }"
               alt=""
             />
-            <span>{{ item.name }}</span>
+            <span
+              :style="{
+                fontWeight: `${item.size === 'small' ? '400' : 'bold'}`,
+              }"
+              >{{ item.name }}</span
+            >
           </a>
         </li>
       </ul>
@@ -184,7 +189,7 @@ export default {
             font-size: 24px;
             line-height: 30px;
             font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: bold;
+            font-weight: 400;
             color: #222222;
             margin-top: 13px;
             white-space: nowrap;

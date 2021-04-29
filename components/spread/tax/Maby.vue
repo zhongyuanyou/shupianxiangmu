@@ -2,7 +2,7 @@
   <div class="maby">
     <div class="maby-title">这些业务您可能也需要</div>
     <div class="maby-banner">
-      <a v-for="(item, i) of imgs" :key="i" href="javascript:;">
+      <a v-for="(item, i) of serviceList" :key="i" href="javascript:;">
         <div
           v-md-map
           v-md:webClick
@@ -10,7 +10,12 @@
           class="maby-banner-item"
           :style="item.bg"
           @click="openImUrl(item.url)"
-        ></div>
+        >
+          <div class="banner-item-box">
+            <div class="banner-item-box-title">{{ item.title }}</div>
+            <div class="banner-item-box-subtitle">{{ item.subtitle }}</div>
+          </div>
+        </div>
       </a>
     </div>
   </div>
@@ -21,28 +26,31 @@ export default {
   name: 'Maby',
   data() {
     return {
-      imgs: [
+      serviceList: [
         {
           title: '工商变更',
+          subtitle: '各大服务包随心选择',
           bg: {
             backgroundImage:
-              'url(https://cdn.shupian.cn/sp-pt/wap/images/6plmb0uu7l40000.png)',
+              'url(https://cdn.shupian.cn/sp-pt/wap/images/1596zop5zoak000.png)',
           },
           url: '/spread/businessChange',
         },
         {
           title: '代理记账',
+          subtitle: '灵活制定节税方案',
           bg: {
             backgroundImage:
-              'url(https://cdn.shupian.cn/sp-pt/wap/21vfp6qa0i1s000.png)',
+              'url(https://cdn.shupian.cn/sp-pt/wap/images/3gxiam5vxau0000.png)',
           },
           url: '/spread/agency/',
         },
         {
           title: '其他服务',
+          subtitle: '一站服务，省时高效',
           bg: {
             backgroundImage:
-              'url(https://cdn.shupian.cn/sp-pt/wap/images/fuwvgf0lbig0000.png)',
+              'url(https://cdn.shupian.cn/sp-pt/wap/images/8v6ghjtbd3w0000.png)',
           },
           url: '',
         },
@@ -138,6 +146,22 @@ export default {
       color: #ffffff;
       margin-right: -1px;
     }
+  }
+}
+.banner-item-box {
+  &-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222222;
+    margin-bottom: 11px;
+    line-height: 1;
+  }
+  &-subtitle {
+    font-size: 22px;
+    font-weight: 400;
+    color: #999999;
+    width: 153px;
+    line-height: 1.36;
   }
 }
 </style>

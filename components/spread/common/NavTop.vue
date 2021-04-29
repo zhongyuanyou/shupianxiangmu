@@ -1,8 +1,17 @@
 <template>
   <div class="search">
     <sp-sticky>
-      <div :style="{ backgroundColor: bgColor }" class="nav-top">
+      <div
+        :style="{
+          backgroundColor: bgColor,
+        }"
+        class="nav-top"
+      >
         <Search
+          :style="{
+            'padding-top': safeTop + 20 + 'px',
+            'padding-bottom': 28 + 'px',
+          }"
           :opacity="opacity"
           :icon-left="0.25"
           :type="type"
@@ -34,7 +43,10 @@
 
 <script>
 import { Icon, Sticky } from '@chipspc/vant-dgg'
-import Search from '@/components/common/search/Search'
+import { mapState } from 'vuex'
+import safeAreaInsets from 'safe-area-insets'
+
+import Search from '@/components/common/search/Search.vue'
 export default {
   components: {
     [Sticky.name]: Sticky,
@@ -79,6 +91,20 @@ export default {
       inputVal: '',
       colorVal: 250,
       bgColor: null,
+      safeTop: 0, // 顶部安全区的高度
+      headHeight: 88,
+    }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
+  created() {
+    // 因为通过中间件ua获取到了 isInApp 的值，故可以在服务端设置，避免页面上头部抖动
+    if (process && process.server && !this.isInApp) {
+      this.safeTop = 0
     }
   },
   mounted() {
@@ -87,20 +113,22 @@ export default {
     if (this.isBlack) {
       this.bgColor = '#f5f5f5'
     }
+
+    this.getTopMargin()
   },
   methods: {
     searchHandle(val) {
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop // 滚动条距离顶部的位置
       this.opacity = scrollTop / this.scrollPercentage // 透明度
-      if (this.isBlack) {
-        this.colorVal = 26
+      if (!this.isBlack) {
+        this.colorVal = 250
         return
       }
       if (scrollTop < 50) {
-        this.colorVal = 250
-      } else {
         this.colorVal = 26
+      } else {
+        this.colorVal = 250
       }
     },
     // 值变化
@@ -117,11 +145,19 @@ export default {
     },
     // 返回
     onClickLeft() {
-      if (window.history.length <= 1) {
-        this.$router.replace('/spread')
-        return false
-      } else {
-        this.$router.back()
+      if (this.isInApp) {
+        this.$appFn.dggWebGoBack((res) => {})
+        return
+      }
+      this.$router.back()
+    },
+    // app 头部兼容
+    getTopMargin() {
+      if (process && process.client) {
+        let safeTop = safeAreaInsets.top
+        if (this.isInApp) safeTop = this.appInfo.statusBarHeight + 10
+        this.safeTop = safeTop
+        console.log(this.safeTop)
       }
     },
   },
@@ -133,7 +169,8 @@ export default {
   .nav-top {
     width: @spread-page-width;
     margin: 0 auto;
-
+    position: relative;
+    display: block;
     .search-content {
       width: @spread-page-width;
       padding: 20px 20px 26px 28px;

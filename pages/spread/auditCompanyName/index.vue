@@ -48,7 +48,7 @@ import DggImCompany from '@/components/spread/DggImCompany'
 import Banner from '@/components/spread/auditCompanyName/AuditCompanyNameBanner'
 
 import { planlerList, nums } from '@/assets/spread/auditComopanyName'
-import { spreadApi } from '@/api/spread'
+import { spreadApi, recPlaner } from '@/api/spread'
 
 export default {
   name: 'Index',
@@ -173,8 +173,52 @@ export default {
     }
   },
   methods: {
+    // 请求规划师
+    async getPlanner(getObj) {
+      this.cityData = await this.$getPositonCity()
+      console.log('this.cityData', this.cityData)
+      // 获取用户唯一标识
+      const deviceId = await this.$getFinger()
+      // deviceId = '0022ef1a-f685-469a-93a8-5409892207a2'
+      console.log('deviceId', deviceId)
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .get(recPlaner, {
+            params: {
+              limit: getObj.limit || 10,
+              page: 1,
+              area:
+                this.cityData.code === 200 ? this.cityData.data.code : '510000', // 区域编码
+              deviceId, // 设备ID
+              level_2_ID: getObj.level_2_ID || '', // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
+              // login_name: null, // 规划师ID(选填)
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型 必须 产品类型	（交易：FL20201116000003，服务：FL20201116000002）写死
+              sceneId: getObj.sceneId || 'app-ghsdgye-01', // 场景ID
+              // user_id: this.$cookies.get('userId'), // 用户ID(选填)
+              platform: 'app', // 平台（app,m,pc）
+              // productId: this.proDetail.id, // 产品id 非必填pp"
+              // "productId":"607991482841724751"
+              productId: getObj.productId || '',
+            },
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              resolve(res.data.records)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+    },
+
     /** 规划师数据处理 */
     plannerHandle(data) {
+      // 待改
+      // const getObj = { level_2_ID: 'ad113205' }
+      // this.getPlanner(getObj).then((res) => {
+      //   console.log('planner33333', res)
+      // })
       if (data.length !== 0) {
         const guihuashiList = []
         data.forEach((item, i) => {
@@ -197,6 +241,28 @@ export default {
       } else {
         return this.plannersData
       }
+      // if (data.length !== 0) {
+      //   const guihuashiList = []
+      //   data.forEach((item, i) => {
+      //     const obj = {
+      //       id: item.userCentreId,
+      //       type: '金牌规划师',
+      //       imgSrc: item.userHeadUrl,
+      //       avatarImg: item.userHeadUrl,
+      //       name: item.realName,
+      //       shuPianFen: 11,
+      //       serverNum: 250,
+      //       telephone: item.userPhone,
+      //       labels: ['工商注册', '财税咨询', '税务筹划'],
+      //       jobNum: item.userPhoneloginName,
+      //     }
+      //     guihuashiList.push(obj)
+      //   })
+      //   this.plannersData = guihuashiList
+      //   this.planner = guihuashiList[0]
+      // } else {
+      //   return this.plannersData
+      // }
     },
     /** 处理核名数据 */
     toAdiut(data) {

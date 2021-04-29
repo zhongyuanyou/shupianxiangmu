@@ -14,6 +14,7 @@
         <my-icon name="nav_ic_back" size="0.40rem" color="#1a1a1a"></my-icon>
       </div>
     </sp-top-nav-bar>
+
     <div class="banner-img">
       <sp-swipe :autoplay="3000" :show-indicators="false">
         <sp-swipe-item v-for="(image, index) in bannerImages" :key="index">
@@ -23,9 +24,14 @@
         </sp-swipe-item>
       </sp-swipe>
     </div>
+
+    <!-- S 表单 -->
     <div class="precontract">
       <Card />
     </div>
+    <!-- E 表单 -->
+
+    <!-- S 列表 -->
     <div class="introduction">
       <h5>服务介绍</h5>
       <RegisterList :list-count="listCount" :is-more="isMore" />
@@ -41,10 +47,13 @@
               :name="isMore ? 'tab_ic_all_s' : 'tab_ic_all_n'"
               size="13px"
               color="#555555"
-            ></my-icon></span
-        ></a>
+            ></my-icon>
+          </span>
+        </a>
       </p>
     </div>
+    <!-- E 列表 -->
+
     <div class="norm">
       <h5>办理标准</h5>
       <Standard />
@@ -60,13 +69,15 @@
       />
     </div>
     <!-- E立即咨询 -->
+
     <!-- S注册公司准备工作-平台优势 -->
     <RegisterReady />
     <!-- E注册公司准备工作-平台优势 -->
+
     <!-- S咨询规划师 -->
     <div class="refer">
       <PlannerSwipe
-        :planners-data="guiHuaShiList"
+        :planners-data="plannerSwipe"
         :planners-common="plannersCommon"
       ></PlannerSwipe>
     </div>
@@ -83,6 +94,11 @@
           :data-name="`${item.name}`"
           @click="onService(item.url, index)"
         >
+          <div class="serice-cotent">
+            <p>{{ item.title[0] }}</p>
+            <p class="serice-cotent_title">{{ item.title[1] }}</p>
+            <p class="serice-cotent_title">{{ item.title[2] }}</p>
+          </div>
           <sp-image :src="item.img"
         /></a>
       </div>
@@ -117,13 +133,14 @@ import {
   SwipeItem,
   Lazyload,
   Image,
-  Sticky,
 } from '@chipspc/vant-dgg'
 import { mapState } from 'vuex'
 import Dialog from '@/components/spread/common/Dialog'
 
 // import { foundApi } from '~/api'
-import { dataResult } from '@/assets/spread/companyRegister'
+import { spreadApi, spread2Api, recPlaner } from '@/api/spread'
+import { dataResult } from '@/assets/spread/companyRegister2'
+
 import Card from '@/components/spread/companyRegister/Card.vue'
 import RegisterList from '~/components/spread/companyRegister/RegisterList'
 import Standard from '@/components/spread/companyRegister/Standard'
@@ -133,7 +150,6 @@ import PlannerSwipe from '@/components/spread/common/PlannerSwipe'
 import ConsultTel from '@/components/spread/common/ConsultTel'
 import SPDescription from '@/components/spread/common/SPDescription'
 import DggImCompany from '@/components/spread/DggImCompany'
-import { spreadApi } from '@/api/spread'
 export default {
   name: 'Index',
   components: {
@@ -160,19 +176,21 @@ export default {
     const type = 'extendBussineReg'
     const defaultRes = dataResult
     try {
-      const res = await $axios.get(spreadApi.list, {
+      const res = await $axios.get(spread2Api.list, {
         params: {
           pageCode: type,
+          locations: 'ad113205',
         },
       })
       if (res.code === 200) {
+        console.log(res.message)
         return {
           resultData: res,
         }
-      } else {
-        return {
-          resultData: defaultRes,
-        }
+      }
+      console.log('请求失败')
+      return {
+        resultData: defaultRes,
       }
     } catch (error) {
       console.log('error', error)
@@ -197,23 +215,29 @@ export default {
       // 其他服务
       sericeImg: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/f67zabgy4w00000.png',
+          // img: 'https://cdn.shupian.cn/sp-pt/wap/f67zabgy4w00000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ctlpg6iiio00000.png',
           name: '工商注册_你可能还需要其他服务_税务筹划',
           url: '/spread/tax',
+          title: ['税务筹划', '各大服务包', '随心选择'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/7mdee1enz8s0000.png',
+          // img: 'https://cdn.shupian.cn/sp-pt/wap/7mdee1enz8s0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/731gw63toz40000.png',
           name: '工商注册_你可能还需要其他服务_代理记账',
           url: '/spread/agency',
+          title: ['代理记账', '各大服务包', '随心选择'],
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/86kmcgq4i1s0000.png',
+          // img: 'https://cdn.shupian.cn/sp-pt/wap/86kmcgq4i1s0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ece46ht1ha80000.png',
           name: '工商注册_你可能还需要其他服务_其他服务',
           url: '',
+          title: ['其他服务', '一站服务', '省时高效'],
         },
       ],
       // 规划师轮播列表
-      guiHuaShiList: [
+      plannerSwipe: [
         {
           id: '7862495547640840192',
           avatarImg:
@@ -232,59 +256,15 @@ export default {
         telName: '工商注册_咨询规划师_电话',
       },
       // 列表
-      listCount: [
-        {
-          pric: 4000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/a0761uxgsiw0000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-        {
-          pric: 5000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/kbpgoqhkn58000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-        {
-          pric: 7000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/v5qbb7umt7k000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-        {
-          pric: 7000,
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2d721lqgmtz4000.png',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-          operating: {
-            actualViews: 3291,
-            defaultSales: 1837,
-            actualSales: 1832,
-          },
-        },
-      ],
+      listCount: [],
       imgPlanner: [
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/a0761uxgsiw0000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/kbpgoqhkn58000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/v5qbb7umt7k000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2d721lqgmtz4000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/9odvjxumogs0000.png' },
-        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d8yaj7dckgw0000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/a0761uxgsiw0000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/kbpgoqhkn58000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/v5qbb7umt7k000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2d721lqgmtz4000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/9odvjxumogs0000.png' },
+        // { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/d8yaj7dckgw0000.png' },
+        { bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png' },
       ],
       planner: {
         id: '7862495547640840192',
@@ -304,6 +284,11 @@ export default {
           name: '工商注册_钻石展位_在线咨询',
           type: '售前',
         },
+      },
+      // 城市
+      cityData: {
+        code: 500,
+        data: {},
       },
     }
   },
@@ -330,7 +315,8 @@ export default {
     try {
       if (JSON.stringify(this.resultData.data) !== '{}') {
         this.ListCount(this.resultData.data || [])
-        this.plannerData(this.resultData.data.planlerList || [])
+        // this.plannerData(this.resultData.data.planlerList || [])
+        // this.plannerData(this.resultData.data.planlerList || [])
       }
     } catch (error) {
       console.log(error)
@@ -340,76 +326,201 @@ export default {
     this.$appFn.dggHideNav((res) => {})
   },
   methods: {
-    // listCout列表数据处理
+    // 封装请求规划师
+    async getPlanner(getObj) {
+      this.cityData = await this.$getPositonCity()
+      console.log('this.cityData', this.cityData)
+      // 获取用户唯一标识
+      const deviceId = await this.$getFinger()
+      // deviceId = '0022ef1a-f685-469a-93a8-5409892207a2'
+      console.log('deviceId', deviceId)
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .get(recPlaner, {
+            params: {
+              limit: getObj.limit || 10,
+              page: 1,
+              area:
+                this.cityData.code === 200 ? this.cityData.data.code : '510000', // 区域编码
+              deviceId, // 设备ID
+              level_2_ID: getObj.level_2_ID, // 二级产品分类   推广页广告位数据下的产品详情的parentClassCode "parentClassCode": "FL20201224136014,FL20201224136034,FL20201224136037",// "parentClassName": "工商/工商注册/有限公司注册",
+              // login_name: null, // 规划师ID(选填)
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型 必须 产品类型	（交易：FL20201116000003，服务：FL20201116000002）写死
+              sceneId: getObj.sceneId || 'app-ghsdgye-01', // 场景ID
+              // user_id: this.$cookies.get('userId'), // 用户ID(选填)
+              platform: 'app', // 平台（app,m,pc）
+              // productId: this.proDetail.id, // 产品id 非必填pp"
+              // "productId":"607991482841724751"
+              productId: getObj.productId || '',
+            },
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              resolve(res.data.records)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+    },
+
+    // listCout列表和规划师轮播数据处理
     ListCount(data) {
       const listAll = data.adList[0].sortMaterialList || []
+      const title = [
+        '有限责任公司',
+        '个体注册',
+        '分公司注册',
+        '外资企业注册',
+        '合作企业注册',
+        '股份公司注册',
+      ]
       if (listAll.length !== 0) {
-        const listCount = []
-        listAll.forEach((elem, index) => {
-          const valueObj = elem.materialList[0].productDetail
-          const obj = {
-            pric: valueObj.referencePrice,
-            bgImg: this.imgPlanner[
-              index < this.imgPlanner.length
-                ? index
-                : Math.floor(Math.random() * this.imgPlanner.length)
-            ].bgImg,
-            operating: valueObj.operating,
-            id: '7862495547640840192',
-            name: '李劲',
-            jobNum: '107547',
-            telephone: '18402858698',
-            imgSrc:
-              'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+        const levelId = listAll[0].materialList[0].productDetail.parentClassCode.split(
+          ','
+        )[1]
+        // 根据id查询钻展规划师
+        const plannerObj = {
+          limit: 3,
+          level_2_ID: levelId,
+          sceneId: 'app-cpxqye-02',
+          productId: data.adList[0].locationId,
+        }
+        this.plannerData(plannerObj)
+
+        // 根据id请求列表轮播规划师并绑定列表
+        const getObj = { level_2_ID: levelId }
+        this.getPlanner(getObj).then((plannersRes) => {
+          // 列表数据
+          const listCount = listAll.map((elem, index) => {
+            const valueObj = elem.materialList[0].productDetail
+            const obj = {
+              pric: valueObj.referencePrice,
+              bgImg: this.imgPlanner[
+                index < this.imgPlanner.length
+                  ? index
+                  : Math.floor(Math.random() * this.imgPlanner.length)
+              ].bgImg,
+              // title: title[index],
+              title: valueObj.productDescription,
+              url: elem.materialList[0].materialLink,
+              serviceTag: [], // 服务标签
+              activityTag: '', // 右上角标签
+              salesTag: '', // 销售标签
+              operating: {
+                actualViews: valueObj.operating.actualViews || 6439,
+                defaultSales: valueObj.operating.defaultSales || 4932,
+                actualSales: valueObj.operating.actualSales || 4930,
+              },
+              id: '7862495547640840192',
+              name: '李劲',
+              jobNum: '107547',
+              telephone: '18402858698',
+              imgSrc:
+                'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+            }
+            // 判断标签类型
+            if (valueObj.tags.length !== 0) {
+              valueObj.tags.filter((elem) => {
+                if (elem.tagType === 'PRO_SERVICE_TAG') {
+                  // 服务标签
+                  obj.serviceTag.push(elem.tagName)
+                }
+                if (elem.tagType === 'PRO_ACTIVITY_TAG') {
+                  // 右上角标签
+                  obj.activityTag = elem.tagName
+                }
+                if (elem.tagType === 'PRO_SALES_TAG') {
+                  // 销售标签
+                  obj.salesTag = elem.tagName
+                }
+              })
+            }
+            // 列表对应规划师
+            if (plannersRes.length > 0) {
+              const subPlanner =
+                plannersRes[
+                  `${
+                    index < data.planlerList.length
+                      ? index
+                      : Math.floor(Math.random() * data.planlerList.length)
+                  }`
+                ]
+              obj.id = subPlanner.userCenterId
+              obj.name = subPlanner.userName
+              obj.jobNum = subPlanner.userCenterNo
+              obj.telephone = subPlanner.phone
+              obj.imgSrc = subPlanner.portrait
+            }
+
+            //   obj.id = subPlanner.userCentreId
+            //   obj.name = subPlanner.realName
+            //   obj.jobNum = subPlanner.loginName
+            //   obj.telephone = subPlanner.userPhone
+            //   obj.imgSrc = subPlanner.userHeadUrl
+
+            return obj
+          })
+          this.listCount = listCount
+
+          // 规划师轮播列表
+          if (plannersRes.length > 0) {
+            const plannerSwipe = plannersRes.map((item) => {
+              return {
+                id: item.userCenterId,
+                name: item.userName,
+                jobNum: item.userCenterNo,
+                telephone: item.phone,
+                avatarImg: item.portrait,
+
+                shuPianFen: item.point,
+                serverNum: item.serveNum,
+                labels: ['工商注册', '财税咨询', '税务筹划'],
+              }
+            })
+            this.plannerSwipe = plannerSwipe
           }
-          if (data.planlerList.length > 0) {
-            const subPlanner =
-              data.planlerList[
-                `${
-                  index < data.planlerList.length
-                    ? index
-                    : Math.floor(Math.random() * data.planlerList.length)
-                }`
-              ]
-            obj.id = subPlanner.userCentreId
-            obj.name = subPlanner.realName
-            obj.jobNum = subPlanner.loginName
-            obj.telephone = subPlanner.userPhone
-            obj.imgSrc = subPlanner.userHeadUrl
-          }
-          listCount.push(obj)
         })
-        this.listCount = listCount
       }
     },
     // 规划师数据
-    plannerData(data) {
-      if (data.length !== 0) {
-        this.planner = data[0] && {
-          id: data[0].userCentreId,
-          name: data[0].realName,
-          jobNum: data[0].loginName,
-          telephone: data[0].userPhone,
-          imgSrc: data[0].userHeadUrl,
-        }
-        // 规划师轮播列表
-        const guiHuaShiList = []
-        data.forEach((item) => {
-          const obj = {
-            id: item.userCentreId,
-            avatarImg: item.userHeadUrl,
-            name: item.realName,
-            shuPianFen: 11,
-            serverNum: 250,
-
-            telephone: item.userPhone,
-            labels: ['工商注册', '财税咨询', '税务筹划'],
-            jobNum: item.loginName,
+    async plannerData(data) {
+      await this.getPlanner(data).then((res) => {
+        if (res.length > 0) {
+          this.planner = res[0] && {
+            id: res[0].userCenterId,
+            name: res[0].userName,
+            jobNum: res[0].userCenterNo,
+            telephone: res[0].phone,
+            imgSrc: res[0].portrait,
           }
-          guiHuaShiList.push(obj)
-        })
-        this.guiHuaShiList = guiHuaShiList
-      }
+        }
+      })
+      // if (data.length !== 0) {
+      //   this.planner = data[0] && {
+      //     id: data[0].userCentreId,
+      //     name: data[0].realName,
+      //     jobNum: data[0].loginName,
+      //     telephone: data[0].userPhone,
+      //     imgSrc: data[0].userHeadUrl,
+      //   }
+      // // 规划师轮播列表
+      // const plannerSwipe = data.map((item) => {
+      //   const obj = {
+      //     id: item.userCentreId,
+      //     avatarImg: item.userHeadUrl,
+      //     name: item.realName,
+      //     shuPianFen: 11,
+      //     serverNum: 250,
+      //     telephone: item.userPhone,
+      //     labels: ['工商注册', '财税咨询', '税务筹划'],
+      //     jobNum: item.loginName,
+      //   }
+      //   plannerSwipe.push(obj)
+      // })
+      // this.plannerSwipe = plannerSwipe
+      // }
     },
     onClickLeft() {
       if (this.isInApp) {
@@ -508,8 +619,9 @@ export default {
       font-size: 28px;
       font-weight: 400;
       color: #555555;
-      line-height: 44px;
-      padding: 12px 0 0 0;
+      line-height: 26px;
+      position: relative;
+      margin-top: -6px;
       span {
         color: #555555;
       }
@@ -532,6 +644,28 @@ export default {
         ::v-deep.sp-image {
           width: 208px;
           height: 188px;
+        }
+        .serice-cotent {
+          position: absolute;
+          z-index: 3;
+          width: 208px;
+          height: 188px;
+          font-size: 28px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+          padding: 24px 0 0 24px;
+          &_title {
+            font-size: 22px;
+            font-weight: 400;
+            color: #999999;
+            line-height: 22px;
+            padding-top: 16px;
+          }
+          &_title:last-child {
+            padding-top: 8px;
+          }
         }
       }
     }

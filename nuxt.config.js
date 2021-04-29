@@ -126,6 +126,8 @@ module.exports = {
     { src: '@/plugins/oss', ssr: true },
     { src: '@/plugins/install-components', ssr: false },
     { src: '@/plugins/sp-md-directive', ssr: false },
+    { src: '@/plugins/getCity', ssr: false },
+    { src: '@/plugins/getFinger', ssr: false },
   ],
   router: {
     middleware: 'appDock',

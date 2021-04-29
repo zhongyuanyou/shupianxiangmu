@@ -413,12 +413,13 @@ export default {
   .header-bg {
     width: 100%;
     height: 420px;
-    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/bmjxoxb7fq80000.png');
+    background: url('https://cdn.shupian.cn/sp-pt/wap/images/bmjxoxb7fq80000.png')
+      no-repeat;
     background-size: 100% 100%;
 
     .header-content {
       margin-left: 38px;
-      margin-top: 64px;
+      margin-top: 50px;
 
       .header-title {
         font-size: 48px;

@@ -3,7 +3,9 @@
     <div class="my-component">
       <div class="header">
         <span class="header-title">新人专属礼</span>
-        <button class="header-btn">更多></button>
+        <button class="header-btn">
+          更多<my-icon name="list_ic_next" size="0.14rem"></my-icon>
+        </button>
       </div>
       <div class="content" @click="() => $parent.toast()">
         <div class="content-left">

@@ -48,7 +48,8 @@
               data-type="咨询表单"
               data-name="核名表单_公司名称"
               label="公司名称"
-              :maxlength="5"
+              :maxlength="20"
+              :readonly="isOverlay"
               :formatter="companyTest"
               placeholder="3-5个"
             />
@@ -79,6 +80,7 @@
             :display="isOverlay"
             :details="details"
             @DisplayNone="Dis"
+            @DisNone="None"
           />
           <!-- e 手机号弹窗 -->
           <!-- s 核名数据 -->
@@ -334,11 +336,11 @@ export default {
         this.isShow = true
       }
     },
-    Dis(data) {
-      console.log(1)
+    None(data) {
       this.isOverlay = false
-      // this.isOverlay = data.Dis
-      console.log(this.isOverlay)
+    },
+    Dis(data) {
+      this.isOverlay = false
       this.cityName = '成都'
       this.cityCode = 'cd'
       this.industry = ''
@@ -374,7 +376,7 @@ export default {
       const inputValue = this.companyName.split('')
       if (this.companyName === '') {
         Toast('请填写公司名')
-      } else if (inputValue.length < 3) {
+      } else if (inputValue.length < 1) {
         Toast('公司名格式不正确')
       } else if (this.industry === '') {
         Toast('请选择行业')

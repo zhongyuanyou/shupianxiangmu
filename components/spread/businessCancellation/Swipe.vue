@@ -1,10 +1,12 @@
 <template>
   <div class="swipe">
     <sp-swipe class="my-swipe" :autoplay="3000" :show-indicators="false">
-      <sp-swipe-item v-for="(item, i) of banners" :key="i">
-        <nuxt-link :to="item.url">
-          <img :src="item.img" alt="" />
-        </nuxt-link>
+      <sp-swipe-item
+        v-for="(item, i) of banners"
+        :key="i"
+        @click="jumpLink(item.url)"
+      >
+        <img :src="item.img" alt="" />
       </sp-swipe-item>
     </sp-swipe>
   </div>
@@ -23,6 +25,12 @@ export default {
       required: true,
     },
   },
+  methods: {
+    // 页面跳转
+    jumpLink(url) {
+      this.$router.push(url)
+    },
+  },
 }
 </script>
 <style lang="less" scoped>
@@ -34,14 +42,10 @@ export default {
 .sp-swipe-item {
   z-index: 1;
   width: 100%;
-  height: 100%;
-  a {
+  height: 392px;
+  > img {
     width: 100%;
-    height: 100%;
-    > img {
-      width: 100%;
-      height: 100%;
-    }
+    height: 392px;
   }
 }
 </style>

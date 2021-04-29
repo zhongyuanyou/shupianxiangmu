@@ -45,7 +45,7 @@ export default {
       flex: none;
       height: 24px;
       font-size: 26px;
-      font-weight: bold;
+      // font-weight: bold;
       color: #222222;
       line-height: 24px;
     }
@@ -80,7 +80,7 @@ export default {
 
   .desc {
     font-size: 26px;
-    font-weight: bold;
+    // font-weight: bold;
     color: #222222;
     line-height: 24px;
   }

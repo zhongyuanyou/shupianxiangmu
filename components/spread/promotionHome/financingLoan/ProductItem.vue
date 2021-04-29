@@ -67,7 +67,7 @@ export default {
   .item-img {
     width: 180px;
     height: 180px;
-    background: linear-gradient(180deg, #46494d 0%, #797d83 0%, #414347 100%);
+    background: linear-gradient(180deg, #46494d 5%, #797d83 75%, #414347 100%);
     border-radius: 14px;
     margin-right: 32px;
     img {

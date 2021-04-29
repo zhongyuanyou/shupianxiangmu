@@ -3,7 +3,11 @@
     <!-- S 头部和金刚区 -->
     <div class="top-background">
       <NavTop title="企业服务" @searchKeydownHandle="searchKeydownHandle" />
-      <Nav :roll-nav="rollNav" class="navs" />
+      <Nav
+        :roll-nav="rollNav"
+        class="navs"
+        :style="{ 'margin-top': marginTop + 'px' }"
+      />
     </div>
     <!-- E 头部和金刚区 -->
 
@@ -35,11 +39,11 @@ import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 // import { defaultRes } from './enterpriseService'
 import { chipSpread } from '@/api/spread'
 
-import NavTop from '@/components/spread/common/NavTop'
-import Nav from '@/components/spread/common/Nav'
+import NavTop from '@/components/spread/common/NavTop.vue'
+import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
-import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList'
+import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
 // import { resultData } from '~/assets/spread/licence'
 export default {
   name: 'Index',
@@ -84,7 +88,7 @@ export default {
         resultData: dataRes.data,
       }
     } catch (error) {
-      console.log(error)
+      console.log('请求错误')
       return {
         resultData: dataRes.data,
       }
@@ -92,6 +96,7 @@ export default {
   },
   data() {
     return {
+      // marginTop: 10,
       // 金刚区
       rollNav: [
         {
@@ -438,6 +443,7 @@ export default {
     // 请求数据
     onChange(changeObj) {
       this.changeState = changeObj
+      // console.log(this.$refs.enterprise.initialize())
       this.$refs.enterprise.initialize(changeObj)
       // if (obj.type === 1) {
       //   this.list = defaultList
@@ -539,10 +545,11 @@ export default {
   background: #f5f5f5;
   margin: 0 auto;
   .top-background {
-    height: 344px;
-    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png);
-    background-size: 100%;
-    margin-bottom: 113px;
+    // height: 450px;
+    background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
+      no-repeat;
+    background-size: 100% 450px;
+    margin-bottom: 20px;
   }
   .navs {
     position: relative;

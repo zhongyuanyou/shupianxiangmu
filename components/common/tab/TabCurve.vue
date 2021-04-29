@@ -2,7 +2,11 @@
   <!-- tab 切换组件     -->
   <div>
     <sp-sticky v-if="needFixed" :offset-top="offsetTop" @scroll="scrollHandle">
-      <div class="tab-curve" :class="[isFixed ? 'fixed-tab' : '']">
+      <div
+        class="tab-curve"
+        :class="[isFixed ? 'fixed-tab' : '']"
+        :style="{ backgroundColor: bgColor }"
+      >
         <ul class="tab-curve-list">
           <li
             v-for="(item, index) in tabList"
@@ -10,9 +14,11 @@
             :style="{ 'margin-right': right + 'rem' }"
             @click="selectItem(item, index)"
           >
-            <span :class="[index === visible ? 'tab-curve-active' : '']">{{
-              item[nameField]
-            }}</span>
+            <span
+              :class="[index === visible ? 'tab-curve-active' : '']"
+              :style="{ backgroundColor: bgColor }"
+              >{{ item[nameField] }}</span
+            >
             <div class="svg-content">
               <my-icon
                 class="my-icon"
@@ -73,6 +79,11 @@ export default {
     event: 'update',
   },
   props: {
+    // 背景颜色
+    bgColor: {
+      type: String,
+      default: '#ffffff',
+    },
     // 当前选中项
     curentItem: {
       type: Number,
@@ -142,7 +153,6 @@ export default {
 <style lang="less" scoped>
 .tab-curve {
   width: 100%;
-  background-color: #fff;
   font-size: 24px;
   &-list {
     display: flex;

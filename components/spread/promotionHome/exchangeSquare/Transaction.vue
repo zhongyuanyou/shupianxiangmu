@@ -5,18 +5,19 @@
       sticky
       title-active-color="#222222"
       title-inactive-color="#999999"
-      offset-top="1.28rem"
+      :offset-top="offsetTop"
       :background="isFixed === true ? fixedColor : bgColor"
       @scroll="scroll"
     >
-      <sp-tab v-for="(item, index) of productList" :key="index">
-        <template #title>
-          <div class="title">
-            <span>{{ item.title }}</span>
-          </div>
-        </template>
-        <!-- 二级分类 -->
-        <!-- <div class="secondary-label">
+      <div class="list">
+        <sp-tab v-for="(item, index) of productList" :key="index">
+          <template #title>
+            <div class="title">
+              <span>{{ item.title }}</span>
+            </div>
+          </template>
+          <!-- 二级分类 -->
+          <!-- <div class="secondary-label">
           <div class="labels">
             <ul>
               <li
@@ -36,72 +37,74 @@
             />
           </div>
         </div> -->
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <div class="product-box">
-            <ul v-if="item.title === '商标交易'">
-              <li
-                v-for="(product, productcode) in item.product"
-                v-show="productcode < max"
-                :key="productcode"
-              >
-                <a href="javascript:;">
-                  <span class="product-title">{{ product.title }}</span>
-                  <div class="label-box">
-                    <span
-                      v-if="product.activeTag && product.activeTag !== ''"
-                      class="activeTag"
-                      >{{ product.activeTag }}</span
-                    >
-                    <div class="product-labels">
+          <sp-list
+            v-model="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <div class="product-box">
+              <ul v-if="item.title === '商标交易'">
+                <li
+                  v-for="(product, productcode) in item.product"
+                  v-show="productcode < max"
+                  :key="productcode"
+                >
+                  <a href="javascript:;">
+                    <span class="product-title">{{ product.title }}</span>
+                    <div class="label-box">
                       <span
-                        v-for="(label, labelCode) in product.list"
-                        v-show="index < 3"
-                        :key="labelCode"
-                        >{{ label }}</span
+                        v-if="product.activeTag && product.activeTag !== ''"
+                        class="activeTag"
+                        >{{ product.activeTag }}</span
                       >
+                      <div class="product-labels">
+                        <span
+                          v-for="(label, labelCode) in product.list"
+                          v-show="index < 3"
+                          :key="labelCode"
+                          >{{ label }}</span
+                        >
+                      </div>
                     </div>
-                  </div>
-                  <span class="product-describe">{{ product.describe }}</span>
-                  <div class="price-box">
-                    <img
-                      v-show="product.saleImg && product.saleImg !== ''"
-                      :src="product.saleImg"
-                      alt=""
-                    />
-                    <div class="price">
-                      <span>{{ product.price }}</span>
-                      <span>元</span>
+                    <span class="product-describe">{{ product.describe }}</span>
+                    <div class="price-box">
+                      <img
+                        v-show="product.saleImg && product.saleImg !== ''"
+                        :src="product.saleImg"
+                        alt=""
+                      />
+                      <div class="price">
+                        <span>{{ product.price }}</span>
+                        <span>元</span>
+                      </div>
+                      <span class="original-price">{{
+                        product.originalPrice
+                      }}</span>
                     </div>
-                    <span class="original-price">{{
-                      product.originalPrice
-                    }}</span>
-                  </div>
-                  <div class="product-image">
-                    <ul>
-                      <li
-                        v-for="(imgs, imgCode) in product.images"
-                        :key="imgCode"
-                      >
-                        <img :src="imgs" alt="" />
-                      </li>
-                    </ul></div
-                ></a>
-              </li>
-            </ul>
-            <ProductItem v-else :product="item.product"></ProductItem>
-          </div>
-        </sp-list>
-      </sp-tab>
+                    <div class="product-image">
+                      <ul>
+                        <li
+                          v-for="(imgs, imgCode) in product.images"
+                          :key="imgCode"
+                        >
+                          <img :src="imgs" alt="" />
+                        </li>
+                      </ul></div
+                  ></a>
+                </li>
+              </ul>
+              <ProductItem v-else :product="item.product"></ProductItem>
+            </div>
+          </sp-list>
+        </sp-tab>
+      </div>
     </sp-tabs>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
 import ProductItem from '@/components/spread/promotionHome/exchangeSquare/ProductItem'
 export default {
@@ -482,6 +485,7 @@ export default {
   },
   data() {
     return {
+      offsetTop: 0,
       fixedColor: '#ffffff',
       bgColor: '#f5f5f5',
       isFixed: false,
@@ -506,10 +510,23 @@ export default {
       ],
     }
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   watch: {
     isFixed(newval, oldval) {
       this.isFixed = newval
     },
+  },
+  mounted() {
+    if (this.isInApp) {
+      this.offsetTop = this.appInfo.statusBarHeight + 58 + 'px'
+    } else {
+      this.offsetTop = 58 + 'px'
+    }
   },
   methods: {
     scroll(e) {
@@ -539,6 +556,9 @@ export default {
 .transaction {
   width: 100%;
   margin-top: 11px;
+  .list {
+    min-height: 1000px;
+  }
   .secondary-label {
     width: 100%;
     position: relative;
@@ -608,14 +628,25 @@ export default {
     width: 60px;
     height: 12px;
     background-color: transparent;
-    background-image: linear-gradient(to right, #4974f5, transparent);
+    // background-image: linear-gradient(to right, #4974f5, transparent);
+    background: linear-gradient(90deg, rgba(73, 116, 245, 0.8), #dbe4fc);
     top: 48px;
     left: 16px;
   }
   ::v-deep.sp-tab__text {
     font-size: 32px;
     font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+  }
+  ::v-deep.sp-tab--active {
     font-weight: bold;
+    line-height: 32px;
+    .sp-tab__text {
+      font-weight: bold;
+      font-size: 32px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      color: #222222;
+    }
   }
   ::v-deep.sp-tabs__wrap {
     margin-bottom: 11px;
@@ -625,6 +656,7 @@ export default {
     padding: 0 20px;
     margin: 0 auto;
   }
+
   .product-box {
     width: 100%;
     padding: 0 20px;

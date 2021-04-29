@@ -1,9 +1,12 @@
 <template>
   <div class="internet">
     <!-- 头部 -->
-    <div class="head"><Header title="IT互联网" /></div>
+    <div class="head">
+      <Header title="IT互联网" />
+      <Nav :roll-nav="rollNav" class="nav"></Nav>
+    </div>
     <!-- 金刚区 -->
-    <Nav :roll-nav="rollNav" class="nav"></Nav>
+
     <!-- 新人红包 -->
     <GiftBag
       v-show="giftBagList.length"
@@ -18,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
 import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
@@ -46,27 +50,26 @@ export default {
       })
 
       if (res.code === 200) {
+        console.log('请求成功')
         return {
           result: res,
         }
-      } else if (res.code === 500) {
-        return {
-          result: internetData,
-        }
-      } else if (res.code === 404) {
-        console.log(111)
-        return {
-          result: internetData,
-        }
+      }
+      console.log('请求失败')
+      return {
+        result: internetData,
       }
     } catch (error) {
+      console.log('请求错误')
       // 请求出错也要保证页面正常显示
-
-      return { error }
+      return {
+        result: internetData,
+      }
     }
   },
   data() {
     return {
+      // marginTop: -120,
       rollNav: [],
       giftBagList: [],
       advertisingList: {
@@ -93,12 +96,21 @@ export default {
       },
     }
   },
-
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   mounted() {
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)
-        this.getData(this.result.data.adList)
+        if (this.result.data.adList.length > 0) {
+          this.getData(this.result.data.adList)
+        } else {
+          this.getData(internetData.data.adList)
+        }
       }
     } catch (error) {
       console.log(error)
@@ -232,10 +244,9 @@ export default {
     background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/8un99iso7e40000.png');
     background-repeat: no-repeat;
     background-size: 100%, 100%;
-    height: 399px;
   }
   .nav {
-    margin-top: -277px;
+    // margin-top: -270px;
   }
   .gift-bag {
     margin-top: 20px;

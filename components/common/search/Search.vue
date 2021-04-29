@@ -9,7 +9,7 @@
 <template>
   <div
     class="search-content"
-    :style="{ backgroundColor: 'rgba(255,255,255,' + opacity + ')' }"
+    :style="{ backgroundColor: 'rgba(73,116,245,' + opacity + ')' }"
   >
     <slot name="left"></slot>
     <div class="input-box">
@@ -125,6 +125,23 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.fixed-head {
+  box-sizing: content-box;
+  .my-head {
+    box-sizing: content-box;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    // box-shadow: 0px 1px 0px 0px #f4f4f4;
+    background-color: #ffffff;
+  }
+  .safe-area-top {
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+  }
+}
 .search-content {
   display: flex;
   align-items: center;
