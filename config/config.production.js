@@ -7,4 +7,8 @@ module.exports = {
   imBaseUrl: 'https://im.shupian.cn', // IM 地址
   domainUrl: 'https://m.shupian.cn/', // 域名
   ossUrl: 'https://spapi.shupian.cn', // oss域名
+  // 网关签名code
+  SYS_CODE: 'spc-wap',
+  // 网关签名密钥
+  SECRET: 'c8a4d4389b5d20f6b020ebfebb8bd428',
 }
