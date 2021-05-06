@@ -104,7 +104,7 @@ export default {
   .title {
     font-size: 36px;
     line-height: 36px;
-    font-weight: 600;
+    font-weight: bold;
     color: #1a1a1a;
     margin-bottom: 20px;
   }

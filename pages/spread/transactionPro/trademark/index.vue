@@ -58,7 +58,7 @@ import HotTrademark from '~/components/spread/transactionPro/trademark/HotTradem
 import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
 // import FixedBottom from '~/components/spread/transactionPro/common/FooterBottom'
-import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 import DggImCompany from '~/components/spread/DggImCompany'
 
@@ -449,7 +449,7 @@ export default {
     }
   }
   .nav-bar {
-    margin-top: 16px;
+    padding-top: 16px;
     ::v-deep.my-component {
       padding: 24px 40px 32px;
     }

@@ -200,7 +200,7 @@ export default {
     .item-text {
       flex: none;
       font-size: 24px;
-      font-weight: bold;
+      // font-weight: bold;
       color: #222222;
       white-space: nowrap;
       line-height: 24px;

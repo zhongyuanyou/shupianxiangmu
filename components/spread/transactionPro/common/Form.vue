@@ -472,7 +472,7 @@ export default {
     width: 710px;
     border-radius: 24px;
     .form-box-title {
-      margin-bottom: 47px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: center;
       align-items: center;

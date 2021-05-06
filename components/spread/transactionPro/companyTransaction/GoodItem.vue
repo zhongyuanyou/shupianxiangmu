@@ -322,12 +322,13 @@ export default {
         font-size: 22px;
         font-weight: 400;
         color: #5c7499;
-        line-height: 22px;
+        // line-height: 22px;
         height: 32px;
         background: #f0f2f5;
         border-radius: 4px;
         display: flex;
-        padding: 5px 10px 6px 8px;
+        justify-content: center;
+        padding: 0px 10px 0px 8px;
         margin-right: 12px;
         margin-bottom: 6px;
       }

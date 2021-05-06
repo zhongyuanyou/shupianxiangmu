@@ -83,7 +83,7 @@ export default {
     line-height: 32px;
     font-size: 32px;
     font-family: PingFang SC;
-    font-weight: 600;
+    font-weight: bold;
     color: #1a1a1a;
     margin-bottom: 24px;
   }
@@ -101,7 +101,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      margin-bottom: 12px;
+      margin-bottom: 20px;
       border: 0.5px solid rgba(205, 205, 205, 0.5);
       border-radius: 8px;
       .item-title {

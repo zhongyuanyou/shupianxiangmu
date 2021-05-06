@@ -215,7 +215,7 @@ export default {
         }
       }
       a:first-child {
-        margin-bottom: 12px;
+        margin-bottom: 18px;
       }
     }
   }

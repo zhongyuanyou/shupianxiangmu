@@ -31,6 +31,14 @@
       </template>
     </TabServiceItem>
     <!-- E 列表 -->
+
+    <!-- START 规划师-->
+    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <!-- END 规划师-->
+
+    <!-- START IM在线咨询-->
+    <DggImCompany></DggImCompany>
+    <!-- END IM在线咨询-->
   </div>
 </template>
 
@@ -44,6 +52,8 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
 import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
+import DggImCompany from '@/components/spread/DggImCompany'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { resultData } from '~/assets/spread/licence'
 export default {
   name: 'Index',
@@ -53,6 +63,8 @@ export default {
     Advertising,
     TabServiceItem,
     EnterpriseList,
+    BtnPlanner,
+    DggImCompany,
   },
   async asyncData({ $axios }) {
     // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
@@ -96,7 +108,7 @@ export default {
   },
   data() {
     return {
-      // marginTop: 10,
+      marginTop: 0,
       // 金刚区
       rollNav: [
         {
@@ -407,6 +419,21 @@ export default {
           url: '',
         },
       ],
+      // 页面规划师
+      pagePlanner: {
+        id: '7862495547640840192',
+        name: '张毅',
+        jobNum: '107547',
+        telephone: '18402858698',
+        imgSrc: '',
+      },
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: '公司交易聚合页_底部展位_在线咨询',
+          type: '售前',
+        },
+      },
     }
   },
   mounted() {

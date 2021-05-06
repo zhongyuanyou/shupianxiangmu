@@ -82,7 +82,7 @@ export default {
     font-size: 32px;
     line-height: 33px;
     font-family: PingFang SC;
-    font-weight: 500;
+    font-weight: bold;
     color: #1a1a1a;
   }
   .hot-trademark-content {

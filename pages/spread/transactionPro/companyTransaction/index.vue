@@ -60,9 +60,9 @@ import { plannerApi } from '@/api/spread'
 
 import Header from '@/components/common/head/header'
 import DggImCompany from '@/components/spread/DggImCompany'
-import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
-import NavBar from '@/components/spread/transactionPro/common/NavBar'
+import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '@/components/spread/transactionPro/common/Banner'
 import Form from '~/components/spread/transactionPro/common/Form'
 import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry'
@@ -85,13 +85,14 @@ export default {
   data() {
     return {
       pageTitle: '公司交易',
+      // 页面规划师
       pagePlanner: {
         id: '7862495547640840192',
         name: '张毅',
         jobNum: '107547',
         telephone: '18402858698',
         imgSrc: '',
-      }, // 页面规划师y
+      },
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -224,7 +225,7 @@ export default {
 
       // 表单
       cardName: {
-        title: '只需5秒 一键为您适配专利',
+        title: '公司转让通道 立即预约',
         buttonName: '立即获取',
         subInfo: ['价格透明', '信息安全', '官方保障'],
         type: 'zhgszr', // 业态编码。固定几个业态编码。
@@ -337,7 +338,7 @@ export default {
 
   // @--页面各板块上下间距
   .nav-btn-margin {
-    margin-top: 20px;
+    padding-top: 20px;
   }
   .banner-margin {
     margin: 20px auto;

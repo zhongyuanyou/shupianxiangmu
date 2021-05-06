@@ -34,7 +34,7 @@ export default {
           title: '自带商标',
           desc: '无形资产，具有商业价值，推动企业发展',
           marketingImg: '',
-          imgWidth: 329,
+          imgWidth: 331,
           imgHeight: 172,
         },
         {
@@ -42,7 +42,7 @@ export default {
           title: '网络资产',
           desc: '企业知名度高，规模大、市场中具备强竞争力',
           marketingImg: '',
-          imgWidth: 329,
+          imgWidth: 331,
           imgHeight: 172,
         },
         {
@@ -90,7 +90,7 @@ export default {
   .title {
     font-size: 31px;
     line-height: 32px;
-    font-weight: 600;
+    font-weight: bold;
     color: #1a1a1a;
     margin-bottom: 24px;
   }
@@ -104,11 +104,11 @@ export default {
       background-repeat: no-repeat;
       background-size: cover;
       padding-left: 24px;
-      padding-right: 36px;
+      padding-right: 30px;
       padding-top: 36px;
       border-radius: 8px;
 
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       .item-title {
         flex: none;
         font-size: 28px;

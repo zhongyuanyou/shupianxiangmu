@@ -8,7 +8,16 @@
       :data-im_type="`${md.imMd.type}`"
       @click="onlineConsult"
     >
-      <div class="btn-planner_item_img"></div>
+      <div class="btn-planner_item_img">
+        <img
+          :src="
+            planner.imgSrc
+              ? planner.imgSrc
+              : 'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png'
+          "
+          alt=""
+        />
+      </div>
       <div class="btn-planner_item_con">
         <p class="name">规划师</p>
         <span class="title">在线咨询</span>
@@ -80,6 +89,11 @@ export default {
       background: #ffffff;
       border: 4px solid #4974f5;
       border-radius: 50%;
+      display: flex;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
     &_con {
       width: 126px;

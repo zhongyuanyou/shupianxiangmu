@@ -19,6 +19,14 @@
     <GiftBag :gift-bag-list="giftBagList"></GiftBag>
     <!-- 交易产品列表 -->
     <Transaction></Transaction>
+
+    <!-- START 规划师-->
+    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <!-- END 规划师-->
+
+    <!-- START IM在线咨询-->
+    <DggImCompany></DggImCompany>
+    <!-- END IM在线咨询-->
   </div>
 </template>
 
@@ -30,10 +38,21 @@ import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
 import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
+import DggImCompany from '@/components/spread/DggImCompany'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import { chipSpread } from '@/api/spread'
 
 export default {
-  components: { Header, Nav, Activity, Banner, GiftBag, Transaction },
+  components: {
+    Header,
+    Nav,
+    Activity,
+    Banner,
+    GiftBag,
+    Transaction,
+    BtnPlanner,
+    DggImCompany,
+  },
   async asyncData({ $axios }) {
     try {
       const res = await $axios.get(chipSpread.list, {
@@ -62,6 +81,22 @@ export default {
   },
   data() {
     return {
+      marginTop: 0,
+      // 页面规划师
+      pagePlanner: {
+        id: '7862495547640840192',
+        name: '张毅',
+        jobNum: '107547',
+        telephone: '18402858698',
+        imgSrc: '',
+      },
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: '公司交易聚合页_底部展位_在线咨询',
+          type: '售前',
+        },
+      },
       rollNav: [],
       activityList: [
         {

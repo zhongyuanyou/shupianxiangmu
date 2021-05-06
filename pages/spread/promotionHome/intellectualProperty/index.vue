@@ -82,7 +82,7 @@ export default {
   },
   data() {
     return {
-      // marginTop: 10,
+      marginTop: 0,
       // 金刚区
       rollNav: [
         {

@@ -58,7 +58,7 @@ import Form from '~/components/spread/transactionPro/common/Form'
 import ProductList from '~/components/spread/transactionPro/common/ProductList'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising'
 // import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
-import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import DggImCompany from '~/components/spread/DggImCompany'
 export default {
   name: 'Index',
@@ -453,7 +453,7 @@ export default {
     }
   }
   .nav-btn-margin {
-    margin-top: 24px;
+    padding-top: 24px;
   }
   .laowu-banner {
     margin-top: 20px;
