@@ -548,7 +548,7 @@ export default {
     // height: 450px;
     background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
       no-repeat;
-    background-size: 100% 450px;
+    background-size: cover;
     margin-bottom: 20px;
   }
   .navs {
