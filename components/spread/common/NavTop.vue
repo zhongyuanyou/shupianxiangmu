@@ -15,10 +15,12 @@
           :opacity="opacity"
           :icon-left="0.25"
           :type="type"
+          :disabled="disabled"
           :placeholder="placeholder"
           :maxlength="maxlength"
           @valChangeHandle="searchInputHandle"
           @searchKeydownHandle="searchKeydownHandle"
+          @clickInputHandle="clickInputHandle"
         >
           <template v-slot:left>
             <span class="serch-left" @click="onClickLeft"
@@ -82,6 +84,11 @@ export default {
     placeholder: {
       type: String,
       default: '请输入关键字',
+    },
+    // 是否禁用输入
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -159,6 +166,10 @@ export default {
         this.safeTop = safeTop
         console.log(this.safeTop)
       }
+    },
+    // 点击 事件
+    clickInputHandle() {
+      this.$emit('clickInputHandle')
     },
   },
 }

@@ -2,7 +2,12 @@
   <div class="enterprise-service">
     <!-- S 头部和金刚区 -->
     <div class="top-background">
-      <NavTop title="企业服务" @searchKeydownHandle="searchKeydownHandle" />
+      <NavTop
+        title="企业服务"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <Nav
         :roll-nav="rollNav"
         class="navs"
@@ -43,9 +48,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-// import { defaultRes } from './enterpriseService'
-import { chipSpread } from '@/api/spread'
+import { chipSpread, plannerApi } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
@@ -72,8 +77,7 @@ export default {
       'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
     // const url =
     //   'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/productList.do'
-    // const url =
-    //   'http://localhost:3000/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
+
     const locations = 'ad113250,ad113252,ad113257'
     const code = 'nav100057'
     const centerCode = 'EnterpriseService'
@@ -108,6 +112,7 @@ export default {
   },
   data() {
     return {
+      placeholder: '请输入关键字',
       marginTop: 0,
       // 金刚区
       rollNav: [
@@ -420,13 +425,7 @@ export default {
         },
       ],
       // 页面规划师
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -434,6 +433,20 @@ export default {
           type: '售前',
         },
       },
+    }
+  },
+  computed: {
+    // 将接受的state混合进组件局部计算属性
+    // 监听接受的state值
+    ...mapState({
+      currentCity: (state) => state.city.currentCity,
+      isInApp: (state) => state.app.isInApp,
+    }),
+  },
+  created() {
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   mounted() {
@@ -464,8 +477,9 @@ export default {
   },
   methods: {
     // 搜索
-    searchKeydownHandle(e) {
-      console.log(e)
+    clickInputHandle(e) {
+      window.location.href = 'https://m.shupian.cn/search/'
+      console.log(this.$router)
     },
     // 请求数据
     onChange(changeObj) {
@@ -555,6 +569,59 @@ export default {
             name: elem.name,
           }
         })
+      }
+    },
+    // 推介规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425163708', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].userCentreId,
+                name: res.data[0].userName,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
   },

@@ -101,7 +101,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       border: 0.5px solid rgba(205, 205, 205, 0.5);
       border-radius: 8px;
       .item-title {

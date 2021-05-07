@@ -5,6 +5,8 @@ const spreadApi = {
 }
 const plannerApi = {
   planner: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/planner.do`,
+  plannerReferrals: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/planner_referrals/v1/planner.do`,
+  // plannerReferrals: `http://172.16.132.116:7001/service/nk/planner_referrals/v1/planner.do`,
 }
 
 const chipSpread = {

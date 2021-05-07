@@ -1,5 +1,5 @@
 <template>
-  <div class="btn-planner">
+  <div v-if="JSON.stringify(planner) !== '{}'" class="btn-planner">
     <div
       v-md-map
       v-md:p_IMClick
@@ -13,7 +13,7 @@
           :src="
             planner.imgSrc
               ? planner.imgSrc
-              : 'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png'
+              : 'https://cdn.shupian.cn/sp-pt/wap/images/fd67oqvwepc0000.png'
           "
           alt=""
         />
@@ -27,19 +27,23 @@
 </template>
 
 <script>
+/**
+ *planner==={}的时候隐藏
+ * @data {
+ *           id: '7862495547640840192',
+ *           name: '张毅',
+ *           jobNum: '107547',
+ *           telephone: '18402858698',
+ *           imgSrc:
+ *           'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+ *      }  planner 需要传的参数
+ **/
 export default {
   props: {
     planner: {
       type: Object,
       default: () => {
-        return {
-          id: '7862495547640840192',
-          name: '张毅',
-          jobNum: '107547',
-          telephone: '18402858698',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-        }
+        return {}
       },
     },
     md: {
@@ -93,6 +97,7 @@ export default {
       img {
         width: 100%;
         height: 100%;
+        border-radius: 50%;
       }
     }
     &_con {

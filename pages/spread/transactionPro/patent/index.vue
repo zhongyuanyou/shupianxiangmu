@@ -10,7 +10,9 @@
     >
       <template v-if="false" v-slot:right>
         <span class="my-customize-header" @click="choiceCity">
-          <span class="my-customize-header-text">{{ currentCity }}</span>
+          <span class="my-customize-header-text">{{
+            currentCity.name || '成都'
+          }}</span>
           <my-icon name="sear_ic_open" size="0.18rem" color="#cccccc"></my-icon>
         </span>
       </template>
@@ -48,7 +50,6 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-
 import { plannerApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
@@ -58,7 +59,7 @@ import Form from '~/components/spread/transactionPro/common/Form'
 import ProductList from '~/components/spread/transactionPro/common/ProductList'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising'
 // import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import BtnPlanner from '~/components/spread/common/BtnPlanner'
 import DggImCompany from '~/components/spread/DggImCompany'
 export default {
   name: 'Index',
@@ -213,23 +214,23 @@ export default {
           { name: '精选专利', type: 'patentType=2' },
           { name: '特价专利', type: 'priceUpper=5000' },
         ],
-        marks: [
-          '医学医疗',
-          '交通运输',
-          '教育器械',
-          '工业机械',
-          '电子电器',
-          '新型能源',
-          '家居用品',
-          '食品保健',
-        ],
+        // marks: [
+        //   '医学医疗',
+        //   '交通运输',
+        //   '教育器械',
+        //   '工业机械',
+        //   '电子电器',
+        //   '新型能源',
+        //   '家居用品',
+        //   '食品保健',
+        // ],
         planner: {
           id: '7862495547640840192',
           name: '张毅',
           jobNum: '107547',
           telephone: '4000962540',
           imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+            'https://cdn.shupian.cn/6b36906ec8c649a5aaee0bb274f6daeb1618991541795.jpeg',
         },
         md: {
           pageName: '专利交易聚合页',
@@ -243,14 +244,7 @@ export default {
         noMore: false, // 无更多加载数据
       },
       // 推荐规划师：默认数据
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc:
-          'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-      },
+      pagePlanner: {},
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -273,7 +267,7 @@ export default {
     // 将接受的state混合进组件局部计算属性
     // 监听接受的state值
     ...mapState({
-      currentCity: (state) => state.city.currentCity.name || '成都',
+      currentCity: (state) => state.city.currentCity,
       isInApp: (state) => state.app.isInApp,
     }),
   },
@@ -281,7 +275,7 @@ export default {
     if (process.client) {
       // 请求
       this.getGoodList()
-      this.getPagePlanner()
+      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   mounted() {
@@ -289,8 +283,6 @@ export default {
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
-    // this.getGoodList()
-    // this.getPagePlanner()
   },
   methods: {
     // 选择城市
@@ -386,22 +378,58 @@ export default {
       this.params = { type: item.type, index: 1 }
       this.getGoodList()
     },
-    async getPagePlanner() {
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      // const url =
+      //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
       try {
-        const res = await this.$axios.get(`${plannerApi.planner}`)
-        console.log('plannerApi.planner succes:', res.code + '--' + res.message)
-        if (res.code === 200) {
-          console.log(res, 4561)
-          this.pagePlanner = this.dataNavBar.planner = {
-            id: res.data.list[0].userCentreId,
-            name: res.data.list[0].realName,
-            jobNum: res.data.list[0].loginName,
-            telephone: res.data.list[0].userPhone,
-            imgSrc: res.data.list[0].userHeadUrl,
-          }
-        }
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136341', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = this.dataNavBar.planner = {
+                id: res.data[0].userCentreId,
+                name: res.data[0].userName,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
       } catch (error) {
-        console.log('plannerApi.planner error：', error.message)
+        console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
   },

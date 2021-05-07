@@ -56,6 +56,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import { plannerApi } from '~/api/spread'
+
 import Header from '@/components/common/head/header'
 import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
@@ -216,13 +218,7 @@ export default {
         type: 'zzzr',
       },
       // 推荐规划师
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
 
       // @--S 埋点数据
       fixedMd: {
@@ -245,7 +241,7 @@ export default {
           { name: '热卖资质', type: 9 },
           { name: '急售', type: 1 },
         ],
-        marks: ['特级', '一级', '二级', '三级'],
+        // marks: ['特级', '一级', '二级', '三级'],
         planner: {
           id: '7862495547640840192',
           name: '张毅',
@@ -289,7 +285,11 @@ export default {
     }),
   },
   created() {
-    this.getGoodList(this.params)
+    if (process.client) {
+      // 请求
+      this.getGoodList(this.params)
+      this.getPagePlanner('app-ghsdgye-02')
+    }
   },
   mounted() {
     // @--判断页面是否在app里打开
@@ -453,7 +453,61 @@ export default {
       this.params.page++
       this.getGoodList(this.params)
     },
-    // @--E   推荐公司板块
+    // 推挤规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      // const url =
+      //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136348', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].userCentreId,
+                name: res.data[0].userName,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
   },
   head() {
     return {

@@ -305,7 +305,7 @@ export default {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
     this.getGoodList()
-    this.getPagePlanner()
+    this.getPagePlanner('app-ghsdgye-02')
   },
   methods: {
     // 根据接口获取商品列表
@@ -402,22 +402,76 @@ export default {
       }
     },
     // @--获取规划师
-    async getPagePlanner() {
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      // const url =
+      //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
       try {
-        const res = await this.$axios.get(`${plannerApi.planner}`)
-        if (res.code === 200) {
-          this.pagePlanner = {
-            id: res.data.list[0].userCentreId,
-            name: res.data.list[0].realName,
-            jobNum: res.data.list[0].loginName,
-            telephone: res.data.list[0].userPhone,
-            imgSrc: res.data.list[0].userHeadUrl,
-          }
-        }
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136273', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = this.dataNavBar.planner = {
+                id: res.data[0].userCentreId,
+                name: res.data[0].userName,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
       } catch (error) {
-        console.log('plannerApi.planner error：', error.message)
+        console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
+    // async getPagePlanner() {
+    //   try {
+    //     const res = await this.$axios.get(`${plannerApi.planner}`)
+    //     if (res.code === 200) {
+    //       this.pagePlanner = {
+    //         id: res.data.list[0].userCentreId,
+    //         name: res.data.list[0].realName,
+    //         jobNum: res.data.list[0].loginName,
+    //         telephone: res.data.list[0].userPhone,
+    //         imgSrc: res.data.list[0].userHeadUrl,
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.log('plannerApi.planner error：', error.message)
+    //   }
+    // },
   },
   head() {
     return {
