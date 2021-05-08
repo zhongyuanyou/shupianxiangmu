@@ -19,9 +19,9 @@
     <!-- banner区 -->
     <Banner class="my-banner" :data="images" />
     <!-- 表单区 -->
-    <Form class="my-form" :data="FormMsg" />
+    <!-- <Form class="my-form" :data="FormMsg" /> -->
     <!-- 广告位 -->
-    <ADList :data="ADList" class="ad-margin" />
+    <!-- <ADList :data="ADList" class="ad-margin" /> -->
     <!-- 热门商标 -->
     <HotTrademark />
     <!-- 商标服务 -->
@@ -52,8 +52,8 @@ import { plannerApi } from '@/api/spread'
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
 import Banner from '~/components/spread/transactionPro/common/Banner'
-import Form from '~/components/spread/transactionPro/common/Form'
-import ADList from '@/components/spread/transactionPro/common/ADList'
+// import Form from '~/components/spread/transactionPro/common/Form'
+// import ADList from '@/components/spread/transactionPro/common/ADList'
 import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark'
 import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
@@ -67,8 +67,8 @@ export default {
     Header,
     NavBar,
     Banner,
-    Form,
-    ADList,
+    // Form,
+    // ADList,
     HotTrademark,
     TrademarkService,
     ProductList,

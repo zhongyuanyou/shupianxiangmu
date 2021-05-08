@@ -78,7 +78,8 @@ export default {
     // const url =
     //   'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/productList.do'
 
-    const locations = 'ad113250,ad113252,ad113257'
+    // const locations = 'ad113250,ad113252,ad113257'
+    const locations = 'ad113257,ad113252,ad113250,ad113227'
     const code = 'nav100057'
     const centerCode = 'EnterpriseService'
     const dataRes = defaultRes
@@ -454,6 +455,7 @@ export default {
     // this.onChange({ type: 1 })
     // 处理后台数据
     const resData = this.resultData
+    console.log(resData)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航

@@ -26,10 +26,10 @@
     <!--END   轮播Banner-->
 
     <!--START 表单-->
-    <Form :data="formData" class="" />
+    <!-- <Form :data="formData" class="" /> -->
     <!--END   表单-->
 
-    <ADList class="ad-margin" />
+    <!-- <ADList class="ad-margin" /> -->
     <!--START 优质资质-->
     <GoodQualification class="good-qua-margin" />
     <!--END   优质资质-->
@@ -64,11 +64,11 @@ import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '@/components/spread/transactionPro/common/Banner'
-import Form from '@/components/spread/transactionPro/common/Form'
+// import Form from '@/components/spread/transactionPro/common/Form'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
 
 import GoodQualification from '@/components/spread/transactionPro/qualification/GoodQualification'
-import ADList from '@/components/spread/transactionPro/common/ADList'
+// import ADList from '@/components/spread/transactionPro/common/ADList'
 
 export default {
   name: 'Index',
@@ -76,12 +76,12 @@ export default {
     Header,
     NavBar,
     Banner,
-    Form,
+    // Form,
     ProductList,
     DggImCompany,
     BtnPlanner,
     GoodQualification,
-    ADList,
+    // ADList,
   },
   data() {
     return {

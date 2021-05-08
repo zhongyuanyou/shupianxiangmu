@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="my-component">
-      <div class="title">热门行业分类</div>
+      <div class="title">热门行业</div>
       <div class="content">
         <a
           v-for="(item, index) in data"

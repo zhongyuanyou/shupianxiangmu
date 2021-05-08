@@ -105,7 +105,7 @@
 
 <script>
 import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
-import TabCurve from '~/components/common/tab/TabCurve'
+import TabCurve from '~/components/spread/transactionPro/common/TabCurve.vue'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import GoodItem from '~/components/spread/transactionPro/common/ProductItem'
 export default {

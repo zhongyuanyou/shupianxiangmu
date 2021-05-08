@@ -106,7 +106,7 @@
 
 <script>
 import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
-import TabCurve from '~/components/common/tab/TabCurve'
+import TabCurve from '~/components/spread/transactionPro/common/TabCurve'
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
 
@@ -133,18 +133,18 @@ export default {
       searchDomHeight: 0, // 选项卡吸顶时与顶部的距离
 
       // @--商品列表
-      marks: [
-        '空壳公司',
-        '实体公司',
-        '小规模',
-        '高新技术',
-        '有限公司',
-        '降价',
-        '带商标',
-        '带专利',
-        '无经营',
-        '发票',
-      ], // 推荐选项卡列表滚动区
+      // marks: [
+      //   '空壳公司',
+      //   '实体公司',
+      //   '小规模',
+      //   '高新技术',
+      //   '有限公司',
+      //   '降价',
+      //   '带商标',
+      //   '带专利',
+      //   '无经营',
+      //   '发票',
+      // ], // 推荐选项卡列表滚动区
       goodList: [],
       params: {
         page: 1,

@@ -25,7 +25,7 @@
     <Banner class="laowu-banner" :data="imageBanner" />
     <!-- E轮播图 -->
     <!-- S表单 -->
-    <Form class="laowu-form" :data="cardName" />
+    <!-- <Form class="laowu-form" :data="cardName" /> -->
     <!-- E表单 -->
     <!-- S推荐专利 热门行业 专利转让分类-->
     <Advertising :page-planner="pagePlanner" />
@@ -55,7 +55,7 @@ import { plannerApi } from '~/api/spread'
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
 import Banner from '~/components/spread/transactionPro/common/Banner'
-import Form from '~/components/spread/transactionPro/common/Form'
+// import Form from '~/components/spread/transactionPro/common/Form'
 import ProductList from '~/components/spread/transactionPro/common/ProductList'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising'
 // import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
@@ -68,7 +68,7 @@ export default {
     Header,
     NavBar,
     Banner,
-    Form,
+    // Form,
     ProductList,
     Advertising,
     // FooterBottom,

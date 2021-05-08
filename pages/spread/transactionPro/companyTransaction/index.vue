@@ -29,7 +29,7 @@
 
     <!-- START 表单-->
     <!-- <Form /> -->
-    <Form class="laowu-form" :data="cardName" />
+    <!-- <Form class="laowu-form" :data="cardName" /> -->
     <!-- END   表单-->
 
     <!-- START 热门行业-->
@@ -64,7 +64,7 @@ import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '@/components/spread/transactionPro/common/Banner'
-import Form from '~/components/spread/transactionPro/common/Form'
+// import Form from '~/components/spread/transactionPro/common/Form'
 import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry'
 import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType'
 import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany'
@@ -74,7 +74,7 @@ export default {
   components: {
     Header,
     Banner,
-    Form,
+    // Form,
     HotIndustry,
     WithAssetsType,
     RecommendCompany,
