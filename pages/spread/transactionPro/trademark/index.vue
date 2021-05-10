@@ -398,7 +398,7 @@ export default {
         resData.adList.filter((elem) => {
           // 轮播
           if (elem.locationCode === 'ad113299') {
-            this.navListData(elem.sortMaterialList)
+            this.bannerListData(elem.sortMaterialList)
           }
           // 热门服务
           if (elem.locationCode === 'ad113300') {
@@ -407,15 +407,18 @@ export default {
           //   this.lificationData(elem.sortMaterialList, sizeData)
           // }
 
-          // // 商标服务2
-          if (elem.locationCode === 'ad113302') {
-            trademarArr.push(elem.sortMaterialList[0])
-            // this.trademarkServiceData(elem.sortMaterialList)
-          }
           // 商标服务
           if (elem.locationCode === 'ad113301') {
             // this.trademarkService = []
-            trademarArr.push(elem.sortMaterialList[0])
+            trademarArr.push(elem.sortMaterialList[0].materialList[0])
+            // this.trademarkServiceData(elem.sortMaterialList)
+          }
+          // 商标服务2
+          if (elem.locationCode === 'ad113302') {
+            // trademarArr.push(elem.sortMaterialList)
+            elem.sortMaterialList.filter((elem) => {
+              trademarArr.push(elem.sortMaterialList[0].materialList[0])
+            })
             // this.trademarkServiceData(elem.sortMaterialList)
           }
         })
