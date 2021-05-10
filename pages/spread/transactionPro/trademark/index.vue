@@ -80,7 +80,7 @@ export default {
   async asyncData({ $axios }) {
     const locations = 'ad113299,ad113300,ad113301,ad113302'
     const code = 'nav100073'
-    const centerCode = 'EnterpriseService'
+    const centerCode = 'CRISPS-C-ZLJY'
     const dataRes = defaultRes
     try {
       // const res = await $axios.get(`${url}?locationCodes=${locations}`)
@@ -88,10 +88,10 @@ export default {
         params: {
           locationCodes: locations,
           navCodes: code,
-          productCenterCode: centerCode,
+          code: centerCode,
         },
       })
-      console.log(res.message)
+      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -390,6 +390,7 @@ export default {
     this.getGoodList()
     this.getPagePlanner('app-ghsdgye-02')
     const resData = this.resultData
+    console.log(resData)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
@@ -417,7 +418,8 @@ export default {
           if (elem.locationCode === 'ad113302') {
             // trademarArr.push(elem.sortMaterialList)
             elem.sortMaterialList.filter((elem) => {
-              trademarArr.push(elem.sortMaterialList[0].materialList[0])
+              // console.log(elem.materialList[0], 465)
+              trademarArr.push(elem.materialList[0])
             })
             // this.trademarkServiceData(elem.sortMaterialList)
           }
@@ -467,6 +469,7 @@ export default {
     },
     // 热门商标
     trademarkHotData(data) {
+      // console.log(data, 4687132)
       if (data.length !== 0) {
         this.trademarkHot = data.map((elem, index) => {
           return {
