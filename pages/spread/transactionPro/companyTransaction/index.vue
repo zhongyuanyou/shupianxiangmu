@@ -87,14 +87,13 @@ export default {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
     // advertising.advertisingApi
     try {
-      const res = await $axios.get(url, {
+      const res = await $axios.get(advertising.advertisingApi, {
         params: {
           locationCodes: locations,
           navCodes: navCode,
           code: 'CRISPS-C-GSJY',
         },
       })
-      console.log(res)
       if (res.code === 200) {
         return {
           resultData: res.data,
@@ -287,6 +286,8 @@ export default {
     this.getAd('ad113295')
     this.getAd('ad113296')
     this.getAd('ad113297')
+    this.getAd('ad113298')
+
     // @--神策埋点-浏览事件-只执行一次
     window.spptMd.spptTrackRow('pageview', {
       name: `推广公司交易聚合页浏览`,
@@ -404,17 +405,17 @@ export default {
                 iosUrl: elem.materialList[0].iosLink,
                 wapUrl: elem.materialList[0].wapLink,
                 androidUrl: elem.materialList[0].androidLink,
-                imgWidth: 331,
-                imgHeight: 172,
+                imgWidth: 215,
+                imgHeight: 205,
               }
               pro.push(obj)
             })
-
             this.assetsBottom = pro
           }
         })
       }
-      this.assetsList = this.assetsTop.concat(this.assetsBottom)
+      const list = this.assetsTop.concat(this.assetsBottom)
+      this.assetsList = list
     },
     // @--跳转
     // 选择城市
