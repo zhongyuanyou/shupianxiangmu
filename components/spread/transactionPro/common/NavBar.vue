@@ -143,16 +143,14 @@ export default {
     jumpLink(url, code) {
       if (url) {
         if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
+          window.location.href = url
         }
-      } else {
-        // IM美恰客服
-        // window.spptMqMi.showPanel()
-        this.$parent.jumpLink(url)
       }
+      //  else {
+      //   // IM美恰客服
+      //   // window.spptMqMi.showPanel()
+      //   this.$parent.jumpLink(url)
+      // }
     },
   },
 }

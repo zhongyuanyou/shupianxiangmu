@@ -31,7 +31,7 @@
 
     <!-- <ADList class="ad-margin" /> -->
     <!--START 优质资质-->
-    <GoodQualification class="good-qua-margin" />
+    <GoodQualification :data="lification" class="good-qua-margin" />
     <!--END   优质资质-->
 
     <!--START 推荐公司-->
@@ -56,7 +56,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import { plannerApi } from '~/api/spread'
+import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread, plannerApi } from '~/api/spread'
 
 import Header from '@/components/common/head/header'
 import DggImCompany from '@/components/spread/DggImCompany'
@@ -67,7 +68,7 @@ import Banner from '@/components/spread/transactionPro/common/Banner'
 // import Form from '@/components/spread/transactionPro/common/Form'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
 
-import GoodQualification from '@/components/spread/transactionPro/qualification/GoodQualification'
+import GoodQualification from '@/components/spread/transactionPro/qualification/GoodQualification.vue'
 // import ADList from '@/components/spread/transactionPro/common/ADList'
 
 export default {
@@ -82,6 +83,38 @@ export default {
     BtnPlanner,
     GoodQualification,
     // ADList,
+  },
+  async asyncData({ $axios }) {
+    const locations = 'ad113292,ad113293,ad113294'
+    const code = 'nav100074'
+    // const centerCode = 'EnterpriseService'
+    const dataRes = defaultRes
+    try {
+      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: code,
+          // productCenterCode: centerCode,
+        },
+      })
+      console.log(res.message)
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    } catch (error) {
+      console.log('请求错误')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    }
   },
   data() {
     return {
@@ -207,6 +240,54 @@ export default {
           },
         },
       ],
+      // 优质资质
+      lification: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/3ia3ajzw8xo0000.png',
+          imgWidth: 327,
+          imgHeight: 145,
+          url: '',
+          md: {
+            name: '资质交易聚合页_建筑工程',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2gxgo9h7eyi0000.png',
+          imgWidth: 327,
+          imgHeight: 145,
+          url: '',
+          md: {
+            name: '资质交易聚合页_公路工程',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/1uqbozuf4u74000.png',
+          imgWidth: 213,
+          imgHeight: 146,
+          url: '',
+          md: {
+            name: '资质交易聚合页_地基基础',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/xx9gz37ikxc000.png',
+          imgWidth: 213,
+          imgHeight: 146,
+          url: '',
+          md: {
+            name: '资质交易聚合页_消防设施',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/15rjalmh0ag0000.png',
+          imgWidth: 213,
+          imgHeight: 146,
+          url: '',
+          md: {
+            name: '资质交易聚合页_公路路面',
+          },
+        },
+      ],
       // 表单数据
       formData: {
         title: '只需5秒 一键进行资质匹配',
@@ -296,12 +377,99 @@ export default {
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
+    const resData = this.resultData
+    console.log(resData, 456)
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        // 导航
+        this.navList(resData.navs.nav100074 || [])
+        // this.productTitle(resData.productClassList || [])
+        resData.adList.filter((elem) => {
+          // 轮播
+          if (elem.locationCode === 'ad113292') {
+            this.bannerListData(elem.sortMaterialList)
+          }
+          // 优质资质2
+          if (elem.locationCode === 'ad113294') {
+            this.lification = []
+            const sizeData = {
+              imgWidth: 213,
+              imgHeight: 146,
+            }
+            this.lificationData(elem.sortMaterialList, sizeData)
+          }
+          // 优质资质
+          if (elem.locationCode === 'ad113293') {
+            const sizeData = {
+              imgWidth: 327,
+              imgHeight: 145,
+            }
+            this.lificationData(elem.sortMaterialList, sizeData)
+          }
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
   },
   methods: {
     // @--跳转
     // 选择城市
     choiceCity() {
       this.$router.push({ path: '/city/choiceCity' })
+    },
+    // 金刚区导航栏
+    navList(data) {
+      if (data.length !== 0) {
+        this.navBarList = data.map((elem, index) => {
+          return {
+            sort: elem.sort,
+            img: elem.navigationImageUrl,
+            text: elem.name,
+            marketingImg: '',
+            url: elem.url,
+            md: {
+              type: '',
+              name: `专利交易聚合页_金刚区_${elem.name}`,
+            },
+          }
+        })
+        this.navBarList.sort((a, b) => {
+          return a.sort - b.sort
+        })
+      }
+    },
+    // 轮播
+    bannerListData(data) {
+      if (data.length !== 0) {
+        this.bannerList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].name,
+            md: {
+              name: `资质交易聚合页_${elem.materialList[0].name}`,
+            },
+          }
+        })
+      }
+    },
+    lificationData(data, sizeData) {
+      if (data.length !== 0) {
+        data.map((elem, index) => {
+          const obj = {
+            img: elem.materialList[0].materialUrl,
+            imgWidth: sizeData.imgWidth,
+            imgHeight: sizeData.imgHeight,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].name,
+            md: {
+              name: `资质交易聚合页_${elem.materialList[0].name}`,
+            },
+          }
+          this.lification.push(obj)
+        })
+      }
     },
     // 跳转链接-IM规划师
     jumpLink(url) {

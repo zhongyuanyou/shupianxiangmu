@@ -59,10 +59,7 @@ export default {
     onUrl(url) {
       if (url) {
         if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
+          window.location.href = url
         }
       }
     },

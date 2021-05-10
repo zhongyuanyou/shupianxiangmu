@@ -28,7 +28,12 @@
     <!-- <Form class="laowu-form" :data="cardName" /> -->
     <!-- E表单 -->
     <!-- S推荐专利 热门行业 专利转让分类-->
-    <Advertising :page-planner="pagePlanner" />
+    <Advertising
+      :page-planner="pagePlanner"
+      :choiceness="choiceness"
+      :hot-list="hotList"
+      :make="make"
+    />
     <!-- E推荐专利 热门行业 专利转让分类 -->
     <!-- S列表 -->
     <ProductList
@@ -49,15 +54,16 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
-import { plannerApi } from '~/api/spread'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread, plannerApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
-import NavBar from '~/components/spread/transactionPro/common/NavBar'
+import NavBar from '~/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '~/components/spread/transactionPro/common/Banner'
 // import Form from '~/components/spread/transactionPro/common/Form'
 import ProductList from '~/components/spread/transactionPro/common/ProductList'
-import Advertising from '~/components/spread/transactionPro/patent/Advertising'
+import Advertising from '~/components/spread/transactionPro/patent/Advertising.vue'
 // import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
 import BtnPlanner from '~/components/spread/common/BtnPlanner'
 import DggImCompany from '~/components/spread/DggImCompany'
@@ -73,6 +79,45 @@ export default {
     Advertising,
     // FooterBottom,
     BtnPlanner,
+  },
+  async asyncData({ $axios }) {
+    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+    const url =
+      'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
+    // const url =
+    //   'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/productList.do'
+
+    // const locations = 'ad113250,ad113252,ad113257'
+    const locations = 'ad113291,ad113290,ad113289,ad113288,ad113287'
+    const code = 'nav100071'
+    // const centerCode = 'EnterpriseService'
+    const dataRes = defaultRes
+    try {
+      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: code,
+          // productCenterCode: centerCode,
+        },
+      })
+      console.log(res.message)
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    } catch (error) {
+      console.log('请求错误')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    }
   },
   data() {
     return {
@@ -199,14 +244,86 @@ export default {
           },
         },
       ],
-      // 表单
-      cardName: {
-        title: '免费查找专利  一键解决专利难题',
-        buttonName: '立即获取',
-        subInfo: ['价格透明', '信息安全', '官方保障'],
-        type: 'zljy', // 业态编码。固定几个业态编码。
-        md: { pageName: '专利交易聚合页' },
+      // 推介
+      choiceness: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/co0p9uk64q80000.png',
+          name: '',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/9vqi000ukcc0000.png',
+          name: '',
+          url: '',
+        },
+      ],
+      // 热门行业
+      hotList: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/34ov5aqag6y0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_农业牧林',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/6dg0enu4e2k0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_作业/运输',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/1ka3nwiyoao0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_包装印刷',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/62gnvw9ky000000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_机械/照明',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/fdy731w76z40000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_新能源',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/66tffyndpwo0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_电气自动化',
+          url: '',
+        },
+      ],
+      // 专利转让
+      make: {
+        maxMake: {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/9sklu1mitjw0000.jpg',
+          name: '设计专利',
+          url: '',
+        },
+        minMake: [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/bshj11eeftk0000.jpg',
+            name: '发明专利',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/g1i3915lpr40000.jpg',
+            name: '实用新型专利',
+            url: '',
+          },
+        ],
       },
+      // 表单
+      // cardName: {
+      //   title: '免费查找专利  一键解决专利难题',
+      //   buttonName: '立即获取',
+      //   subInfo: ['价格透明', '信息安全', '官方保障'],
+      //   type: 'zljy', // 业态编码。固定几个业态编码。
+      //   md: { pageName: '专利交易聚合页' },
+      // },
       // 列表导航
       dataNavBar: {
         tabBtnList: [
@@ -279,22 +396,147 @@ export default {
     }
   },
   mounted() {
+    // this.POSITION_CITY({
+    //   type: 'rest',
+    // })
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
+    const resData = this.resultData
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        // 导航
+        this.navList(resData.navs.nav100071 || [])
+        // this.productTitle(resData.productClassList || [])
+        resData.adList.filter((elem) => {
+          // 轮播
+          if (elem.locationCode === 'ad113287') {
+            this.imageBannerData(elem.sortMaterialList)
+          }
+          // 热销专利
+          if (elem.locationCode === 'ad113291') {
+            this.choicenessData(elem.sortMaterialList)
+          }
+          // 热门行业
+          if (elem.locationCode === 'ad113288') {
+            this.hotListData(elem.sortMaterialList)
+          }
+          // 转让分类
+          if (elem.locationCode === 'ad113289') {
+            elem.sortMaterialList.length > 0 &&
+              this.maxMake(elem.sortMaterialList[0].materialList)
+          }
+          if (elem.locationCode === 'ad113290') {
+            this.minMake(elem.sortMaterialList)
+          }
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
   },
   methods: {
+    ...mapActions({
+      POSITION_CITY: 'city/POSITION_CITY',
+    }),
     // 选择城市
     choiceCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
     jumpLink(url) {
       if (url) {
-        window.open(url, '_blank')
-      } else {
-        // 待改
-        window.spptMqMi.showPanel()
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+        }
+      }
+      // if (url) {
+      //   window.open(url, '_blank')
+      // } else {
+      //   // 待改
+      //   window.spptMqMi.showPanel()
+      // }
+    },
+    // 金刚区导航栏
+    navList(data) {
+      if (data.length !== 0) {
+        this.dataList = data.map((elem, index) => {
+          return {
+            sort: elem.sort,
+            img: elem.navigationImageUrl,
+            text: elem.name,
+            marketingImg: '',
+            url: elem.url,
+            md: {
+              type: '',
+              name: `专利交易聚合页_金刚区_${elem.name}`,
+            },
+          }
+        })
+        this.dataList.sort((a, b) => {
+          return a.sort - b.sort
+        })
+      }
+    },
+    // 轮播
+    imageBannerData(data) {
+      if (data.length !== 0) {
+        this.imageBanner = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            md: {
+              type: '',
+              name: '',
+            },
+          }
+        })
+      }
+    },
+    // 推介
+    choicenessData(data) {
+      if (data.length !== 0) {
+        this.choiceness = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+      }
+    },
+    // 热门行业
+    hotListData(data) {
+      if (data.length !== 0) {
+        this.hotList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+      }
+    },
+    // 热门行业
+    maxMake(data) {
+      if (data.length !== 0) {
+        this.make.maxMake = {
+          img: data[0].materialUrl,
+          name: data[0].name,
+          url: data[0].materialLink,
+        }
+      }
+    },
+    minMake(data) {
+      if (data.length !== 0) {
+        this.make.minMake = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+        console.log(this.make, 4564546)
       }
     },
     // 请求列表参数
@@ -391,6 +633,7 @@ export default {
       } else {
         areaCode = this.currentCity.code
       }
+
       // const url =
       //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
       try {
