@@ -481,7 +481,6 @@ export default {
           )
           .then((res) => {
             if (res.code === 200 && res.data.length > 0) {
-              debugger
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
                 name: res.data[0].userName,
