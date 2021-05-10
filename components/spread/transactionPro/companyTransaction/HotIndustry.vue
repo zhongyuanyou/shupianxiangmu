@@ -4,7 +4,7 @@
       <div class="title">热门行业</div>
       <div class="content">
         <a
-          v-for="(item, index) in data"
+          v-for="(item, index) in hotIndustry"
           :key="index"
           class="item"
           :class="index > 2 ? 'item-no-margin' : ''"
@@ -22,6 +22,14 @@
 <script>
 export default {
   name: 'HotIndustry',
+  props: {
+    hotIndustry: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
     return {
       data: [

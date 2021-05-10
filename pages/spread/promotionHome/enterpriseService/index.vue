@@ -75,15 +75,12 @@ export default {
           productCenterCode: centerCode,
         },
       })
-
-      console.log(res.message)
       if (res.code === 200) {
         console.log('请求成功')
         return {
           resultData: res.data,
         }
       }
-      console.log('请求失败')
       return {
         resultData: dataRes.data,
       }
