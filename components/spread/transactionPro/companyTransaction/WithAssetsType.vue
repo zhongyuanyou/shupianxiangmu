@@ -4,7 +4,7 @@
       <div class="title">附带资产类型</div>
       <div class="content">
         <a
-          v-for="(item, index) in data"
+          v-for="(item, index) in assetsList"
           :key="index"
           class="item"
           :class="index > 1 ? 'item-no-margin' : ''"
@@ -15,8 +15,8 @@
           }"
           @click="jumpLink(item.url)"
         >
-          <p class="item-title">{{ item.title }}</p>
-          <p class="item-desc">{{ item.desc }}</p>
+          <p v-if="item.title" class="item-title">{{ item.title }}</p>
+          <p v-if="item.desc" class="item-desc">{{ item.desc }}</p>
         </a>
       </div>
     </div>

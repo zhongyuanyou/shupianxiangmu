@@ -86,7 +86,7 @@ export default {
   },
   async asyncData({ $axios }) {
     const locations = 'ad113292,ad113293,ad113294'
-    const code = 'nav100074'
+    const navCode = 'nav100074'
     // const centerCode = 'EnterpriseService'
     const dataRes = defaultRes
     try {
@@ -94,11 +94,12 @@ export default {
       const res = await $axios.get(chipSpread.list, {
         params: {
           locationCodes: locations,
-          navCodes: code,
+          navCodes: navCode,
+          code: 'CRISPS-C-LWZZ',
           // productCenterCode: centerCode,
         },
       })
-      console.log(res.message)
+      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -312,7 +313,7 @@ export default {
       // @--S 推荐公司板块
       params: {
         page: 1,
-        limit: 10,
+        limit: 15,
         type: 0,
       },
       // 选项卡、规划师
