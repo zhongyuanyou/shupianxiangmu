@@ -3,7 +3,8 @@ import { CHIPS_WAP_SPREAD_BASE_URL } from '../../config/constant'
 const newSpreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/list.do`,
   service_product_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/service_product_list.do`,
-  trade_product_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/trade_product_list.do`,
+  // trade_product_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/trade_product_list.do`,
+  trade_product_list: `http://172.16.132.116:7001/service/nk/newChipSpread/v1/trade_product_list.do`,
 }
 
 const spreadApi = {
