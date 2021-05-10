@@ -23,7 +23,7 @@
     <!-- END   导航部-金刚区-->
 
     <!-- START 轮播Banner-->
-    <Banner class="banner-margin" :data="imageBanner" />
+    <Banner class="banner-margin" :images="imageBanner" />
 
     <!-- END   轮播Banner-->
 
@@ -33,23 +33,23 @@
     <!-- END   表单-->
 
     <!-- START 热门行业-->
-    <HotIndustry class="banner-margin" />
+    <HotIndustry :hotIndustry="hotIndustry" class="banner-margin" />
     <!-- END   热门行业-->
 
     <!-- START 附带资产类型-->
-    <WithAssetsType class="with-assets-type-margin" />
+    <WithAssetsType :assetsList="assetsList" class="with-assets-type-margin" />
     <!-- END   附带资产类型-->
 
     <!-- START 推荐公司-->
-    <RecommendCompany />
+    <RecommendCompany :tab-list="tabList" />
     <!-- END   推荐公司-->
 
     <!-- START 规划师-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner v-if="pagePlanner" :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!-- END IM在线咨询-->
   </div>
 </template>
@@ -57,17 +57,16 @@
 <script>
 import { mapState } from 'vuex'
 import { plannerApi } from '@/api/spread'
-
 import Header from '@/components/common/head/header'
-import DggImCompany from '@/components/spread/DggImCompany'
+// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
-
 import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '@/components/spread/transactionPro/common/Banner'
 // import Form from '~/components/spread/transactionPro/common/Form'
 import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry'
 import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType'
 import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany'
+import { advertising } from '@/api/spread'
 
 export default {
   name: 'Index',
@@ -79,14 +78,46 @@ export default {
     WithAssetsType,
     RecommendCompany,
     BtnPlanner,
-    DggImCompany,
+    // DggImCompany,
     NavBar,
+  },
+  async asyncData({ $axios }) {
+    const locations = 'ad113298,ad113297,ad113296,ad113295'
+    const navCode = 'nav100072'
+    const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
+    // advertising.advertisingApi
+    try {
+      const res = await $axios.get(url, {
+        params: {
+          locationCodes: locations,
+          navCodes: navCode,
+          code: 'CRISPS-C-GSJY',
+        },
+      })
+      console.log(res)
+      if (res.code === 200) {
+        return {
+          resultData: res.data,
+        }
+      }
+      return {
+        resultData: [],
+      }
+    } catch (error) {
+      return {
+        resultData: [],
+      }
+    }
   },
   data() {
     return {
       pageTitle: '公司交易',
       // 页面规划师
+      hotIndustry: [],
       pagePlanner: {},
+      assetsList: [],
+      assetsTop: [],
+      assetsBottom: [],
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -225,6 +256,7 @@ export default {
         type: 'zhgszr', // 业态编码。固定几个业态编码。
         md: { pageName: '公司交易聚合页' },
       },
+      // tab标签
     }
   },
   computed: {
@@ -234,6 +266,15 @@ export default {
       currentCity: (state) => state.city.currentCity.name || '成都',
       isInApp: (state) => state.app.isInApp,
     }),
+    tabList() {
+      const tabs = []
+      this.resultData.classList &&
+        this.resultData.classList.forEach((item) => {
+          const obj = { name: item.name, type: item.ext1, goodList: [] }
+          tabs.push(obj)
+        })
+      return tabs
+    },
   },
   created() {
     if (process.client) {
@@ -242,6 +283,10 @@ export default {
     }
   },
   mounted() {
+    this.getNav(this.resultData.navs.nav100072)
+    this.getAd('ad113295')
+    this.getAd('ad113296')
+    this.getAd('ad113297')
     // @--神策埋点-浏览事件-只执行一次
     window.spptMd.spptTrackRow('pageview', {
       name: `推广公司交易聚合页浏览`,
@@ -262,6 +307,115 @@ export default {
     }
   },
   methods: {
+    getNav(nav) {
+      const navs = []
+      nav.forEach((item) => {
+        const obj = {
+          img: item.navigationImageUrl,
+          text: item.name,
+          iosUrl: item.iosRoute,
+          wapUrl: item.wapRoute,
+          androidUrl: item.androidRoute,
+          marketingImg: '',
+          mad: {
+            type: '',
+            name: '公司交易聚合页_' + item.name,
+          },
+        }
+        navs.push(obj)
+      })
+      this.dataList = navs
+    },
+    getAd(code) {
+      const data = this.resultData.adList
+      const assets = []
+      if (code === 'ad113295') {
+        const banner = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+                md: {
+                  type: '',
+                  name: '',
+                },
+              }
+              banner.push(obj)
+            })
+            this.imageBanner = banner
+          }
+        })
+      }
+      if (code === 'ad113296') {
+        const hot = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+              }
+              hot.push(obj)
+            })
+            this.hotIndustry = hot
+          }
+        })
+      }
+      if (code === 'ad113297') {
+        const pro = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                marketingImg: '',
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+                imgWidth: 331,
+                imgHeight: 172,
+              }
+              pro.push(obj)
+            })
+            this.assetsTop = pro
+          }
+        })
+      }
+      if (code === 'ad113298') {
+        const pro = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                marketingImg: '',
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+                imgWidth: 331,
+                imgHeight: 172,
+              }
+              pro.push(obj)
+            })
+
+            this.assetsBottom = pro
+          }
+        })
+      }
+      this.assetsList = this.assetsTop.concat(this.assetsBottom)
+    },
     // @--跳转
     // 选择城市
     choiceCity() {
@@ -328,8 +482,9 @@ export default {
           .then((res) => {
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
-                id: res.data[0].userCentreId,
+                id: res.data[0].mchUserId,
                 name: res.data[0].userName,
+                type: res.data[0].type,
                 jobNum: res.data[0].userCenterNo,
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,

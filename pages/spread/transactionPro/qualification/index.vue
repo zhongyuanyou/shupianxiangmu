@@ -49,7 +49,7 @@
     <!--END   固定底部-->
 
     <!--START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!--END   IM在线咨询-->
   </div>
 </template>
@@ -60,7 +60,7 @@ import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { chipSpread, plannerApi } from '~/api/spread'
 
 import Header from '@/components/common/head/header'
-import DggImCompany from '@/components/spread/DggImCompany'
+// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
@@ -79,7 +79,7 @@ export default {
     Banner,
     // Form,
     ProductList,
-    DggImCompany,
+    // DggImCompany,
     BtnPlanner,
     GoodQualification,
     // ADList,
@@ -378,7 +378,6 @@ export default {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
     const resData = this.resultData
-    console.log(resData, 456)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
@@ -664,8 +663,9 @@ export default {
           .then((res) => {
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
-                id: res.data[0].userCentreId,
+                id: res.data[0].mchUserId,
                 name: res.data[0].userName,
+                type: res.data[0].type,
                 jobNum: res.data[0].userCenterNo,
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,

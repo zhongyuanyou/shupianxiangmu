@@ -49,7 +49,7 @@
     <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
     <!-- E底部咨询 -->
     <!-- S IM在线咨询-->
-    <DggImCompany />
+    <!-- <DggImCompany /> -->
     <!-- E IM在线咨询-->
   </div>
 </template>
@@ -66,11 +66,11 @@ import ProductList from '~/components/spread/transactionPro/common/ProductList'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising.vue'
 // import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
 import BtnPlanner from '~/components/spread/common/BtnPlanner'
-import DggImCompany from '~/components/spread/DggImCompany'
+// import DggImCompany from '~/components/spread/DggImCompany'
 export default {
   name: 'Index',
   components: {
-    DggImCompany,
+    // DggImCompany,
     Header,
     NavBar,
     Banner,
@@ -663,8 +663,9 @@ export default {
           .then((res) => {
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = this.dataNavBar.planner = {
-                id: res.data[0].userCentreId,
+                id: res.data[0].mchUserId,
                 name: res.data[0].userName,
+                type: res.data[0].type,
                 jobNum: res.data[0].userCenterNo,
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,

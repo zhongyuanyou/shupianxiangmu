@@ -26,6 +26,14 @@
 <script>
 export default {
   name: 'WithAssetsType',
+  props: {
+    assetsList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
     return {
       data: [

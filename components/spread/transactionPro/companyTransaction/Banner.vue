@@ -24,10 +24,7 @@ export default {
     images: {
       type: Array,
       default: () => {
-        return [
-          'https://cdn.shupian.cn/sp-pt/wap/images/f7ijmltazq00000.png',
-          'https://cdn.shupian.cn/sp-pt/wap/images/5x2uvrt99dw0000.png',
-        ]
+        return []
       },
     },
   },

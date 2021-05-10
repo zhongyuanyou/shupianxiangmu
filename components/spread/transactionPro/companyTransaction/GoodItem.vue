@@ -29,13 +29,9 @@
           </span>
         </div>
         <div class="item-notes">
-          <span
-            v-for="(item, index) in data.notes"
-            :key="index"
-            class="item-note"
-          >
-            {{ item }}
-            <label v-if="index != data.notes.length - 1">|</label>
+          <span class="item-note">
+            {{ data.notes }}
+            <!-- <label v-if="index != data.notes.length - 1">|</label> -->
           </span>
         </div>
         <p class="item-price">
@@ -136,17 +132,16 @@ export default {
       // 处理传进的数据
       const obj = this.good
       const item = {
-        industryImg: '',
+        industryImg: obj.img,
         industryName: obj.companyIndustryName,
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
-        price: obj.transferPrice,
-        name: obj.showName,
-        tabs: this.getArrayItems(this.slogans, 3),
-        notes: [
-          obj.companyIndustryName,
-          obj.payTaxesTypeName,
-          obj.establishDate,
-        ],
+        price: obj.price,
+        name: obj.title,
+        tabs:
+          obj.tabs.length !== 0
+            ? obj.tabs
+            : this.getArrayItems(this.slogans, 3),
+        notes: obj.desc,
       }
       switch (obj.companyIndustryName) {
         case '电子贸易': {
@@ -292,27 +287,30 @@ export default {
   padding: 28px 20px;
   margin-top: 20px;
   .item-img {
-    flex: none;
-    width: 160px;
-    height: 160px;
+    flex-shrink: 0;
+    width: 220px;
+    height: 220px;
     margin-right: 32px;
     border-radius: 4px;
     img {
-      width: 160px;
-      height: 160px;
+      width: 100%;
+      height: 100%;
       border-radius: 4px;
     }
   }
   .item-content {
-    flex: none;
-    width: calc(100% - 200px);
+    flex-shrink: 0;
+    width: 418px;
     .item-title {
       font-size: 32px;
       font-weight: bold;
       color: #222222;
       line-height: 42px;
-      width: 476px;
+      width: 100%;
       font-family: PingFang SC;
+      max-height: 82px;
+      min-height: 82px;
+      .textOverflow(2);
     }
     .item-tabs {
       display: flex;
@@ -323,6 +321,7 @@ export default {
         font-weight: 400;
         color: #5c7499;
         // line-height: 22px;
+        max-width: 110px;
         height: 32px;
         background: #f0f2f5;
         border-radius: 4px;
@@ -331,6 +330,7 @@ export default {
         padding: 0px 10px 0px 8px;
         margin-right: 12px;
         margin-bottom: 6px;
+        .textOverflow(1);
       }
     }
     .item-notes {
@@ -338,9 +338,10 @@ export default {
       margin-top: 10px;
       margin-bottom: 20px;
       font-size: 22px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      .textOverflow(1);
+      //   white-space: nowrap;
+      //   overflow: hidden;
+      //   text-overflow: ellipsis;
       .item-note {
         font-size: 22px;
         font-weight: 400;

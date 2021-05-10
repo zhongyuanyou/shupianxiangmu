@@ -5,9 +5,8 @@
  */
 'use strict'
 import { Toast } from '@chipspc/vant-dgg'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import config from '@/config'
-import { userinfoApi } from '@/api'
 export default {
   computed: {
     ...mapState({
@@ -18,48 +17,85 @@ export default {
     }),
   },
   methods: {
-    loginToast(
-      message = '',
-      className = 'toast',
-      icon = 'toast_ic_remind',
-      duration = 1000
-    ) {
-      Toast({
-        duration,
-        className,
-        message,
-        icon,
-        iconPrefix: 'spiconfont',
-      })
-    },
-    // 判断是否登录
-    judgeLoginMixin(needUserInfo = false) {
-      return new Promise((resolve) => {
-        if (this.userId && this.token && this.userType) {
-          if (needUserInfo) {
-            // 获取用户信息
-            this.$axios
-              .get(userinfoApi.info, {
-                params: { id: this.userId },
-              })
-              .then((res) => {
-                if (res.code === 200 && res.data.id) {
-                  resolve(res.data)
-                } else {
-                  this.loginToast('获取用户信息失败')
-                }
-              })
-          } else {
-            resolve(true)
-          }
-        } else {
-          this.$router.push({
-            path: '/login',
-            query: {
-              redirect: this.$route.fullPath,
+    ...mapMutations({
+      setUserInfo: 'user/SET_USER',
+      clearUserInfo: 'user/CLEAR_USER',
+    }),
+    // 发起聊天
+    uPIM(planner) {
+      const { mchUserId, userName, type } = planner
+      // 如果当前页面在app中，则调用原生IM的方法
+      if (this.isInApp) {
+        try {
+          // 需要判断登陆没有，没有登录就是调用登录
+          this.getUserInfo()
+          this.$appFn.dggOpenIM(
+            {
+              name: userName,
+              userId: mchUserId,
+              userType: type || 'MERCHANT_B',
             },
-          })
+            (res) => {
+              const { code } = res || {}
+
+              if (code !== 200)
+                this.$xToast.show({
+                  message: `联系失败`,
+                  duration: 1000,
+                  forbidClick: true,
+                  icon: 'toast_ic_remind',
+                })
+            }
+          )
+        } catch (error) {
+          console.error('uPIM error:', error)
         }
+      } else {
+        const imUserType = type || 'MERCHANT_B' // 用户类型: ORDINARY_B 启大顺 ;MERCHANT_S 启大包
+        this.creatImSessionMixin({
+          imUserId: mchUserId,
+          imUserType,
+        })
+      }
+    },
+
+    // app获取用户信息
+    getUserInfo() {
+      return new Promise((resolve, reject) => {
+        if (this.userInfo.userId) {
+          resolve(this.userInfo.userId)
+          return
+        }
+        this.$appFn.dggGetUserInfo((res) => {
+          const { code, data } = res || {}
+          // 未登录需要登录
+          if (code !== 200) {
+            this.$appFn.dggLogin((loginRes) => {
+              if (loginRes && loginRes.code === 200) {
+                console.log('loginRes : ', loginRes)
+                if (
+                  loginRes.data &&
+                  loginRes.data.userId &&
+                  loginRes.data.token
+                ) {
+                  this.setUserInfo(loginRes.data)
+                  resolve(loginRes.data.userId)
+                  return
+                }
+                reject(new Error('登录后userId或者token缺失'))
+                return
+              }
+              reject(new Error('登录失败'))
+            })
+            return
+          }
+          if (data && data.userId && data.token) {
+            this.setUserInfo(data)
+            resolve(data.userId)
+            return
+          }
+          reject(new Error('用户信息中userId或者token缺失'))
+        })
       })
     },
     /**
@@ -74,30 +110,48 @@ export default {
      * @param {Object} data.ext.recommendAttrJson: 推荐属性 Object 非必传
      * @return: void
      */
+
     creatImSessionMixin(data) {
-      this.judgeLoginMixin().then((userInfo) => {
-        if (userInfo) {
-          let params = {
-            imUserId: '',
-            imUserType: '',
-            ext: {
-              intentionType: '',
-              intentionCity: '',
-              recommendId: '',
-              recommendAttrJson: {},
-              startUserType: 'cps-app',
-            },
-          }
-          params = Object.assign(params, data)
-          this.imExample.createSession(params, (res) => {
-            if (res.code === 200) {
-              window.location.href = `${config.imBaseUrl}/chat?token=${this.token}&userId=${this.userId}&userType=${this.userType}&id=${res.data.groupId}`
-            } else {
-              this.loginToast(res.msg)
-            }
-          })
+      const userInfo = this.$store.state.user.userInfo
+      if (userInfo) {
+        let params = {
+          imUserId: '',
+          imUserType: '',
+          ext: {
+            intentionType: '',
+            intentionCity: '',
+            recommendId: '',
+            recommendAttrJson: {},
+            startUserType: 'cps-app',
+          },
         }
-      })
+        params = Object.assign(params, data)
+        this.imExample.createSession(params, (res) => {
+          console.log(res)
+          if (res.code === 200) {
+            const myInfo = localStorage.getItem('myInfo')
+              ? JSON.parse(localStorage.getItem('myInfo'))
+              : {}
+            const token =
+              this.token ||
+              this.$cookies.get('token', { path: '/' }) ||
+              myInfo.token
+            const userId =
+              this.userId ||
+              this.$cookies.get('userId', { path: '/' }) ||
+              myInfo.userId
+            const userType =
+              this.userType ||
+              this.$cookies.get('userType', { path: '/' }) ||
+              'VISITOR'
+            window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}`
+          } else if (res.code === 5223) {
+            this.clearUserInfoAndJumpLoging()
+          } else {
+            this.$xToast.warning(res.msg)
+          }
+        })
+      }
     },
     /**
      * @description: 发送模板消息
@@ -123,70 +177,106 @@ export default {
      * @param {String} msgParams.unit: 小数点后面带单位的字符串（示例：20.20元，就需要传入20元） （sendType = 0 必传）
      * @return: void
      */
-    sendTemplateMsgMixin({ sessionParams, msgParams }) {
-      this.judgeLoginMixin(true).then((userInfo) => {
-        if (userInfo) {
-          let params = {
-            imUserId: '',
-            imUserType: 'MERCHANT_USER',
-            ext: {
-              intentionType: '',
-              intentionCity: '',
-              recommendId: '',
-              recommendAttrJson: {},
-              startUserType: 'cps-app',
-            },
-          }
-          params = Object.assign(params, sessionParams)
-          // 发送模板消息前先创建会话
-          this.imExample.createSession(params, (res) => {
-            if (res.code === 200) {
-              const tepMsgParams = {
-                templateId: '', // 模板 id
-                receiver: res.data.groupId, // 会话 id
-                senderName: userInfo.nickName, // 发送者昵称
-                msgType: msgParams.msgType, // 消息类型
-                extContent: JSON.stringify(msgParams.extContent), // 路由参数
-                paramJsonStr: {
-                  productName: msgParams.productName, // 产品名称
-                  productContent: msgParams.productContent, // 产品信息
-                  price: msgParams.price, // 价格
-                  forwardAbstract: msgParams.forwardAbstract, // 摘要信息，可与显示内容保持一致
-                  routerId: msgParams.routerId, // 路由ID
-                },
-              }
-              switch (msgParams.sendType) {
-                // 带图片的模板消息
-                case 0:
-                  tepMsgParams.paramJsonStr.imageUrl = msgParams.imageUrl // 产品图片
-                  tepMsgParams.paramJsonStr.unit = msgParams.unit // 小数点后面带单位的字符串（示例：20.20元，就需要传入20元）
-                  tepMsgParams.templateId = '5fcef0aec24ddd00065a8c93' // 模板id
-                  break
-                // 不带图片的模板消息
-                case 1:
-                  tepMsgParams.templateId = '5fcef0aec24ddd00065a8c83' // 模板id
-                  break
-
-                default:
-                  break
-              }
-              tepMsgParams.paramJsonStr = JSON.stringify(
-                tepMsgParams.paramJsonStr
-              )
-              // 发送模板消息
-              this.imExample.sendTemplateMsg(tepMsgParams, (resData) => {
-                if (resData.code === 200) {
-                  window.location.href = `${config.imBaseUrl}/chat?token=${this.token}&userId=${this.userId}&userType=${this.userType}&id=${res.data.groupId}`
-                } else {
-                  this.loginToast(resData.msg)
-                }
-              })
-            } else {
-              this.loginToast(res.msg)
-            }
-          })
+    regularVisitor({ visitorId, userId }) {
+      console.log(visitorId, userId, 321)
+      this.imExample.regularVisitor(
+        {
+          visitorId,
+          userId,
+        },
+        (res) => {
+          console.log(res, 123)
         }
-      })
+      )
+    },
+    sendTemplateMsgMixin({ sessionParams, msgParams }) {
+      const userInfo = this.$store.state.user.userInfo
+      // this.judgeLoginMixin(true).then((userInfo) => {
+      if (userInfo) {
+        let params = {
+          imUserId: '',
+          imUserType: '',
+          ext: {
+            intentionType: '',
+            intentionCity: '',
+            recommendId: '',
+            recommendAttrJson: {},
+            startUserType: 'cps-app',
+          },
+        }
+        params = Object.assign(params, sessionParams)
+        // 发送模板消息前先创建会话
+        this.imExample.createSession(params, (res) => {
+          if (res.code === 200) {
+            const tepMsgParams = {
+              templateId: '', // 模板 id
+              receiver: res.data.groupId, // 会话 id
+              senderName: userInfo.nickName || '访客', // 发送者昵称
+              msgType: msgParams.msgType, // 消息类型
+              extContent: JSON.stringify(msgParams.extContent), // 路由参数
+              paramJsonStr: {
+                productName: msgParams.productName, // 产品名称
+                productContent: msgParams.productContent, // 产品信息
+                // eslint-disable-next-line eqeqeq
+                price: msgParams.price == '0.00元' ? '面议' : msgParams.price, // 价格
+                forwardAbstract: msgParams.forwardAbstract, // 摘要信息，可与显示内容保持一致
+                routerId: msgParams.routerId, // 路由ID
+              },
+            }
+            switch (msgParams.sendType) {
+              // 带图片的模板消息
+              case 0:
+                tepMsgParams.paramJsonStr.imageUrl = msgParams.imageUrl // 产品图片
+                tepMsgParams.paramJsonStr.unit =
+                  // eslint-disable-next-line eqeqeq
+                  msgParams.price == '0.00元' ? '' : msgParams.unit // 小数点后面带单位的字符串（示例：20.20元，就需要传入20元）
+                tepMsgParams.templateId = '5fcef0aec24ddd00065a8c93' // 模板id
+                break
+              // 不带图片的模板消息
+              case 1:
+                tepMsgParams.templateId = '5fcef0aec24ddd00065a8c83' // 模板id
+                break
+              default:
+                break
+            }
+            tepMsgParams.paramJsonStr = JSON.stringify(
+              tepMsgParams.paramJsonStr
+            )
+            // 发送模板消息
+            this.imExample.sendTemplateMsg(tepMsgParams, (resData) => {
+              if (resData.code === 200) {
+                // 延时1s进入IM,避免模板消息未发生完成就已进入IM
+                this.$xToast.showLoading({ message: '正在联系规划师...' })
+                const timer = setTimeout(() => {
+                  clearTimeout(timer)
+                  this.$xToast.hideLoading()
+                  const myInfo = localStorage.getItem('myInfo')
+                    ? JSON.parse(localStorage.getItem('myInfo'))
+                    : {}
+                  const token = this.userType ? this.token : myInfo.token
+                  const userId = this.userType ? this.userId : myInfo.token
+                  const userType = this.userType || 'VISITOR'
+                  if (this.isApplets) {
+                    window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}&requireCode=${sessionParams.requireCode}&requireName=${sessionParams.requireName}&isApplets=true`
+                  } else {
+                    window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}&requireCode=${sessionParams.requireCode}&requireName=${sessionParams.requireName}`
+                  }
+                }, 2000)
+                window.location.href = `${config.imBaseUrl}/chat?token=${this.token}&userId=${this.userId}&userType=${this.userType}&id=${res.data.groupId}`
+              } else if (res.code === 5223) {
+                this.clearUserInfoAndJumpLoging()
+              } else {
+                this.$xToast.warning(resData.msg)
+              }
+            })
+          } else if (res.code === 5223) {
+            this.clearUserInfoAndJumpLoging()
+          } else {
+            this.$xToast.warning(res.msg)
+          }
+        })
+      }
+      // })
     },
   },
 }

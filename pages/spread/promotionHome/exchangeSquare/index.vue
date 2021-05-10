@@ -18,14 +18,23 @@
     <!-- 新人红包 -->
     <GiftBag :gift-bag-list="giftBagList"></GiftBag>
     <!-- 交易产品列表 -->
-    <Transaction></Transaction>
+    <TabServiceItem :title-name="titleName" @change="onChange">
+      <template v-slot:list>
+        <!-- <KnowledgeList /> -->
+        <EnterpriseList
+          ref="enterprise"
+          :default-list="defaultList"
+          :change-state="changeState"
+        />
+      </template>
+    </TabServiceItem>
 
     <!-- START 规划师-->
     <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!-- END IM在线咨询-->
   </div>
 </template>
@@ -36,9 +45,11 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.vue'
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
-import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
+import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
+import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
+// import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
-import DggImCompany from '@/components/spread/DggImCompany'
+// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import { chipSpread } from '@/api/spread'
 
@@ -49,17 +60,22 @@ export default {
     Activity,
     Banner,
     GiftBag,
-    Transaction,
+    // Transaction,
     BtnPlanner,
-    DggImCompany,
+    // DggImCompany,
+    TabServiceItem,
+    EnterpriseList,
   },
   async asyncData({ $axios }) {
+    const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
     try {
-      const res = await $axios.get(chipSpread.list, {
+      // chipSpread.list
+      const res = await $axios.get(url, {
         params: {
           locationCodes: 'ad113246,ad113244,ad113281',
           navCodes: 'nav100059',
           productCenterCode: 'TradingPlatform',
+          code: 'CRISPS-C-JYGC',
         },
       })
       console.log(res, 123123)
@@ -81,6 +97,35 @@ export default {
   },
   data() {
     return {
+      // 当前列表状态
+      changeState: {
+        code: '',
+        name: '',
+      },
+      defaultList: [],
+      // 列表导航
+      titleName: [
+        {
+          code: 1,
+          type: 1,
+          name: '商标交易',
+        },
+        {
+          code: 2,
+          type: 1,
+          name: '公司交易',
+        },
+        {
+          code: 3,
+          type: 1,
+          name: '专利交易',
+        },
+        {
+          code: 4,
+          type: 1,
+          name: '资质交易',
+        },
+      ],
       marginTop: 0,
       // 页面规划师
       pagePlanner: {
@@ -90,6 +135,7 @@ export default {
         telephone: '18402858698',
         imgSrc: '',
       },
+
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -163,6 +209,15 @@ export default {
   mounted() {
     try {
       if (JSON.stringify(this.result.data) !== '{}') {
+        const titleList = []
+        this.result.data.classList.forEach((item) => {
+          const obj = {
+            name: item.name,
+            code: item.ext1,
+          }
+          titleList.push(obj)
+        })
+        this.titleName = titleList
         this.navDetail(this.result.data.navs.nav100059)
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
@@ -173,6 +228,15 @@ export default {
     }
   },
   methods: {
+    onChange(changeObj) {
+      console.log(changeObj, 111)
+      this.changeState = changeObj
+      // console.log(this.$refs.enterprise.initialize())
+      this.$refs.enterprise.initialize(changeObj)
+      // if (obj.type === 1) {
+      //   this.list = defaultList
+      // }
+    },
     // 金刚区数据处理
     navDetail(data) {
       if (data.length === 0) {
