@@ -80,7 +80,7 @@ export default {
   async asyncData({ $axios }) {
     const locations = 'ad113299,ad113300,ad113301,ad113302'
     const code = 'nav100073'
-    // const centerCode = 'EnterpriseService'
+    const centerCode = 'EnterpriseService'
     const dataRes = defaultRes
     try {
       // const res = await $axios.get(`${url}?locationCodes=${locations}`)
@@ -88,7 +88,7 @@ export default {
         params: {
           locationCodes: locations,
           navCodes: code,
-          // productCenterCode: centerCode,
+          productCenterCode: centerCode,
         },
       })
       console.log(res.message)
@@ -409,14 +409,13 @@ export default {
 
           // // 商标服务2
           if (elem.locationCode === 'ad113302') {
-            trademarArr.push(elem.sortMaterialList)
+            trademarArr.push(elem.sortMaterialList[0])
             // this.trademarkServiceData(elem.sortMaterialList)
           }
           // 商标服务
           if (elem.locationCode === 'ad113301') {
             // this.trademarkService = []
-            trademarArr.push(elem.sortMaterialList)
-
+            trademarArr.push(elem.sortMaterialList[0])
             // this.trademarkServiceData(elem.sortMaterialList)
           }
         })
@@ -624,8 +623,9 @@ export default {
             if (res.code === 200 && res.data.length > 0) {
               console.log(res, 15465445465)
               this.pagePlanner = {
-                id: res.data[0].userCentreId,
+                id: res.data[0].mchUserId,
                 name: res.data[0].userName,
+                type: res.data[0].type,
                 jobNum: res.data[0].userCenterNo,
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,
