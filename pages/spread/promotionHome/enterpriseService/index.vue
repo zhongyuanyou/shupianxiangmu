@@ -50,7 +50,7 @@
 <script>
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi } from '@/api/spread'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
@@ -72,30 +72,22 @@ export default {
     DggImCompany,
   },
   async asyncData({ $axios }) {
-    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-    const url =
-      'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
-    // const url =
-    //   'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/productList.do'
-
-    // const locations = 'ad113250,ad113252,ad113257'
     const locations = 'ad113257,ad113252,ad113250,ad113227'
     const code = 'nav100057'
-    const centerCode = 'EnterpriseService'
+    const centerCode = 'CRISPS-C-QYFW'
     const dataRes = defaultRes
     try {
-      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
-      const res = await $axios.get(chipSpread.list, {
+      const res = await $axios.get(newSpreadApi.list, {
         params: {
           locationCodes: locations,
           navCodes: code,
-          productCenterCode: centerCode,
+          code: centerCode,
         },
       })
-
-      console.log(res.message)
+      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
+        console.log(res.data)
         return {
           resultData: res.data,
         }
@@ -280,26 +272,26 @@ export default {
           type: 1,
           name: '为你推荐',
         },
-        {
-          code: 2,
-          type: 1,
-          name: '工商服务',
-        },
-        {
-          code: 3,
-          type: 1,
-          name: '会计服务',
-        },
-        {
-          code: 4,
-          type: 1,
-          name: '知识服务',
-        },
-        {
-          code: 5,
-          type: 1,
-          name: '资质服务',
-        },
+        // {
+        //   code: 2,
+        //   type: 1,
+        //   name: '工商服务',
+        // },
+        // {
+        //   code: 3,
+        //   type: 1,
+        //   name: '会计服务',
+        // },
+        // {
+        //   code: 4,
+        //   type: 1,
+        //   name: '知识服务',
+        // },
+        // {
+        //   code: 5,
+        //   type: 1,
+        //   name: '资质服务',
+        // },
       ],
       // 当前列表状态
       changeState: {
@@ -460,7 +452,7 @@ export default {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
         this.navList(resData.navs.nav100057 || [])
-        // this.productTitle(resData.productClassList || [])
+        this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
           if (elem.locationCode === 'ad113250') {
             this.giftData(elem.sortMaterialList)
@@ -551,6 +543,25 @@ export default {
           }
         })
       }
+    },
+    // 产品分类
+    productClassData(data) {
+      if (data.length === 0) return
+      this.changeState = {
+        type: data[0].ext1,
+        code: data[0].ext1,
+        name: data[0].name,
+      }
+
+      const classArr = []
+      data.forEach((item, index) => {
+        classArr.push({
+          type: item.ext1,
+          code: item.ext1,
+          name: item.name,
+        })
+      })
+      this.titleName = classArr
     },
 
     // 列表导航

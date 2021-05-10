@@ -31,11 +31,11 @@
               class="region-price"
             >
               {{ item.currentPrice }}<span>元</span>
-              <span
-                v-show="item.originalPrice !== '' && item.originalPrice"
-                class="original-price"
-                >{{ item.originalPrice }}元</span
-              >
+              <!--              <span-->
+              <!--                v-show="item.originalPrice !== '' && item.originalPrice"-->
+              <!--                class="original-price"-->
+              <!--                >{{ item.originalPrice }}元</span-->
+              <!--              >-->
             </div>
           </div>
         </div>
@@ -46,6 +46,8 @@
 
 <script>
 import { List } from '@chipspc/vant-dgg'
+import { newSpreadApi } from '@/api/spread'
+
 export default {
   name: 'EnterpriseList',
   components: {
@@ -171,17 +173,14 @@ export default {
     selectTab(item) {
       // 当前无数据不执行
       if (this.finished && !this.loading) return
-      const api = '/service/nk/chipSpread/v1/productList.do'
-      const cdn = 'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api'
-      // const cdn = 'http://172.16.132.70:7001'
       const type = item.code
       // 2、调用接口
       this.$axios
-        .get(cdn + api, {
+        .get(newSpreadApi.service_product_list, {
           params: {
             pageNumber: this.pageNumber,
             pageSize: '15',
-            classCodes: type,
+            classCodes: 'FL20210425163722',
           },
         })
         .then((res) => {
@@ -192,20 +191,18 @@ export default {
             this.loading = false
             this.finished = true
           }
-          if (result.length !== 0 && res.code === 200) {
+          if (res.code === 200 && result.length !== 0) {
             ++this.pageNumber
             result.filter((elem, index) => {
               this.list.push({
                 code: index + 1,
                 img:
+                  elem.img ||
                   'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
-                title: elem.name,
-                label: ['套餐优惠', '热销好品', '金牌团队'],
-                currentPrice:
-                  ((parseFloat(elem.referencePrice) / 10000) * 0.3).toFixed(2) +
-                  '万',
-                originalPrice:
-                  (parseFloat(elem.referencePrice) / 10000).toFixed(2) + '万',
+                title: elem.title,
+                label: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
+                currentPrice: elem.price,
+                originalPrice: 0,
                 url: '',
               })
             })

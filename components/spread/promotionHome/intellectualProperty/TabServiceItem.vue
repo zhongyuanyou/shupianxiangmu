@@ -111,6 +111,9 @@ export default {
     }
   }
 
+  ::v-deep.sp-tabs__nav--line {
+    padding-left: 20px;
+  }
   .sp-tab:first-child {
     padding-left: 20px;
   }
