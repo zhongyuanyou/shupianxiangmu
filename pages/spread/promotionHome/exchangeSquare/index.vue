@@ -25,7 +25,7 @@
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!-- END IM在线咨询-->
   </div>
 </template>
@@ -38,7 +38,7 @@ import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
 import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
-import DggImCompany from '@/components/spread/DggImCompany'
+// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import { chipSpread } from '@/api/spread'
 
@@ -51,7 +51,7 @@ export default {
     GiftBag,
     Transaction,
     BtnPlanner,
-    DggImCompany,
+    // DggImCompany,
   },
   async asyncData({ $axios }) {
     try {
