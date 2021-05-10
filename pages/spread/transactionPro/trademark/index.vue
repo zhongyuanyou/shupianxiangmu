@@ -48,7 +48,7 @@
 <script>
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi } from '~/api/spread'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
@@ -390,12 +390,12 @@ export default {
     this.getGoodList()
     this.getPagePlanner('app-ghsdgye-02')
     const resData = this.resultData
-    console.log(resData)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
         this.navListData(resData.navs.nav100073 || [])
         const trademarArr = []
+        const trademarArr2 = []
         resData.adList.filter((elem) => {
           // 轮播
           if (elem.locationCode === 'ad113299') {
@@ -410,21 +410,19 @@ export default {
 
           // 商标服务
           if (elem.locationCode === 'ad113301') {
-            // this.trademarkService = []
             trademarArr.push(elem.sortMaterialList[0].materialList[0])
-            // this.trademarkServiceData(elem.sortMaterialList)
           }
           // 商标服务2
           if (elem.locationCode === 'ad113302') {
-            // trademarArr.push(elem.sortMaterialList)
             elem.sortMaterialList.filter((elem) => {
-              // console.log(elem.materialList[0], 465)
-              trademarArr.push(elem.materialList[0])
+              trademarArr2.push(elem.materialList[0])
             })
-            // this.trademarkServiceData(elem.sortMaterialList)
           }
         })
-        console.log(trademarArr, 5465)
+        if (trademarArr.length > 0 && trademarArr2.length > 0) {
+          const arr = trademarArr.concat(trademarArr2)
+          this.trademarkServiceData(arr)
+        }
       }
     } catch (error) {
       console.log(error)
@@ -485,9 +483,9 @@ export default {
       if (data.length !== 0) {
         this.trademarkService = data.map((elem, index) => {
           return {
-            img: elem.materialList[0].materialUrl,
-            name: elem.materialList[0].name,
-            url: elem.materialList[0].materialLink,
+            img: elem.materialUrl,
+            name: elem.name,
+            url: elem.materialLink,
           }
         })
       }
