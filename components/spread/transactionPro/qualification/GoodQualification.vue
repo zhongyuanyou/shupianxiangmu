@@ -26,69 +26,72 @@
 <script>
 export default {
   name: 'GoodQualification',
-  data() {
-    return {
-      data: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/3ia3ajzw8xo0000.png',
-          imgWidth: 327,
-          imgHeight: 145,
-          url: '',
-          md: {
-            name: '资质交易聚合页_建筑工程',
+  props: {
+    data: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/3ia3ajzw8xo0000.png',
+            imgWidth: 327,
+            imgHeight: 145,
+            url: '',
+            md: {
+              name: '资质交易聚合页_建筑工程',
+            },
           },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2gxgo9h7eyi0000.png',
-          imgWidth: 327,
-          imgHeight: 145,
-          url: '',
-          md: {
-            name: '资质交易聚合页_公路工程',
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2gxgo9h7eyi0000.png',
+            imgWidth: 327,
+            imgHeight: 145,
+            url: '',
+            md: {
+              name: '资质交易聚合页_公路工程',
+            },
           },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/1uqbozuf4u74000.png',
-          imgWidth: 213,
-          imgHeight: 146,
-          url: '',
-          md: {
-            name: '资质交易聚合页_地基基础',
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/1uqbozuf4u74000.png',
+            imgWidth: 213,
+            imgHeight: 146,
+            url: '',
+            md: {
+              name: '资质交易聚合页_地基基础',
+            },
           },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/xx9gz37ikxc000.png',
-          imgWidth: 213,
-          imgHeight: 146,
-          url: '',
-          md: {
-            name: '资质交易聚合页_消防设施',
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/xx9gz37ikxc000.png',
+            imgWidth: 213,
+            imgHeight: 146,
+            url: '',
+            md: {
+              name: '资质交易聚合页_消防设施',
+            },
           },
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/15rjalmh0ag0000.png',
-          imgWidth: 213,
-          imgHeight: 146,
-          url: '',
-          md: {
-            name: '资质交易聚合页_公路路面',
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/15rjalmh0ag0000.png',
+            imgWidth: 213,
+            imgHeight: 146,
+            url: '',
+            md: {
+              name: '资质交易聚合页_公路路面',
+            },
           },
-        },
-      ],
-    }
+        ]
+      },
+    },
   },
   methods: {
     jumpLink(url) {
       if (url) {
-        if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
+        if (url) {
+          if (url.indexOf('http') > -1) {
+            window.location.href = url
+          }
         }
-      } else {
-        this.$parent.jumpLink(url)
       }
+      // else {
+      //   this.$parent.jumpLink(url)
+      // }
     },
   },
 }

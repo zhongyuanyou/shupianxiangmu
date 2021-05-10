@@ -17,15 +17,15 @@
     <!-- 金刚区 -->
     <NavBar class="nav-bar" :data="NavBtns" />
     <!-- banner区 -->
-    <Banner class="my-banner" :data="images" />
+    <Banner class="my-banner" :data="bannerList" />
     <!-- 表单区 -->
     <!-- <Form class="my-form" :data="FormMsg" /> -->
     <!-- 广告位 -->
     <!-- <ADList :data="ADList" class="ad-margin" /> -->
     <!-- 热门商标 -->
-    <HotTrademark />
+    <HotTrademark :trademark-hot="trademarkHot" />
     <!-- 商标服务 -->
-    <TrademarkService />
+    <TrademarkService :trademark-service="trademarkService" />
     <!-- 商标列表 -->
     <!-- <ProductList :planner="pagePlanner" /> -->
     <ProductList
@@ -47,15 +47,16 @@
 
 <script>
 import { mapState } from 'vuex'
-import { plannerApi } from '@/api/spread'
+import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread, plannerApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
 import Banner from '~/components/spread/transactionPro/common/Banner'
 // import Form from '~/components/spread/transactionPro/common/Form'
 // import ADList from '@/components/spread/transactionPro/common/ADList'
-import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark'
-import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService'
+import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark.vue'
+import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService.vue'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
 // import FixedBottom from '~/components/spread/transactionPro/common/FooterBottom'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
@@ -76,7 +77,38 @@ export default {
     DggImCompany,
     // FixedBottom,
   },
-
+  async asyncData({ $axios }) {
+    const locations = 'ad113299,ad113300,ad113301,ad113302'
+    const code = 'nav100073'
+    const centerCode = 'EnterpriseService'
+    const dataRes = defaultRes
+    try {
+      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: code,
+          productCenterCode: centerCode,
+        },
+      })
+      console.log(res.message)
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    } catch (error) {
+      console.log('请求错误')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    }
+  },
   data() {
     return {
       pageTitle: '商标交易',
@@ -94,6 +126,7 @@ export default {
           type: '售前',
         },
       },
+      // 金刚区
       NavBtns: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/3v8zphmmlyc0000.png',
@@ -196,14 +229,14 @@ export default {
           },
         },
       ],
-      FormMsg: {
-        title: '海量精品商标  免费为您推荐',
-        buttonName: '立即获取',
-        subInfo: ['价格透明', '信息安全', '专业保障'],
-        type: 'sbjy', // 业态编码。固定几个业态编码。
-        md: { pageName: '商标交易聚合页表单' },
-      },
-      images: [
+      // FormMsg: {
+      //   title: '海量精品商标  免费为您推荐',
+      //   buttonName: '立即获取',
+      //   subInfo: ['价格透明', '信息安全', '专业保障'],
+      //   type: 'sbjy', // 业态编码。固定几个业态编码。
+      //   md: { pageName: '商标交易聚合页表单' },
+      // },
+      bannerList: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/8tsmiv55cgk0000.png',
           md: {
@@ -219,23 +252,73 @@ export default {
           },
         },
       ],
-
-      ADList: [
+      // 热门商标
+      trademarkHot: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/c8w39clg7go0000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/10mhf9bggcq8000.jpg',
           url: '',
-          md: {
-            name: '商标交易聚合页_优质资质',
-          },
+          name: '第03类化妆日用',
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/e5vqunicu000000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/blnijqibtxs0000.jpg',
           url: '',
-          md: {
-            name: '商标交易聚合页_热销资质',
-          },
+          name: '第05类医药药品',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/crj3x70vv0o0000.jpg',
+          url: '',
+          name: '第11类家用电器',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/92ihdvtmr1o0000.jpg',
+          url: '',
+          name: '第18类皮革箱包',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bywj1i8uge00000.jpg',
+          url: '',
+          name: '第25类服装鞋帽',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2clxcnzlduqs000.jpg',
+          url: '',
+          name: '第29类食品行业',
         },
       ],
+      // 商标服务
+      trademarkService: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9fdf4f6ag0k0000.jpg',
+          url: '',
+          name: '商标注册',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ayfnw0im9740000.jpg',
+          url: '',
+          name: '商标信息变更',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8eqt8sxee380000.jpg',
+          url: '',
+          name: '商标异议处理',
+        },
+      ],
+      // ADList: [
+      //   {
+      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/c8w39clg7go0000.jpg',
+      //     url: '',
+      //     md: {
+      //       name: '商标交易聚合页_优质资质',
+      //     },
+      //   },
+      //   {
+      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/e5vqunicu000000.jpg',
+      //     url: '',
+      //     md: {
+      //       name: '商标交易聚合页_热销资质',
+      //     },
+      //   },
+      // ],
       // 选项卡、规划师
       goodListData: {
         tabBtnList: [
@@ -243,14 +326,14 @@ export default {
           { name: '优质商标', type: 1 },
           { name: '特价急售', type: 2 },
         ],
-        marks: [
-          '化妆日用',
-          '医药药品',
-          '家用电器',
-          '皮革箱包',
-          '服装鞋帽',
-          '食品行页',
-        ],
+        // marks: [
+        //   '化妆日用',
+        //   '医药药品',
+        //   '家用电器',
+        //   '皮革箱包',
+        //   '服装鞋帽',
+        //   '食品行页',
+        // ],
         planner: {
           id: '7862495547640840192',
           name: '张毅',
@@ -306,8 +389,103 @@ export default {
     }
     this.getGoodList()
     this.getPagePlanner('app-ghsdgye-02')
+    const resData = this.resultData
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        // 导航
+        this.navListData(resData.navs.nav100073 || [])
+        const trademarArr = []
+        resData.adList.filter((elem) => {
+          // 轮播
+          if (elem.locationCode === 'ad113299') {
+            this.navListData(elem.sortMaterialList)
+          }
+          // 热门服务
+          if (elem.locationCode === 'ad113300') {
+            this.trademarkHotData(elem.sortMaterialList)
+          }
+          //   this.lificationData(elem.sortMaterialList, sizeData)
+          // }
+
+          // // 商标服务2
+          if (elem.locationCode === 'ad113302') {
+            trademarArr.push(elem.sortMaterialList[0])
+            // this.trademarkServiceData(elem.sortMaterialList)
+          }
+          // 商标服务
+          if (elem.locationCode === 'ad113301') {
+            // this.trademarkService = []
+            trademarArr.push(elem.sortMaterialList[0])
+            // this.trademarkServiceData(elem.sortMaterialList)
+          }
+        })
+        console.log(trademarArr, 5465)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   },
   methods: {
+    // 金刚区导航栏
+    navListData(data) {
+      if (data.length !== 0) {
+        this.NavBtns = data.map((elem, index) => {
+          return {
+            sort: elem.sort,
+            img: elem.navigationImageUrl,
+            text: elem.name,
+            marketingImg: '',
+            url: elem.url,
+            md: {
+              type: '',
+              name: `专利交易聚合页_金刚区_${elem.name}`,
+            },
+          }
+        })
+        this.NavBtns.sort((a, b) => {
+          return a.sort - b.sort
+        })
+      }
+    },
+    // 轮播
+    bannerListData(data) {
+      if (data.length !== 0) {
+        this.bannerList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].name,
+            md: {
+              name: `资质交易聚合页_${elem.materialList[0].name}`,
+            },
+          }
+        })
+      }
+    },
+    // 热门商标
+    trademarkHotData(data) {
+      if (data.length !== 0) {
+        this.trademarkHot = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+      }
+    },
+    // 商标服务
+    trademarkServiceData(data) {
+      if (data.length !== 0) {
+        this.trademarkService = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+      }
+    },
     // 根据接口获取商品列表
     getGoodList() {
       this.loading = true
@@ -443,9 +621,11 @@ export default {
           )
           .then((res) => {
             if (res.code === 200 && res.data.length > 0) {
-              this.pagePlanner = this.dataNavBar.planner = {
-                id: res.data[0].userCentreId,
+              console.log(res, 15465445465)
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
                 name: res.data[0].userName,
+                type: res.data[0].type,
                 jobNum: res.data[0].userCenterNo,
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,
