@@ -30,6 +30,12 @@ const spread2Api = {
 // const recPlaner = `${CHIPS_WAP_BASE_URL}/nk/spread2/v1/recPlanner.do`
 const recPlaner =
   'https://spmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/recommend/v1/planner.do'
+const productListApi = {
+  list: `${CHIPS_WAP_SPREAD_BASE_URL}nk/newChipSpread/v1/service_product_list.do`,
+}
+const trading = {
+  list: `${CHIPS_WAP_SPREAD_BASE_URL}nk/newChipSpread//v1/trade_product_list.do`,
+}
 export {
   spreadApi,
   plannerApi,
@@ -37,4 +43,6 @@ export {
   spread2Api,
   chipSpread,
   newSpreadApi,
+  productListApi,
+  trading,
 }

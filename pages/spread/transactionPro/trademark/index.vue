@@ -36,7 +36,7 @@
       @getMore="getMore"
     ></ProductList>
     <!-- 站位 -->
-    <div class="box"></div>
+    <!-- <div class="box"></div> -->
     <!-- 底部按钮 -->
     <!-- <FixedBottom :planner="pagePlanner" :md="bottomMd" /> -->
     <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
@@ -48,20 +48,15 @@
 <script>
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
+import { chipSpread, plannerApi, newSpreadApi, trading } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
 import Banner from '~/components/spread/transactionPro/common/Banner'
-// import Form from '~/components/spread/transactionPro/common/Form'
-// import ADList from '@/components/spread/transactionPro/common/ADList'
 import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark.vue'
 import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService.vue'
-import ProductList from '@/components/spread/transactionPro/common/ProductList'
-// import FixedBottom from '~/components/spread/transactionPro/common/FooterBottom'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
-
-// import DggImCompany from '~/components/spread/DggImCompany'
+import ProductList from '~/components/spread/transactionPro/common/ProductList'
+import BtnPlanner from '~/components/spread/common/BtnPlanner'
 
 export default {
   components: {
@@ -74,8 +69,6 @@ export default {
     TrademarkService,
     ProductList,
     BtnPlanner,
-    // DggImCompany,
-    // FixedBottom,
   },
   async asyncData({ $axios }) {
     const locations = 'ad113299,ad113300,ad113301,ad113302'
@@ -111,6 +104,10 @@ export default {
   },
   data() {
     return {
+      more: {
+        loading: false,
+        noMore: false,
+      },
       pageTitle: '商标交易',
       pagePlanner: {
         id: '7862495547640840192',
@@ -348,11 +345,19 @@ export default {
       // 商品列表
       goodList: [],
       // 加载更多loading
-      more: {
-        loading: false,
-        noMore: false,
-      },
 
+      slogans: [
+        '优质资质',
+        '特价资质',
+        '新上资质',
+        '热卖资质',
+        '急售资质',
+        '价格透明',
+        '交易保障',
+        '售后保障',
+        '品牌担保',
+        '真实有效',
+      ],
       params: {
         dictionaryCode: 'C-SY-RMJY-GG', // 查询数据字典的code
         findType: 0, // 查询类型：0：初始查询广告+数据字典+推荐商品  1：查询广告+推荐商品 2：只查推荐商品
@@ -367,10 +372,15 @@ export default {
         type: 0, // 当前选项卡
       },
       pageNum: 1, // 当前页
-
       recommendedList: [], // 推荐商标列表
       highQualityList: [], // 优质商标列表
       specialOfferList: [], // 特价急售商标列表
+      paramData: {
+        page: 1,
+        limit: 15,
+        type: 0,
+      },
+      firstScreen: '',
     }
   },
   computed: {
@@ -381,13 +391,26 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
-  created() {},
+  created() {
+    if (process.client) {
+      const tabs = []
+      this.resultData.classList &&
+        this.resultData.classList.forEach((item) => {
+          const obj = { name: item.name, type: item.ext1 }
+          tabs.push(obj)
+        })
+      this.goodListData.tabBtnList = tabs
+      // 请求
+      debugger
+      this.paramData.type = this.goodListData.tabBtnList[0].type
+      this.getGoodList(this.paramData)
+    }
+  },
   mounted() {
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
-    this.getGoodList()
     this.getPagePlanner('app-ghsdgye-02')
     const resData = this.resultData
     try {
@@ -490,91 +513,80 @@ export default {
         })
       }
     },
-    // 根据接口获取商品列表
-    getGoodList() {
-      this.loading = true
-      const api = '/xdy-portal-product-api/trademark/recommend'
-      const cdn = 'https://microuag.dgg188.cn'
-      this.more.loading = true
-      this.$axios
-        .get(cdn + api)
-        .then((res) => {
-          this.loading = false
-          if (res.code === 'SYS_0000') {
-            this.more.loading = false
-            // 获取商品后，处理商品数据
-            this.goodList = res.data
-            this.processData(this.goodList)
-            this.switchHandle()
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-    // 处理数据
-    processData(data) {
-      const recommended = []
-      const highQuality = []
-      const specialOffer = []
-      const reg = /^[\u4E00-\u9FA5]{1,3}$/
-      const rg = /^[\u4E00-\u9FA5]{1,3}\s[a-zA-Z]{1,8}$/
-      const englishRg = /^[a-zA-Z]{1,8}$/
-      data.forEach((item, index) => {
-        const resObj = {
-          img: item.imageUri, // 商品左侧图片
-          price: item.sellPrice, // 商品价格
-          name: item.firstCategoryName, // 公司显示名称（有*号）
-          tabs: ['品质商标', '即买即用'], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
-          notes: [`${item.firstCategoryId}类-${item.firstCategoryName}`], // 以 | 字符分隔的注意，接口字段值
-        }
-        if (
-          item.firstCategoryName === '化妆日用' ||
-          item.firstCategoryName === '医药药品' ||
-          item.firstCategoryName === '家用电器' ||
-          item.firstCategoryName === '服装鞋帽' ||
-          item.firstCategoryName === '皮革箱包' ||
-          item.firstCategoryName === '食品鱼肉'
-        ) {
-          recommended.push(resObj)
-        }
-        if (
-          reg.test(item.trademarkName) ||
-          rg.test(item.trademarkName) ||
-          englishRg.test(item.trademarkName)
-        ) {
-          highQuality.push(resObj)
-        }
-        if (item.sellPrice < 20000) {
-          specialOffer.push(resObj)
-        }
-      })
-      this.recommendedList = recommended
-      this.highQualityList = highQuality
-      this.specialOfferList = specialOffer
-      if (this.goodList.length < 10) {
-        this.more.noMore = true
-      }
-    },
+
     swipeChange(item) {
       this.params.type = item.type
-      this.pageNum = 1
-      // this.getGoodList()
-      this.switchHandle()
+      this.paramData.page = 1
+      this.getGoodList(this.paramData)
     },
-    switchHandle() {
-      const sub = this.params.type
-      if (sub === 0) this.goodList = this.recommendedList
-      if (sub === 1) this.goodList = this.highQualityList
-      if (sub === 2) this.goodList = this.specialOfferList
-    },
+
     chooseCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
     // 获取更多
     getMore() {
-      this.pageNum++
-      this.getGoodList()
+      this.paramData.page++
+      this.getGoodList(this.paramData)
+    },
+    // 随机生成三条数据
+    getArrayItems(recent, num) {
+      const temparray = []
+      for (const index in recent) {
+        temparray.push(recent[index])
+      }
+      const returnarray = []
+      for (let i = 0; i < num; i++) {
+        if (temparray.length > 0) {
+          const arrIndex = Math.floor(Math.random() * temparray.length)
+          returnarray[i] = temparray[arrIndex]
+          temparray.splice(arrIndex, 1)
+        } else {
+          break
+        }
+      }
+      return returnarray
+    },
+    // 根据接口获取商品列表
+    getGoodList({ type = this.firstScreen, page = 1, limit = 15 }) {
+      this.more.loading = true
+      // 1、处理参数和接口
+      const param = `?type=${type}&page=${page}&limit=${limit}`
+      const api = '/xdy-portal-product-api/aptitude/getRelatedRecommendations'
+      const cdn = 'https://microuag.dgg188.cn'
+      const url =
+        'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
+      // 2、调用接口
+      this.$axios
+        .get(url + param)
+        .then((res) => {
+          this.more.loading = false
+          // 1、获取商品后，处理商品数据
+          const data = res.data.records || []
+          if (res.code === 200 && res.data.records.length > 0) {
+            data.forEach((obj) => {
+              // 全部数据处理
+              const item = {
+                img: obj.img,
+                industryName: '',
+                price: Number(obj.price),
+                name: obj.title,
+                tabs:
+                  obj.tabs.length !== 0
+                    ? obj.tabs
+                    : this.getArrayItems(this.slogans, 3),
+                notes: obj.desc,
+              }
+              this.goodList.push(item)
+            })
+            // 2、当展示的商品列表和商品总条数相等时，显示'无更多数据啦'
+            if (this.goodList.length === res.data.total) {
+              this.more.noMore = true
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     jumpLink(url) {
       if (url) {
@@ -625,7 +637,6 @@ export default {
           )
           .then((res) => {
             if (res.code === 200 && res.data.length > 0) {
-              console.log(res, 15465445465)
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
                 name: res.data[0].userName,
@@ -640,22 +651,6 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    // async getPagePlanner() {
-    //   try {
-    //     const res = await this.$axios.get(`${plannerApi.planner}`)
-    //     if (res.code === 200) {
-    //       this.pagePlanner = {
-    //         id: res.data.list[0].userCentreId,
-    //         name: res.data.list[0].realName,
-    //         jobNum: res.data.list[0].loginName,
-    //         telephone: res.data.list[0].userPhone,
-    //         imgSrc: res.data.list[0].userHeadUrl,
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.log('plannerApi.planner error：', error.message)
-    //   }
-    // },
   },
   head() {
     return {

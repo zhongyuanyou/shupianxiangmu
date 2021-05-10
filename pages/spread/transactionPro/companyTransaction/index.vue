@@ -66,7 +66,7 @@ import Banner from '@/components/spread/transactionPro/common/Banner'
 import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry'
 import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType'
 import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany'
-import { advertising } from '@/api/spread'
+import { chipSpread } from '@/api/spread'
 
 export default {
   name: 'Index',
@@ -87,7 +87,7 @@ export default {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
     // advertising.advertisingApi
     try {
-      const res = await $axios.get(advertising.advertisingApi, {
+      const res = await $axios.get(chipSpread.list, {
         params: {
           locationCodes: locations,
           navCodes: navCode,

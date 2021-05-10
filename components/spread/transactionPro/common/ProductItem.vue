@@ -18,13 +18,9 @@
           </span>
         </div>
         <div class="item-notes">
-          <span
-            v-for="(item, index) in data.notes"
-            :key="index"
-            class="item-note"
-          >
-            {{ item }}
-            <label v-if="index != data.notes.length - 1">|</label>
+          <span class="item-note">
+            {{ data.notes }}
+            <!-- <label v-if="index != data.notes.length - 1">|</label> -->
           </span>
         </div>
         <p class="item-price">
@@ -80,25 +76,26 @@ export default {
   padding: 28px 20px;
   .item-img {
     flex: none;
-    width: 160px;
-    height: 160px;
+    width: 220px;
+    height: 220px;
     margin-right: 32px;
     border-radius: 4px;
     img {
-      width: 160px;
-      height: 160px;
+      width: 220px;
+      height: 220px;
       border-radius: 4px;
     }
   }
   .item-content {
     flex: none;
-    width: calc(100% - 200px);
+    width: 418px;
     .item-title {
+      min-height: 84px;
+      max-height: 84px;
       font-size: 32px;
       font-weight: bold;
       color: #222222;
       line-height: 42px;
-      width: 476px;
       font-family: PingFang SC;
     }
     .item-tabs {
