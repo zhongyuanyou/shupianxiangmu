@@ -49,7 +49,7 @@
     <!--END   固定底部-->
 
     <!--START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!--END   IM在线咨询-->
   </div>
 </template>
@@ -60,7 +60,7 @@ import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { chipSpread, plannerApi } from '~/api/spread'
 
 import Header from '@/components/common/head/header'
-import DggImCompany from '@/components/spread/DggImCompany'
+// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
@@ -79,7 +79,7 @@ export default {
     Banner,
     // Form,
     ProductList,
-    DggImCompany,
+    // DggImCompany,
     BtnPlanner,
     GoodQualification,
     // ADList,

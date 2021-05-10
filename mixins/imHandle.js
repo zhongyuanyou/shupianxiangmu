@@ -128,7 +128,6 @@ export default {
         params = Object.assign(params, data)
         this.imExample.createSession(params, (res) => {
           console.log(res)
-          debugger
           if (res.code === 200) {
             const myInfo = localStorage.getItem('myInfo')
               ? JSON.parse(localStorage.getItem('myInfo'))

@@ -67,7 +67,6 @@ export default {
         userName: this.planner.name,
         type: this.planner.type,
       }
-      debugger
       this.uPIM(planner)
     },
   },

@@ -41,7 +41,7 @@
     <!-- <FixedBottom :planner="pagePlanner" :md="bottomMd" /> -->
     <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
     <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
   </div>
 </template>
 
@@ -61,7 +61,7 @@ import ProductList from '@/components/spread/transactionPro/common/ProductList'
 // import FixedBottom from '~/components/spread/transactionPro/common/FooterBottom'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
-import DggImCompany from '~/components/spread/DggImCompany'
+// import DggImCompany from '~/components/spread/DggImCompany'
 
 export default {
   components: {
@@ -74,7 +74,7 @@ export default {
     TrademarkService,
     ProductList,
     BtnPlanner,
-    DggImCompany,
+    // DggImCompany,
     // FixedBottom,
   },
   async asyncData({ $axios }) {
