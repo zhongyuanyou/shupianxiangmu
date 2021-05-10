@@ -37,7 +37,7 @@
     <!-- END   热门行业-->
 
     <!-- START 附带资产类型-->
-    <WithAssetsType class="with-assets-type-margin" />
+    <WithAssetsType :assetsList="assetsList" class="with-assets-type-margin" />
     <!-- END   附带资产类型-->
 
     <!-- START 推荐公司-->
@@ -115,6 +115,9 @@ export default {
       // 页面规划师
       hotIndustry: [],
       pagePlanner: {},
+      assetsList: [],
+      assetsTop: [],
+      assetsBottom: [],
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -363,7 +366,6 @@ export default {
               hot.push(obj)
             })
             this.hotIndustry = hot
-            console.log(this.hotIndustry)
           }
         })
       }
@@ -374,20 +376,45 @@ export default {
             item.sortMaterialList.forEach((elem, idx) => {
               const obj = {
                 img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                marketingImg: '',
                 iosUrl: elem.materialList[0].iosLink,
                 wapUrl: elem.materialList[0].wapLink,
                 androidUrl: elem.materialList[0].androidLink,
-                md: {
-                  type: '',
-                  name: '',
-                },
+                imgWidth: 331,
+                imgHeight: 172,
               }
               pro.push(obj)
             })
-            this.imageBanner = pro
+            this.assetsTop = pro
           }
         })
       }
+      if (code === 'ad113298') {
+        const pro = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                marketingImg: '',
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+                imgWidth: 331,
+                imgHeight: 172,
+              }
+              pro.push(obj)
+            })
+
+            this.assetsBottom = pro
+          }
+        })
+      }
+      this.assetsList = this.assetsTop.concat(this.assetsBottom)
     },
     // @--跳转
     // 选择城市
