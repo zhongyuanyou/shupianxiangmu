@@ -378,7 +378,6 @@ export default {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
     const resData = this.resultData
-    console.log(resData, 456)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
