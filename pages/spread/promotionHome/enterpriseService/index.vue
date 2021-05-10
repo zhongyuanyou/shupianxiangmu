@@ -92,15 +92,12 @@ export default {
           productCenterCode: centerCode,
         },
       })
-
-      console.log(res.message)
       if (res.code === 200) {
         console.log('请求成功')
         return {
           resultData: res.data,
         }
       }
-      console.log('请求失败')
       return {
         resultData: dataRes.data,
       }
@@ -455,7 +452,6 @@ export default {
     // this.onChange({ type: 1 })
     // 处理后台数据
     const resData = this.resultData
-    console.log(resData)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航

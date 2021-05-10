@@ -3,7 +3,7 @@
     <sp-tabs
       v-model="active"
       :background="isFixed ? '#ffffff' : '#F5F5F5'"
-      :swipe-threshold="4"
+      :swipe-threshold="titleName.length - 1"
       sticky
       title-style="title-style"
       :offset-top="offsetTop"
@@ -36,28 +36,28 @@ export default {
       type: Array,
       default: () => {
         return [
+          //   {
+          //     code: 1,
+          //     type: 1,
+          //     name: '为你推介',
+          //   },
           {
             code: 1,
-            type: 1,
-            name: '为你推介',
-          },
-          {
-            code: 2,
             type: 1,
             name: '工商服务',
           },
           {
-            code: 3,
+            code: 2,
             type: 1,
             name: '会计服务',
           },
           {
-            code: 4,
+            code: 3,
             type: 1,
             name: '知识服务',
           },
           {
-            code: 5,
+            code: 4,
             type: 1,
             name: '资质服务',
           },

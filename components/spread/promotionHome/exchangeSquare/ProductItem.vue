@@ -8,8 +8,8 @@
         <span class="title">{{ products.title }}</span>
         <div class="label-box">
           <span
-            v-for="labels in products.labels"
-            :key="labels.code"
+            v-for="(labels, index) in products.labels"
+            :key="index"
             class="label"
             :class="
               labels.type === 'saleTag'
@@ -25,7 +25,11 @@
           <span class="describe-msg">{{ products.descride }}</span>
         </div>
         <div class="price-box">
-          <img :src="products.discountTag" alt="" />
+          <img
+            v-show="products.discountTag"
+            :src="products.discountTag"
+            alt=""
+          />
           <div class="salePrice">
             <span>{{ products.salePrice }}</span>
             <span v-if="products.priceUnit === '万元'">万元</span>
@@ -168,7 +172,6 @@ export default {
             font-weight: bold;
             color: #ec5330;
             line-height: 22px;
-            margin-left: ;
           }
         }
         .originalPrice {

@@ -31,7 +31,7 @@
               @touchstart="preventTouch"
               @touchmove="preventTouch"
             >
-              <div class="marks">
+              <!-- <div class="marks">
                 <a
                   v-for="(mark, markIndex) in marks"
                   :key="markIndex"
@@ -40,7 +40,7 @@
                 >
                   {{ mark }}
                 </a>
-              </div>
+              </div> -->
             </div>
             <!-- E 推荐内容滚动区 -->
 
@@ -109,9 +109,18 @@ import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
 import TabCurve from '~/components/spread/transactionPro/common/TabCurve'
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
-
 import GoodItem from '~/components/spread/transactionPro/companyTransaction/GoodItem'
+import { productList } from '@/api/spread'
+
 export default {
+  props: {
+    tabList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   components: {
     [Swipe.name]: Swipe,
     [swipeItem.name]: swipeItem,
@@ -148,10 +157,10 @@ export default {
       goodList: [],
       params: {
         page: 1,
-        limit: 10,
+        limit: 15,
         type: 0,
       },
-
+      firstScreen: '',
       // @--加载更多
       allListTotal: null, // 总共数据条数
       loading: false, // 加载按钮，调接口时为true
@@ -160,8 +169,14 @@ export default {
   watch: {},
   created() {
     if (process.client) {
-      this.getGoodList(this.params)
+      this.firstScreen = this.tabBtnList[0].type
     }
+  },
+  mounted() {
+    this.tabBtnList = this.tabList
+    this.firstScreen = this.tabBtnList[0].type
+    this.params.type = this.tabList[0].type
+    this.getGoodList(this.params)
   },
   methods: {
     // @--触发获取商品数据
@@ -186,18 +201,21 @@ export default {
       this.getGoodList(this.params)
     },
     // 接口获取商品列表
-    getGoodList({ type = 0, page = 1, limit = 10 }) {
+    getGoodList({ type = this.firstScreen, page = 1, limit = 10 }) {
       this.loading = true
       const param = `?type=${type}&page=${page}&limit=${limit}`
-      const api = 'https://mjy.dgg.cn/tradingApi/WapCompany/find/newList'
-      this.$axios.get(api + param).then((res) => {
+      const api =
+        'http://172.16.133.68:7002/service/nk/newChipSpread/v1/trade_product_list.do'
+      const url =
+        'http://172.16.133.68:7002/service/nk/newChipSpread/v1/trade_product_list.do'
+      // productList.list
+      this.$axios.get(url + param).then((res) => {
         this.loading = false
-        console.log(res.data.searchList.records)
-        if (res.code === 'SYS_0000') {
-          this.allListTotal = Number(res.data.searchList.total)
+        if (res.code === 200) {
+          this.allListTotal = Number(res.data.total)
           // 获取商品后，处理商品数据
           const vm = this
-          const data = res.data.searchList.records
+          const data = res.data.records
           data.forEach((item) => {
             vm.goodList.push(item)
           })
@@ -221,7 +239,7 @@ export default {
 <style scoped lang="less">
 .my-component {
   width: 100%;
-  padding-bottom: 164px;
+  padding-bottom: 36px;
   .tab-curve::after {
     display: block;
     content: '';
