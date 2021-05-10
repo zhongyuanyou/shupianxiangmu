@@ -110,7 +110,7 @@ import TabCurve from '~/components/spread/transactionPro/common/TabCurve'
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import GoodItem from '~/components/spread/transactionPro/companyTransaction/GoodItem'
-import { productList } from '@/api/spread'
+import { productListApi } from '@/api/spread'
 
 export default {
   props: {
@@ -204,12 +204,10 @@ export default {
     getGoodList({ type = this.firstScreen, page = 1, limit = 10 }) {
       this.loading = true
       const param = `?type=${type}&page=${page}&limit=${limit}`
-      const api =
-        'http://172.16.133.68:7002/service/nk/newChipSpread/v1/trade_product_list.do'
       const url =
         'http://172.16.133.68:7002/service/nk/newChipSpread/v1/trade_product_list.do'
       // productList.list
-      this.$axios.get(url + param).then((res) => {
+      this.$axios.get(productListApi.list + param).then((res) => {
         this.loading = false
         if (res.code === 200) {
           this.allListTotal = Number(res.data.total)
