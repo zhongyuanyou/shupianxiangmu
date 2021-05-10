@@ -38,7 +38,9 @@
  *           'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
  *      }  planner 需要传的参数
  **/
+import imHandle from '@/mixins/imHandle'
 export default {
+  mixins: [imHandle],
   props: {
     planner: {
       type: Object,
@@ -60,13 +62,13 @@ export default {
   },
   methods: {
     onlineConsult() {
-      this.$root.$emit(
-        'openIMM',
-        this.planner.id,
-        this.planner.name,
-        this.planner.jobNum,
-        this.planner.avatarImg
-      )
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+      }
+      debugger
+      this.uPIM(planner)
     },
   },
 }

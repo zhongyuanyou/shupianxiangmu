@@ -2,12 +2,7 @@
   <div class="enterprise-service">
     <!-- S 头部和金刚区 -->
     <div class="top-background">
-      <NavTop
-        title="企业服务"
-        :disabled="true"
-        :placeholder="placeholder"
-        @clickInputHandle="clickInputHandle"
-      />
+      <NavTop title="企业服务" @searchKeydownHandle="searchKeydownHandle" />
       <Nav
         :roll-nav="rollNav"
         class="navs"
@@ -36,29 +31,19 @@
       </template>
     </TabServiceItem>
     <!-- E 列表 -->
-
-    <!-- START 规划师-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
-    <!-- END 规划师-->
-
-    <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
-    <!-- END IM在线咨询-->
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi } from '@/api/spread'
+// import { defaultRes } from './enterpriseService'
+import { chipSpread } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
 import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
-import DggImCompany from '@/components/spread/DggImCompany'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { resultData } from '~/assets/spread/licence'
 export default {
   name: 'Index',
@@ -68,8 +53,6 @@ export default {
     Advertising,
     TabServiceItem,
     EnterpriseList,
-    BtnPlanner,
-    DggImCompany,
   },
   async asyncData({ $axios }) {
     // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
@@ -77,9 +60,9 @@ export default {
       'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
     // const url =
     //   'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/productList.do'
-
-    // const locations = 'ad113250,ad113252,ad113257'
-    const locations = 'ad113257,ad113252,ad113250,ad113227'
+    // const url =
+    //   'http://localhost:3000/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
+    const locations = 'ad113250,ad113252,ad113257'
     const code = 'nav100057'
     const centerCode = 'EnterpriseService'
     const dataRes = defaultRes
@@ -110,8 +93,7 @@ export default {
   },
   data() {
     return {
-      placeholder: '请输入关键字',
-      marginTop: 0,
+      // marginTop: 10,
       // 金刚区
       rollNav: [
         {
@@ -422,29 +404,6 @@ export default {
           url: '',
         },
       ],
-      // 页面规划师
-      pagePlanner: {},
-      // 底部规划师埋点
-      fixedMd: {
-        imMd: {
-          name: '公司交易聚合页_底部展位_在线咨询',
-          type: '售前',
-        },
-      },
-    }
-  },
-  computed: {
-    // 将接受的state混合进组件局部计算属性
-    // 监听接受的state值
-    ...mapState({
-      currentCity: (state) => state.city.currentCity,
-      isInApp: (state) => state.app.isInApp,
-    }),
-  },
-  created() {
-    if (process.client) {
-      // 请求
-      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   mounted() {
@@ -475,9 +434,8 @@ export default {
   },
   methods: {
     // 搜索
-    clickInputHandle(e) {
-      window.location.href = 'https://m.shupian.cn/search/'
-      console.log(this.$router)
+    searchKeydownHandle(e) {
+      console.log(e)
     },
     // 请求数据
     onChange(changeObj) {
@@ -569,59 +527,6 @@ export default {
         })
       }
     },
-    // 推介规划师
-    async getPagePlanner(scene) {
-      const device = await this.$getFinger().then((res) => {
-        return res
-      })
-      let areaCode = '510100' // 站点code
-      // 站点code
-      if (this.isInApp) {
-        this.$appFn.dggCityCode((res) => {
-          areaCode = res.data.adCode
-        })
-      } else {
-        areaCode = this.currentCity.code
-      }
-      try {
-        this.$axios
-          .post(
-            plannerApi.plannerReferrals,
-            {
-              login_name: '',
-              deviceId: device, // 设备标识
-              area: areaCode || '510100', // 站点code
-              user_id: '',
-              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
-              sceneId: scene, // 场景id
-              level_2_ID: '', // 二级code
-              platform: 'app',
-              productId: '', //
-              thirdTypeCodes: '', // 三级code
-              firstTypeCode: 'FL20210425163708', // 一级code
-            },
-            {
-              headers: {
-                sysCode: 'cloud-recomd-api',
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          .then((res) => {
-            if (res.code === 200 && res.data.length > 0) {
-              this.pagePlanner = {
-                id: res.data[0].userCentreId,
-                name: res.data[0].userName,
-                jobNum: res.data[0].userCenterNo,
-                telephone: res.data[0].phone,
-                imgSrc: res.data[0].imgaes,
-              }
-            }
-          })
-      } catch (error) {
-        console.log('plannerApi.plannerReferrals error：', error.message)
-      }
-    },
   },
   head() {
     return {
@@ -640,7 +545,7 @@ export default {
     // height: 450px;
     background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
       no-repeat;
-    background-size: cover;
+    background-size: 100% 450px;
     margin-bottom: 20px;
   }
   .navs {

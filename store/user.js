@@ -66,4 +66,7 @@ export const actions = {
   setUser({ commit }, data) {
     commit('SET_USER', data)
   },
+  setInfo({ commit }, data) {
+    commit('SET_INFO', data)
+  },
 }
