@@ -162,9 +162,9 @@ export default {
       // ], // 推荐选项卡列表滚动区
       goodList: [],
       params: {
-        page: 1,
+        start: 1,
         limit: 15,
-        type: 0,
+        classCode: 0,
       },
       firstScreen: '',
       // @--加载更多
@@ -172,7 +172,7 @@ export default {
       loading: false, // 加载按钮，调接口时为true
     }
   },
-  watch: {},
+  computed: {},
   created() {
     if (process.client) {
       this.firstScreen = this.tabBtnList[0].type
@@ -181,7 +181,7 @@ export default {
   mounted() {
     this.tabBtnList = this.tabList
     this.firstScreen = this.tabBtnList[0].type
-    this.params.type = this.tabList[0].type
+    this.params.classCode = this.tabList[0].type
     this.getGoodList(this.params)
   },
   methods: {
@@ -189,27 +189,26 @@ export default {
     // 选项卡选择某项：切换轮播，显示不同内容
     selectTabHandle({ index, type }) {
       this.goodList = []
-      this.params.page = 1
-      this.params.type = this.tabBtnList[index].type
+      this.params.start = 1
+      this.params.classCode = this.tabBtnList[index].type
       this.$refs.recomRef.swipeTo(index)
     },
     // 轮播组件的轮播切换时触发
     onSwipeChange(index) {
       this.currentItem = index
       this.goodList = []
-      this.params.page = 1
-      this.params.type = this.tabBtnList[index].type
+      this.params.start = 1
+      this.params.classCode = this.tabBtnList[index].type
       this.getGoodList(this.params)
     },
     // 获取更多按钮
     getMore() {
-      this.params.page++
+      this.params.start++
       this.getGoodList(this.params)
     },
     // 接口获取商品列表
     getGoodList(params) {
       this.loading = true
-
       const url =
         'http://172.16.133.68:7002/service/nk/newChipSpread/v1/trade_product_list.do'
       // productList.list
