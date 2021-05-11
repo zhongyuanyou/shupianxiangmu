@@ -35,7 +35,7 @@
     </TabServiceItem>
 
     <!-- START 规划师-->
-    <BtnPlanner :page-planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
@@ -56,7 +56,7 @@ import EnterpriseList from '@/components/spread/promotionHome/exchangeSquare/Ent
 // import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 // import DggImCompany from '@/components/spread/DggImCompany'
-import BtnPlanner from '~/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { chipSpread } from '@/api/spread'
 import { newSpreadApi, plannerApi } from '~/api/spread'
 
@@ -386,6 +386,15 @@ export default {
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
+    },
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
   head() {

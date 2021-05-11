@@ -38,7 +38,7 @@
     <!-- E 列表 -->
 
     <!-- START 规划师-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
@@ -508,7 +508,7 @@ export default {
         this.gift = data.map((elem) => {
           return {
             img: elem.materialList[0].materialUrl,
-            url: '',
+            url: elem.materialList[0].materialLink,
             title: elem.materialList[0].materialDescription.split(',')[0],
             price: elem.materialList[0].materialDescription.split(',')[1],
           }
@@ -519,7 +519,9 @@ export default {
     },
     // 直播 补贴
     proDiscountsData(data) {
-      this.proDiscountsData = data.map((elem, index) => {
+      // console.log(data, 46546)
+
+      this.proDiscounts = data.map((elem, index) => {
         const labelData = ['直播中', '优惠放送']
         return {
           proTitle: elem.materialList[0].materialDescription.split(',')[0],
@@ -529,6 +531,7 @@ export default {
           url: elem.materialList[0].materialLink,
         }
       })
+      console.log(this.proDiscountsData, 46546)
     },
     // 活动广告位
     introduceData(data) {
@@ -636,6 +639,15 @@ export default {
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
+    },
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
   head() {

@@ -194,7 +194,7 @@ export default {
     flex-wrap: nowrap;
     justify-content: space-between;
     height: 154px;
-    padding: 13px 20px 20px 20px;
+    padding: 0px 20px 20px 20px;
     /deep/.sp-image {
       width: 347px;
       height: 124px;

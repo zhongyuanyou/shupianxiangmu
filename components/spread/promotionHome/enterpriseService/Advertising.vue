@@ -9,7 +9,7 @@
             v-md-map
             v-md:webClick
             data-name="工商注册_服务介绍_展开更多"
-            @click="onMore('')"
+            @click="onMore(gift[0].url)"
             >更多
             <my-icon name="list_ic_next" size="0.14rem"></my-icon>
           </span>
@@ -193,17 +193,17 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
-      } else {
-        Toast('功能正在建设中，敬请期待')
-        // this.$root.$emit(
-        //   'openIMM',
-        //   this.listCount[index].id,
-        //   this.listCount[index].name,
-        //   this.listCount[index].jobNum,
-        //   this.listCount[index].imgSrc
-        // )
       }
+      this.$parent.jumpLink(url)
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //   }
+      // } else {
+      //   Toast('功能正在建设中，敬请期待')
+      // }
     },
     onServe() {
       Toast('功能正在建设中，敬请期待')

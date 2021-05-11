@@ -34,7 +34,9 @@ export default {
     prompt(url) {
       if (url) {
         url.indexOf('http') > -1 && (window.location.href = url)
+        return
       }
+      this.$parent.jumpLink(url)
     },
   },
 }

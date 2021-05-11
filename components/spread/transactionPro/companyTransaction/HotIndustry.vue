@@ -88,7 +88,7 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: calc(@spread-page-width - 30px);
+  width: calc(@spread-page-width - 40px);
   margin: 0 auto;
   padding: 24px 21px;
   background: #ffffff;

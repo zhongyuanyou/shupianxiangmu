@@ -25,8 +25,8 @@
           <template v-slot:left>
             <span class="serch-left" @click="onClickLeft"
               ><my-icon
-                size="0.32rem"
-                name="order_ic_listnext"
+                size="0.4rem"
+                name="nav_ic_back"
                 :style="{ color: `rgba(${colorVal},${colorVal},${colorVal})` }"
               />
               <span
@@ -210,7 +210,7 @@ export default {
       }
       .input-box {
         height: 72px;
-        background: #ededed;
+        background: #ffffff;
         border-radius: 8px;
         border: none;
         input {

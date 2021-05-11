@@ -96,8 +96,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
+      this.$parent.jumpLink(url)
     },
     jumpHandle(item) {
       let url = ''

@@ -58,7 +58,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
-import Header from '~/components/common/head/header'
+import Header from '~/components/common/head/header.vue'
 import NavBar from '~/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '~/components/spread/transactionPro/common/Banner.vue'
 // import Form from '~/components/spread/transactionPro/common/Form'
