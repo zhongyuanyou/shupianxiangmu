@@ -143,6 +143,7 @@ export default {
       error: false,
       pageNumber: 1,
       list: [],
+      classCode: '', // 分类code
     }
   },
   mounted() {
@@ -152,6 +153,7 @@ export default {
   },
   methods: {
     initialize(changeObj) {
+      this.classCode = changeObj.type
       this.pageNumber = 1
       this.list = []
       this.finished = false
@@ -169,7 +171,7 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=FL20201224136319&productId=${id}`
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.classCode}&productId=${id}`
     },
     // 请求数据
     selectTab(item) {
@@ -182,7 +184,7 @@ export default {
           params: {
             pageNumber: this.pageNumber,
             pageSize: '15',
-            classCodes: 'FL20210425163722',
+            classCodes: this.classCode,
           },
         })
         .then((res) => {
