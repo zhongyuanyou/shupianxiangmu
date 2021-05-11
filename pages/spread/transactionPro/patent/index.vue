@@ -407,10 +407,12 @@ export default {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
     const resData = this.resultData
+    console.log(resData, 45645)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
         this.navList(resData.navs.nav100071 || [])
+        this.classListData(resData.classList || [])
         // this.productTitle(resData.productClassList || [])
         resData.adList.filter((elem) => {
           // 轮播
@@ -480,6 +482,10 @@ export default {
           return a.sort - b.sort
         })
       }
+    },
+    // 导航选项
+    classListData(data) {
+      // console.log(data)
     },
     // 轮播
     imageBannerData(data) {
@@ -588,7 +594,7 @@ export default {
                   `${tabs[random + 1] || '资料齐全'}`,
                   `${tabs[random + 2] || '高咨询'}`,
                 ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
-                notes: [], // 以 | 字符分隔的注意，接口字段值
+                // notes: [], // 以 | 字符分隔的注意，接口字段值
               }
               // if (elem.patentTypeName) {
               //   obj.notes.push(elem.patentTypeName)
