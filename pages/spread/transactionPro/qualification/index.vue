@@ -510,7 +510,6 @@ export default {
           this.more.loading = false
           // 1、获取商品后，处理商品数据
           const data = res.data.records || []
-          debugger
           if (res.code === 200 && res.data.records.length > 0) {
             data.forEach((obj) => {
               // 进行类型图片处理：截取数组第一个值得第一个字段
@@ -569,7 +568,7 @@ export default {
               }
               // 全部数据处理
               const item = {
-                img: obj.img || img,
+                img: obj.img.split(',')[1] || img,
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
@@ -586,6 +585,7 @@ export default {
               this.more.loading = false
               this.more.noMore = true
             }
+            return
           }
           this.more.loading = false
           this.more.noMore = true

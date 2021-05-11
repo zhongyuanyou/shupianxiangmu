@@ -132,8 +132,10 @@ export default {
       // 处理传进的数据
       const obj = this.good
       const item = {
-        industryImg: obj.img,
-        industryName: obj.companyIndustryName,
+        industryImg:
+          obj.img.split(',')[1] ||
+          'https://img10.dgg.cn/pt06/wap/7sj0p2oe7000000.png',
+        // industryName: obj.companyIndustryName,
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
         price: obj.price,
         name: obj.title,
@@ -143,46 +145,46 @@ export default {
             : this.getArrayItems(this.slogans, 3),
         notes: obj.desc,
       }
-      switch (obj.companyIndustryName) {
-        case '电子贸易': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/8501dnyiae40000.png'
-          break
-        }
-        case '科技信息': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/eb0b1yellgg0000.png'
-          break
-        }
-        case '教育培训': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/bas2zdj518w0000.png'
-          break
-        }
-        case '广告传媒': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/39l64c4kujc0000.png'
-          break
-        }
-        case '餐饮美容': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/734jysfyke00000.png'
-          break
-        }
-        case '公司交易': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/7sj0p2oe7000000.png'
-          break
-        }
-        case '公司转让': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/fcyegzq87o00000.png'
-          break
-        }
-        default: {
-          // 当没有行业对应图片时，随机从三张默认图里抽一张作为行业图片
-          const images = [
-            'https://img10.dgg.cn/pt06/wap/7iswdcpn8jc0000.png',
-            'https://img10.dgg.cn/pt06/wap/7mgxtxioehw0000.png',
-            'https://img10.dgg.cn/pt06/wap/3ejz3vwjiks0000.png',
-          ]
-          const num = Math.floor(Math.random() * 3)
-          item.industryImg = images[num]
-        }
-      }
+      //   switch (obj.companyIndustryName) {
+      //     case '电子贸易': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/8501dnyiae40000.png'
+      //       break
+      //     }
+      //     case '科技信息': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/eb0b1yellgg0000.png'
+      //       break
+      //     }
+      //     case '教育培训': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/bas2zdj518w0000.png'
+      //       break
+      //     }
+      //     case '广告传媒': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/39l64c4kujc0000.png'
+      //       break
+      //     }
+      //     case '餐饮美容': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/734jysfyke00000.png'
+      //       break
+      //     }
+      //     case '公司交易': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/7sj0p2oe7000000.png'
+      //       break
+      //     }
+      //     case '公司转让': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/fcyegzq87o00000.png'
+      //       break
+      //     }
+      //     default: {
+      //       // 当没有行业对应图片时，随机从三张默认图里抽一张作为行业图片
+      //       const images = [
+      //         'https://img10.dgg.cn/pt06/wap/7iswdcpn8jc0000.png',
+      //         'https://img10.dgg.cn/pt06/wap/7mgxtxioehw0000.png',
+      //         'https://img10.dgg.cn/pt06/wap/3ejz3vwjiks0000.png',
+      //       ]
+      //       const num = Math.floor(Math.random() * 3)
+      //       item.industryImg = images[num]
+      //     }
+      //   }
       return item
     },
   },

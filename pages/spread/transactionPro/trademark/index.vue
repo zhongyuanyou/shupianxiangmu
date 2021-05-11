@@ -400,7 +400,6 @@ export default {
         })
       this.goodListData.tabBtnList = tabs
       // 请求
-      debugger
       this.paramData.type = this.goodListData.tabBtnList[0].type
       this.getGoodList(this.paramData)
     }
@@ -580,6 +579,7 @@ export default {
               this.more.loading = false
               this.more.noMore = true
             }
+            return
           }
           this.more.loading = false
           this.more.noMore = true
