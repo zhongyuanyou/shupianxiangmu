@@ -175,14 +175,14 @@ export default {
     selectTab(item) {
       // 当前无数据不执行
       if (this.finished && !this.loading) return
-      const type = item.code
+      const type = item.type
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {
           params: {
             pageNumber: this.pageNumber,
             pageSize: '15',
-            classCodes: 'FL20210425163722',
+            classCodes: type,
           },
         })
         .then((res) => {

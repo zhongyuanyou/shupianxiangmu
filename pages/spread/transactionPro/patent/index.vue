@@ -549,7 +549,6 @@ export default {
             url: elem.materialList[0].materialLink,
           }
         })
-        console.log(this.make, 4564546)
       }
     },
     // 请求列表参数
@@ -560,7 +559,7 @@ export default {
       // const params = `?classCode=${this.params.type}&limit=10&start=${this.pageNum}`
       const param = {
         classCodes: this.params.type,
-        limit: '10',
+        limit: '15',
         start: this.pageNum,
       }
       // 2、调用接口
@@ -574,6 +573,10 @@ export default {
           if (result.length > 0 && res.code === 200) {
             this.more.loading = false
             result.forEach((elem) => {
+              let img = ''
+              elem.classCode = 'FL20201224136320' && (img = this.listImg[2])
+              elem.classCode = 'FL20201224136343' && (img = this.listImg[1])
+              elem.classCode = 'FL20201224136342' && (img = this.listImg[0])
               const tabs = [
                 '人气商品',
                 '严选商品',
@@ -596,7 +599,7 @@ export default {
               const random = parseInt(Math.random() * (tabs.length - 3) + 3)
               const obj = {
                 // img: this.listImg[elem.patentType - 1], // 商品本身的图片
-                img: elem.img.split(',')[1], // 商品本身的图片
+                img: elem.img.split(',')[1] || img, // 商品本身的图片
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
                 price: Number(elem.price), // 商品价格
                 name: elem.title, // 公司显示名称（有*号）
