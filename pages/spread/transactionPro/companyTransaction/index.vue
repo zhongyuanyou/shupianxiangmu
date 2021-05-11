@@ -85,7 +85,7 @@ export default {
     const locations = 'ad113298,ad113297,ad113296,ad113295'
     const navCode = 'nav100072'
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
-    // advertising.advertisingApi
+    // chipSpread.list
     try {
       const res = await $axios.get(chipSpread.list, {
         params: {
@@ -279,6 +279,7 @@ export default {
     if (process.client) {
       // 请求
       this.getPagePlanner('app-ghsdgye-02')
+      console.log(this.resultData)
     }
   },
   mounted() {
@@ -336,6 +337,7 @@ export default {
           if (item.locationCode === code) {
             item.sortMaterialList.forEach((elem, idx) => {
               const obj = {
+                url: elem.materialList[0].materialLink,
                 img: elem.materialList[0].materialUrl,
                 iosUrl: elem.materialList[0].iosLink,
                 wapUrl: elem.materialList[0].wapLink,
@@ -357,6 +359,7 @@ export default {
           if (item.locationCode === code) {
             item.sortMaterialList.forEach((elem, idx) => {
               const obj = {
+                url: elem.materialList[0].materialLink,
                 img: elem.materialList[0].materialUrl,
                 title: '',
                 desc: '',
@@ -380,6 +383,7 @@ export default {
                 title: '',
                 desc: '',
                 marketingImg: '',
+                url: elem.materialList[0].materialLink,
                 iosUrl: elem.materialList[0].iosLink,
                 wapUrl: elem.materialList[0].wapLink,
                 androidUrl: elem.materialList[0].androidLink,
@@ -402,6 +406,7 @@ export default {
                 title: '',
                 desc: '',
                 marketingImg: '',
+                url: elem.materialList[0].materialLink,
                 iosUrl: elem.materialList[0].iosLink,
                 wapUrl: elem.materialList[0].wapLink,
                 androidUrl: elem.materialList[0].androidLink,

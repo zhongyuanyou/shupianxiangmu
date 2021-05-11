@@ -48,7 +48,7 @@
 <script>
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi, newSpreadApi, trading } from '~/api/spread'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
@@ -84,7 +84,6 @@ export default {
           code: centerCode,
         },
       })
-      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -517,6 +516,7 @@ export default {
     swipeChange(item) {
       this.params.type = item.type
       this.paramData.page = 1
+      this.goodList = []
       this.getGoodList(this.paramData)
     },
 
@@ -547,17 +547,14 @@ export default {
       return returnarray
     },
     // 根据接口获取商品列表
-    getGoodList({ type = this.firstScreen, page = 1, limit = 15 }) {
+    getGoodList(param) {
       this.more.loading = true
       // 1、处理参数和接口
-      const param = `?type=${type}&page=${page}&limit=${limit}`
-      const api = '/xdy-portal-product-api/aptitude/getRelatedRecommendations'
-      const cdn = 'https://microuag.dgg188.cn'
       const url =
         'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
       this.$axios
-        .get(url + param)
+        .get(newSpreadApi.trade_product_list, param)
         .then((res) => {
           this.more.loading = false
           // 1、获取商品后，处理商品数据
@@ -566,7 +563,7 @@ export default {
             data.forEach((obj) => {
               // 全部数据处理
               const item = {
-                img: obj.img,
+                img: obj.img.split(',')[1],
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
@@ -700,16 +697,16 @@ export default {
   .box {
     height: 148px;
   }
-  ::v-deep.btn {
-    display: none;
-  }
-  ::v-deep.my-component {
-    padding-bottom: 0px;
-  }
-  ::v-deep.sp-bottombar {
-    position: fixed;
-    bottom: 0;
-    z-index: 10;
-  }
+  //   ::v-deep.btn {
+  //     display: none;
+  //   }
+  //   ::v-deep.my-component {
+  //     padding-bottom: 0px;
+  //   }
+  //   ::v-deep.sp-bottombar {
+  //     position: fixed;
+  //     bottom: 0;
+  //     z-index: 10;
+  //   }
 }
 </style>
