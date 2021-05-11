@@ -99,7 +99,6 @@ export default {
           // productCenterCode: centerCode,
         },
       })
-      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -577,6 +576,7 @@ export default {
                     ? obj.tabs
                     : this.getArrayItems(this.slogans, 3),
                 notes: obj.desc,
+                id: obj.id,
               }
               this.goodList.push(item)
             })
@@ -592,6 +592,8 @@ export default {
         })
         .catch((err) => {
           console.log(err)
+          this.more.loading = false
+          this.more.noMore = true
         })
     },
     // 随机生成三条数据

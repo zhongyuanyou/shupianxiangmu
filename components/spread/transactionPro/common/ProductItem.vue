@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="goodItem" class="my-component">
+    <div ref="goodItem" @click="jump(data.id)" class="my-component">
       <!-- S 左侧商品图片 -->
       <div class="item-img"><img :src="data.img" /></div>
       <!-- E 左侧商品图片 -->
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'GoodItem',
   props: {
@@ -61,6 +62,15 @@ export default {
   computed: {
     data() {
       return JSON.parse(JSON.stringify(this.good))
+    },
+  },
+  methods: {
+    jump(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=FL20201224136319&productId=${id}`
     },
   },
 }

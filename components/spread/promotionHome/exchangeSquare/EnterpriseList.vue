@@ -169,7 +169,7 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=FL20201224136319&productId=${id}`
     },
     // 请求数据
     selectTab(item) {
@@ -178,7 +178,7 @@ export default {
       const type = item.code
       // 2、调用接口
       this.$axios
-        .get(newSpreadApi.service_product_list, {
+        .get(newSpreadApi.trade_product_list, {
           params: {
             pageNumber: this.pageNumber,
             pageSize: '15',
