@@ -46,7 +46,7 @@
     <!-- E列表 -->
     <!-- S底部咨询 -->
     <!-- <FooterBottom :planner="pagePlanner" :md="fixedMd" /> -->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- E底部咨询 -->
     <!-- S IM在线咨询-->
     <!-- <DggImCompany /> -->
@@ -60,7 +60,7 @@ import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar.vue'
-import Banner from '~/components/spread/transactionPro/common/Banner'
+import Banner from '~/components/spread/transactionPro/common/Banner.vue'
 // import Form from '~/components/spread/transactionPro/common/Form'
 import ProductList from '~/components/spread/transactionPro/common/ProductList'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising.vue'
@@ -453,14 +453,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
-      // if (url) {
-      //   window.open(url, '_blank')
-      // } else {
-      //   // 待改
-      //   window.spptMqMi.showPanel()
-      // }
+      this.$refs.plannerIM.onlineConsult()
     },
     // 金刚区导航栏
     navList(data) {

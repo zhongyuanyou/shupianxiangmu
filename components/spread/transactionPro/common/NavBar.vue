@@ -42,13 +42,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
-      //  else {
-      //   // IM美恰客服
-      //   // window.spptMqMi.showPanel()
-      //   this.$parent.jumpLink(url)
-      // }
+      this.$parent.jumpLink(url)
     },
   },
 }

@@ -39,7 +39,7 @@
     <!-- <div class="box"></div> -->
     <!-- 底部按钮 -->
     <!-- <FixedBottom :planner="pagePlanner" :md="bottomMd" /> -->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- START IM在线咨询-->
     <!-- <DggImCompany></DggImCompany> -->
   </div>
@@ -597,13 +597,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
-      // if (url) {
-      //   window.open(url, '_blank')
-      // } else {
-      //   window.spptMqMi.showPanel()
-      // }
+      this.$refs.plannerIM.onlineConsult()
     },
     // @--获取规划师
     async getPagePlanner(scene) {

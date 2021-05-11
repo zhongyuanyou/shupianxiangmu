@@ -45,7 +45,7 @@
     <!--END   推荐公司-->
 
     <!--START 固定底部-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!--END   固定底部-->
 
     <!--START IM在线咨询-->
@@ -481,18 +481,12 @@ export default {
     // 跳转链接-IM规划师
     jumpLink(url) {
       if (url) {
-        window.open(url, '_blank')
-      } else {
-        // const planner = this.pagePlanner
-        // this.$root.$emit(
-        //   'openIMM',
-        //   planner.id,
-        //   planner.name || '',
-        //   planner.jobNum || '',
-        //   planner.imgSrc || ''
-        // )
-        window.spptMqMi.showPanel()
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
       }
+      this.$refs.plannerIM.onlineConsult()
     },
 
     // @--S 推荐公司板块
