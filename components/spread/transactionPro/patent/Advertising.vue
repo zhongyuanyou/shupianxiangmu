@@ -232,7 +232,7 @@ export default {
   &-make-over {
     background: #ffffff;
     border-radius: 24px;
-    padding: 30px 17px 24px 20px;
+    padding: 30px 20px 24px 20px;
     display: flex;
     flex-direction: column;
     width: calc(@spread-page-width - 40px);

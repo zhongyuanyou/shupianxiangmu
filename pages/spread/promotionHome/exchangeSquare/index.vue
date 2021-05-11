@@ -2,7 +2,12 @@
   <div class="exchange-square">
     <!-- 头部搜索 -->
     <div class="head">
-      <Header title="交易广场" />
+      <Header
+        title="交易广场"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <Nav
         class="nav"
         :roll-nav="rollNav"
@@ -53,7 +58,7 @@ import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 // import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '~/components/spread/common/BtnPlanner'
 // import { chipSpread } from '@/api/spread'
-import { chipSpread, plannerApi } from '~/api/spread'
+import { newSpreadApi, plannerApi } from '~/api/spread'
 
 export default {
   components: {
@@ -72,11 +77,11 @@ export default {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
     try {
       // chipSpread.list
-      const res = await $axios.get(chipSpread.list, {
+      const res = await $axios.get(newSpreadApi.list, {
         params: {
           locationCodes: 'ad113246,ad113244,ad113281',
           navCodes: 'nav100059',
-          productCenterCode: 'TradingPlatform',
+          // productCenterCode: 'TradingPlatform',
           code: 'CRISPS-C-JYGC',
         },
       })
@@ -99,6 +104,7 @@ export default {
   },
   data() {
     return {
+      placeholder: '请输入关键字',
       // 当前列表状态
       changeState: {
         code: '',
@@ -244,6 +250,11 @@ export default {
     }
   },
   methods: {
+    // 搜索
+    clickInputHandle(e) {
+      window.location.href = 'https://m.shupian.cn/search/'
+      console.log(this.$router)
+    },
     onChange(changeObj) {
       this.changeState = changeObj
       // console.log(this.$refs.enterprise.initialize())
