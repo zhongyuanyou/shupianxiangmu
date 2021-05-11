@@ -64,14 +64,11 @@ export default {
   methods: {
     chat(url) {
       if (url) {
-        if (url.indexOf('http') > -1) {
-          window.open(url)
-        } else {
-          this.$router.push(url)
-        }
-        return
+        // if (url.indexOf('http') > -1) {
+        //   window.location.href = url
+        // }
+        this.$parent.jumpLink(url)
       }
-      this.$parent.jumpLink(url)
     },
   },
 }

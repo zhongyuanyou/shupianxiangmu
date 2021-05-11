@@ -310,22 +310,24 @@ export default {
   methods: {
     getNav(nav) {
       const navs = []
-      nav.forEach((item) => {
+      nav.forEach((elem) => {
         const obj = {
-          img: item.navigationImageUrl,
-          text: item.name,
-          iosUrl: item.iosRoute,
-          wapUrl: item.wapRoute,
-          androidUrl: item.androidRoute,
+          sort: elem.sort,
+          img: elem.navigationImageUrl,
+          text: elem.name,
           marketingImg: '',
-          mad: {
+          url: elem.url,
+          md: {
             type: '',
-            name: '公司交易聚合页_' + item.name,
+            name: `专利交易聚合页_金刚区_${elem.name}`,
           },
         }
         navs.push(obj)
       })
       this.dataList = navs
+      this.dataList.sort((a, b) => {
+        return a.sort - b.sort
+      })
     },
     getAd(code) {
       const data = this.resultData.adList

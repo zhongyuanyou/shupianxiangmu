@@ -591,14 +591,17 @@ export default {
                 // img: this.listImg[elem.patentType - 1], // 商品本身的图片
                 img: elem.img.split(',')[1], // 商品本身的图片
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
-                price: `${elem.price}`, // 商品价格
+                price: Number(elem.price), // 商品价格
                 name: elem.title, // 公司显示名称（有*号）
-                tabs: [
-                  `${tabs[random] || '人气产品'}`,
-                  `${tabs[random + 1] || '资料齐全'}`,
-                  `${tabs[random + 2] || '高咨询'}`,
-                ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
-                // notes: [], // 以 | 字符分隔的注意，接口字段值
+                tabs:
+                  elem.tabs.length !== 0
+                    ? elem.tabs
+                    : [
+                        `${tabs[random] || '人气产品'}`,
+                        `${tabs[random + 1] || '资料齐全'}`,
+                        `${tabs[random + 2] || '高咨询'}`,
+                      ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
+                notes: elem.desc, // 以 | 字符分隔的注意，接口字段值
               }
               // if (elem.patentTypeName) {
               //   obj.notes.push(elem.patentTypeName)

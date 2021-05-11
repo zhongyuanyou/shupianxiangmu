@@ -590,10 +590,15 @@ export default {
     },
     jumpLink(url) {
       if (url) {
-        window.open(url, '_blank')
-      } else {
-        window.spptMqMi.showPanel()
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+        }
       }
+      // if (url) {
+      //   window.open(url, '_blank')
+      // } else {
+      //   window.spptMqMi.showPanel()
+      // }
     },
     // @--获取规划师
     async getPagePlanner(scene) {
