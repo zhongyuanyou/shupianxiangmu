@@ -73,7 +73,7 @@ export default {
   async asyncData({ $axios }) {
     const locations = 'ad113299,ad113300,ad113301,ad113302'
     const code = 'nav100073'
-    const centerCode = 'CRISPS-C-ZLJY'
+    const centerCode = 'CPISPS-C-SBJY'
     const dataRes = defaultRes
     try {
       // const res = await $axios.get(`${url}?locationCodes=${locations}`)
