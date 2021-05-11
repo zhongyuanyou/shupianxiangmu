@@ -57,7 +57,7 @@
 <script>
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi } from '~/api/spread'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
 import Header from '@/components/common/head/header'
 // import DggImCompany from '@/components/spread/DggImCompany'
@@ -309,7 +309,7 @@ export default {
           type: '售前',
         },
       },
-
+      firstScreen: '',
       // @--S 推荐公司板块
       params: {
         page: 1,
@@ -368,7 +368,15 @@ export default {
   },
   created() {
     if (process.client) {
+      const tabs = []
+      this.resultData.classList &&
+        this.resultData.classList.forEach((item) => {
+          const obj = { name: item.name, type: item.ext1 }
+          tabs.push(obj)
+        })
+      this.goodListData.tabBtnList = tabs
       // 请求
+      this.params.type = this.goodListData.tabBtnList[0].type
       this.getGoodList(this.params)
       this.getPagePlanner('app-ghsdgye-02')
     }
@@ -490,72 +498,66 @@ export default {
 
     // @--S 推荐公司板块
     // 获取商品列表
-    getGoodList({ type = 0, page = 1, limit = 10 }) {
+    getGoodList(param) {
       this.more.loading = true
       // 1、处理参数和接口
-      const param = `?type=${type}&page=${page}&limit=${limit}`
-      const api = '/xdy-portal-product-api/aptitude/getRelatedRecommendations'
-      const cdn = 'https://microuag.dgg188.cn'
+      const url =
+        'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
       this.$axios
-        .get(cdn + api + param)
+        .get(newSpreadApi.trade_product_list, param)
         .then((res) => {
           this.more.loading = false
           // 1、获取商品后，处理商品数据
-          const data = res.data.list || []
-          if (res.code === 200 && res.data.list.length > 0) {
+          const data = res.data.records || []
+          debugger
+          if (res.code === 200 && res.data.records.length > 0) {
             data.forEach((obj) => {
               // 进行类型图片处理：截取数组第一个值得第一个字段
-              let type = ''
-              const index = obj.aptitudes[0].name.indexOf('-')
-              if (index > -1) {
-                type = obj.aptitudes[0].name.slice(0, index)
-              } else {
-                type = obj.aptitudes[0].name
-              }
+              const type = obj.id.substring(-1, 1)
               let img = ''
               switch (type) {
-                case '施工总承包': {
+                case 0: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/dmw1eqwpz5c0000.png'
                   break
                 }
-                case '施工专业承包': {
+                case 1: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/fnrnbp54bm00000.png'
                   break
                 }
-                case '其他资质': {
+                case 2: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/7k86445axyw0000.png'
                   break
                 }
-                case '勘察': {
+                case 3: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/8q40o2nqbmo0000.png'
                   break
                 }
-                case '施工劳务': {
+                case 4: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/43iipcpfwm20000.png'
                   break
                 }
-                case '工程设计': {
+                case 5: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/2p0q0971ccw0000.png'
                   break
                 }
-                case '房地产开发': {
+                case 6: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/d1hxxmkv5kg0000.png'
                   break
                 }
-                case '招标代理': {
+                case 7: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/22k7vyj0zy80000.png'
                   break
                 }
-                case '监理': {
+                case 8: {
                   img =
                     'https://cdn.shupian.cn/sp-pt/wap/images/7g003aqqas00000.png'
                   break
@@ -565,19 +567,17 @@ export default {
                     'https://cdn.shupian.cn/sp-pt/wap/images/2zqf2fldtmk0000.png'
                 }
               }
-
               // 全部数据处理
               const item = {
-                img,
+                img: obj.img || img,
                 industryName: '',
-                price: Number(obj.capital),
-                name: obj.comName,
-                tabs: this.getArrayItems(this.slogans, 3),
-                notes: [
-                  obj.cityName,
-                  obj.endYear,
-                  obj.safety === '1' ? '有安全许可证' : null,
-                ],
+                price: Number(obj.price),
+                name: obj.title,
+                tabs:
+                  obj.tabs.length !== 0
+                    ? obj.tabs
+                    : this.getArrayItems(this.slogans, 3),
+                notes: obj.desc,
               }
               this.goodList.push(item)
             })

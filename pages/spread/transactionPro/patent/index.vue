@@ -56,7 +56,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi } from '~/api/spread'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar.vue'
@@ -90,7 +90,7 @@ export default {
     // const locations = 'ad113250,ad113252,ad113257'
     const locations = 'ad113291,ad113290,ad113289,ad113288,ad113287'
     const code = 'nav100071'
-    // const centerCode = 'EnterpriseService'
+    const centerCode = 'CRISPS-C-ZLJY'
     const dataRes = defaultRes
     try {
       // const res = await $axios.get(`${url}?locationCodes=${locations}`)
@@ -98,7 +98,7 @@ export default {
         params: {
           locationCodes: locations,
           navCodes: code,
-          // productCenterCode: centerCode,
+          code: centerCode,
         },
       })
       console.log(res.message)
@@ -327,9 +327,12 @@ export default {
       // 列表导航
       dataNavBar: {
         tabBtnList: [
-          { name: '热销专利', type: 'patentStatuse=1' },
-          { name: '精选专利', type: 'patentType=2' },
-          { name: '特价专利', type: 'priceUpper=5000' },
+          // { name: '热销专利', type: 'patentStatuse=1' },
+          // { name: '精选专利', type: 'patentType=2' },
+          // { name: '特价专利', type: 'priceUpper=5000' },
+          { name: '热销专利', type: 'FL20201224136319' },
+          { name: '精选专利', type: 'FL20201224136319' },
+          { name: '特价专利', type: 'FL20201224136319' },
         ],
         // marks: [
         //   '医学医疗',
@@ -375,7 +378,7 @@ export default {
         'https://cdn.shupian.cn/sp-pt/wap/cs4dlk7fo800000.jpg',
       ],
       // 当前分类下标
-      params: { type: 'patentStatuse=1', index: 0 },
+      params: { type: 'FL20201224136319', index: 0 },
       // 当前页
       pageNum: 1,
     }
@@ -404,10 +407,12 @@ export default {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
     const resData = this.resultData
+    console.log(resData, 45645)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
         this.navList(resData.navs.nav100071 || [])
+        this.classListData(resData.classList || [])
         // this.productTitle(resData.productClassList || [])
         resData.adList.filter((elem) => {
           // 轮播
@@ -478,6 +483,10 @@ export default {
         })
       }
     },
+    // 导航选项
+    classListData(data) {
+      // console.log(data)
+    },
     // 轮播
     imageBannerData(data) {
       if (data.length !== 0) {
@@ -544,14 +553,14 @@ export default {
       this.more.loading = true
       const api = '/xdy-portal-product-api/patent/list'
       const cdn = 'https://microuag.dgg188.cn'
-      const params = `?${this.params.type}&pageSize=10&pageNum=${this.pageNum}`
+      const params = `?classCode=${this.params.type}&limit=10&start=${this.pageNum}`
       // 2、调用接口
       this.$axios
-        .get(cdn + api + params)
+        .get(newSpreadApi.trade_product_list + params)
         .then((res) => {
           // 调用回调函数处理数据
-          const result = res.data.list || []
-          if (result.length > 0 && res.code === 'SYS_0000') {
+          const result = res.data.records || []
+          if (result.length > 0 && res.code === 200) {
             this.more.loading = false
             result.forEach((elem) => {
               const tabs = [
@@ -575,23 +584,24 @@ export default {
               ]
               const random = parseInt(Math.random() * (tabs.length - 3) + 3)
               const obj = {
-                img: this.listImg[elem.patentType - 1], // 商品本身的图片
+                // img: this.listImg[elem.patentType - 1], // 商品本身的图片
+                img: elem.img.split(',')[1], // 商品本身的图片
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
-                price: elem.transferDiscountPrice, // 商品价格
-                name: elem.patentName, // 公司显示名称（有*号）
+                price: `${elem.price}`, // 商品价格
+                name: elem.title, // 公司显示名称（有*号）
                 tabs: [
                   `${tabs[random] || '人气产品'}`,
                   `${tabs[random + 1] || '资料齐全'}`,
                   `${tabs[random + 2] || '高咨询'}`,
                 ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
-                notes: [], // 以 | 字符分隔的注意，接口字段值
+                // notes: [], // 以 | 字符分隔的注意，接口字段值
               }
-              if (elem.patentTypeName) {
-                obj.notes.push(elem.patentTypeName)
-              }
-              if (elem.patentStatusName) {
-                obj.notes.push(elem.patentStatusName)
-              }
+              // if (elem.patentTypeName) {
+              //   obj.notes.push(elem.patentTypeName)
+              // }
+              // if (elem.patentStatusName) {
+              //   obj.notes.push(elem.patentStatusName)
+              // }
               this.goodList.push(obj)
             })
             if (result.length < 10) {

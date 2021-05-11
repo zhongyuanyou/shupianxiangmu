@@ -143,17 +143,6 @@ export default {
             '无经营',
             '发票',
           ],
-          planner: {
-            id: '7862495547640840192',
-            name: '张毅',
-            jobNum: '107547',
-            telephone: '18402858698',
-            imgSrc: '',
-          },
-          // 埋点数据
-          md: {
-            pageName: '',
-          },
         }
       },
     },
@@ -177,10 +166,7 @@ export default {
     more: {
       type: Object,
       default: () => {
-        return {
-          loading: false, // 加载更多按钮点击时，显示的loading加载
-          noMore: false, // 无更多加载数据
-        }
+        return {}
       },
     },
   },
@@ -227,7 +213,7 @@ export default {
 <style scoped lang="less">
 .my-component {
   width: 100%;
-  padding-bottom: 164px;
+  padding-bottom: 32px;
   .tab-curve::after {
     display: block;
     content: '';

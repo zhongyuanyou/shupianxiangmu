@@ -30,7 +30,7 @@
     </TabServiceItem>
 
     <!-- START 规划师-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner :page-planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
@@ -40,18 +40,20 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
 import Header from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.vue'
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
-import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
+import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem.vue'
 import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
 // import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 // import DggImCompany from '@/components/spread/DggImCompany'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
-import { chipSpread } from '@/api/spread'
+import BtnPlanner from '~/components/spread/common/BtnPlanner'
+// import { chipSpread } from '@/api/spread'
+import { chipSpread, plannerApi } from '~/api/spread'
 
 export default {
   components: {
@@ -70,7 +72,7 @@ export default {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
     try {
       // chipSpread.list
-      const res = await $axios.get(url, {
+      const res = await $axios.get(chipSpread.list, {
         params: {
           locationCodes: 'ad113246,ad113244,ad113281',
           navCodes: 'nav100059',
@@ -206,6 +208,20 @@ export default {
       ],
     }
   },
+  computed: {
+    // 将接受的state混合进组件局部计算属性
+    // 监听接受的state值
+    ...mapState({
+      currentCity: (state) => state.city.currentCity,
+      isInApp: (state) => state.app.isInApp,
+    }),
+  },
+  created() {
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
+    }
+  },
   mounted() {
     try {
       if (JSON.stringify(this.result.data) !== '{}') {
@@ -229,7 +245,6 @@ export default {
   },
   methods: {
     onChange(changeObj) {
-      console.log(changeObj, 111)
       this.changeState = changeObj
       // console.log(this.$refs.enterprise.initialize())
       this.$refs.enterprise.initialize(changeObj)
@@ -272,7 +287,6 @@ export default {
             activity.push(obj)
           })
           this.activityList = activity
-          console.log(this.activityList)
         }
         // banner广告位
         if (item.locationCode === 'ad113281') {
@@ -304,9 +318,63 @@ export default {
             giftBag.push(obj)
           })
           this.giftBagList = giftBag
-          console.log(this.giftBagList, 465)
         }
       })
+    },
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      // const url =
+      //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136341', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
     },
   },
   head() {
