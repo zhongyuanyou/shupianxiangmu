@@ -279,7 +279,7 @@ export default {
     if (process.client) {
       // 请求
       this.getPagePlanner('app-ghsdgye-02')
-      console.log(this.resultData)
+      console.log(this.resultData, 555)
     }
   },
   mounted() {
@@ -313,6 +313,7 @@ export default {
       const navs = []
       nav.forEach((item) => {
         const obj = {
+          url: item.url,
           img: item.navigationImageUrl,
           text: item.name,
           iosUrl: item.iosRoute,
