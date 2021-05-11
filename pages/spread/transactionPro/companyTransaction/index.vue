@@ -33,11 +33,11 @@
     <!-- END   表单-->
 
     <!-- START 热门行业-->
-    <HotIndustry :hotIndustry="hotIndustry" class="banner-margin" />
+    <HotIndustry :hot-industry="hotIndustry" class="banner-margin" />
     <!-- END   热门行业-->
 
     <!-- START 附带资产类型-->
-    <WithAssetsType :assetsList="assetsList" class="with-assets-type-margin" />
+    <WithAssetsType :assets-list="assetsList" class="with-assets-type-margin" />
     <!-- END   附带资产类型-->
 
     <!-- START 推荐公司-->
@@ -56,7 +56,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { plannerApi } from '@/api/spread'
+import { plannerApi, chipSpread } from '@/api/spread'
 import Header from '@/components/common/head/header'
 // import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
@@ -66,7 +66,6 @@ import Banner from '@/components/spread/transactionPro/common/Banner'
 import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry'
 import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType'
 import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany'
-import { chipSpread } from '@/api/spread'
 
 export default {
   name: 'Index',
@@ -279,7 +278,7 @@ export default {
     if (process.client) {
       // 请求
       this.getPagePlanner('app-ghsdgye-02')
-      console.log(this.resultData, 555)
+      console.log(this.resultData)
     }
   },
   mounted() {
@@ -313,7 +312,6 @@ export default {
       const navs = []
       nav.forEach((item) => {
         const obj = {
-          url: item.url,
           img: item.navigationImageUrl,
           text: item.name,
           iosUrl: item.iosRoute,
@@ -433,16 +431,17 @@ export default {
         if (url.indexOf('http') > -1) {
           window.location.href = url
         }
-      } else {
-        const planner = this.pagePlanner
-        this.$root.$emit(
-          'openIMM',
-          planner.id,
-          planner.name || '',
-          planner.jobNum || '',
-          planner.imgSrc || ''
-        )
       }
+      //  else {
+      //   const planner = this.pagePlanner
+      //   this.$root.$emit(
+      //     'openIMM',
+      //     planner.id,
+      //     planner.name || '',
+      //     planner.jobNum || '',
+      //     planner.imgSrc || ''
+      //   )
+      // }
     },
 
     // @--获取规划师

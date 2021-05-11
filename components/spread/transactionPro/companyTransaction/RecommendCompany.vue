@@ -98,7 +98,7 @@
 
       <!-- S 无更多数据 -->
       <div
-        v-if="allListTotal === goodList.length && more.length > 0"
+        v-if="allListTotal === goodList.length && goodList.length > 0"
         class="no-more-data"
       >
         无更多数据啦
@@ -113,6 +113,7 @@ import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
 import TabCurve from '~/components/spread/transactionPro/common/TabCurve'
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
+import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
 import GoodItem from '~/components/spread/transactionPro/companyTransaction/GoodItem'
 import { newSpreadApi } from '@/api/spread'
 
@@ -124,6 +125,7 @@ export default {
     [Loading.name]: Loading,
     TabCurve,
     GoodItem,
+    Fruitless,
   },
   mixins: [adJumpHandle],
   props: {
