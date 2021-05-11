@@ -84,7 +84,6 @@ export default {
           code: centerCode,
         },
       })
-      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -564,7 +563,7 @@ export default {
             data.forEach((obj) => {
               // 全部数据处理
               const item = {
-                img: obj.img,
+                img: obj.img.split(',')[1],
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
