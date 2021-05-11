@@ -557,10 +557,17 @@ export default {
       this.more.loading = true
       const api = '/xdy-portal-product-api/patent/list'
       const cdn = 'https://microuag.dgg188.cn'
-      const params = `?classCode=${this.params.type}&limit=10&start=${this.pageNum}`
+      // const params = `?classCode=${this.params.type}&limit=10&start=${this.pageNum}`
+      const param = {
+        classCodes: this.params.type,
+        limit: '10',
+        start: this.pageNum,
+      }
       // 2、调用接口
       this.$axios
-        .get(newSpreadApi.trade_product_list + params)
+        .get(newSpreadApi.trade_product_list, {
+          params: param,
+        })
         .then((res) => {
           // 调用回调函数处理数据
           const result = res.data.records || []
@@ -621,6 +628,8 @@ export default {
           this.more.noMore = true
         })
         .catch((err) => {
+          this.more.loading = false
+          this.more.noMore = true
           console.log(err)
         })
     },

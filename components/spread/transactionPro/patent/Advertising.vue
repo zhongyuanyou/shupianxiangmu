@@ -206,7 +206,7 @@ export default {
     padding: 24px 20px 30px 20px;
     display: flex;
     flex-direction: column;
-    width: calc(@spread-page-width - 30px);
+    width: calc(@spread-page-width - 40px);
     margin: 0 auto;
     > div {
       display: flex;
@@ -216,11 +216,11 @@ export default {
       a {
         display: inline-block;
         height: 182px;
-        border-radius: 8px;
+        // border-radius: 8px;
         .sp-image {
           width: 215px;
           height: 182px;
-          border: 1px solid rgba(205, 205, 205, 0.3);
+          // border: 1px solid rgba(205, 205, 205, 0.3);
           // box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.08);
         }
       }
@@ -235,7 +235,7 @@ export default {
     padding: 30px 17px 24px 20px;
     display: flex;
     flex-direction: column;
-    width: calc(@spread-page-width - 30px);
+    width: calc(@spread-page-width - 40px);
     margin: 0 auto;
     margin-top: 20px;
     /deep/.content {
@@ -247,8 +247,8 @@ export default {
         margin-right: 16px;
         .sp-image {
           width: 327px;
-          background: linear-gradient(90deg, #f8f8f8, #faf5ed);
-          border-radius: 8px;
+          // background: linear-gradient(90deg, #f8f8f8, #faf5ed);
+          // border-radius: 8px;
         }
       }
       > div:last-child {

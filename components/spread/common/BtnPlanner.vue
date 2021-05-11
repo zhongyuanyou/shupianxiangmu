@@ -79,8 +79,8 @@ export default {
   height: 136px;
   // border: 1px solid red;
   position: fixed;
-  bottom: 100px;
-  right: 40px;
+  bottom: 148px;
+  right: 32px;
   &_item {
     position: relative;
     width: 100%;
@@ -132,6 +132,7 @@ export default {
         line-height: 19px;
         opacity: 0.6;
         display: inline-block;
+        margin: 0px 4px;
         &:after {
           content: '';
           display: inline-block;
