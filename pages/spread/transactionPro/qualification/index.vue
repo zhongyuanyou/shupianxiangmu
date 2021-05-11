@@ -57,7 +57,7 @@
 <script>
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-import { chipSpread, plannerApi, trading } from '~/api/spread'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
 import Header from '@/components/common/head/header'
 // import DggImCompany from '@/components/spread/DggImCompany'
@@ -498,17 +498,14 @@ export default {
 
     // @--S 推荐公司板块
     // 获取商品列表
-    getGoodList({ type = this.firstScreen, page = 1, limit = 15 }) {
+    getGoodList(param) {
       this.more.loading = true
       // 1、处理参数和接口
-      const param = `?type=${type}&page=${page}&limit=${limit}`
-      const api = '/xdy-portal-product-api/aptitude/getRelatedRecommendations'
-      const cdn = 'https://microuag.dgg188.cn'
       const url =
         'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
       this.$axios
-        .get(url + param)
+        .get(newSpreadApi.trade_product_list, param)
         .then((res) => {
           this.more.loading = false
           // 1、获取商品后，处理商品数据
@@ -570,7 +567,6 @@ export default {
                     'https://cdn.shupian.cn/sp-pt/wap/images/2zqf2fldtmk0000.png'
                 }
               }
-
               // 全部数据处理
               const item = {
                 img: obj.img || img,

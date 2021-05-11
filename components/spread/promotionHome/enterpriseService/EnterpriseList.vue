@@ -176,7 +176,7 @@ export default {
       const type = item.code
       // 2、调用接口
       this.$axios
-        .get(newSpreadApi.service_product_list, {
+        .get(newSpreadApi.trade_product_list, {
           params: {
             pageNumber: this.pageNumber,
             pageSize: '15',

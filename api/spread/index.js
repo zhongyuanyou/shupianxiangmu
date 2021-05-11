@@ -33,9 +33,7 @@ const recPlaner =
 const productListApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}nk/newChipSpread/v1/service_product_list.do`,
 }
-const trading = {
-  list: `${CHIPS_WAP_SPREAD_BASE_URL}nk/newChipSpread//v1/trade_product_list.do`,
-}
+
 export {
   spreadApi,
   plannerApi,
@@ -44,5 +42,4 @@ export {
   chipSpread,
   newSpreadApi,
   productListApi,
-  trading,
 }

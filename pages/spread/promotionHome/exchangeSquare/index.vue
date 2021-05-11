@@ -245,7 +245,6 @@ export default {
   },
   methods: {
     onChange(changeObj) {
-      console.log(changeObj, 111)
       this.changeState = changeObj
       // console.log(this.$refs.enterprise.initialize())
       this.$refs.enterprise.initialize(changeObj)
@@ -288,7 +287,6 @@ export default {
             activity.push(obj)
           })
           this.activityList = activity
-          console.log(this.activityList)
         }
         // banner广告位
         if (item.locationCode === 'ad113281') {
@@ -320,7 +318,6 @@ export default {
             giftBag.push(obj)
           })
           this.giftBagList = giftBag
-          console.log(this.giftBagList, 465)
         }
       })
     },
@@ -337,7 +334,6 @@ export default {
       } else {
         areaCode = this.currentCity.code
       }
-      console.log(567984)
       // const url =
       //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
       try {
@@ -374,7 +370,6 @@ export default {
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,
               }
-              console.log(this.pagePlanner, 4654)
             }
           })
       } catch (error) {
