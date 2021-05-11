@@ -30,6 +30,7 @@
           ref="enterprise"
           :default-list="defaultList"
           :change-state="changeState"
+          :titel-list="titleName"
         />
       </template>
     </TabServiceItem>
@@ -240,6 +241,7 @@ export default {
           titleList.push(obj)
         })
         this.titleName = titleList
+        this.changeState = titleList[0]
         this.navDetail(this.result.data.navs.nav100059)
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
@@ -253,7 +255,6 @@ export default {
     // 搜索
     clickInputHandle(e) {
       window.location.href = 'https://m.shupian.cn/search/'
-      console.log(this.$router)
     },
     onChange(changeObj) {
       this.changeState = changeObj

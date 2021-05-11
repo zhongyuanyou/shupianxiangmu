@@ -6,7 +6,7 @@
       :error.sync="error"
       finished-text="没有更多了"
       error-text=""
-      offset="100"
+      offset="20"
       @load="onLoad"
     >
       <div class="content">
@@ -128,12 +128,18 @@ export default {
     changeState: {
       type: Object,
       default: () => {
-        return {
-          code: 'FL20201224136019',
-          name: '许可证',
-          type: 0,
-        }
+        return {}
       },
+    },
+    titelList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+    code: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -144,27 +150,33 @@ export default {
       pageNumber: 1,
       list: [],
       classCode: '', // 分类code
+      check: false,
+      params: {},
     }
   },
+  created() {},
   mounted() {
     // 初始化推介数据
     // this.list = this.defaultList
     // this.initialize(this.changeState)
+    // this.classCode = this.titelList[0].code
+    this.params = this.changeState
   },
   methods: {
+    onLoad() {
+      // // 异步更新数据
+      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      this.list.length === 0 && (this.pageNumber = 1)
+      this.selectTab()
+    },
     initialize(changeObj) {
-      this.classCode = changeObj.type
+      this.params = changeObj
+      this.$forceUpdate()
       this.pageNumber = 1
       this.list = []
       this.finished = false
       this.loading = true
-      this.selectTab(changeObj)
-    },
-    onLoad(e) {
-      // // 异步更新数据
-      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      this.list.length === 0 && (this.pageNumber = 1)
-      this.selectTab(this.changeState)
+      this.selectTab()
     },
     onMore(id) {
       let base = ''
@@ -174,17 +186,16 @@ export default {
       window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.classCode}&productId=${id}`
     },
     // 请求数据
-    selectTab(item) {
+    selectTab() {
       // 当前无数据不执行
       if (this.finished && !this.loading) return
-      const type = item.code
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.trade_product_list, {
           params: {
-            pageNumber: this.pageNumber,
-            pageSize: '15',
-            classCodes: this.classCode,
+            start: this.pageNumber,
+            limit: '15',
+            classCode: this.params.code,
           },
         })
         .then((res) => {
