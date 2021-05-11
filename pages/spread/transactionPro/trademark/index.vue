@@ -375,9 +375,9 @@ export default {
       highQualityList: [], // 优质商标列表
       specialOfferList: [], // 特价急售商标列表
       paramData: {
-        page: 1,
+        start: 1,
         limit: 15,
-        type: 0,
+        classCode: 0,
       },
       firstScreen: '',
     }
@@ -400,7 +400,7 @@ export default {
         })
       this.goodListData.tabBtnList = tabs
       // 请求
-      this.paramData.type = this.goodListData.tabBtnList[0].type
+      this.paramData.classCode = this.goodListData.tabBtnList[0].type
       this.getGoodList(this.paramData)
     }
   },
@@ -514,8 +514,9 @@ export default {
 
     swipeChange(item) {
       this.params.type = item.type
-      this.paramData.page = 1
+      this.paramData.start = 1
       this.goodList = []
+      this.more.noMore = false
       this.getGoodList(this.paramData)
     },
 
@@ -524,7 +525,7 @@ export default {
     },
     // 获取更多
     getMore() {
-      this.paramData.page++
+      this.paramData.start++
       this.getGoodList(this.paramData)
     },
     // 随机生成三条数据
@@ -553,7 +554,7 @@ export default {
         'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
       this.$axios
-        .get(newSpreadApi.trade_product_list, param)
+        .get(newSpreadApi.trade_product_list, { params: param })
         .then((res) => {
           this.more.loading = false
           // 1、获取商品后，处理商品数据

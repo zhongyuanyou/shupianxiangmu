@@ -311,7 +311,7 @@ export default {
       firstScreen: '',
       // @--S 推荐公司板块
       params: {
-        page: 1,
+        start: 1,
         limit: 15,
         classCode: 0,
       },
@@ -499,9 +499,8 @@ export default {
       // 2、调用接口
       // newSpreadApi.trade_product_list
       this.$axios
-        .get(url, { params: param })
+        .get(newSpreadApi.trade_product_list, { params: param })
         .then((res) => {
-          console.log(res)
           this.more.loading = false
           // 1、获取商品后，处理商品数据
           const data = res.data.records || []
@@ -613,13 +612,14 @@ export default {
     // swipe当前项改变时
     swipeChange(option) {
       this.goodList = []
-      this.params.page = 1
+      this.params.start = 1
       this.params.classCode = option.type
+      this.more.noMore = false
       this.getGoodList(this.params)
     },
     // 获取更多按钮
     getMore() {
-      this.params.page++
+      this.params.start++
       this.getGoodList(this.params)
     },
     // 推挤规划师

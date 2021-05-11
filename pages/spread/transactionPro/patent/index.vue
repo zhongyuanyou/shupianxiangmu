@@ -330,9 +330,9 @@ export default {
           // { name: '热销专利', type: 'patentStatuse=1' },
           // { name: '精选专利', type: 'patentType=2' },
           // { name: '特价专利', type: 'priceUpper=5000' },
-          { name: '热销专利', type: 'FL20201224136319' },
-          { name: '精选专利', type: 'FL20201224136319' },
-          { name: '特价专利', type: 'FL20201224136319' },
+          { name: '热销专利', type: '' },
+          { name: '精选专利', type: '' },
+          { name: '特价专利', type: '' },
         ],
         // marks: [
         //   '医学医疗',
@@ -394,7 +394,7 @@ export default {
   created() {
     if (process.client) {
       // 请求
-      this.getGoodList()
+
       this.getPagePlanner('app-ghsdgye-02')
     }
   },
@@ -407,7 +407,6 @@ export default {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
     const resData = this.resultData
-    console.log(resData, 45645)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
@@ -440,6 +439,7 @@ export default {
     } catch (error) {
       console.log(error)
     }
+    this.getGoodList()
   },
   methods: {
     ...mapActions({
@@ -482,6 +482,7 @@ export default {
     // 导航选项
     classListData(data) {
       if (data.length !== 0) {
+        this.params.type = data[0].ext1
         this.dataNavBar.tabBtnList = data.map((elem, index) => {
           return { name: elem.name, type: elem.ext1 }
         })
@@ -550,11 +551,8 @@ export default {
     // 请求列表参数
     getGoodList() {
       this.more.loading = true
-      const api = '/xdy-portal-product-api/patent/list'
-      const cdn = 'https://microuag.dgg188.cn'
-      // const params = `?classCode=${this.params.type}&limit=10&start=${this.pageNum}`
       const param = {
-        classCodes: this.params.type,
+        classCode: this.params.type,
         limit: '15',
         start: this.pageNum,
       }
@@ -608,6 +606,7 @@ export default {
                         `${tabs[random + 2] || '高咨询'}`,
                       ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
                 notes: elem.desc, // 以 | 字符分隔的注意，接口字段值
+                id: elem.id,
               }
               // if (elem.patentTypeName) {
               //   obj.notes.push(elem.patentTypeName)
