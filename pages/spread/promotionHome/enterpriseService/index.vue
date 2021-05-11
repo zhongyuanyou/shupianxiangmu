@@ -527,7 +527,7 @@ export default {
           subheading: elem.materialList[0].materialDescription.split(',')[1],
           label: labelData[index] || '',
           bgImg: elem.materialList[0].materialUrl,
-          url: '',
+          url: elem.materialList[0].materialLink,
         }
       })
     },
@@ -539,7 +539,7 @@ export default {
             title: elem.materialList[0].materialDescription.split(',')[0],
             subheading: elem.materialList[0].materialDescription.split(',')[1],
             img: elem.materialList[0].materialUrl,
-            url: '',
+            url: elem.materialList[0].materialLink,
           }
         })
       }
