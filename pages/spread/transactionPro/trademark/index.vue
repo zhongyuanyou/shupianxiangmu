@@ -562,7 +562,9 @@ export default {
             data.forEach((obj) => {
               // 全部数据处理
               const item = {
-                img: obj.img.split(',')[1],
+                img:
+                  obj.img.split(',')[1] ||
+                  'https://cdn.shupian.cn/sp-pt/wap/images/8n7yuuz26io0000.jpg?x-oss-process=image/resize,m_fill,w_750,h_520,limit_0',
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
