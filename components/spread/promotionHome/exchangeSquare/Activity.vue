@@ -5,7 +5,7 @@
         v-for="(item, index) in activityList"
         :key="index"
         class="active-content"
-        @click="prompt"
+        @click="prompt(item.url)"
       >
         <a href="javascript:;">
           <span class="name">{{ item.name }}</span>
@@ -31,8 +31,10 @@ export default {
     },
   },
   methods: {
-    prompt() {
-      Toast('功能正在建设中，敬请期待')
+    prompt(url) {
+      if (url) {
+        url.indexOf('http') > -1 && (window.location.href = url)
+      }
     },
   },
 }

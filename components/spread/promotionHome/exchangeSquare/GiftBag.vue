@@ -3,7 +3,7 @@
     <div class="gift-bag-box">
       <div class="giftbag-box-title">
         <div class="giftbag-box-title-left">新人专属礼</div>
-        <a class="giftbag-box-title-right" @click="prompt">
+        <a class="giftbag-box-title-right" @click="prompt(giftBagList[0].url)">
           <span>更多</span>
           <my-icon
             class="next-icon"
@@ -17,7 +17,7 @@
         <div
           class="giftbag-content-left"
           :style="{ backgroundImage: 'url(' + bg + ')' }"
-          @click="prompt"
+          @click="prompt(giftBagList[0].url)"
         >
           <!-- <span class="title">新人红包</span>
           <span class="title-describe">立享多重优惠</span> -->
@@ -27,7 +27,7 @@
             v-for="item in giftBagList"
             :key="item.code"
             class="product"
-            @click="prompt"
+            @click="prompt(item.url)"
           >
             <a href="javascript:;">
               <div class="img-box"><img :src="item.img" alt="" /></div>
@@ -62,8 +62,10 @@ export default {
     }
   },
   methods: {
-    prompt() {
-      Toast('功能正在建设中，敬请期待')
+    prompt(url) {
+      if (url) {
+        url.indexOf('http') > -1 && (window.location.href = url)
+      }
     },
   },
 }
