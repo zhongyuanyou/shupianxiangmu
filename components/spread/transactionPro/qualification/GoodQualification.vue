@@ -82,16 +82,7 @@ export default {
   },
   methods: {
     jumpLink(url) {
-      if (url) {
-        if (url) {
-          if (url.indexOf('http') > -1) {
-            window.location.href = url
-          }
-        }
-      }
-      // else {
-      //   this.$parent.jumpLink(url)
-      // }
+      this.$parent.jumpLink(url)
     },
   },
 }

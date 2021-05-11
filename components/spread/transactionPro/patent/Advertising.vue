@@ -167,12 +167,13 @@ export default {
   },
   methods: {
     onMessage(url, e) {
-      // 待改
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
+      this.$parent.jumpLink(url)
     },
   },
 }
