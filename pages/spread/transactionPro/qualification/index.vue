@@ -313,7 +313,7 @@ export default {
       params: {
         page: 1,
         limit: 15,
-        type: 0,
+        classCode: 0,
       },
       // 选项卡、规划师
       goodListData: {
@@ -375,7 +375,7 @@ export default {
         })
       this.goodListData.tabBtnList = tabs
       // 请求
-      this.params.type = this.goodListData.tabBtnList[0].type
+      this.params.classCode = this.goodListData.tabBtnList[0].type
       this.getGoodList(this.params)
       this.getPagePlanner('app-ghsdgye-02')
     }
@@ -503,9 +503,11 @@ export default {
       const url =
         'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
+      // newSpreadApi.trade_product_list
       this.$axios
-        .get(newSpreadApi.trade_product_list, param)
+        .get(url, { params: param })
         .then((res) => {
+          console.log(res)
           this.more.loading = false
           // 1、获取商品后，处理商品数据
           const data = res.data.records || []
@@ -618,7 +620,7 @@ export default {
     swipeChange(option) {
       this.goodList = []
       this.params.page = 1
-      this.params.type = option.type
+      this.params.classCode = option.type
       this.getGoodList(this.params)
     },
     // 获取更多按钮
