@@ -215,38 +215,38 @@ export default {
 
     // @--滚动浏览埋点
     // 商品已经在页面可视区显示是，手动埋点
-    scrollMd(event) {
-      this.scrollFunc()
-      if (this.scrollDirection === 'down') {
-        // 页面向下滚动要做的事情
-        const clientHeight = document.documentElement.clientHeight
-        const eleTop = this.$refs.goodItem.getBoundingClientRect().top
-        const goodHeight = this.$refs.goodItem.getBoundingClientRect().height
-        if (
-          !this.isMd &&
-          eleTop > 0 &&
-          clientHeight - eleTop > goodHeight + 50
-        ) {
-          console.log(clientHeight - eleTop)
-          // 当元素最顶部 距离小于 页面最顶部时
-          // 进行一次埋点
-          window.spptMd.spptTrackRow('p_commodityVisit', {
-            name: `推荐商品浏览`,
-            track_code: 'SPTG000004',
-            commodity_type: this.good.compantType, // 商品类型
-            commodity_number: this.good.companyId, // 商品编号
-            commodity_name: this.good.companyName, // 商品名称
-            n_now_price: this.good.transferPrice, // 商品售价
-          })
-          this.isMd = true
-          this.$emit('update:isMd', true)
-        }
-      } else if (this.scrollDirection === 'up') {
-        // 页面向上滚动要做的事情
-        // console.log('up')
-        this.isMd = false
-      }
-    },
+    // scrollMd(event) {
+    //   this.scrollFunc()
+    //   if (this.scrollDirection === 'down') {
+    //     // 页面向下滚动要做的事情
+    //     const clientHeight = document.documentElement.clientHeight
+    //     const eleTop = this.$refs.goodItem.getBoundingClientRect().top
+    //     const goodHeight = this.$refs.goodItem.getBoundingClientRect().height
+    //     if (
+    //       !this.isMd &&
+    //       eleTop > 0 &&
+    //       clientHeight - eleTop > goodHeight + 50
+    //     ) {
+    //       console.log(clientHeight - eleTop)
+    //       // 当元素最顶部 距离小于 页面最顶部时
+    //       // 进行一次埋点
+    //       window.spptMd.spptTrackRow('p_commodityVisit', {
+    //         name: `推荐商品浏览`,
+    //         track_code: 'SPTG000004',
+    //         commodity_type: this.good.compantType, // 商品类型
+    //         commodity_number: this.good.companyId, // 商品编号
+    //         commodity_name: this.good.companyName, // 商品名称
+    //         n_now_price: this.good.transferPrice, // 商品售价
+    //       })
+    //       this.isMd = true
+    //       this.$emit('update:isMd', true)
+    //     }
+    //   } else if (this.scrollDirection === 'up') {
+    //     // 页面向上滚动要做的事情
+    //     // console.log('up')
+    //     this.isMd = false
+    //   }
+    // },
     // 滚动时判断滚动方向：向上、向下、向左、向右
     scrollFunc() {
       if (typeof this.scrollAction.x === 'undefined') {
