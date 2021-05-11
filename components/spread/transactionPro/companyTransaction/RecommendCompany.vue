@@ -45,7 +45,7 @@
             <!-- E 推荐内容滚动区 -->
 
             <!-- S 推荐商品列表 -->
-            <div ref="goodList" class="goods-list">
+            <div v-if="goodList.length > 0" ref="goodList" class="goods-list">
               <!-- S 空屏骨架 -->
               <sp-skeleton
                 v-for="val in 10"
@@ -68,6 +68,7 @@
                 :good="good"
               />
             </div>
+            <Fruitless v-else />
             <!-- E 推荐商品列表 -->
 
             <!-- S 商品加载提示 -->
@@ -96,7 +97,10 @@
       <!-- E 查看更多按钮 -->
 
       <!-- S 无更多数据 -->
-      <div v-if="allListTotal === goodList.length" class="no-more-data">
+      <div
+        v-if="allListTotal === goodList.length && more.length > 0"
+        class="no-more-data"
+      >
         无更多数据啦
       </div>
       <!-- E 无更多数据 -->
@@ -113,14 +117,6 @@ import GoodItem from '~/components/spread/transactionPro/companyTransaction/Good
 import { newSpreadApi } from '@/api/spread'
 
 export default {
-  props: {
-    tabList: {
-      type: Array,
-      default: () => {
-        return []
-      },
-    },
-  },
   components: {
     [Swipe.name]: Swipe,
     [swipeItem.name]: swipeItem,
@@ -130,6 +126,14 @@ export default {
     GoodItem,
   },
   mixins: [adJumpHandle],
+  props: {
+    tabList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
     return {
       // @--半圆选项菜单列表

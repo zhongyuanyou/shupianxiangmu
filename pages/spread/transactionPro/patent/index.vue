@@ -485,7 +485,11 @@ export default {
     },
     // 导航选项
     classListData(data) {
-      // console.log(data)
+      if (data.length !== 0) {
+        this.dataNavBar.tabBtnList = data.map((elem, index) => {
+          return { name: elem.name, type: elem.ext1 }
+        })
+      }
     },
     // 轮播
     imageBannerData(data) {
@@ -572,7 +576,7 @@ export default {
                 '资料齐全',
                 '可随时交易',
                 '热销商品',
-                '签署出售协议',
+                // '签署出售协议',
                 '陪同交易',
                 '超高性价',
                 '明码标价',
@@ -602,13 +606,16 @@ export default {
               // if (elem.patentStatusName) {
               //   obj.notes.push(elem.patentStatusName)
               // }
+              if (result.length < 10) {
+                this.more.loading = false
+                this.more.noMore = true
+              }
               this.goodList.push(obj)
             })
-            if (result.length < 10) {
-              this.more.noMore = true
-            }
-            console.log(this.goodList)
+            return
           }
+          this.more.loading = false
+          this.more.noMore = true
         })
         .catch((err) => {
           console.log(err)

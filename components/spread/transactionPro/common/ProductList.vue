@@ -49,7 +49,7 @@
             <!-- E 推荐内容滚动区 -->
 
             <!-- S 推荐商品列表 -->
-            <div ref="goodList" class="goods-list">
+            <div v-if="goodList.length > 0" ref="goodList" class="goods-list">
               <!-- S 空屏骨架 -->
               <sp-skeleton
                 v-for="val in 10"
@@ -73,6 +73,7 @@
                 :good="good"
               />
             </div>
+            <Fruitless v-else />
             <!-- E 推荐商品列表 -->
 
             <!-- S 商品加载提示 -->
@@ -97,7 +98,9 @@
       <!-- E 查看更多按钮 -->
 
       <!-- S 无更多数据 -->
-      <div v-if="more.noMore" class="no-more-data">无更多数据啦</div>
+      <div v-if="more.noMore && more.length > 0" class="no-more-data">
+        无更多数据啦
+      </div>
       <!-- E 无更多数据 -->
     </div>
   </div>
@@ -108,6 +111,7 @@ import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
 import TabCurve from '~/components/spread/transactionPro/common/TabCurve.vue'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import GoodItem from '~/components/spread/transactionPro/common/ProductItem'
+import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
 export default {
   components: {
     [Swipe.name]: Swipe,
@@ -116,6 +120,7 @@ export default {
     [Loading.name]: Loading,
     TabCurve,
     GoodItem,
+    Fruitless,
   },
   mixins: [adJumpHandle],
   props: {

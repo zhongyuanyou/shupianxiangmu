@@ -577,9 +577,12 @@ export default {
             })
             // 2、当展示的商品列表和商品总条数相等时，显示'无更多数据啦'
             if (this.goodList.length === res.data.total) {
+              this.more.loading = false
               this.more.noMore = true
             }
           }
+          this.more.loading = false
+          this.more.noMore = true
         })
         .catch((err) => {
           console.log(err)
