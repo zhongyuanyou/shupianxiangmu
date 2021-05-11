@@ -279,7 +279,7 @@ export default {
     if (process.client) {
       // 请求
       this.getPagePlanner('app-ghsdgye-02')
-      console.log(this.resultData)
+      console.log(this.resultData, 555)
     }
   },
   mounted() {
@@ -313,6 +313,7 @@ export default {
       const navs = []
       nav.forEach((item) => {
         const obj = {
+          url: item.url,
           img: item.navigationImageUrl,
           text: item.name,
           iosUrl: item.iosRoute,
@@ -430,10 +431,7 @@ export default {
     jumpLink(url) {
       if (url) {
         if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
+          window.location.href = url
         }
       } else {
         const planner = this.pagePlanner
