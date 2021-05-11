@@ -52,7 +52,7 @@ import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem.vue'
-import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
+import EnterpriseList from '@/components/spread/promotionHome/exchangeSquare/EnterpriseList.vue'
 // import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 // import DggImCompany from '@/components/spread/DggImCompany'

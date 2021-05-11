@@ -447,7 +447,6 @@ export default {
     // this.onChange({ type: 1 })
     // 处理后台数据
     const resData = this.resultData
-    console.log(resData)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航

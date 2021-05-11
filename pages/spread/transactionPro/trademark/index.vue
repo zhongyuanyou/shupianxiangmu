@@ -571,6 +571,7 @@ export default {
                     ? obj.tabs
                     : this.getArrayItems(this.slogans, 3),
                 notes: obj.desc,
+                id: obj.id,
               }
               this.goodList.push(item)
             })
@@ -586,6 +587,8 @@ export default {
         })
         .catch((err) => {
           console.log(err)
+          this.more.loading = false
+          this.more.noMore = true
         })
     },
     jumpLink(url) {
