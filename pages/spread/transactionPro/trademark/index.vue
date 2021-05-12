@@ -513,7 +513,7 @@ export default {
     },
 
     swipeChange(item) {
-      this.params.type = item.type
+      this.paramData.classCode = item.type
       this.paramData.start = 1
       this.goodList = []
       this.more.noMore = false
