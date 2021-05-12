@@ -137,13 +137,7 @@ export default {
       ],
       marginTop: 0,
       // 页面规划师
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
 
       // 底部规划师埋点
       fixedMd: {
@@ -254,6 +248,33 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
+      if (this.isInApp) {
+        const iOSRouter = {
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
       window.location.href = 'https://m.shupian.cn/search/'
     },
     onChange(changeObj) {
