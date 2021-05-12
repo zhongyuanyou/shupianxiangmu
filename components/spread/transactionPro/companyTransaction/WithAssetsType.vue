@@ -90,7 +90,7 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: calc(@spread-page-width - 30px);
+  width: calc(@spread-page-width - 40px);
   margin: 0 auto;
   background: #ffffff;
   border-radius: 24px;

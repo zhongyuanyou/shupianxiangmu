@@ -52,7 +52,7 @@ export default {
     // 背景颜色
     bgColor: {
       type: String,
-      default: '#fff',
+      default: '#f5f5f5',
     },
   },
   methods: {

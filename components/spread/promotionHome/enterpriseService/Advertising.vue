@@ -9,7 +9,7 @@
             v-md-map
             v-md:webClick
             data-name="工商注册_服务介绍_展开更多"
-            @click="onMore('')"
+            @click="onMore(gift[0].url)"
             >更多
             <my-icon name="list_ic_next" size="0.14rem"></my-icon>
           </span>
@@ -17,7 +17,7 @@
       </div>
       <div class="exclusive-floor-item">
         <!-- 红包 -->
-        <div class="event" @click="onMore('')">
+        <div class="event">
           <!-- <p class="event-title">新人红包</p>
           <p class="event-content">多重优惠</p> -->
         </div>
@@ -46,7 +46,7 @@
         v-for="(item, proKey) of proDiscounts"
         :key="proKey"
         class="discounts-item"
-        @click="onMore('')"
+        @click="onMore(item.url)"
       >
         <div class="title">
           {{ item.proTitle }}
@@ -82,7 +82,7 @@
         v-for="(introduces, proKey) of introduce"
         :key="proKey"
         class="introduce-item"
-        @click="onMore('')"
+        @click="onMore(introduces.url)"
       >
         <div class="introduce-title">{{ introduces.title }}</div>
         <div class="introduce-subheading">{{ introduces.subheading }}</div>
@@ -190,18 +190,20 @@ export default {
   // },
   methods: {
     onMore(url) {
-      if (url !== '') {
-        window.location.href = url
-      } else {
-        Toast('功能正在建设中，敬请期待')
-        // this.$root.$emit(
-        //   'openIMM',
-        //   this.listCount[index].id,
-        //   this.listCount[index].name,
-        //   this.listCount[index].jobNum,
-        //   this.listCount[index].imgSrc
-        // )
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
       }
+      this.$parent.jumpLink(url)
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //   }
+      // } else {
+      //   Toast('功能正在建设中，敬请期待')
+      // }
     },
     onServe() {
       Toast('功能正在建设中，敬请期待')

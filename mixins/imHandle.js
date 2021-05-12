@@ -14,6 +14,7 @@ export default {
       userId: (state) => state.user.userId,
       userType: (state) => state.user.userType,
       imExample: (state) => state.im.imExample, // IM 实例
+      isInApp: (state) => state.app.isInApp,
     }),
   },
   methods: {

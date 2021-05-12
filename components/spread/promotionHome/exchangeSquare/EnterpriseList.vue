@@ -6,7 +6,7 @@
       :error.sync="error"
       finished-text="没有更多了"
       error-text=""
-      offset="100"
+      offset="20"
       @load="onLoad"
     >
       <div class="content">
@@ -128,12 +128,18 @@ export default {
     changeState: {
       type: Object,
       default: () => {
-        return {
-          code: 'FL20201224136019',
-          name: '许可证',
-          type: 0,
-        }
+        return {}
       },
+    },
+    titelList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+    code: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -143,56 +149,57 @@ export default {
       error: false,
       pageNumber: 1,
       list: [],
-      defaultState: {},
+      classCode: '', // 分类code
+      check: false,
+      params: {},
     }
   },
+  created() {},
   mounted() {
     // 初始化推介数据
     // this.list = this.defaultList
     // this.initialize(this.changeState)
-    this.defaultState = this.changeState
+    // this.classCode = this.titelList[0].code
+    this.params = this.changeState
   },
   methods: {
+    onLoad() {
+      this.params = this.changeState
+      // // 异步更新数据
+      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      this.list.length === 0 && (this.pageNumber = 1)
+      this.selectTab()
+    },
     initialize(changeObj) {
+      this.params = changeObj
       this.pageNumber = 1
       this.list = []
       this.finished = false
       this.loading = true
-      this.defaultState = this.changeState
-      // this.selectTab()
       this.onLoad()
-    },
-    onLoad(e) {
-      // // 异步更新数据
-      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      this.defaultState = this.changeState
-      this.list.length === 0 && (this.pageNumber = 1)
-      this.selectTab()
     },
     onMore(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.classCode}&productId=${id}`
     },
     // 请求数据
-    selectTab(item) {
-      console.log(this.defaultState, '请求数据')
+    selectTab() {
+      console.log(this.params, '请求数据')
       // 当前无数据不执行
       if (this.finished && !this.loading) return
-      const type = this.defaultState.type
       // 2、调用接口
       this.$axios
-        .get(newSpreadApi.service_product_list, {
+        .get(newSpreadApi.trade_product_list, {
           params: {
-            pageNumber: this.pageNumber,
-            pageSize: '15',
-            classCodes: type,
+            start: this.pageNumber,
+            limit: '15',
+            classCode: this.params.code,
           },
         })
         .then((res) => {
-          console.log(res, 456)
           // 调用回调函数处理数据
           const result = res.data.records
           if (res.code !== 200) {
@@ -201,10 +208,6 @@ export default {
             this.finished = true
           }
           if (res.code === 200 && result.length !== 0) {
-            // if (res.data.pageNumber === 1) {
-            //   // console.log(res.data.pageNumber, this.defaultState, 1564)
-            //   this.list = []
-            // }
             ++this.pageNumber
             result.forEach((elem, index) => {
               this.list.push({
@@ -227,10 +230,10 @@ export default {
           }
           this.loading = false
           this.error = true
-          // this.list = this.defaultList
+          this.list = this.defaultList
         })
         .catch((err) => {
-          // this.list = this.defaultList
+          this.list = this.defaultList
           this.loading = false
           this.finished = true
           this.error = true
@@ -257,7 +260,6 @@ export default {
       .imge {
         width: 220px;
         height: 220px;
-        // background: #b2b2b2;
         border-radius: 12px;
         margin-right: 32px;
         img {

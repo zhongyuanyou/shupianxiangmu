@@ -1,12 +1,7 @@
 <template>
   <div class="trademark-page">
     <!-- 头部导航 -->
-    <Header
-      v-if="!isInApp"
-      :title="pageTitle"
-      :fixed="false"
-      head-class="head-icon"
-    >
+    <Header :title="pageTitle" :fixed="true" head-class="head-icon">
       <template v-if="false" v-slot:right>
         <div class="city-btn" @click="chooseCity">
           <span class="city-btn-text">{{ currentCity }}</span>
@@ -39,7 +34,7 @@
     <!-- <div class="box"></div> -->
     <!-- 底部按钮 -->
     <!-- <FixedBottom :planner="pagePlanner" :md="bottomMd" /> -->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- START IM在线咨询-->
     <!-- <DggImCompany></DggImCompany> -->
   </div>
@@ -375,9 +370,9 @@ export default {
       highQualityList: [], // 优质商标列表
       specialOfferList: [], // 特价急售商标列表
       paramData: {
-        page: 1,
+        start: 1,
         limit: 15,
-        type: 0,
+        classCode: 0,
       },
       firstScreen: '',
     }
@@ -400,7 +395,7 @@ export default {
         })
       this.goodListData.tabBtnList = tabs
       // 请求
-      this.paramData.type = this.goodListData.tabBtnList[0].type
+      this.paramData.classCode = this.goodListData.tabBtnList[0].type
       this.getGoodList(this.paramData)
     }
   },
@@ -513,9 +508,10 @@ export default {
     },
 
     swipeChange(item) {
-      this.params.type = item.type
-      this.paramData.page = 1
+      this.paramData.classCode = item.type
+      this.paramData.start = 1
       this.goodList = []
+      this.more.noMore = false
       this.getGoodList(this.paramData)
     },
 
@@ -524,7 +520,7 @@ export default {
     },
     // 获取更多
     getMore() {
-      this.paramData.page++
+      this.paramData.start++
       this.getGoodList(this.paramData)
     },
     // 随机生成三条数据
@@ -553,7 +549,7 @@ export default {
         'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
       this.$axios
-        .get(newSpreadApi.trade_product_list, param)
+        .get(newSpreadApi.trade_product_list, { params: param })
         .then((res) => {
           this.more.loading = false
           // 1、获取商品后，处理商品数据
@@ -562,7 +558,9 @@ export default {
             data.forEach((obj) => {
               // 全部数据处理
               const item = {
-                img: obj.img.split(',')[1],
+                img:
+                  obj.img.split(',')[1] ||
+                  'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
@@ -571,6 +569,7 @@ export default {
                     ? obj.tabs
                     : this.getArrayItems(this.slogans, 3),
                 notes: obj.desc,
+                id: obj.id,
               }
               this.goodList.push(item)
             })
@@ -586,19 +585,18 @@ export default {
         })
         .catch((err) => {
           console.log(err)
+          this.more.loading = false
+          this.more.noMore = true
         })
     },
     jumpLink(url) {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
-      // if (url) {
-      //   window.open(url, '_blank')
-      // } else {
-      //   window.spptMqMi.showPanel()
-      // }
+      this.$refs.plannerIM.onlineConsult()
     },
     // @--获取规划师
     async getPagePlanner(scene) {

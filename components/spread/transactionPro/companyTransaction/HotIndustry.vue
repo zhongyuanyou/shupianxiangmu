@@ -74,6 +74,12 @@ export default {
   },
   methods: {
     jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
       this.$parent.jumpLink(url)
     },
   },
@@ -82,7 +88,7 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: calc(@spread-page-width - 30px);
+  width: calc(@spread-page-width - 40px);
   margin: 0 auto;
   padding: 24px 21px;
   background: #ffffff;

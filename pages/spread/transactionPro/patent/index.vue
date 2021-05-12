@@ -2,10 +2,9 @@
   <div class="patent">
     <!-- S头部Header -->
     <Header
-      v-if="!isInApp"
       ref="header"
       :title="pageTitle"
-      :fixed="false"
+      :fixed="true"
       head-class="head-icon"
     >
       <template v-if="false" v-slot:right>
@@ -46,7 +45,7 @@
     <!-- E列表 -->
     <!-- S底部咨询 -->
     <!-- <FooterBottom :planner="pagePlanner" :md="fixedMd" /> -->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- E底部咨询 -->
     <!-- S IM在线咨询-->
     <!-- <DggImCompany /> -->
@@ -58,9 +57,9 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
-import Header from '~/components/common/head/header'
+import Header from '~/components/common/head/header.vue'
 import NavBar from '~/components/spread/transactionPro/common/NavBar.vue'
-import Banner from '~/components/spread/transactionPro/common/Banner'
+import Banner from '~/components/spread/transactionPro/common/Banner.vue'
 // import Form from '~/components/spread/transactionPro/common/Form'
 import ProductList from '~/components/spread/transactionPro/common/ProductList'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising.vue'
@@ -330,9 +329,9 @@ export default {
           // { name: '热销专利', type: 'patentStatuse=1' },
           // { name: '精选专利', type: 'patentType=2' },
           // { name: '特价专利', type: 'priceUpper=5000' },
-          { name: '热销专利', type: 'FL20201224136319' },
-          { name: '精选专利', type: 'FL20201224136319' },
-          { name: '特价专利', type: 'FL20201224136319' },
+          { name: '热销专利', type: '' },
+          { name: '精选专利', type: '' },
+          { name: '特价专利', type: '' },
         ],
         // marks: [
         //   '医学医疗',
@@ -394,7 +393,7 @@ export default {
   created() {
     if (process.client) {
       // 请求
-      this.getGoodList()
+
       this.getPagePlanner('app-ghsdgye-02')
     }
   },
@@ -407,7 +406,6 @@ export default {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
     const resData = this.resultData
-    console.log(resData, 45645)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
@@ -440,6 +438,7 @@ export default {
     } catch (error) {
       console.log(error)
     }
+    this.getGoodList()
   },
   methods: {
     ...mapActions({
@@ -453,14 +452,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
-      // if (url) {
-      //   window.open(url, '_blank')
-      // } else {
-      //   // 待改
-      //   window.spptMqMi.showPanel()
-      // }
+      this.$refs.plannerIM.onlineConsult()
     },
     // 金刚区导航栏
     navList(data) {
@@ -486,6 +481,7 @@ export default {
     // 导航选项
     classListData(data) {
       if (data.length !== 0) {
+        this.params.type = data[0].ext1
         this.dataNavBar.tabBtnList = data.map((elem, index) => {
           return { name: elem.name, type: elem.ext1 }
         })
@@ -549,24 +545,29 @@ export default {
             url: elem.materialList[0].materialLink,
           }
         })
-        console.log(this.make, 4564546)
       }
     },
     // 请求列表参数
     getGoodList() {
       this.more.loading = true
-      const api = '/xdy-portal-product-api/patent/list'
-      const cdn = 'https://microuag.dgg188.cn'
-      const params = `?classCode=${this.params.type}&limit=10&start=${this.pageNum}`
+      const param = {
+        classCode: this.params.type,
+        limit: '15',
+        start: this.pageNum,
+      }
       // 2、调用接口
       this.$axios
-        .get(newSpreadApi.trade_product_list + params)
+        .get(newSpreadApi.trade_product_list, {
+          params: param,
+        })
         .then((res) => {
           // 调用回调函数处理数据
           const result = res.data.records || []
           if (result.length > 0 && res.code === 200) {
             this.more.loading = false
             result.forEach((elem) => {
+              const img =
+                'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png'
               const tabs = [
                 '人气商品',
                 '严选商品',
@@ -589,7 +590,7 @@ export default {
               const random = parseInt(Math.random() * (tabs.length - 3) + 3)
               const obj = {
                 // img: this.listImg[elem.patentType - 1], // 商品本身的图片
-                img: elem.img.split(',')[1], // 商品本身的图片
+                img: elem.img.split(',')[1] || img, // 商品本身的图片
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
                 price: Number(elem.price), // 商品价格
                 name: elem.title, // 公司显示名称（有*号）
@@ -602,6 +603,7 @@ export default {
                         `${tabs[random + 2] || '高咨询'}`,
                       ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
                 notes: elem.desc, // 以 | 字符分隔的注意，接口字段值
+                id: elem.id,
               }
               // if (elem.patentTypeName) {
               //   obj.notes.push(elem.patentTypeName)
@@ -621,6 +623,8 @@ export default {
           this.more.noMore = true
         })
         .catch((err) => {
+          this.more.loading = false
+          this.more.noMore = true
           console.log(err)
         })
     },

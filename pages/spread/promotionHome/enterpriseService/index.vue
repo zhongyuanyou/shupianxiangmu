@@ -38,7 +38,7 @@
     <!-- E 列表 -->
 
     <!-- START 规划师-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
@@ -447,7 +447,6 @@ export default {
     // this.onChange({ type: 1 })
     // 处理后台数据
     const resData = this.resultData
-    console.log(resData)
     try {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
@@ -472,8 +471,35 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      window.location.href = 'https://m.shupian.cn/search/'
       console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 请求数据
     onChange(changeObj) {
@@ -509,7 +535,7 @@ export default {
         this.gift = data.map((elem) => {
           return {
             img: elem.materialList[0].materialUrl,
-            url: '',
+            url: elem.materialList[0].materialLink,
             title: elem.materialList[0].materialDescription.split(',')[0],
             price: elem.materialList[0].materialDescription.split(',')[1],
           }
@@ -520,16 +546,19 @@ export default {
     },
     // 直播 补贴
     proDiscountsData(data) {
-      this.proDiscountsData = data.map((elem, index) => {
+      // console.log(data, 46546)
+
+      this.proDiscounts = data.map((elem, index) => {
         const labelData = ['直播中', '优惠放送']
         return {
           proTitle: elem.materialList[0].materialDescription.split(',')[0],
           subheading: elem.materialList[0].materialDescription.split(',')[1],
           label: labelData[index] || '',
           bgImg: elem.materialList[0].materialUrl,
-          url: '',
+          url: elem.materialList[0].materialLink,
         }
       })
+      console.log(this.proDiscountsData, 46546)
     },
     // 活动广告位
     introduceData(data) {
@@ -539,7 +568,7 @@ export default {
             title: elem.materialList[0].materialDescription.split(',')[0],
             subheading: elem.materialList[0].materialDescription.split(',')[1],
             img: elem.materialList[0].materialUrl,
-            url: '',
+            url: elem.materialList[0].materialLink,
           }
         })
       }
@@ -637,6 +666,15 @@ export default {
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
+    },
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
   head() {

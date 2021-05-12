@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a
+    <!-- <a
       ref="goodItem"
       v-md-map
       v-md:p_commodityClick
@@ -10,8 +10,10 @@
       :data-commodity_number="good.companyId"
       :data-commodity_name="good.companyName"
       :data-n_now_price="good.transferPrice"
+      @click="jump(good.id)"
       class="my-component"
-    >
+    > -->
+    <a ref="goodItem" @click="jump(good.id)" class="my-component">
       <!-- S 左侧商品图片 -->
       <div class="item-img"><img :src="data.industryImg" /></div>
       <!-- E 左侧商品图片 -->
@@ -53,6 +55,7 @@
 </template>
 
 <script>
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'GoodItem',
   props: {
@@ -134,7 +137,7 @@ export default {
       const item = {
         industryImg:
           obj.img.split(',')[1] ||
-          'https://img10.dgg.cn/pt06/wap/7sj0p2oe7000000.png',
+          'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
         // industryName: obj.companyIndustryName,
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
         price: obj.price,
@@ -144,6 +147,7 @@ export default {
             ? obj.tabs
             : this.getArrayItems(this.slogans, 3),
         notes: obj.desc,
+        id: obj.id,
       }
       //   switch (obj.companyIndustryName) {
       //     case '电子贸易': {
@@ -196,6 +200,14 @@ export default {
     }
   },
   methods: {
+    // 跳转详情
+    jump(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=FL20201224136319&productId=${id}`
+    },
     // @--随机生成三条数据
     getArrayItems(recent, num) {
       const temparray = []

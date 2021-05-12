@@ -2,7 +2,12 @@
   <div class="exchange-square">
     <!-- 头部搜索 -->
     <div class="head">
-      <Header title="交易广场" />
+      <Header
+        title="交易广场"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <Nav
         class="nav"
         :roll-nav="rollNav"
@@ -25,12 +30,13 @@
           ref="enterprise"
           :default-list="defaultList"
           :change-state="changeState"
+          :titel-list="titleName"
         />
       </template>
     </TabServiceItem>
 
     <!-- START 规划师-->
-    <BtnPlanner :page-planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
@@ -47,13 +53,13 @@ import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem.vue'
-import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
+import EnterpriseList from '@/components/spread/promotionHome/exchangeSquare/EnterpriseList.vue'
 // import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 // import DggImCompany from '@/components/spread/DggImCompany'
-import BtnPlanner from '~/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { chipSpread } from '@/api/spread'
-import { chipSpread, plannerApi } from '~/api/spread'
+import { newSpreadApi, plannerApi } from '~/api/spread'
 
 export default {
   components: {
@@ -72,11 +78,11 @@ export default {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
     try {
       // chipSpread.list
-      const res = await $axios.get(chipSpread.list, {
+      const res = await $axios.get(newSpreadApi.list, {
         params: {
           locationCodes: 'ad113246,ad113244,ad113281',
           navCodes: 'nav100059',
-          productCenterCode: 'TradingPlatform',
+          // productCenterCode: 'TradingPlatform',
           code: 'CRISPS-C-JYGC',
         },
       })
@@ -99,6 +105,7 @@ export default {
   },
   data() {
     return {
+      placeholder: '请输入关键字',
       // 当前列表状态
       changeState: {
         code: '',
@@ -130,13 +137,7 @@ export default {
       ],
       marginTop: 0,
       // 页面规划师
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
 
       // 底部规划师埋点
       fixedMd: {
@@ -234,6 +235,7 @@ export default {
           titleList.push(obj)
         })
         this.titleName = titleList
+        this.changeState = titleList[0]
         this.navDetail(this.result.data.navs.nav100059)
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
@@ -244,6 +246,37 @@ export default {
     }
   },
   methods: {
+    // 搜索
+    clickInputHandle(e) {
+      if (this.isInApp) {
+        const iOSRouter = {
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      window.location.href = 'https://m.shupian.cn/search/'
+    },
     onChange(changeObj) {
       this.changeState = changeObj
       // console.log(this.$refs.enterprise.initialize())
@@ -297,6 +330,7 @@ export default {
               title: '',
               describe: '',
               bg: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
             }
             swiper.push(obj)
           })
@@ -375,6 +409,15 @@ export default {
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
+    },
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
   head() {

@@ -2,10 +2,9 @@
   <div class="page-content">
     <!--START 头部Header-->
     <Header
-      v-if="!isInApp"
       ref="header"
       :title="pageTitle"
-      :fixed="false"
+      :fixed="true"
       head-class="head-icon"
     >
       <template v-if="false" v-slot:right>
@@ -45,7 +44,7 @@
     <!--END   推荐公司-->
 
     <!--START 固定底部-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!--END   固定底部-->
 
     <!--START IM在线咨询-->
@@ -99,7 +98,6 @@ export default {
           // productCenterCode: centerCode,
         },
       })
-      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -312,9 +310,9 @@ export default {
       firstScreen: '',
       // @--S 推荐公司板块
       params: {
-        page: 1,
+        start: 1,
         limit: 15,
-        type: 0,
+        classCode: 0,
       },
       // 选项卡、规划师
       goodListData: {
@@ -376,7 +374,7 @@ export default {
         })
       this.goodListData.tabBtnList = tabs
       // 请求
-      this.params.type = this.goodListData.tabBtnList[0].type
+      this.params.classCode = this.goodListData.tabBtnList[0].type
       this.getGoodList(this.params)
       this.getPagePlanner('app-ghsdgye-02')
     }
@@ -482,18 +480,12 @@ export default {
     // 跳转链接-IM规划师
     jumpLink(url) {
       if (url) {
-        window.open(url, '_blank')
-      } else {
-        // const planner = this.pagePlanner
-        // this.$root.$emit(
-        //   'openIMM',
-        //   planner.id,
-        //   planner.name || '',
-        //   planner.jobNum || '',
-        //   planner.imgSrc || ''
-        // )
-        window.spptMqMi.showPanel()
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
       }
+      this.$refs.plannerIM.onlineConsult()
     },
 
     // @--S 推荐公司板块
@@ -504,8 +496,9 @@ export default {
       const url =
         'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
+      // newSpreadApi.trade_product_list
       this.$axios
-        .get(newSpreadApi.trade_product_list, param)
+        .get(newSpreadApi.trade_product_list, { params: param })
         .then((res) => {
           this.more.loading = false
           // 1、获取商品后，处理商品数据
@@ -514,58 +507,9 @@ export default {
             data.forEach((obj) => {
               // 进行类型图片处理：截取数组第一个值得第一个字段
               const type = obj.id.substring(-1, 1)
-              let img = ''
-              switch (type) {
-                case 0: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/dmw1eqwpz5c0000.png'
-                  break
-                }
-                case 1: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/fnrnbp54bm00000.png'
-                  break
-                }
-                case 2: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/7k86445axyw0000.png'
-                  break
-                }
-                case 3: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/8q40o2nqbmo0000.png'
-                  break
-                }
-                case 4: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/43iipcpfwm20000.png'
-                  break
-                }
-                case 5: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/2p0q0971ccw0000.png'
-                  break
-                }
-                case 6: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/d1hxxmkv5kg0000.png'
-                  break
-                }
-                case 7: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/22k7vyj0zy80000.png'
-                  break
-                }
-                case 8: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/7g003aqqas00000.png'
-                  break
-                }
-                default: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/2zqf2fldtmk0000.png'
-                }
-              }
+              const img =
+                'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png'
+
               // 全部数据处理
               const item = {
                 img: obj.img.split(',')[1] || img,
@@ -577,6 +521,7 @@ export default {
                     ? obj.tabs
                     : this.getArrayItems(this.slogans, 3),
                 notes: obj.desc,
+                id: obj.id,
               }
               this.goodList.push(item)
             })
@@ -592,6 +537,8 @@ export default {
         })
         .catch((err) => {
           console.log(err)
+          this.more.loading = false
+          this.more.noMore = true
         })
     },
     // 随机生成三条数据
@@ -615,13 +562,14 @@ export default {
     // swipe当前项改变时
     swipeChange(option) {
       this.goodList = []
-      this.params.page = 1
-      this.params.type = option.type
+      this.params.start = 1
+      this.params.classCode = option.type
+      this.more.noMore = false
       this.getGoodList(this.params)
     },
     // 获取更多按钮
     getMore() {
-      this.params.page++
+      this.params.start++
       this.getGoodList(this.params)
     },
     // 推挤规划师

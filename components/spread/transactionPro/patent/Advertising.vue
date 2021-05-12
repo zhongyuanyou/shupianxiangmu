@@ -167,12 +167,13 @@ export default {
   },
   methods: {
     onMessage(url, e) {
-      // 待改
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
+      this.$parent.jumpLink(url)
     },
   },
 }
@@ -193,7 +194,7 @@ export default {
     flex-wrap: nowrap;
     justify-content: space-between;
     height: 154px;
-    padding: 13px 20px 20px 20px;
+    padding: 0px 20px 20px 20px;
     /deep/.sp-image {
       width: 347px;
       height: 124px;
@@ -206,7 +207,7 @@ export default {
     padding: 24px 20px 30px 20px;
     display: flex;
     flex-direction: column;
-    width: calc(@spread-page-width - 30px);
+    width: calc(@spread-page-width - 40px);
     margin: 0 auto;
     > div {
       display: flex;
@@ -216,11 +217,11 @@ export default {
       a {
         display: inline-block;
         height: 182px;
-        border-radius: 8px;
+        // border-radius: 8px;
         .sp-image {
           width: 215px;
           height: 182px;
-          border: 1px solid rgba(205, 205, 205, 0.3);
+          // border: 1px solid rgba(205, 205, 205, 0.3);
           // box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.08);
         }
       }
@@ -232,10 +233,10 @@ export default {
   &-make-over {
     background: #ffffff;
     border-radius: 24px;
-    padding: 30px 17px 24px 20px;
+    padding: 30px 20px 24px 20px;
     display: flex;
     flex-direction: column;
-    width: calc(@spread-page-width - 30px);
+    width: calc(@spread-page-width - 40px);
     margin: 0 auto;
     margin-top: 20px;
     /deep/.content {
@@ -247,8 +248,8 @@ export default {
         margin-right: 16px;
         .sp-image {
           width: 327px;
-          background: linear-gradient(90deg, #f8f8f8, #faf5ed);
-          border-radius: 8px;
+          // background: linear-gradient(90deg, #f8f8f8, #faf5ed);
+          // border-radius: 8px;
         }
       }
       > div:last-child {

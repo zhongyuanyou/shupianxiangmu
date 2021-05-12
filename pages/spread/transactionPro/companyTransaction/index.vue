@@ -2,10 +2,9 @@
   <div class="page-content">
     <!-- START 头部Header-->
     <Header
-      v-if="!isInApp"
       ref="header"
       :title="pageTitle"
-      :fixed="false"
+      :fixed="true"
       head-class="head-icon"
     >
       <template v-if="false" v-slot:right>
@@ -45,7 +44,12 @@
     <!-- END   推荐公司-->
 
     <!-- START 规划师-->
-    <BtnPlanner v-if="pagePlanner" :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner
+      v-if="pagePlanner"
+      ref="plannerIM"
+      :planner="pagePlanner"
+      :md="fixedMd"
+    />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
@@ -61,10 +65,10 @@ import Header from '@/components/common/head/header'
 // import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
-import Banner from '@/components/spread/transactionPro/common/Banner'
+import Banner from '@/components/spread/transactionPro/common/Banner.vue'
 // import Form from '~/components/spread/transactionPro/common/Form'
-import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry'
-import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType'
+import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry.vue'
+import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType.vue'
 import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany'
 
 export default {
@@ -432,18 +436,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
+          return
         }
       }
-      //  else {
-      //   const planner = this.pagePlanner
-      //   this.$root.$emit(
-      //     'openIMM',
-      //     planner.id,
-      //     planner.name || '',
-      //     planner.jobNum || '',
-      //     planner.imgSrc || ''
-      //   )
-      // }
+      this.$refs.plannerIM.onlineConsult()
     },
 
     // @--获取规划师
