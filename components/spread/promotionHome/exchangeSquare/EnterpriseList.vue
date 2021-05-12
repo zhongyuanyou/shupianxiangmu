@@ -197,6 +197,7 @@ export default {
             start: this.pageNumber,
             limit: '15',
             classCode: this.params.code,
+            dictCode: this.params.dictCode,
           },
         })
         .then((res) => {

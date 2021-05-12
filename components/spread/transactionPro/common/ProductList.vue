@@ -98,7 +98,7 @@
       <!-- E 查看更多按钮 -->
 
       <!-- S 无更多数据 -->
-      <div v-if="more.noMore && more.length > 0" class="no-more-data">
+      <div v-if="more.noMore && goodList.length > 0" class="no-more-data">
         无更多数据啦
       </div>
       <!-- E 无更多数据 -->

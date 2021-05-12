@@ -13,7 +13,7 @@
       @click="jump(good.id)"
       class="my-component"
     > -->
-    <a ref="goodItem" @click="jump(good.id)" class="my-component">
+    <a ref="goodItem" class="my-component" @click="jump(good.id)">
       <!-- S 左侧商品图片 -->
       <div class="item-img"><img :src="data.industryImg" /></div>
       <!-- E 左侧商品图片 -->
@@ -302,19 +302,22 @@ export default {
   margin-top: 20px;
   .item-img {
     flex-shrink: 0;
-    width: 220px;
-    height: 220px;
+    width: 230px;
+    height: 230px;
     margin-right: 32px;
     border-radius: 4px;
-    img {
-      width: 100%;
-      height: 100%;
+    > img {
+      width: 220px;
+      height: 220px;
       border-radius: 4px;
     }
   }
   .item-content {
     flex-shrink: 0;
     width: 418px;
+    // display: inline-block;
+    min-height: 220px;
+    position: relative;
     .item-title {
       font-size: 32px;
       font-weight: bold;
@@ -323,7 +326,7 @@ export default {
       width: 100%;
       font-family: PingFang SC;
       max-height: 82px;
-      min-height: 82px;
+      // min-height: 82px;
       .textOverflow(2);
     }
     .item-tabs {
@@ -333,17 +336,18 @@ export default {
       .item-tab {
         font-size: 22px;
         font-weight: 400;
-        color: #5c7499;
-        // line-height: 22px;
-        max-width: 110px;
-        height: 32px;
-        background: #f0f2f5;
-        border-radius: 4px;
-        display: flex;
-        justify-content: center;
-        padding: 0px 10px 0px 8px;
-        margin-right: 12px;
-        margin-bottom: 6px;
+        color: #222;
+        // color: #5c7499;
+        // // line-height: 22px;
+        // max-width: 120px;
+        // height: 32px;
+        // background: #f0f2f5;
+        // border-radius: 4px;
+        // display: flex;
+        // justify-content: center;
+        // padding: 0px 10px 0px 8px;
+        // margin-right: 12px;
+        // margin-bottom: 6px;
         .textOverflow(1);
       }
     }
@@ -368,10 +372,11 @@ export default {
       font-weight: 400;
       color: #ec5330;
       line-height: 36px;
+      position: absolute;
+      bottom: 0px;
       .item-price-num {
         font-size: 36px;
         line-height: 36px;
-
         font-weight: bold;
       }
     }

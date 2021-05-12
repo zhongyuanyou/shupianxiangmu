@@ -554,6 +554,7 @@ export default {
         classCode: this.params.type,
         limit: '15',
         start: this.pageNum,
+        dictCode: 'CONDITION-JY-ZY',
       }
       // 2、调用接口
       this.$axios
@@ -564,7 +565,6 @@ export default {
           // 调用回调函数处理数据
           const result = res.data.records || []
           if (result.length > 0 && res.code === 200) {
-            this.more.loading = false
             result.forEach((elem) => {
               const img =
                 'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png'
@@ -612,9 +612,11 @@ export default {
               //   obj.notes.push(elem.patentStatusName)
               // }
               if (result.length < 10) {
-                this.more.loading = false
                 this.more.noMore = true
+              } else {
+                this.more.noMore = false
               }
+              this.more.loading = false
               this.goodList.push(obj)
             })
             return

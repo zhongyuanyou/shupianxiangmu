@@ -25,6 +25,7 @@
                   {{ labels }}
                 </span>
               </label>
+              <div class="region-explain">{{ item.desc }}</div>
             </div>
             <div
               v-show="item.currentPrice !== '' && item.currentPrice"
@@ -217,6 +218,7 @@ export default {
                 currentPrice: elem.price,
                 originalPrice: 0,
                 url: '',
+                desc: elem.desc,
                 id: elem.id,
               })
             })
@@ -292,7 +294,22 @@ export default {
               line-height: 32px;
               margin-right: 8px;
               padding: 4px 6px;
+              max-width: 120px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
+          }
+          .region-explain {
+            margin-top: 20px;
+            height: 22px;
+            font-size: 22px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #222;
+            line-height: 22px;
+            .textOverflow(1);
+            width: 100%;
           }
         }
         &-price {

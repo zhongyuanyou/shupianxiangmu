@@ -50,7 +50,7 @@
       >
         <div class="title">
           {{ item.proTitle }}
-          <span class="title-live">
+          <span v-if="false" class="title-live">
             <span v-if="proKey === 0" class="living-margin">
               <span class="living-icon">
                 <span class="living-bar living-bar1"></span>
@@ -133,7 +133,7 @@ export default {
           {
             proTitle: '企服直播',
             subheading: '行业大牛助力企业',
-            label: '直播中',
+            label: '直播中5646',
             bgImg: 'https://cdn.shupian.cn/sp-pt/wap/g3rg0424lp40000.png',
             url: '',
           },

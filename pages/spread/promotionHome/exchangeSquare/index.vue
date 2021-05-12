@@ -226,11 +226,18 @@ export default {
   mounted() {
     try {
       if (JSON.stringify(this.result.data) !== '{}') {
+        const dictCode = [
+          'CONDITION-JY-ZZ',
+          'CONDITION-JY-ZY',
+          'CONDITION-JY-GS',
+          'CONDITION-JY-SB',
+        ]
         const titleList = []
-        this.result.data.classList.forEach((item) => {
+        this.result.data.classList.forEach((item, index) => {
           const obj = {
             name: item.name,
             code: item.ext1,
+            dictCode: dictCode[index] || '',
           }
           titleList.push(obj)
         })

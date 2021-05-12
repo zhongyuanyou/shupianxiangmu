@@ -168,6 +168,7 @@ export default {
         start: 1,
         limit: 15,
         classCode: 0,
+        dictCode: 'CONDITION-JY-GS',
       },
       firstScreen: '',
       // @--加载更多
