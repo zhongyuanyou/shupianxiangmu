@@ -110,7 +110,10 @@
 
 <script>
 import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
+import { mapState } from 'vuex'
+import safeAreaInsets from 'safe-area-insets'
 import TabCurve from '~/components/spread/transactionPro/common/TabCurve'
+
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
@@ -145,7 +148,7 @@ export default {
         { name: '降价急售', type: 1, goodList: [] },
       ],
       currentItem: 0, // 默认tabs选中第一个
-      searchDomHeight: 0, // 选项卡吸顶时与顶部的距离
+      searchDomHeight: 40, // 选项卡吸顶时与顶部的距离
 
       // @--商品列表
       // marks: [
@@ -172,7 +175,12 @@ export default {
       loading: false, // 加载按钮，调接口时为true
     }
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   created() {
     if (process.client) {
       this.firstScreen = this.tabBtnList[0].type
@@ -183,6 +191,7 @@ export default {
     this.firstScreen = this.tabBtnList[0].type
     this.params.classCode = this.tabList[0].type
     this.getGoodList(this.params)
+    this.getTopMargin()
   },
   methods: {
     // @--触发获取商品数据
@@ -234,6 +243,14 @@ export default {
     // 阻止冒泡
     preventTouch(e) {
       e.stopImmediatePropagation() // 阻止冒泡
+    },
+    // app顶部距离
+    getTopMargin() {
+      if (process && process.client && this.isInApp) {
+        let safeTop = safeAreaInsets.top
+        if (this.isInApp) safeTop = this.appInfo.statusBarHeight + 40
+        this.searchDomHeight = safeTop
+      }
     },
     // 跳转链接
     jumpLink(url) {

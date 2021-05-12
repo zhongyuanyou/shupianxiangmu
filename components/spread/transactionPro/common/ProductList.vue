@@ -107,11 +107,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import safeAreaInsets from 'safe-area-insets'
+
 import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
 import TabCurve from '~/components/spread/transactionPro/common/TabCurve.vue'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import GoodItem from '~/components/spread/transactionPro/common/ProductItem'
 import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
+
 export default {
   components: {
     [Swipe.name]: Swipe,
@@ -178,8 +182,17 @@ export default {
   data() {
     return {
       currentItem: 0, // 默认tabs选中第一个
-      searchDomHeight: 0, // 选项卡吸顶时与顶部的距离
+      searchDomHeight: 40, // 选项卡吸顶时与顶部的距离
     }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
+  mounted() {
+    this.getTopMargin()
   },
   methods: {
     // @--抛出事件方法
@@ -202,6 +215,14 @@ export default {
     // 阻止冒泡
     preventTouch(e) {
       e.stopImmediatePropagation()
+    },
+    // app顶部距离
+    getTopMargin() {
+      if (process && process.client && this.isInApp) {
+        let safeTop = safeAreaInsets.top
+        if (this.isInApp) safeTop = this.appInfo.statusBarHeight + 40
+        this.searchDomHeight = safeTop
+      }
     },
     // 跳转链接
     jumpLink(url) {
