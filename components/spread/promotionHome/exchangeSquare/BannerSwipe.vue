@@ -5,6 +5,7 @@
         v-for="item in swipeList"
         :key="item.code"
         :style="{ backgroundImage: 'url(' + item.bg + ')' }"
+        @click="jump(item.url)"
       >
         <!-- <span class="title">{{ item.title }}</span>
         <span class="describe">{{ item.describe }}</span> -->
@@ -26,6 +27,17 @@ export default {
       default: () => {
         return []
       },
+    },
+  },
+  methods: {
+    jump(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$parent.jumpLink(url)
     },
   },
 }

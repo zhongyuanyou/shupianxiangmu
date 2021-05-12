@@ -309,6 +309,7 @@ export default {
               title: '',
               describe: '',
               bg: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
             }
             swiper.push(obj)
           })
