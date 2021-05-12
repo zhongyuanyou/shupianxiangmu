@@ -471,8 +471,35 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      window.location.href = 'https://m.shupian.cn/search/'
       console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 请求数据
     onChange(changeObj) {
