@@ -565,7 +565,7 @@ export default {
               const item = {
                 img:
                   obj.img.split(',')[1] ||
-                  'https://cdn.shupian.cn/sp-pt/wap/images/8n7yuuz26io0000.jpg?x-oss-process=image/resize,m_fill,w_750,h_520,limit_0',
+                  'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,

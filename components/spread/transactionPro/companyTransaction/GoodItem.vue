@@ -137,7 +137,7 @@ export default {
       const item = {
         industryImg:
           obj.img.split(',')[1] ||
-          'https://img10.dgg.cn/pt06/wap/7sj0p2oe7000000.png',
+          'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
         // industryName: obj.companyIndustryName,
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
         price: obj.price,

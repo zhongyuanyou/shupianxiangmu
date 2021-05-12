@@ -508,58 +508,9 @@ export default {
             data.forEach((obj) => {
               // 进行类型图片处理：截取数组第一个值得第一个字段
               const type = obj.id.substring(-1, 1)
-              let img = ''
-              switch (type) {
-                case 0: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/dmw1eqwpz5c0000.png'
-                  break
-                }
-                case 1: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/fnrnbp54bm00000.png'
-                  break
-                }
-                case 2: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/7k86445axyw0000.png'
-                  break
-                }
-                case 3: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/8q40o2nqbmo0000.png'
-                  break
-                }
-                case 4: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/43iipcpfwm20000.png'
-                  break
-                }
-                case 5: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/2p0q0971ccw0000.png'
-                  break
-                }
-                case 6: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/d1hxxmkv5kg0000.png'
-                  break
-                }
-                case 7: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/22k7vyj0zy80000.png'
-                  break
-                }
-                case 8: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/7g003aqqas00000.png'
-                  break
-                }
-                default: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/2zqf2fldtmk0000.png'
-                }
-              }
+              const img =
+                'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png'
+
               // 全部数据处理
               const item = {
                 img: obj.img.split(',')[1] || img,
