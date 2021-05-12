@@ -2,10 +2,9 @@
   <div class="patent">
     <!-- S头部Header -->
     <Header
-      v-if="!isInApp"
       ref="header"
       :title="pageTitle"
-      :fixed="false"
+      :fixed="true"
       head-class="head-icon"
     >
       <template v-if="false" v-slot:right>

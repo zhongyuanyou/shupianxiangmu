@@ -1,12 +1,7 @@
 <template>
   <div class="trademark-page">
     <!-- 头部导航 -->
-    <Header
-      v-if="!isInApp"
-      :title="pageTitle"
-      :fixed="false"
-      head-class="head-icon"
-    >
+    <Header :title="pageTitle" :fixed="true" head-class="head-icon">
       <template v-if="false" v-slot:right>
         <div class="city-btn" @click="chooseCity">
           <span class="city-btn-text">{{ currentCity }}</span>
