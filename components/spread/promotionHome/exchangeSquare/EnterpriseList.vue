@@ -260,7 +260,6 @@ export default {
       .imge {
         width: 220px;
         height: 220px;
-        background: #b2b2b2;
         border-radius: 12px;
         margin-right: 32px;
         img {
