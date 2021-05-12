@@ -102,7 +102,7 @@ export default {
     padding: 0px;
     padding-left: 0px;
   }
-  /deep/.sp-tabs {
+  ::v-deep.sp-tabs {
     // 最外层宽度
     .sp-tabs__wrap {
       width: @spread-page-width;
@@ -142,6 +142,7 @@ export default {
     font-size: 32px;
     font-family: PingFangSC-Regular, PingFang SC;
     color: #999999;
+    z-index: 2;
   }
   ::v-deep.sp-tabs__wrap {
     margin-bottom: 11px;

@@ -143,12 +143,14 @@ export default {
       error: false,
       pageNumber: 1,
       list: [],
+      defaultState: {},
     }
   },
   mounted() {
     // 初始化推介数据
     // this.list = this.defaultList
     // this.initialize(this.changeState)
+    this.defaultState = this.changeState
   },
   methods: {
     initialize(changeObj) {
@@ -156,13 +158,16 @@ export default {
       this.list = []
       this.finished = false
       this.loading = true
-      this.selectTab(changeObj)
+      this.defaultState = this.changeState
+      // this.selectTab()
+      this.onLoad()
     },
     onLoad(e) {
       // // 异步更新数据
       // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      this.defaultState = this.changeState
       this.list.length === 0 && (this.pageNumber = 1)
-      this.selectTab(this.changeState)
+      this.selectTab()
     },
     onMore(id) {
       let base = ''
@@ -173,9 +178,10 @@ export default {
     },
     // 请求数据
     selectTab(item) {
+      console.log(this.defaultState, '请求数据')
       // 当前无数据不执行
       if (this.finished && !this.loading) return
-      const type = item.type
+      const type = this.defaultState.type
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {
@@ -186,6 +192,7 @@ export default {
           },
         })
         .then((res) => {
+          console.log(res, 456)
           // 调用回调函数处理数据
           const result = res.data.records
           if (res.code !== 200) {
@@ -194,13 +201,17 @@ export default {
             this.finished = true
           }
           if (res.code === 200 && result.length !== 0) {
+            // if (res.data.pageNumber === 1) {
+            //   // console.log(res.data.pageNumber, this.defaultState, 1564)
+            //   this.list = []
+            // }
             ++this.pageNumber
             result.forEach((elem, index) => {
               this.list.push({
                 code: index + 1,
                 img:
                   elem.img.split(',')[1] ||
-                  'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
+                  'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 title: elem.title,
                 label: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
                 currentPrice: elem.price,
@@ -216,10 +227,10 @@ export default {
           }
           this.loading = false
           this.error = true
-          this.list = this.defaultList
+          // this.list = this.defaultList
         })
         .catch((err) => {
-          this.list = this.defaultList
+          // this.list = this.defaultList
           this.loading = false
           this.finished = true
           this.error = true
