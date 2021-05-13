@@ -168,7 +168,6 @@ export default {
       if (this.pageNumber === 1) {
         this.list = []
       }
-      // if (this.loading) return
       // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       this.defaultState = this.changeState
       // this.list.length === 0 && (this.pageNumber = 1)
