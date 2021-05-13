@@ -27,8 +27,8 @@
         <!-- </div> -->
         <div class="giftbag-content-right">
           <div
-            v-for="item in giftBagMsg.giftBagList"
-            :key="item.code"
+            v-for="(item, index) in giftBagMsg.giftBagList"
+            :key="index"
             :style="{ backgroundImage: 'url(' + item.img + ')' }"
             class="product"
             @click="prompt(item.url)"
@@ -43,7 +43,7 @@
               <span v-show="item.price" class="product-price">{{
                 item.price
               }}</span>
-              <span v-show="item.label" class="product-label">{{
+              <span v-show="index !== 0" class="product-label">{{
                 item.label
               }}</span>
             </a>

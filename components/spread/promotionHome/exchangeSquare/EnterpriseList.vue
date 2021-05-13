@@ -308,7 +308,7 @@ export default {
         }
         .region-explain {
           margin-top: 20px;
-          min-height: 22px;
+          height: 22px;
           font-size: 22px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
