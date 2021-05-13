@@ -518,7 +518,7 @@ export default {
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
-                tabs: obj.field ? obj.field.join('|') : '',
+                tabs: obj.field ? obj.field.join(' | ') : '',
                 // tabs:
                 //   obj.tabs.length !== 0
                 //     ? obj.tabs

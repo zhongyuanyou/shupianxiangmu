@@ -57,6 +57,7 @@ export default {
   methods: {
     // 跳转链接-IM规划师
     onUrl(url) {
+      console.log(url, '跳转')
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url

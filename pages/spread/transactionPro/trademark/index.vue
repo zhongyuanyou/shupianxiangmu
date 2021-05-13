@@ -552,7 +552,7 @@ export default {
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
-                tabs: obj.field ? obj.field.join('|') : '',
+                tabs: obj.field ? obj.field.join(' | ') : '',
                 // tabs:
                 //   obj.tabs.length !== 0
                 //     ? obj.tabs
@@ -655,6 +655,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+iframe {
+  display: none;
+}
 .trademark-page {
   background: #ffffff;
   width: @spread-page-width;

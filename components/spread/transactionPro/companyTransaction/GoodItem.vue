@@ -143,7 +143,7 @@ export default {
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
         price: obj.price,
         name: obj.title,
-        tabs: obj.field ? obj.field.join('|') : '',
+        tabs: obj.field ? obj.field.join(' | ') : '',
         // tabs:
         //   obj.tabs.length !== 0
         //     ? obj.tabs

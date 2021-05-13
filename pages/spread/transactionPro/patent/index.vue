@@ -587,7 +587,7 @@ export default {
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
                 price: Number(elem.price), // 商品价格
                 name: elem.title, // 公司显示名称（有*号）
-                tabs: elem.field ? elem.field.join('|') : '',
+                tabs: elem.field ? elem.field.join(' | ') : '',
                 // tabs:
                 //   elem.tabs.length !== 0
                 //     ? elem.tabs
