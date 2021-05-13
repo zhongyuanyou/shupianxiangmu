@@ -21,7 +21,7 @@
     <!-- banner -->
     <Banner :swipe-list="swipeList"></Banner>
     <!-- 新人红包 -->
-    <GiftBag :gift-bag-list="giftBagList"></GiftBag>
+    <GiftBag :gift-bag-list="giftBagList" :gift-bag-msg="giftBagMsg"></GiftBag>
     <!-- 交易产品列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
       <template v-slot:list>
@@ -60,6 +60,7 @@ import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { chipSpread } from '@/api/spread'
 import { newSpreadApi, plannerApi } from '~/api/spread'
+import { resultData } from '~/assets/spread/licence'
 
 export default {
   components: {
@@ -86,7 +87,7 @@ export default {
           code: 'CRISPS-C-JYGC',
         },
       })
-      console.log(res, 123123)
+
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -105,6 +106,7 @@ export default {
   },
   data() {
     return {
+      giftBagMsg: {},
       placeholder: '请输入关键字',
       // 当前列表状态
       changeState: {
@@ -242,7 +244,7 @@ export default {
           titleList.push(obj)
         })
         this.titleName = titleList
-        this.changeState = titleList[0]
+        this.changeState = this.titleName[0]
         this.navDetail(this.result.data.navs.nav100059)
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
@@ -345,6 +347,8 @@ export default {
         }
         // 新人红包广告位
         if (item.locationCode === 'ad113246') {
+          const giftBagMsg = { name: '', giftBagList: [] }
+          giftBagMsg.name = item.locationName
           const giftBag = []
           item.sortMaterialList.forEach((elem, idx) => {
             const msg = elem.materialList[0].materialDescription.split('#')
@@ -359,6 +363,8 @@ export default {
             giftBag.push(obj)
           })
           this.giftBagList = giftBag
+          giftBagMsg.giftBagList = giftBag
+          this.giftBagMsg = giftBagMsg
         }
       })
     },
