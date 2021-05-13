@@ -9,13 +9,14 @@
       <div class="item-content">
         <p class="item-title">{{ data.name }}</p>
         <div class="item-tabs">
-          <span
+          <!-- <span
             v-for="(item, index) in data.tabs"
             :key="index"
             class="item-tab"
           >
-            {{ item }}|
-          </span>
+            {{ item }} -->
+          <!-- </span> -->
+          <span class="item-tab">{{ data.tabs }}</span>
         </div>
         <div class="item-notes">
           <span class="item-note">
@@ -109,6 +110,10 @@ export default {
       color: #222222;
       line-height: 42px;
       font-family: PingFang SC;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
     }
     .item-tabs {
       display: flex;

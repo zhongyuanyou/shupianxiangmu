@@ -45,7 +45,11 @@
             <!-- E 推荐内容滚动区 -->
 
             <!-- S 推荐商品列表 -->
-            <div v-if="goodList.length > 0" ref="goodList" class="goods-list">
+            <div
+              v-if="loading || goodList.length > 0"
+              ref="goodList"
+              class="goods-list"
+            >
               <!-- S 空屏骨架 -->
               <sp-skeleton
                 v-for="val in 10"

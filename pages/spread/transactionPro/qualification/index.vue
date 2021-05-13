@@ -311,7 +311,7 @@ export default {
       // @--S 推荐公司板块
       params: {
         start: 1,
-        limit: 15,
+        limit: 10,
         classCode: 0,
         dictCode: 'CONDITION-JY-ZZ',
       },
@@ -517,10 +517,11 @@ export default {
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
-                tabs:
-                  obj.tabs.length !== 0
-                    ? obj.tabs
-                    : this.getArrayItems(this.slogans, 3),
+                tabs: obj.field ? obj.field.join('|') : '',
+                // tabs:
+                //   obj.tabs.length !== 0
+                //     ? obj.tabs
+                //     : this.getArrayItems(this.slogans, 3),
                 notes: obj.desc,
                 id: obj.id,
               }

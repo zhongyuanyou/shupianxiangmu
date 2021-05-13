@@ -22,13 +22,14 @@
       <div class="item-content">
         <p class="item-title">{{ data.name }}</p>
         <div class="item-tabs">
-          <span
+          <!-- <span
             v-for="(item, index) in data.tabs"
             :key="index"
             class="item-tab"
           >
             {{ item }}
-          </span>
+          </span> -->
+          <span class="item-tab">{{ data.tabs }}</span>
         </div>
         <div class="item-notes">
           <span class="item-note">
@@ -142,10 +143,11 @@ export default {
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
         price: obj.price,
         name: obj.title,
-        tabs:
-          obj.tabs.length !== 0
-            ? obj.tabs
-            : this.getArrayItems(this.slogans, 3),
+        tabs: obj.field ? obj.field.join('|') : '',
+        // tabs:
+        //   obj.tabs.length !== 0
+        //     ? obj.tabs
+        //     : this.getArrayItems(this.slogans, 3),
         notes: obj.desc,
         id: obj.id,
       }
@@ -327,6 +329,11 @@ export default {
       font-family: PingFang SC;
       max-height: 82px;
       // min-height: 82px;
+      font-family: PingFang SC;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
       .textOverflow(2);
     }
     .item-tabs {

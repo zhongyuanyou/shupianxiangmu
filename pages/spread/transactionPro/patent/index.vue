@@ -343,14 +343,7 @@ export default {
         //   '家居用品',
         //   '食品保健',
         // ],
-        planner: {
-          id: '7862495547640840192',
-          name: '张毅',
-          jobNum: '107547',
-          telephone: '4000962540',
-          imgSrc:
-            'https://cdn.shupian.cn/6b36906ec8c649a5aaee0bb274f6daeb1618991541795.jpeg',
-        },
+        planner: {},
         md: {
           pageName: '专利交易聚合页',
         },
@@ -359,7 +352,7 @@ export default {
       goodList: [],
       // 更多提示
       more: {
-        loading: false, // 加载更多按钮点击时，显示的loading加载
+        loading: true, // 加载更多按钮点击时，显示的loading加载
         noMore: false, // 无更多加载数据
       },
       // 推荐规划师：默认数据
@@ -552,7 +545,7 @@ export default {
       this.more.loading = true
       const param = {
         classCode: this.params.type,
-        limit: '15',
+        limit: '10',
         start: this.pageNum,
         dictCode: 'CONDITION-JY-ZY',
       }
@@ -562,6 +555,7 @@ export default {
           params: param,
         })
         .then((res) => {
+          this.more.loading = true
           // 调用回调函数处理数据
           const result = res.data.records || []
           if (result.length > 0 && res.code === 200) {
@@ -594,14 +588,15 @@ export default {
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
                 price: Number(elem.price), // 商品价格
                 name: elem.title, // 公司显示名称（有*号）
-                tabs:
-                  elem.tabs.length !== 0
-                    ? elem.tabs
-                    : [
-                        `${tabs[random] || '人气产品'}`,
-                        `${tabs[random + 1] || '资料齐全'}`,
-                        `${tabs[random + 2] || '高咨询'}`,
-                      ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
+                tabs: elem.field ? elem.field.join('|') : '',
+                // tabs:
+                //   elem.tabs.length !== 0
+                //     ? elem.tabs
+                //     : [
+                //         `${tabs[random] || '人气产品'}`,
+                //         `${tabs[random + 1] || '资料齐全'}`,
+                //         `${tabs[random + 2] || '高咨询'}`,
+                //       ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
                 notes: elem.desc, // 以 | 字符分隔的注意，接口字段值
                 id: elem.id,
               }
@@ -616,8 +611,8 @@ export default {
               } else {
                 this.more.noMore = false
               }
-              this.more.loading = false
               this.goodList.push(obj)
+              this.more.loading = false
             })
             return
           }
