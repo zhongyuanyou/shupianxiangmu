@@ -3,7 +3,7 @@ import imSdk from '@dgg/sp-im-sdk'
 /**
  * @description: 初始化im
  * @param {String} env: 环境 必传
- * @param {String} token: 登录的获取的X-Auth-Token 必传
+//  * @param {String} token: 登录的获取的X-Auth-Token 必传
  * @param {String} userId: 用户中心userID 必传
  * @param {String} userTypeFlag: 用户类型 必传
  * @param {String} sysCode: 平台sysCode 必传
@@ -15,22 +15,32 @@ export function imInit(data = {}) {
   const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
   const BASE = {
     // 开发、测试环境
-    development: 'T',
+    development: 'D',
     // 预发布环境
-    release: 'D',
+    release: 'T',
     // 生产环境
     production: 'P',
   }
   const env = BASE[DGG_SERVER_ENV]
+  console.log(data)
+  imSdk.sdkInstance = null // 初始化前先重置
   const initSdk = imSdk.instance({
     env, // 'D|T|Y|P'
     token: data.token,
+    deviceId: data.deviceId,
     userId: data.userId,
     userTypeFlag: data.userType,
     sysCode: 'crisps-app',
-    secret: 'b06ca305974e8b6b590b8315f72a7438',
+    secret: '31b07a35b549a5046fb1cace1377c15e',
     appKey: '4R29RHK10AQILT8ONUAOC5DDST',
     isConnectSocket: false,
+    myInfo: (res) => {
+      if (data.userType === 'VISITOR') {
+        localStorage.setItem('myInfo', JSON.stringify(res.data))
+      } else {
+        localStorage.removeItem('myInfo')
+      }
+    },
     onError: (res) => {
       console.log(res)
     },

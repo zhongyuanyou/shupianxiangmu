@@ -49,7 +49,11 @@
             <!-- E 推荐内容滚动区 -->
 
             <!-- S 推荐商品列表 -->
-            <div ref="goodList" class="goods-list">
+            <div
+              v-if="more.loading || goodList.length > 0"
+              ref="goodList"
+              class="goods-list"
+            >
               <!-- S 空屏骨架 -->
               <sp-skeleton
                 v-for="val in 10"
@@ -73,6 +77,7 @@
                 :good="good"
               />
             </div>
+            <Fruitless v-else />
             <!-- E 推荐商品列表 -->
 
             <!-- S 商品加载提示 -->
@@ -97,17 +102,24 @@
       <!-- E 查看更多按钮 -->
 
       <!-- S 无更多数据 -->
-      <div v-if="more.noMore" class="no-more-data">无更多数据啦</div>
+      <div v-if="more.noMore && goodList.length > 0" class="no-more-data">
+        无更多数据啦
+      </div>
       <!-- E 无更多数据 -->
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import safeAreaInsets from 'safe-area-insets'
+
 import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
-import TabCurve from '~/components/common/tab/TabCurve'
+import TabCurve from '~/components/spread/transactionPro/common/TabCurve.vue'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import GoodItem from '~/components/spread/transactionPro/common/ProductItem'
+import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
+
 export default {
   components: {
     [Swipe.name]: Swipe,
@@ -116,6 +128,7 @@ export default {
     [Loading.name]: Loading,
     TabCurve,
     GoodItem,
+    Fruitless,
   },
   mixins: [adJumpHandle],
   props: {
@@ -143,17 +156,6 @@ export default {
             '无经营',
             '发票',
           ],
-          planner: {
-            id: '7862495547640840192',
-            name: '张毅',
-            jobNum: '107547',
-            telephone: '18402858698',
-            imgSrc: '',
-          },
-          // 埋点数据
-          md: {
-            pageName: '',
-          },
         }
       },
     },
@@ -178,7 +180,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          loading: false, // 加载更多按钮点击时，显示的loading加载
+          loading: true, // 加载更多按钮点击时，显示的loading加载
           noMore: false, // 无更多加载数据
         }
       },
@@ -187,8 +189,17 @@ export default {
   data() {
     return {
       currentItem: 0, // 默认tabs选中第一个
-      searchDomHeight: 0, // 选项卡吸顶时与顶部的距离
+      searchDomHeight: 40, // 选项卡吸顶时与顶部的距离
     }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
+  mounted() {
+    this.getTopMargin()
   },
   methods: {
     // @--抛出事件方法
@@ -212,6 +223,14 @@ export default {
     preventTouch(e) {
       e.stopImmediatePropagation()
     },
+    // app顶部距离
+    getTopMargin() {
+      if (process && process.client && this.isInApp) {
+        let safeTop = safeAreaInsets.top
+        if (this.isInApp) safeTop = this.appInfo.statusBarHeight + 40
+        this.searchDomHeight = safeTop
+      }
+    },
     // 跳转链接
     jumpLink(url) {
       if (url) {
@@ -227,7 +246,7 @@ export default {
 <style scoped lang="less">
 .my-component {
   width: 100%;
-  padding-bottom: 164px;
+  padding-bottom: 32px;
   .tab-curve::after {
     display: block;
     content: '';

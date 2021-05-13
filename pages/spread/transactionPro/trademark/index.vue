@@ -1,12 +1,7 @@
 <template>
   <div class="trademark-page">
     <!-- 头部导航 -->
-    <Header
-      v-if="!isInApp"
-      :title="pageTitle"
-      :fixed="false"
-      head-class="head-icon"
-    >
+    <Header :title="pageTitle" :fixed="true" head-class="head-icon">
       <template v-if="false" v-slot:right>
         <div class="city-btn" @click="chooseCity">
           <span class="city-btn-text">{{ currentCity }}</span>
@@ -17,15 +12,15 @@
     <!-- 金刚区 -->
     <NavBar class="nav-bar" :data="NavBtns" />
     <!-- banner区 -->
-    <Banner class="my-banner" :data="images" />
+    <Banner class="my-banner" :data="bannerList" />
     <!-- 表单区 -->
-    <Form class="my-form" :data="FormMsg" />
+    <!-- <Form class="my-form" :data="FormMsg" /> -->
     <!-- 广告位 -->
-    <ADList :data="ADList" class="ad-margin" />
+    <!-- <ADList :data="ADList" class="ad-margin" /> -->
     <!-- 热门商标 -->
-    <HotTrademark />
+    <HotTrademark :trademark-hot="trademarkHot" />
     <!-- 商标服务 -->
-    <TrademarkService />
+    <TrademarkService :trademark-service="trademarkService" />
     <!-- 商标列表 -->
     <!-- <ProductList :planner="pagePlanner" /> -->
     <ProductList
@@ -36,57 +31,77 @@
       @getMore="getMore"
     ></ProductList>
     <!-- 站位 -->
-    <div class="box"></div>
     <!-- 底部按钮 -->
     <!-- <FixedBottom :planner="pagePlanner" :md="bottomMd" /> -->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { plannerApi } from '@/api/spread'
+import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
 import Header from '~/components/common/head/header'
 import NavBar from '~/components/spread/transactionPro/common/NavBar'
 import Banner from '~/components/spread/transactionPro/common/Banner'
-import Form from '~/components/spread/transactionPro/common/Form'
-import ADList from '@/components/spread/transactionPro/common/ADList'
-import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark'
-import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService'
-import ProductList from '@/components/spread/transactionPro/common/ProductList'
-// import FixedBottom from '~/components/spread/transactionPro/common/FooterBottom'
-import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
-
-import DggImCompany from '~/components/spread/DggImCompany'
+import HotTrademark from '~/components/spread/transactionPro/trademark/HotTrademark.vue'
+import TrademarkService from '~/components/spread/transactionPro/trademark/TrademarkService.vue'
+import ProductList from '~/components/spread/transactionPro/common/ProductList'
+import BtnPlanner from '~/components/spread/common/BtnPlanner'
 
 export default {
   components: {
     Header,
     NavBar,
     Banner,
-    Form,
-    ADList,
+    // Form,
+    // ADList,
     HotTrademark,
     TrademarkService,
     ProductList,
     BtnPlanner,
-    DggImCompany,
-    // FixedBottom,
   },
-
+  async asyncData({ $axios }) {
+    const locations = 'ad113299,ad113300,ad113301,ad113302'
+    const code = 'nav100073'
+    const centerCode = 'CPISPS-C-SBJY'
+    const dataRes = defaultRes
+    try {
+      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: code,
+          code: centerCode,
+        },
+      })
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    } catch (error) {
+      console.log('请求错误')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    }
+  },
   data() {
     return {
-      pageTitle: '商标交易',
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
+      more: {
+        loading: false,
+        noMore: false,
       },
+      pageTitle: '商标交易',
+      pagePlanner: {},
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -94,6 +109,7 @@ export default {
           type: '售前',
         },
       },
+      // 金刚区
       NavBtns: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/3v8zphmmlyc0000.png',
@@ -196,14 +212,14 @@ export default {
           },
         },
       ],
-      FormMsg: {
-        title: '海量精品商标  免费为您推荐',
-        buttonName: '立即获取',
-        subInfo: ['价格透明', '信息安全', '专业保障'],
-        type: 'sbjy', // 业态编码。固定几个业态编码。
-        md: { pageName: '商标交易聚合页表单' },
-      },
-      images: [
+      // FormMsg: {
+      //   title: '海量精品商标  免费为您推荐',
+      //   buttonName: '立即获取',
+      //   subInfo: ['价格透明', '信息安全', '专业保障'],
+      //   type: 'sbjy', // 业态编码。固定几个业态编码。
+      //   md: { pageName: '商标交易聚合页表单' },
+      // },
+      bannerList: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/8tsmiv55cgk0000.png',
           md: {
@@ -219,23 +235,73 @@ export default {
           },
         },
       ],
-
-      ADList: [
+      // 热门商标
+      trademarkHot: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/c8w39clg7go0000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/10mhf9bggcq8000.jpg',
           url: '',
-          md: {
-            name: '商标交易聚合页_优质资质',
-          },
+          name: '第03类化妆日用',
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/e5vqunicu000000.jpg',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/blnijqibtxs0000.jpg',
           url: '',
-          md: {
-            name: '商标交易聚合页_热销资质',
-          },
+          name: '第05类医药药品',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/crj3x70vv0o0000.jpg',
+          url: '',
+          name: '第11类家用电器',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/92ihdvtmr1o0000.jpg',
+          url: '',
+          name: '第18类皮革箱包',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bywj1i8uge00000.jpg',
+          url: '',
+          name: '第25类服装鞋帽',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2clxcnzlduqs000.jpg',
+          url: '',
+          name: '第29类食品行业',
         },
       ],
+      // 商标服务
+      trademarkService: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9fdf4f6ag0k0000.jpg',
+          url: '',
+          name: '商标注册',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ayfnw0im9740000.jpg',
+          url: '',
+          name: '商标信息变更',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8eqt8sxee380000.jpg',
+          url: '',
+          name: '商标异议处理',
+        },
+      ],
+      // ADList: [
+      //   {
+      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/c8w39clg7go0000.jpg',
+      //     url: '',
+      //     md: {
+      //       name: '商标交易聚合页_优质资质',
+      //     },
+      //   },
+      //   {
+      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/e5vqunicu000000.jpg',
+      //     url: '',
+      //     md: {
+      //       name: '商标交易聚合页_热销资质',
+      //     },
+      //   },
+      // ],
       // 选项卡、规划师
       goodListData: {
         tabBtnList: [
@@ -243,33 +309,35 @@ export default {
           { name: '优质商标', type: 1 },
           { name: '特价急售', type: 2 },
         ],
-        marks: [
-          '化妆日用',
-          '医药药品',
-          '家用电器',
-          '皮革箱包',
-          '服装鞋帽',
-          '食品行页',
-        ],
-        planner: {
-          id: '7862495547640840192',
-          name: '张毅',
-          jobNum: '107547',
-          telephone: '18402858698',
-          imgSrc: '',
-        },
+        // marks: [
+        //   '化妆日用',
+        //   '医药药品',
+        //   '家用电器',
+        //   '皮革箱包',
+        //   '服装鞋帽',
+        //   '食品行页',
+        // ],
+        planner: {},
         md: {
-          pageName: '资质交易聚合页',
+          pageName: '商标交易聚合页',
         },
       },
       // 商品列表
       goodList: [],
       // 加载更多loading
-      more: {
-        loading: false,
-        noMore: false,
-      },
 
+      slogans: [
+        '优质资质',
+        '特价资质',
+        '新上资质',
+        '热卖资质',
+        '急售资质',
+        '价格透明',
+        '交易保障',
+        '售后保障',
+        '品牌担保',
+        '真实有效',
+      ],
       params: {
         dictionaryCode: 'C-SY-RMJY-GG', // 查询数据字典的code
         findType: 0, // 查询类型：0：初始查询广告+数据字典+推荐商品  1：查询广告+推荐商品 2：只查推荐商品
@@ -284,10 +352,17 @@ export default {
         type: 0, // 当前选项卡
       },
       pageNum: 1, // 当前页
-
       recommendedList: [], // 推荐商标列表
       highQualityList: [], // 优质商标列表
       specialOfferList: [], // 特价急售商标列表
+      paramData: {
+        classCode: 0,
+        limit: 15,
+        start: 1,
+        dictCode: 'CONDITION-JY-SB',
+        // dictCode: 'CONDITION-JY-ZY',
+      },
+      firstScreen: '',
     }
   },
   computed: {
@@ -298,124 +373,275 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
-  created() {},
+  created() {
+    if (process.client) {
+      const tabs = []
+      this.resultData.classList &&
+        this.resultData.classList.forEach((item) => {
+          const obj = { name: item.name, type: item.ext1 }
+          tabs.push(obj)
+        })
+      this.goodListData.tabBtnList = tabs
+      // 请求
+      this.paramData.classCode = this.goodListData.tabBtnList[0].type
+    }
+  },
   mounted() {
+    this.getGoodList(this.paramData)
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
-    this.getGoodList()
-    this.getPagePlanner()
-  },
-  methods: {
-    // 根据接口获取商品列表
-    getGoodList() {
-      this.loading = true
-      const api = '/xdy-portal-product-api/trademark/recommend'
-      const cdn = 'https://microuag.dgg188.cn'
-      this.more.loading = true
-      this.$axios
-        .get(cdn + api)
-        .then((res) => {
-          this.loading = false
-          if (res.code === 'SYS_0000') {
-            this.more.loading = false
-            // 获取商品后，处理商品数据
-            this.goodList = res.data
-            this.processData(this.goodList)
-            this.switchHandle()
+    this.getPagePlanner('app-ghsdgye-02')
+    const resData = this.resultData
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        // 导航
+        this.navListData(resData.navs.nav100073 || [])
+        const trademarArr = []
+        const trademarArr2 = []
+        resData.adList.filter((elem) => {
+          // 轮播
+          if (elem.locationCode === 'ad113299') {
+            this.bannerListData(elem.sortMaterialList)
+          }
+          // 热门服务
+          if (elem.locationCode === 'ad113300') {
+            this.trademarkHotData(elem.sortMaterialList)
+          }
+          //   this.lificationData(elem.sortMaterialList, sizeData)
+          // }
+
+          // 商标服务
+          if (elem.locationCode === 'ad113301') {
+            trademarArr.push(elem.sortMaterialList[0].materialList[0])
+          }
+          // 商标服务2
+          if (elem.locationCode === 'ad113302') {
+            elem.sortMaterialList.filter((elem) => {
+              trademarArr2.push(elem.materialList[0])
+            })
           }
         })
-        .catch((err) => {
-          console.log(err)
+        if (trademarArr.length > 0 && trademarArr2.length > 0) {
+          const arr = trademarArr.concat(trademarArr2)
+          this.trademarkServiceData(arr)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  methods: {
+    // 金刚区导航栏
+    navListData(data) {
+      if (data.length !== 0) {
+        this.NavBtns = data.map((elem, index) => {
+          return {
+            sort: elem.sort,
+            img: elem.navigationImageUrl,
+            text: elem.name,
+            marketingImg: '',
+            url: elem.url,
+            md: {
+              type: '',
+              name: `专利交易聚合页_金刚区_${elem.name}`,
+            },
+          }
         })
-    },
-    // 处理数据
-    processData(data) {
-      const recommended = []
-      const highQuality = []
-      const specialOffer = []
-      const reg = /^[\u4E00-\u9FA5]{1,3}$/
-      const rg = /^[\u4E00-\u9FA5]{1,3}\s[a-zA-Z]{1,8}$/
-      const englishRg = /^[a-zA-Z]{1,8}$/
-      data.forEach((item, index) => {
-        const resObj = {
-          img: item.imageUri, // 商品左侧图片
-          price: item.sellPrice, // 商品价格
-          name: item.firstCategoryName, // 公司显示名称（有*号）
-          tabs: ['品质商标', '即买即用'], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
-          notes: [`${item.firstCategoryId}类-${item.firstCategoryName}`], // 以 | 字符分隔的注意，接口字段值
-        }
-        if (
-          item.firstCategoryName === '化妆日用' ||
-          item.firstCategoryName === '医药药品' ||
-          item.firstCategoryName === '家用电器' ||
-          item.firstCategoryName === '服装鞋帽' ||
-          item.firstCategoryName === '皮革箱包' ||
-          item.firstCategoryName === '食品鱼肉'
-        ) {
-          recommended.push(resObj)
-        }
-        if (
-          reg.test(item.trademarkName) ||
-          rg.test(item.trademarkName) ||
-          englishRg.test(item.trademarkName)
-        ) {
-          highQuality.push(resObj)
-        }
-        if (item.sellPrice < 20000) {
-          specialOffer.push(resObj)
-        }
-      })
-      this.recommendedList = recommended
-      this.highQualityList = highQuality
-      this.specialOfferList = specialOffer
-      if (this.goodList.length < 10) {
-        this.more.noMore = true
+        this.NavBtns.sort((a, b) => {
+          return a.sort - b.sort
+        })
       }
     },
+    // 轮播
+    bannerListData(data) {
+      if (data.length !== 0) {
+        this.bannerList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].name,
+            md: {
+              name: `资质交易聚合页_${elem.materialList[0].name}`,
+            },
+          }
+        })
+      }
+    },
+    // 热门商标
+    trademarkHotData(data) {
+      // console.log(data, 4687132)
+      if (data.length !== 0) {
+        this.trademarkHot = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+      }
+    },
+    // 商标服务
+    trademarkServiceData(data) {
+      if (data.length !== 0) {
+        this.trademarkService = data.map((elem, index) => {
+          return {
+            img: elem.materialUrl,
+            name: elem.name,
+            url: elem.materialLink,
+          }
+        })
+      }
+    },
+
     swipeChange(item) {
-      this.params.type = item.type
-      this.pageNum = 1
-      // this.getGoodList()
-      this.switchHandle()
+      this.paramData.classCode = item.type
+      this.paramData.start = 1
+      this.goodList = []
+      this.more.noMore = false
+      this.getGoodList(this.paramData)
     },
-    switchHandle() {
-      const sub = this.params.type
-      if (sub === 0) this.goodList = this.recommendedList
-      if (sub === 1) this.goodList = this.highQualityList
-      if (sub === 2) this.goodList = this.specialOfferList
-    },
+
     chooseCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
     // 获取更多
     getMore() {
-      this.pageNum++
-      this.getGoodList()
+      this.paramData.start++
+      this.getGoodList(this.paramData)
+    },
+    // 随机生成三条数据
+    getArrayItems(recent, num) {
+      const temparray = []
+      for (const index in recent) {
+        temparray.push(recent[index])
+      }
+      const returnarray = []
+      for (let i = 0; i < num; i++) {
+        if (temparray.length > 0) {
+          const arrIndex = Math.floor(Math.random() * temparray.length)
+          returnarray[i] = temparray[arrIndex]
+          temparray.splice(arrIndex, 1)
+        } else {
+          break
+        }
+      }
+      return returnarray
+    },
+    // 根据接口获取商品列表
+    getGoodList(param) {
+      this.more.loading = true
+      // 1、处理参数和接口
+      const url =
+        'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
+      // 2、调用接口
+      this.$axios
+        .get(newSpreadApi.trade_product_list, { params: param })
+        .then((res) => {
+          this.more.loading = false
+          // 1、获取商品后，处理商品数据
+          const data = res.data.records || []
+          if (res.code === 200 && res.data.records.length > 0) {
+            data.forEach((obj) => {
+              // 全部数据处理
+              const item = {
+                img:
+                  obj.img.split(',')[1] ||
+                  'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
+                industryName: '',
+                price: Number(obj.price),
+                name: obj.title,
+                tabs: obj.field ? obj.field.join(' | ') : '',
+                // tabs:
+                //   obj.tabs.length !== 0
+                //     ? obj.tabs
+                //     : this.getArrayItems(this.slogans, 3),
+                notes: obj.desc,
+                id: obj.id,
+              }
+              this.goodList.push(item)
+            })
+            // 2、当展示的商品列表和商品总条数相等时，显示'无更多数据啦'
+            if (data.length < 10) {
+              this.more.noMore = true
+            } else {
+              this.more.noMore = false
+            }
+            return
+          }
+          this.more.loading = false
+          this.more.noMore = true
+        })
+        .catch((err) => {
+          console.log(err)
+          this.more.loading = false
+          this.more.noMore = true
+        })
     },
     jumpLink(url) {
       if (url) {
-        window.open(url, '_blank')
-      } else {
-        window.spptMqMi.showPanel()
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
       }
+      this.$refs.plannerIM.onlineConsult()
     },
     // @--获取规划师
-    async getPagePlanner() {
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      // const url =
+      //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
       try {
-        const res = await this.$axios.get(`${plannerApi.planner}`)
-        if (res.code === 200) {
-          this.pagePlanner = {
-            id: res.data.list[0].userCentreId,
-            name: res.data.list[0].realName,
-            jobNum: res.data.list[0].loginName,
-            telephone: res.data.list[0].userPhone,
-            imgSrc: res.data.list[0].userHeadUrl,
-          }
-        }
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136273', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
       } catch (error) {
-        console.log('plannerApi.planner error：', error.message)
+        console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
   },
@@ -429,6 +655,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+iframe {
+  display: none;
+}
 .trademark-page {
   background: #ffffff;
   width: @spread-page-width;
@@ -449,7 +678,7 @@ export default {
     }
   }
   .nav-bar {
-    margin-top: 16px;
+    padding-top: 16px;
     ::v-deep.my-component {
       padding: 24px 40px 32px;
     }
@@ -467,16 +696,16 @@ export default {
   .box {
     height: 148px;
   }
-  ::v-deep.btn {
-    display: none;
-  }
-  ::v-deep.my-component {
-    padding-bottom: 0px;
-  }
-  ::v-deep.sp-bottombar {
-    position: fixed;
-    bottom: 0;
-    z-index: 10;
-  }
+  //   ::v-deep.btn {
+  //     display: none;
+  //   }
+  //   ::v-deep.my-component {
+  //     padding-bottom: 0px;
+  //   }
+  //   ::v-deep.sp-bottombar {
+  //     position: fixed;
+  //     bottom: 0;
+  //     z-index: 10;
+  //   }
 }
 </style>

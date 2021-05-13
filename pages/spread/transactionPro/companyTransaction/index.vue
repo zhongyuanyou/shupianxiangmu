@@ -2,10 +2,9 @@
   <div class="page-content">
     <!-- START 头部Header-->
     <Header
-      v-if="!isInApp"
       ref="header"
       :title="pageTitle"
-      :fixed="false"
+      :fixed="true"
       head-class="head-icon"
     >
       <template v-if="false" v-slot:right>
@@ -29,69 +28,98 @@
 
     <!-- START 表单-->
     <!-- <Form /> -->
-    <Form class="laowu-form" :data="cardName" />
+    <!-- <Form class="laowu-form" :data="cardName" /> -->
     <!-- END   表单-->
 
     <!-- START 热门行业-->
-    <HotIndustry class="banner-margin" />
+    <HotIndustry :hot-industry="hotIndustry" class="banner-margin" />
     <!-- END   热门行业-->
 
     <!-- START 附带资产类型-->
-    <WithAssetsType class="with-assets-type-margin" />
+    <WithAssetsType :assets-list="assetsList" class="with-assets-type-margin" />
     <!-- END   附带资产类型-->
 
     <!-- START 推荐公司-->
-    <RecommendCompany />
+    <RecommendCompany :tab-list="tabList" />
     <!-- END   推荐公司-->
 
     <!-- START 规划师-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner
+      v-if="pagePlanner"
+      ref="plannerIM"
+      :planner="pagePlanner"
+      :md="fixedMd"
+    />
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!-- END IM在线咨询-->
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { plannerApi } from '@/api/spread'
-
+import { plannerApi, chipSpread } from '@/api/spread'
 import Header from '@/components/common/head/header'
-import DggImCompany from '@/components/spread/DggImCompany'
-import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
-
-import NavBar from '@/components/spread/transactionPro/common/NavBar'
-import Banner from '@/components/spread/transactionPro/common/Banner'
-import Form from '~/components/spread/transactionPro/common/Form'
-import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry'
-import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType'
-import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany'
+// import DggImCompany from '@/components/spread/DggImCompany'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
+import Banner from '@/components/spread/transactionPro/common/Banner.vue'
+// import Form from '~/components/spread/transactionPro/common/Form'
+import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry.vue'
+import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType.vue'
+import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany.vue'
 
 export default {
   name: 'Index',
   components: {
     Header,
     Banner,
-    Form,
+    // Form,
     HotIndustry,
     WithAssetsType,
     RecommendCompany,
     BtnPlanner,
-    DggImCompany,
+    // DggImCompany,
     NavBar,
+  },
+  async asyncData({ $axios }) {
+    const locations = 'ad113298,ad113297,ad113296,ad113295'
+    const navCode = 'nav100072'
+    const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
+    // chipSpread.list
+    try {
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: navCode,
+          code: 'CRISPS-C-GSJY',
+        },
+      })
+      if (res.code === 200) {
+        return {
+          resultData: res.data,
+        }
+      }
+      return {
+        resultData: [],
+      }
+    } catch (error) {
+      return {
+        resultData: [],
+      }
+    }
   },
   data() {
     return {
       pageTitle: '公司交易',
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      }, // 页面规划师y
+      // 页面规划师
+      hotIndustry: [],
+      pagePlanner: {},
+      assetsList: [],
+      assetsTop: [],
+      assetsBottom: [],
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -224,12 +252,13 @@ export default {
 
       // 表单
       cardName: {
-        title: '只需5秒 一键为您适配专利',
+        title: '公司转让通道 立即预约',
         buttonName: '立即获取',
         subInfo: ['价格透明', '信息安全', '官方保障'],
         type: 'zhgszr', // 业态编码。固定几个业态编码。
         md: { pageName: '公司交易聚合页' },
       },
+      // tab标签
     }
   },
   computed: {
@@ -239,11 +268,29 @@ export default {
       currentCity: (state) => state.city.currentCity.name || '成都',
       isInApp: (state) => state.app.isInApp,
     }),
+    tabList() {
+      const tabs = []
+      this.resultData.classList &&
+        this.resultData.classList.forEach((item) => {
+          const obj = { name: item.name, type: item.ext1, goodList: [] }
+          tabs.push(obj)
+        })
+      return tabs
+    },
   },
   created() {
-    this.getPagePlanner()
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
+    }
   },
   mounted() {
+    this.getNav(this.resultData.navs.nav100072)
+    this.getAd('ad113295')
+    this.getAd('ad113296')
+    this.getAd('ad113297')
+    this.getAd('ad113298')
+
     // @--神策埋点-浏览事件-只执行一次
     window.spptMd.spptTrackRow('pageview', {
       name: `推广公司交易聚合页浏览`,
@@ -264,47 +311,188 @@ export default {
     }
   },
   methods: {
+    getNav(nav) {
+      const navs = []
+      nav.forEach((elem) => {
+        const obj = {
+          sort: elem.sort,
+          img: elem.navigationImageUrl,
+          text: elem.name,
+          marketingImg: '',
+          url: elem.url,
+          md: {
+            type: '',
+            name: `专利交易聚合页_金刚区_${elem.name}`,
+          },
+        }
+        navs.push(obj)
+      })
+      this.dataList = navs
+      this.dataList.sort((a, b) => {
+        return a.sort - b.sort
+      })
+    },
+    getAd(code) {
+      const data = this.resultData.adList
+      const assets = []
+      if (code === 'ad113295') {
+        const banner = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                url: elem.materialList[0].materialLink,
+                img: elem.materialList[0].materialUrl,
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+                md: {
+                  type: '',
+                  name: '',
+                },
+              }
+              banner.push(obj)
+            })
+            this.imageBanner = banner
+          }
+        })
+      }
+      if (code === 'ad113296') {
+        const hot = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                url: elem.materialList[0].materialLink,
+                img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+              }
+              hot.push(obj)
+            })
+            this.hotIndustry = hot
+          }
+        })
+      }
+      if (code === 'ad113297') {
+        const pro = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                marketingImg: '',
+                url: elem.materialList[0].materialLink,
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+                imgWidth: 331,
+                imgHeight: 172,
+              }
+              pro.push(obj)
+            })
+            this.assetsTop = pro
+          }
+        })
+      }
+      if (code === 'ad113298') {
+        const pro = []
+        data.forEach((item) => {
+          if (item.locationCode === code) {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                title: '',
+                desc: '',
+                marketingImg: '',
+                url: elem.materialList[0].materialLink,
+                iosUrl: elem.materialList[0].iosLink,
+                wapUrl: elem.materialList[0].wapLink,
+                androidUrl: elem.materialList[0].androidLink,
+                imgWidth: 215,
+                imgHeight: 205,
+              }
+              pro.push(obj)
+            })
+            this.assetsBottom = pro
+          }
+        })
+      }
+      const list = this.assetsTop.concat(this.assetsBottom)
+      this.assetsList = list
+    },
     // @--跳转
     // 选择城市
     choiceCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
     jumpLink(url) {
-      console.log(132132132)
       if (url) {
         if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
+          window.location.href = url
+          return
         }
-      } else {
-        const planner = this.pagePlanner
-        this.$root.$emit(
-          'openIMM',
-          planner.id,
-          planner.name || '',
-          planner.jobNum || '',
-          planner.imgSrc || ''
-        )
       }
+      this.$refs.plannerIM.onlineConsult()
     },
 
     // @--获取规划师
-    async getPagePlanner() {
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
       try {
-        const res = await this.$axios.get(`${plannerApi.planner}`)
-        if (res.code === 200) {
-          this.pagePlanner = {
-            id: res.data.list[0].userCentreId,
-            name: res.data.list[0].realName,
-            jobNum: res.data.list[0].loginName,
-            telephone: res.data.list[0].userPhone,
-            imgSrc: res.data.list[0].userHeadUrl,
-          }
-        }
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136319', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
       } catch (error) {
-        console.log('plannerApi.planner error：', error.message)
+        console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
   },
@@ -337,7 +525,7 @@ export default {
 
   // @--页面各板块上下间距
   .nav-btn-margin {
-    margin-top: 20px;
+    padding-top: 20px;
   }
   .banner-margin {
     margin: 20px auto;

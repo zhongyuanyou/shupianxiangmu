@@ -2,7 +2,12 @@
   <div class="enterprise-service">
     <!-- S 头部和金刚区 -->
     <div class="top-background">
-      <NavTop title="企业服务" @searchKeydownHandle="searchKeydownHandle" />
+      <NavTop
+        title="企业服务"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <Nav
         :roll-nav="rollNav"
         class="navs"
@@ -31,19 +36,29 @@
       </template>
     </TabServiceItem>
     <!-- E 列表 -->
+
+    <!-- START 规划师-->
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
+    <!-- END 规划师-->
+
+    <!-- START IM在线咨询-->
+    <!-- <DggImCompany></DggImCompany> -->
+    <!-- END IM在线咨询-->
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
-// import { defaultRes } from './enterpriseService'
-import { chipSpread } from '@/api/spread'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
 import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
+// import DggImCompany from '@/components/spread/DggImCompany'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { resultData } from '~/assets/spread/licence'
 export default {
   name: 'Index',
@@ -53,32 +68,26 @@ export default {
     Advertising,
     TabServiceItem,
     EnterpriseList,
+    BtnPlanner,
+    // DggImCompany,
   },
   async asyncData({ $axios }) {
-    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-    const url =
-      'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
-    // const url =
-    //   'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/productList.do'
-    // const url =
-    //   'http://localhost:3000/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
-    const locations = 'ad113250,ad113252,ad113257'
+    const locations = 'ad113257,ad113252,ad113250,ad113227'
     const code = 'nav100057'
-    const centerCode = 'EnterpriseService'
+    const centerCode = 'CRISPS-C-QYFW'
     const dataRes = defaultRes
     try {
-      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
-      const res = await $axios.get(chipSpread.list, {
+      const res = await $axios.get(newSpreadApi.list, {
         params: {
           locationCodes: locations,
           navCodes: code,
-          productCenterCode: centerCode,
+          code: centerCode,
         },
       })
-
-      console.log(res.message)
+      console.log(res)
       if (res.code === 200) {
         console.log('请求成功')
+        console.log(res.data)
         return {
           resultData: res.data,
         }
@@ -96,7 +105,8 @@ export default {
   },
   data() {
     return {
-      // marginTop: 10,
+      placeholder: '请输入关键字',
+      marginTop: 0,
       // 金刚区
       rollNav: [
         {
@@ -262,26 +272,26 @@ export default {
           type: 1,
           name: '为你推荐',
         },
-        {
-          code: 2,
-          type: 1,
-          name: '工商服务',
-        },
-        {
-          code: 3,
-          type: 1,
-          name: '会计服务',
-        },
-        {
-          code: 4,
-          type: 1,
-          name: '知识服务',
-        },
-        {
-          code: 5,
-          type: 1,
-          name: '资质服务',
-        },
+        // {
+        //   code: 2,
+        //   type: 1,
+        //   name: '工商服务',
+        // },
+        // {
+        //   code: 3,
+        //   type: 1,
+        //   name: '会计服务',
+        // },
+        // {
+        //   code: 4,
+        //   type: 1,
+        //   name: '知识服务',
+        // },
+        // {
+        //   code: 5,
+        //   type: 1,
+        //   name: '资质服务',
+        // },
       ],
       // 当前列表状态
       changeState: {
@@ -407,6 +417,29 @@ export default {
           url: '',
         },
       ],
+      // 页面规划师
+      pagePlanner: {},
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: '公司交易聚合页_底部展位_在线咨询',
+          type: '售前',
+        },
+      },
+    }
+  },
+  computed: {
+    // 将接受的state混合进组件局部计算属性
+    // 监听接受的state值
+    ...mapState({
+      currentCity: (state) => state.city.currentCity,
+      isInApp: (state) => state.app.isInApp,
+    }),
+  },
+  created() {
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   mounted() {
@@ -418,7 +451,7 @@ export default {
       if (JSON.stringify(resData) !== '{}') {
         // 导航
         this.navList(resData.navs.nav100057 || [])
-        // this.productTitle(resData.productClassList || [])
+        this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
           if (elem.locationCode === 'ad113250') {
             this.giftData(elem.sortMaterialList)
@@ -427,7 +460,7 @@ export default {
             this.proDiscountsData(elem.sortMaterialList)
           }
           if (elem.locationCode === 'ad113257') {
-            this.introduceData(elem.sortMaterialList)
+            this.introduceData(elem.sortMaterialList, resData)
           }
         })
       }
@@ -437,8 +470,36 @@ export default {
   },
   methods: {
     // 搜索
-    searchKeydownHandle(e) {
-      console.log(e)
+    clickInputHandle(e) {
+      console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 请求数据
     onChange(changeObj) {
@@ -471,12 +532,14 @@ export default {
     // 薯片推广企业服务新人专属礼页面
     giftData(data) {
       if (data.length !== 0) {
-        this.gift = data.map((elem) => {
+        this.gift = data.map((elem, index) => {
           return {
+            mainTitle:
+              index === 0 ? elem.materialList[0].materialDescription : '',
             img: elem.materialList[0].materialUrl,
-            url: '',
-            title: elem.materialList[0].materialDescription.split(',')[0],
-            price: elem.materialList[0].materialDescription.split(',')[1],
+            url: elem.materialList[0].materialLink,
+            title: elem.materialList[0].materialDescription.split(',')[0] || '',
+            price: elem.materialList[0].materialDescription.split(',')[1] || '',
           }
         })
       } else {
@@ -485,29 +548,49 @@ export default {
     },
     // 直播 补贴
     proDiscountsData(data) {
-      this.proDiscountsData = data.map((elem, index) => {
+      this.proDiscounts = data.map((elem, index) => {
         const labelData = ['直播中', '优惠放送']
         return {
           proTitle: elem.materialList[0].materialDescription.split(',')[0],
           subheading: elem.materialList[0].materialDescription.split(',')[1],
           label: labelData[index] || '',
           bgImg: elem.materialList[0].materialUrl,
-          url: '',
+          url: elem.materialList[0].materialLink,
         }
       })
+      console.log(this.proDiscountsData, 46546)
     },
     // 活动广告位
-    introduceData(data) {
+    introduceData(data, resData) {
       if (data.length !== 0) {
         this.introduce = data.map((elem, index) => {
           return {
             title: elem.materialList[0].materialDescription.split(',')[0],
             subheading: elem.materialList[0].materialDescription.split(',')[1],
             img: elem.materialList[0].materialUrl,
-            url: '',
+            url: elem.materialList[0].materialLink,
           }
         })
       }
+    },
+    // 产品分类
+    productClassData(data) {
+      if (data.length === 0) return
+      this.changeState = {
+        type: data[0].ext1,
+        code: data[0].ext1,
+        name: data[0].name,
+      }
+
+      const classArr = []
+      data.forEach((item, index) => {
+        classArr.push({
+          type: item.ext1,
+          code: item.ext1,
+          name: item.name,
+        })
+      })
+      this.titleName = classArr
     },
 
     // 列表导航
@@ -530,6 +613,69 @@ export default {
         })
       }
     },
+    // 推介规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425163708', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
+    },
   },
   head() {
     return {
@@ -548,7 +694,7 @@ export default {
     // height: 450px;
     background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
       no-repeat;
-    background-size: 100% 450px;
+    background-size: cover;
     margin-bottom: 20px;
   }
   .navs {

@@ -2,10 +2,9 @@
   <div class="page-content">
     <!--START 头部Header-->
     <Header
-      v-if="!isInApp"
       ref="header"
       :title="pageTitle"
-      :fixed="false"
+      :fixed="true"
       head-class="head-icon"
     >
       <template v-if="false" v-slot:right>
@@ -26,12 +25,12 @@
     <!--END   轮播Banner-->
 
     <!--START 表单-->
-    <Form :data="formData" class="" />
+    <!-- <Form :data="formData" class="" /> -->
     <!--END   表单-->
 
-    <ADList class="ad-margin" />
+    <!-- <ADList class="ad-margin" /> -->
     <!--START 优质资质-->
-    <GoodQualification class="good-qua-margin" />
+    <GoodQualification :data="lification" class="good-qua-margin" />
     <!--END   优质资质-->
 
     <!--START 推荐公司-->
@@ -45,28 +44,31 @@
     <!--END   推荐公司-->
 
     <!--START 固定底部-->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!--END   固定底部-->
 
     <!--START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!--END   IM在线咨询-->
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
+
 import Header from '@/components/common/head/header'
-import DggImCompany from '@/components/spread/DggImCompany'
-import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
+// import DggImCompany from '@/components/spread/DggImCompany'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 import NavBar from '@/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '@/components/spread/transactionPro/common/Banner'
-import Form from '@/components/spread/transactionPro/common/Form'
+// import Form from '@/components/spread/transactionPro/common/Form'
 import ProductList from '@/components/spread/transactionPro/common/ProductList'
 
-import GoodQualification from '@/components/spread/transactionPro/qualification/GoodQualification'
-import ADList from '@/components/spread/transactionPro/common/ADList'
+import GoodQualification from '@/components/spread/transactionPro/qualification/GoodQualification.vue'
+// import ADList from '@/components/spread/transactionPro/common/ADList'
 
 export default {
   name: 'Index',
@@ -74,12 +76,44 @@ export default {
     Header,
     NavBar,
     Banner,
-    Form,
+    // Form,
     ProductList,
-    DggImCompany,
+    // DggImCompany,
     BtnPlanner,
     GoodQualification,
-    ADList,
+    // ADList,
+  },
+  async asyncData({ $axios }) {
+    const locations = 'ad113292,ad113293,ad113294'
+    const navCode = 'nav100074'
+    // const centerCode = 'EnterpriseService'
+    const dataRes = defaultRes
+    try {
+      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: navCode,
+          code: 'CRISPS-C-LWZZ',
+          // productCenterCode: centerCode,
+        },
+      })
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    } catch (error) {
+      console.log('请求错误')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    }
   },
   data() {
     return {
@@ -205,6 +239,54 @@ export default {
           },
         },
       ],
+      // 优质资质
+      lification: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/3ia3ajzw8xo0000.png',
+          imgWidth: 327,
+          imgHeight: 145,
+          url: '',
+          md: {
+            name: '资质交易聚合页_建筑工程',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2gxgo9h7eyi0000.png',
+          imgWidth: 327,
+          imgHeight: 145,
+          url: '',
+          md: {
+            name: '资质交易聚合页_公路工程',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/1uqbozuf4u74000.png',
+          imgWidth: 213,
+          imgHeight: 146,
+          url: '',
+          md: {
+            name: '资质交易聚合页_地基基础',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/xx9gz37ikxc000.png',
+          imgWidth: 213,
+          imgHeight: 146,
+          url: '',
+          md: {
+            name: '资质交易聚合页_消防设施',
+          },
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/15rjalmh0ag0000.png',
+          imgWidth: 213,
+          imgHeight: 146,
+          url: '',
+          md: {
+            name: '资质交易聚合页_公路路面',
+          },
+        },
+      ],
       // 表单数据
       formData: {
         title: '只需5秒 一键进行资质匹配',
@@ -216,13 +298,7 @@ export default {
         type: 'zzzr',
       },
       // 推荐规划师
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
 
       // @--S 埋点数据
       fixedMd: {
@@ -231,12 +307,13 @@ export default {
           type: '售前',
         },
       },
-
+      firstScreen: '',
       // @--S 推荐公司板块
       params: {
-        page: 1,
+        start: 1,
         limit: 10,
-        type: 0,
+        classCode: 0,
+        dictCode: 'CONDITION-JY-ZZ',
       },
       // 选项卡、规划师
       goodListData: {
@@ -245,7 +322,7 @@ export default {
           { name: '热卖资质', type: 9 },
           { name: '急售', type: 1 },
         ],
-        marks: ['特级', '一级', '二级', '三级'],
+        // marks: ['特级', '一级', '二级', '三级'],
         planner: {
           id: '7862495547640840192',
           name: '张毅',
@@ -289,12 +366,58 @@ export default {
     }),
   },
   created() {
-    this.getGoodList(this.params)
+    if (process.client) {
+      const tabs = []
+      this.resultData.classList &&
+        this.resultData.classList.forEach((item) => {
+          const obj = { name: item.name, type: item.ext1 }
+          tabs.push(obj)
+        })
+      this.goodListData.tabBtnList = tabs
+      // 请求
+      this.params.classCode = this.goodListData.tabBtnList[0].type
+    }
   },
   mounted() {
+    this.getGoodList(this.params)
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
+    }
+    this.getPagePlanner('app-ghsdgye-02')
+
+    const resData = this.resultData
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        // 导航
+        this.navList(resData.navs.nav100074 || [])
+        // this.productTitle(resData.productClassList || [])
+        resData.adList.filter((elem) => {
+          // 轮播
+          if (elem.locationCode === 'ad113292') {
+            this.bannerListData(elem.sortMaterialList)
+          }
+          // 优质资质2
+          if (elem.locationCode === 'ad113294') {
+            this.lification = []
+            const sizeData = {
+              imgWidth: 213,
+              imgHeight: 146,
+            }
+            this.lificationData(elem.sortMaterialList, sizeData)
+          }
+          // 优质资质
+          if (elem.locationCode === 'ad113293') {
+            const sizeData = {
+              imgWidth: 327,
+              imgHeight: 145,
+            }
+            this.lificationData(elem.sortMaterialList, sizeData)
+          }
+        })
+      }
+    } catch (error) {
+      console.log(error)
     }
   },
   methods: {
@@ -303,124 +426,122 @@ export default {
     choiceCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
+    // 金刚区导航栏
+    navList(data) {
+      if (data.length !== 0) {
+        this.navBarList = data.map((elem, index) => {
+          return {
+            sort: elem.sort,
+            img: elem.navigationImageUrl,
+            text: elem.name,
+            marketingImg: '',
+            url: elem.url,
+            md: {
+              type: '',
+              name: `专利交易聚合页_金刚区_${elem.name}`,
+            },
+          }
+        })
+        this.navBarList.sort((a, b) => {
+          return a.sort - b.sort
+        })
+      }
+    },
+    // 轮播
+    bannerListData(data) {
+      if (data.length !== 0) {
+        this.bannerList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].name,
+            md: {
+              name: `资质交易聚合页_${elem.materialList[0].name}`,
+            },
+          }
+        })
+      }
+    },
+    lificationData(data, sizeData) {
+      if (data.length !== 0) {
+        data.map((elem, index) => {
+          const obj = {
+            img: elem.materialList[0].materialUrl,
+            imgWidth: sizeData.imgWidth,
+            imgHeight: sizeData.imgHeight,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].name,
+            md: {
+              name: `资质交易聚合页_${elem.materialList[0].name}`,
+            },
+          }
+          this.lification.push(obj)
+        })
+      }
+    },
     // 跳转链接-IM规划师
     jumpLink(url) {
       if (url) {
-        window.open(url, '_blank')
-      } else {
-        // const planner = this.pagePlanner
-        // this.$root.$emit(
-        //   'openIMM',
-        //   planner.id,
-        //   planner.name || '',
-        //   planner.jobNum || '',
-        //   planner.imgSrc || ''
-        // )
-        window.spptMqMi.showPanel()
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
       }
+      this.$refs.plannerIM.onlineConsult()
     },
 
     // @--S 推荐公司板块
     // 获取商品列表
-    getGoodList({ type = 0, page = 1, limit = 10 }) {
+    getGoodList(param) {
       this.more.loading = true
       // 1、处理参数和接口
-      const param = `?type=${type}&page=${page}&limit=${limit}`
-      const api = '/xdy-portal-product-api/aptitude/getRelatedRecommendations'
-      const cdn = 'https://microuag.dgg188.cn'
+      const url =
+        'http://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       // 2、调用接口
+      // newSpreadApi.trade_product_list
       this.$axios
-        .get(cdn + api + param)
+        .get(newSpreadApi.trade_product_list, { params: param })
         .then((res) => {
           this.more.loading = false
           // 1、获取商品后，处理商品数据
-          const data = res.data.list || []
-          if (res.code === 200 && res.data.list.length > 0) {
+          const data = res.data.records || []
+          if (res.code === 200 && res.data.records.length > 0) {
             data.forEach((obj) => {
               // 进行类型图片处理：截取数组第一个值得第一个字段
-              let type = ''
-              const index = obj.aptitudes[0].name.indexOf('-')
-              if (index > -1) {
-                type = obj.aptitudes[0].name.slice(0, index)
-              } else {
-                type = obj.aptitudes[0].name
-              }
-              let img = ''
-              switch (type) {
-                case '施工总承包': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/dmw1eqwpz5c0000.png'
-                  break
-                }
-                case '施工专业承包': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/fnrnbp54bm00000.png'
-                  break
-                }
-                case '其他资质': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/7k86445axyw0000.png'
-                  break
-                }
-                case '勘察': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/8q40o2nqbmo0000.png'
-                  break
-                }
-                case '施工劳务': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/43iipcpfwm20000.png'
-                  break
-                }
-                case '工程设计': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/2p0q0971ccw0000.png'
-                  break
-                }
-                case '房地产开发': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/d1hxxmkv5kg0000.png'
-                  break
-                }
-                case '招标代理': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/22k7vyj0zy80000.png'
-                  break
-                }
-                case '监理': {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/7g003aqqas00000.png'
-                  break
-                }
-                default: {
-                  img =
-                    'https://cdn.shupian.cn/sp-pt/wap/images/2zqf2fldtmk0000.png'
-                }
-              }
+              const type = obj.id.substring(-1, 1)
+              const img =
+                'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png'
 
               // 全部数据处理
               const item = {
-                img,
+                img: obj.img.split(',')[1] || img,
                 industryName: '',
-                price: Number(obj.capital),
-                name: obj.comName,
-                tabs: this.getArrayItems(this.slogans, 3),
-                notes: [
-                  obj.cityName,
-                  obj.endYear,
-                  obj.safety === '1' ? '有安全许可证' : null,
-                ],
+                price: Number(obj.price),
+                name: obj.title,
+                tabs: obj.field ? obj.field.join(' | ') : '',
+                // tabs:
+                //   obj.tabs.length !== 0
+                //     ? obj.tabs
+                //     : this.getArrayItems(this.slogans, 3),
+                notes: obj.desc,
+                id: obj.id,
               }
               this.goodList.push(item)
             })
             // 2、当展示的商品列表和商品总条数相等时，显示'无更多数据啦'
             if (this.goodList.length === res.data.total) {
+              this.more.loading = false
               this.more.noMore = true
             }
+            return
           }
+          this.more.loading = false
+          this.more.noMore = true
         })
         .catch((err) => {
           console.log(err)
+          this.more.loading = false
+          this.more.noMore = true
         })
     },
     // 随机生成三条数据
@@ -444,16 +565,72 @@ export default {
     // swipe当前项改变时
     swipeChange(option) {
       this.goodList = []
-      this.params.page = 1
-      this.params.type = option.type
+      this.params.start = 1
+      this.params.classCode = option.type
+      this.more.noMore = false
       this.getGoodList(this.params)
     },
     // 获取更多按钮
     getMore() {
-      this.params.page++
+      this.params.start++
       this.getGoodList(this.params)
     },
-    // @--E   推荐公司板块
+    // 推挤规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      // const url =
+      //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136348', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
   },
   head() {
     return {
@@ -484,7 +661,7 @@ export default {
 
   // 各个板块的上下边距
   .nav-margin {
-    margin-top: 20px;
+    padding-top: 20px;
   }
   .banner-margin {
     margin-top: 20px;

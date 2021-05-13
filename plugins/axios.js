@@ -4,6 +4,8 @@ import { saveAxiosInstance } from '@/utils/request'
 import xToast from '@/components/common/spToast'
 // const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 const BASE = require('~/config/index.js')
+console.log('--------BASE.baseURL')
+console.log(BASE.baseURL)
 export default function ({ $axios, redirect, app, store }) {
   $axios.defaults.withCredentials = false
   $axios.defaults.timeout = 12000

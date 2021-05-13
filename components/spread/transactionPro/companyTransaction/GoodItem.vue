@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a
+    <!-- <a
       ref="goodItem"
       v-md-map
       v-md:p_commodityClick
@@ -10,8 +10,10 @@
       :data-commodity_number="good.companyId"
       :data-commodity_name="good.companyName"
       :data-n_now_price="good.transferPrice"
+      @click="jump(good.id)"
       class="my-component"
-    >
+    > -->
+    <a ref="goodItem" class="my-component" @click="jump(good.id)">
       <!-- S 左侧商品图片 -->
       <div class="item-img"><img :src="data.industryImg" /></div>
       <!-- E 左侧商品图片 -->
@@ -20,22 +22,19 @@
       <div class="item-content">
         <p class="item-title">{{ data.name }}</p>
         <div class="item-tabs">
-          <span
+          <!-- <span
             v-for="(item, index) in data.tabs"
             :key="index"
             class="item-tab"
           >
             {{ item }}
-          </span>
+          </span> -->
+          <span class="item-tab">{{ data.tabs }}</span>
         </div>
         <div class="item-notes">
-          <span
-            v-for="(item, index) in data.notes"
-            :key="index"
-            class="item-note"
-          >
-            {{ item }}
-            <label v-if="index != data.notes.length - 1">|</label>
+          <span class="item-note">
+            {{ data.notes }}
+            <!-- <label v-if="index != data.notes.length - 1">|</label> -->
           </span>
         </div>
         <p class="item-price">
@@ -57,6 +56,7 @@
 </template>
 
 <script>
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'GoodItem',
   props: {
@@ -136,58 +136,61 @@ export default {
       // 处理传进的数据
       const obj = this.good
       const item = {
-        industryImg: '',
-        industryName: obj.companyIndustryName,
+        industryImg:
+          obj.img.split(',')[1] ||
+          'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
+        // industryName: obj.companyIndustryName,
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
-        price: obj.transferPrice,
-        name: obj.showName,
-        tabs: this.getArrayItems(this.slogans, 3),
-        notes: [
-          obj.companyIndustryName,
-          obj.payTaxesTypeName,
-          obj.establishDate,
-        ],
+        price: obj.price,
+        name: obj.title,
+        tabs: obj.field ? obj.field.join(' | ') : '',
+        // tabs:
+        //   obj.tabs.length !== 0
+        //     ? obj.tabs
+        //     : this.getArrayItems(this.slogans, 3),
+        notes: obj.desc,
+        id: obj.id,
       }
-      switch (obj.companyIndustryName) {
-        case '电子贸易': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/8501dnyiae40000.png'
-          break
-        }
-        case '科技信息': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/eb0b1yellgg0000.png'
-          break
-        }
-        case '教育培训': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/bas2zdj518w0000.png'
-          break
-        }
-        case '广告传媒': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/39l64c4kujc0000.png'
-          break
-        }
-        case '餐饮美容': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/734jysfyke00000.png'
-          break
-        }
-        case '公司交易': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/7sj0p2oe7000000.png'
-          break
-        }
-        case '公司转让': {
-          item.industryImg = 'https://img10.dgg.cn/pt06/wap/fcyegzq87o00000.png'
-          break
-        }
-        default: {
-          // 当没有行业对应图片时，随机从三张默认图里抽一张作为行业图片
-          const images = [
-            'https://img10.dgg.cn/pt06/wap/7iswdcpn8jc0000.png',
-            'https://img10.dgg.cn/pt06/wap/7mgxtxioehw0000.png',
-            'https://img10.dgg.cn/pt06/wap/3ejz3vwjiks0000.png',
-          ]
-          const num = Math.floor(Math.random() * 3)
-          item.industryImg = images[num]
-        }
-      }
+      //   switch (obj.companyIndustryName) {
+      //     case '电子贸易': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/8501dnyiae40000.png'
+      //       break
+      //     }
+      //     case '科技信息': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/eb0b1yellgg0000.png'
+      //       break
+      //     }
+      //     case '教育培训': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/bas2zdj518w0000.png'
+      //       break
+      //     }
+      //     case '广告传媒': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/39l64c4kujc0000.png'
+      //       break
+      //     }
+      //     case '餐饮美容': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/734jysfyke00000.png'
+      //       break
+      //     }
+      //     case '公司交易': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/7sj0p2oe7000000.png'
+      //       break
+      //     }
+      //     case '公司转让': {
+      //       item.industryImg = 'https://img10.dgg.cn/pt06/wap/fcyegzq87o00000.png'
+      //       break
+      //     }
+      //     default: {
+      //       // 当没有行业对应图片时，随机从三张默认图里抽一张作为行业图片
+      //       const images = [
+      //         'https://img10.dgg.cn/pt06/wap/7iswdcpn8jc0000.png',
+      //         'https://img10.dgg.cn/pt06/wap/7mgxtxioehw0000.png',
+      //         'https://img10.dgg.cn/pt06/wap/3ejz3vwjiks0000.png',
+      //       ]
+      //       const num = Math.floor(Math.random() * 3)
+      //       item.industryImg = images[num]
+      //     }
+      //   }
       return item
     },
   },
@@ -199,6 +202,14 @@ export default {
     }
   },
   methods: {
+    // 跳转详情
+    jump(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=FL20201224136319&productId=${id}`
+    },
     // @--随机生成三条数据
     getArrayItems(recent, num) {
       const temparray = []
@@ -220,38 +231,38 @@ export default {
 
     // @--滚动浏览埋点
     // 商品已经在页面可视区显示是，手动埋点
-    scrollMd(event) {
-      this.scrollFunc()
-      if (this.scrollDirection === 'down') {
-        // 页面向下滚动要做的事情
-        const clientHeight = document.documentElement.clientHeight
-        const eleTop = this.$refs.goodItem.getBoundingClientRect().top
-        const goodHeight = this.$refs.goodItem.getBoundingClientRect().height
-        if (
-          !this.isMd &&
-          eleTop > 0 &&
-          clientHeight - eleTop > goodHeight + 50
-        ) {
-          console.log(clientHeight - eleTop)
-          // 当元素最顶部 距离小于 页面最顶部时
-          // 进行一次埋点
-          window.spptMd.spptTrackRow('p_commodityVisit', {
-            name: `推荐商品浏览`,
-            track_code: 'SPTG000004',
-            commodity_type: this.good.compantType, // 商品类型
-            commodity_number: this.good.companyId, // 商品编号
-            commodity_name: this.good.companyName, // 商品名称
-            n_now_price: this.good.transferPrice, // 商品售价
-          })
-          this.isMd = true
-          this.$emit('update:isMd', true)
-        }
-      } else if (this.scrollDirection === 'up') {
-        // 页面向上滚动要做的事情
-        // console.log('up')
-        this.isMd = false
-      }
-    },
+    // scrollMd(event) {
+    //   this.scrollFunc()
+    //   if (this.scrollDirection === 'down') {
+    //     // 页面向下滚动要做的事情
+    //     const clientHeight = document.documentElement.clientHeight
+    //     const eleTop = this.$refs.goodItem.getBoundingClientRect().top
+    //     const goodHeight = this.$refs.goodItem.getBoundingClientRect().height
+    //     if (
+    //       !this.isMd &&
+    //       eleTop > 0 &&
+    //       clientHeight - eleTop > goodHeight + 50
+    //     ) {
+    //       console.log(clientHeight - eleTop)
+    //       // 当元素最顶部 距离小于 页面最顶部时
+    //       // 进行一次埋点
+    //       window.spptMd.spptTrackRow('p_commodityVisit', {
+    //         name: `推荐商品浏览`,
+    //         track_code: 'SPTG000004',
+    //         commodity_type: this.good.compantType, // 商品类型
+    //         commodity_number: this.good.companyId, // 商品编号
+    //         commodity_name: this.good.companyName, // 商品名称
+    //         n_now_price: this.good.transferPrice, // 商品售价
+    //       })
+    //       this.isMd = true
+    //       this.$emit('update:isMd', true)
+    //     }
+    //   } else if (this.scrollDirection === 'up') {
+    //     // 页面向上滚动要做的事情
+    //     // console.log('up')
+    //     this.isMd = false
+    //   }
+    // },
     // 滚动时判断滚动方向：向上、向下、向左、向右
     scrollFunc() {
       if (typeof this.scrollAction.x === 'undefined') {
@@ -292,27 +303,38 @@ export default {
   padding: 28px 20px;
   margin-top: 20px;
   .item-img {
-    flex: none;
-    width: 160px;
-    height: 160px;
+    flex-shrink: 0;
+    width: 230px;
+    height: 230px;
     margin-right: 32px;
     border-radius: 4px;
-    img {
-      width: 160px;
-      height: 160px;
+    > img {
+      width: 220px;
+      height: 220px;
       border-radius: 4px;
     }
   }
   .item-content {
-    flex: none;
-    width: calc(100% - 200px);
+    flex-shrink: 0;
+    width: 418px;
+    // display: inline-block;
+    min-height: 220px;
+    position: relative;
     .item-title {
       font-size: 32px;
       font-weight: bold;
       color: #222222;
       line-height: 42px;
-      width: 476px;
+      width: 100%;
       font-family: PingFang SC;
+      max-height: 82px;
+      // min-height: 82px;
+      font-family: PingFang SC;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      .textOverflow(2);
     }
     .item-tabs {
       display: flex;
@@ -321,15 +343,19 @@ export default {
       .item-tab {
         font-size: 22px;
         font-weight: 400;
-        color: #5c7499;
-        line-height: 22px;
-        height: 32px;
-        background: #f0f2f5;
-        border-radius: 4px;
-        display: flex;
-        padding: 5px 10px 6px 8px;
-        margin-right: 12px;
-        margin-bottom: 6px;
+        color: #222;
+        // color: #5c7499;
+        // // line-height: 22px;
+        // max-width: 120px;
+        // height: 32px;
+        // background: #f0f2f5;
+        // border-radius: 4px;
+        // display: flex;
+        // justify-content: center;
+        // padding: 0px 10px 0px 8px;
+        // margin-right: 12px;
+        // margin-bottom: 6px;
+        .textOverflow(1);
       }
     }
     .item-notes {
@@ -337,9 +363,10 @@ export default {
       margin-top: 10px;
       margin-bottom: 20px;
       font-size: 22px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      .textOverflow(1);
+      //   white-space: nowrap;
+      //   overflow: hidden;
+      //   text-overflow: ellipsis;
       .item-note {
         font-size: 22px;
         font-weight: 400;
@@ -352,10 +379,11 @@ export default {
       font-weight: 400;
       color: #ec5330;
       line-height: 36px;
+      position: absolute;
+      bottom: 0px;
       .item-price-num {
         font-size: 36px;
         line-height: 36px;
-
         font-weight: bold;
       }
     }

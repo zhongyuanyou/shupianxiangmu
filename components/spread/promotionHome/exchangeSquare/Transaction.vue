@@ -44,7 +44,7 @@
             @load="onLoad"
           >
             <div class="product-box">
-              <ul v-if="item.title === '商标交易'">
+              <!-- <ul v-if="item.title === '商标交易'">
                 <li
                   v-for="(product, productcode) in item.product"
                   v-show="productcode < max"
@@ -93,8 +93,8 @@
                       </ul></div
                   ></a>
                 </li>
-              </ul>
-              <ProductItem v-else :product="item.product"></ProductItem>
+              </ul> -->
+              <ProductItem :product="item.product"></ProductItem>
             </div>
           </sp-list>
         </sp-tab>
@@ -536,7 +536,7 @@ export default {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
-        this.max = this.max + 3
+        this.max = this.max + 15
         // 加载状态结束
         this.loading = false
 

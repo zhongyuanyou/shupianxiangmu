@@ -1,5 +1,5 @@
 <template>
-  <div class="btn-planner">
+  <div v-if="JSON.stringify(planner) !== '{}'" class="btn-planner">
     <div
       v-md-map
       v-md:p_IMClick
@@ -8,7 +8,16 @@
       :data-im_type="`${md.imMd.type}`"
       @click="onlineConsult"
     >
-      <div class="btn-planner_item_img"></div>
+      <div class="btn-planner_item_img">
+        <img
+          :src="
+            planner.imgSrc
+              ? planner.imgSrc
+              : 'https://cdn.shupian.cn/sp-pt/wap/images/fd67oqvwepc0000.png'
+          "
+          alt=""
+        />
+      </div>
       <div class="btn-planner_item_con">
         <p class="name">规划师</p>
         <span class="title">在线咨询</span>
@@ -18,19 +27,25 @@
 </template>
 
 <script>
+/**
+ *planner==={}的时候隐藏
+ * @data {
+ *           id: '7862495547640840192',
+ *           name: '张毅',
+ *           jobNum: '107547',
+ *           telephone: '18402858698',
+ *           imgSrc:
+ *           'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
+ *      }  planner 需要传的参数
+ **/
+import imHandle from '@/mixins/imHandle'
 export default {
+  mixins: [imHandle],
   props: {
     planner: {
       type: Object,
       default: () => {
-        return {
-          id: '7862495547640840192',
-          name: '张毅',
-          jobNum: '107547',
-          telephone: '18402858698',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-        }
+        return {}
       },
     },
     md: {
@@ -47,13 +62,12 @@ export default {
   },
   methods: {
     onlineConsult() {
-      this.$root.$emit(
-        'openIMM',
-        this.planner.id,
-        this.planner.name,
-        this.planner.jobNum,
-        this.planner.avatarImg
-      )
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+      }
+      this.uPIM(planner)
     },
   },
 }
@@ -65,8 +79,9 @@ export default {
   height: 136px;
   // border: 1px solid red;
   position: fixed;
-  bottom: 100px;
-  right: 40px;
+  bottom: 148px;
+  right: 32px;
+  z-index: 6;
   &_item {
     position: relative;
     width: 100%;
@@ -80,6 +95,12 @@ export default {
       background: #ffffff;
       border: 4px solid #4974f5;
       border-radius: 50%;
+      display: flex;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
     &_con {
       width: 126px;
@@ -112,6 +133,7 @@ export default {
         line-height: 19px;
         opacity: 0.6;
         display: inline-block;
+        margin: 0px 4px;
         &:after {
           content: '';
           display: inline-block;

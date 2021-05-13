@@ -31,7 +31,7 @@
               @touchstart="preventTouch"
               @touchmove="preventTouch"
             >
-              <div class="marks">
+              <!-- <div class="marks">
                 <a
                   v-for="(mark, markIndex) in marks"
                   :key="markIndex"
@@ -40,12 +40,16 @@
                 >
                   {{ mark }}
                 </a>
-              </div>
+              </div> -->
             </div>
             <!-- E 推荐内容滚动区 -->
 
             <!-- S 推荐商品列表 -->
-            <div ref="goodList" class="goods-list">
+            <div
+              v-if="loading || goodList.length > 0"
+              ref="goodList"
+              class="goods-list"
+            >
               <!-- S 空屏骨架 -->
               <sp-skeleton
                 v-for="val in 10"
@@ -68,6 +72,7 @@
                 :good="good"
               />
             </div>
+            <Fruitless v-else />
             <!-- E 推荐商品列表 -->
 
             <!-- S 商品加载提示 -->
@@ -96,7 +101,10 @@
       <!-- E 查看更多按钮 -->
 
       <!-- S 无更多数据 -->
-      <div v-if="allListTotal === goodList.length" class="no-more-data">
+      <div
+        v-if="allListTotal === goodList.length && goodList.length > 0"
+        class="no-more-data"
+      >
         无更多数据啦
       </div>
       <!-- E 无更多数据 -->
@@ -106,11 +114,16 @@
 
 <script>
 import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
-import TabCurve from '~/components/common/tab/TabCurve'
+import { mapState } from 'vuex'
+import safeAreaInsets from 'safe-area-insets'
+import TabCurve from '~/components/spread/transactionPro/common/TabCurve'
+
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
-
+import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
 import GoodItem from '~/components/spread/transactionPro/companyTransaction/GoodItem'
+import { newSpreadApi } from '@/api/spread'
+
 export default {
   components: {
     [Swipe.name]: Swipe,
@@ -119,8 +132,17 @@ export default {
     [Loading.name]: Loading,
     TabCurve,
     GoodItem,
+    Fruitless,
   },
   mixins: [adJumpHandle],
+  props: {
+    tabList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
     return {
       // @--半圆选项菜单列表
@@ -130,85 +152,110 @@ export default {
         { name: '降价急售', type: 1, goodList: [] },
       ],
       currentItem: 0, // 默认tabs选中第一个
-      searchDomHeight: 0, // 选项卡吸顶时与顶部的距离
+      searchDomHeight: 40, // 选项卡吸顶时与顶部的距离
 
       // @--商品列表
-      marks: [
-        '空壳公司',
-        '实体公司',
-        '小规模',
-        '高新技术',
-        '有限公司',
-        '降价',
-        '带商标',
-        '带专利',
-        '无经营',
-        '发票',
-      ], // 推荐选项卡列表滚动区
+      // marks: [
+      //   '空壳公司',
+      //   '实体公司',
+      //   '小规模',
+      //   '高新技术',
+      //   '有限公司',
+      //   '降价',
+      //   '带商标',
+      //   '带专利',
+      //   '无经营',
+      //   '发票',
+      // ], // 推荐选项卡列表滚动区
       goodList: [],
       params: {
-        page: 1,
-        limit: 10,
-        type: 0,
+        start: 1,
+        limit: 15,
+        classCode: 0,
+        dictCode: 'CONDITION-JY-GS',
       },
-
+      firstScreen: '',
       // @--加载更多
       allListTotal: null, // 总共数据条数
       loading: false, // 加载按钮，调接口时为true
     }
   },
-  watch: {},
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   created() {
     if (process.client) {
-      this.getGoodList(this.params)
+      this.firstScreen = this.tabBtnList[0].type
     }
+  },
+  mounted() {
+    this.tabBtnList = this.tabList
+    this.firstScreen = this.tabBtnList[0].type
+    this.params.classCode = this.tabList[0].type
+    this.getGoodList(this.params)
+    this.getTopMargin()
   },
   methods: {
     // @--触发获取商品数据
     // 选项卡选择某项：切换轮播，显示不同内容
     selectTabHandle({ index, type }) {
       this.goodList = []
-      this.params.page = 1
-      this.params.type = this.tabBtnList[index].type
+      this.params.start = 1
+      this.params.classCode = this.tabBtnList[index].type
       this.$refs.recomRef.swipeTo(index)
     },
     // 轮播组件的轮播切换时触发
     onSwipeChange(index) {
       this.currentItem = index
       this.goodList = []
-      this.params.page = 1
-      this.params.type = this.tabBtnList[index].type
+      this.params.start = 1
+      this.params.classCode = this.tabBtnList[index].type
       this.getGoodList(this.params)
     },
     // 获取更多按钮
     getMore() {
-      this.params.page++
+      this.params.start++
       this.getGoodList(this.params)
     },
     // 接口获取商品列表
-    getGoodList({ type = 0, page = 1, limit = 10 }) {
+    getGoodList(params) {
       this.loading = true
-      const param = `?type=${type}&page=${page}&limit=${limit}`
-      const api = 'https://mjy.dgg.cn/tradingApi/WapCompany/find/newList'
-      this.$axios.get(api + param).then((res) => {
-        this.loading = false
-        console.log(res.data.searchList.records)
-        if (res.code === 'SYS_0000') {
-          this.allListTotal = Number(res.data.searchList.total)
-          // 获取商品后，处理商品数据
-          const vm = this
-          const data = res.data.searchList.records
-          data.forEach((item) => {
-            vm.goodList.push(item)
-          })
-        }
-      })
+      const url =
+        'http://172.16.133.68:7002/service/nk/newChipSpread/v1/trade_product_list.do'
+      // productList.list
+      this.$axios
+        .get(newSpreadApi.trade_product_list, {
+          params,
+        })
+        .then((res) => {
+          this.loading = false
+          if (res.code === 200) {
+            this.allListTotal = Number(res.data.total)
+            // 获取商品后，处理商品数据
+            const vm = this
+            const data = res.data.records
+            data.forEach((item) => {
+              vm.goodList.push(item)
+            })
+          }
+        })
     },
 
     // @--其他
     // 阻止冒泡
     preventTouch(e) {
       e.stopImmediatePropagation() // 阻止冒泡
+    },
+    // app顶部距离
+    getTopMargin() {
+      if (process && process.client && this.isInApp) {
+        let safeTop = safeAreaInsets.top
+        if (this.isInApp) safeTop = this.appInfo.statusBarHeight + 40
+        this.searchDomHeight = safeTop
+      }
     },
     // 跳转链接
     jumpLink(url) {
@@ -221,7 +268,7 @@ export default {
 <style scoped lang="less">
 .my-component {
   width: 100%;
-  padding-bottom: 164px;
+  padding-bottom: 36px;
   .tab-curve::after {
     display: block;
     content: '';

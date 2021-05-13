@@ -2,29 +2,15 @@
   <div class="advertising">
     <div class="advertising-patent">
       <a
+        v-for="(item, choKey) of choiceness"
+        :key="choKey"
         v-md-map
         v-md:webClick
-        data-type="热销专利"
-        data-name="专利交易聚合页_热销专利"
-        @click="onMessage('', $event)"
+        :data-type="item.name"
+        :data-name="`专利交易聚合页_${item.name}`"
+        @click="onMessage(item.url || '', $event)"
       >
-        <sp-image
-          radius="0.08rem"
-          src="https://cdn.shupian.cn/sp-pt/wap/co0p9uk64q80000.png"
-        />
-      </a>
-      <a
-        v-md-map
-        v-md:webClick
-        data-type="精选专利"
-        data-name="专利交易聚合页_精选专利"
-        @click="onMessage('', $event)"
-      >
-        <sp-image
-          class="img"
-          radius="0.08rem"
-          src="https://cdn.shupian.cn/sp-pt/wap/9vqi000ukcc0000.png"
-        />
+        <sp-image radius="0.08rem" :src="item.img" />
       </a>
     </div>
     <div class="advertising-Hot">
@@ -39,7 +25,7 @@
             :data-name="`${item.tex}`"
             radius="0.08rem"
             :src="item.img"
-            @click="onMessage('', $event)"
+            @click="onMessage(item.url, $event)"
         /></a>
       </div>
     </div>
@@ -51,37 +37,25 @@
             v-md-map
             v-md:webClick
             data-type="专利转让分类"
-            data-name="专利交易聚合页_设计专利"
+            :data-name="`专利交易聚合页_${make.maxMake.name}`"
             radius="0.08rem"
             class="img"
-            src="https://cdn.shupian.cn/sp-pt/wap/9sklu1mitjw0000.jpg"
-            @click="onMessage('', $event)"
+            :src="make.maxMake.img"
+            @click="onMessage(make.maxMake.url || '', $event)"
           />
         </a>
         <div>
-          <a>
+          <a v-for="(item, makeKdy) of make.minMake" :key="makeKdy">
             <sp-image
               v-md-map
               v-md:webClick
               data-type="专利转让分类"
-              data-name="专利交易聚合页_发明专利"
+              :data-name="`专利交易聚合页_${item.name}`"
               radius="0.08rem"
               class="img"
-              src="https://cdn.shupian.cn/sp-pt/wap/bshj11eeftk0000.jpg"
-              @click="onMessage('', $event)"
+              :src="item.img"
+              @click="onMessage(item.url || '', $event)"
           /></a>
-          <a>
-            <sp-image
-              v-md-map
-              v-md:webClick
-              data-type="专利转让分类"
-              data-name="专利交易聚合页_实用新型专利"
-              radius="0.08rem"
-              class="img"
-              src="https://cdn.shupian.cn/sp-pt/wap/g1i3915lpr40000.jpg"
-              @click="onMessage('', $event)"
-            />
-          </a>
         </div>
       </div>
     </div>
@@ -106,63 +80,100 @@ export default {
         }
       },
     },
-  },
-  data() {
-    return {
-      hotList: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/34ov5aqag6y0000.png',
-          marketingImg: '',
-          tex: '专利交易聚合页_农业牧林',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/6dg0enu4e2k0000.png',
-          marketingImg: '',
-          tex: '专利交易聚合页_作业/运输',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/1ka3nwiyoao0000.png',
-          marketingImg: '',
-          tex: '专利交易聚合页_包装印刷',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/62gnvw9ky000000.png',
-          marketingImg: '',
-          tex: '专利交易聚合页_机械/照明',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/fdy731w76z40000.png',
-          marketingImg: '',
-          tex: '专利交易聚合页_新能源',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/66tffyndpwo0000.png',
-          marketingImg: '',
-          tex: '专利交易聚合页_电气自动化',
-          url: '',
-        },
-      ],
-    }
+    choiceness: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/co0p9uk64q80000.png',
+            name: '',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/9vqi000ukcc0000.png',
+            name: '',
+            url: '',
+          },
+        ]
+      },
+    },
+    hotList: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/34ov5aqag6y0000.png',
+            marketingImg: '',
+            tex: '专利交易聚合页_农业牧林',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/6dg0enu4e2k0000.png',
+            marketingImg: '',
+            tex: '专利交易聚合页_作业/运输',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/1ka3nwiyoao0000.png',
+            marketingImg: '',
+            tex: '专利交易聚合页_包装印刷',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/62gnvw9ky000000.png',
+            marketingImg: '',
+            tex: '专利交易聚合页_机械/照明',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/fdy731w76z40000.png',
+            marketingImg: '',
+            tex: '专利交易聚合页_新能源',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/66tffyndpwo0000.png',
+            marketingImg: '',
+            tex: '专利交易聚合页_电气自动化',
+            url: '',
+          },
+        ]
+      },
+    },
+    make: {
+      type: Object,
+      default: () => {
+        return {
+          maxMake: {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/9sklu1mitjw0000.jpg',
+            name: '设计专利',
+            url: '',
+          },
+          minMake: [
+            {
+              img: 'https://cdn.shupian.cn/sp-pt/wap/bshj11eeftk0000.jpg',
+              name: '发明专利',
+              url: '',
+            },
+            {
+              img: 'https://cdn.shupian.cn/sp-pt/wap/g1i3915lpr40000.jpg',
+              name: '实用新型专利',
+              url: '',
+            },
+          ],
+        }
+      },
+    },
   },
   methods: {
     onMessage(url, e) {
-      // 待改
       if (url) {
         if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
+          window.location.href = url
+          return
         }
-      } else {
-        //  在线咨询IM美恰
-        window.spptMqMi.showPanel()
       }
+      this.$parent.jumpLink(url)
     },
   },
 }
@@ -183,7 +194,7 @@ export default {
     flex-wrap: nowrap;
     justify-content: space-between;
     height: 154px;
-    padding: 13px 20px 20px 20px;
+    padding: 0px 20px 20px 20px;
     /deep/.sp-image {
       width: 347px;
       height: 124px;
@@ -196,7 +207,7 @@ export default {
     padding: 24px 20px 30px 20px;
     display: flex;
     flex-direction: column;
-    width: calc(@spread-page-width - 30px);
+    width: calc(@spread-page-width - 40px);
     margin: 0 auto;
     > div {
       display: flex;
@@ -206,26 +217,26 @@ export default {
       a {
         display: inline-block;
         height: 182px;
-        border-radius: 8px;
+        // border-radius: 8px;
         .sp-image {
           width: 215px;
           height: 182px;
-          border: 1px solid rgba(205, 205, 205, 0.3);
+          // border: 1px solid rgba(205, 205, 205, 0.3);
           // box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.08);
         }
       }
       a:first-child {
-        margin-bottom: 12px;
+        margin-bottom: 18px;
       }
     }
   }
   &-make-over {
     background: #ffffff;
     border-radius: 24px;
-    padding: 30px 17px 24px 20px;
+    padding: 30px 20px 24px 20px;
     display: flex;
     flex-direction: column;
-    width: calc(@spread-page-width - 30px);
+    width: calc(@spread-page-width - 40px);
     margin: 0 auto;
     margin-top: 20px;
     /deep/.content {
@@ -237,8 +248,8 @@ export default {
         margin-right: 16px;
         .sp-image {
           width: 327px;
-          background: linear-gradient(90deg, #f8f8f8, #faf5ed);
-          border-radius: 8px;
+          // background: linear-gradient(90deg, #f8f8f8, #faf5ed);
+          // border-radius: 8px;
         }
       }
       > div:last-child {

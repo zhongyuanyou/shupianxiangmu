@@ -2,15 +2,16 @@
   <div class="patent">
     <!-- S头部Header -->
     <Header
-      v-if="!isInApp"
       ref="header"
       :title="pageTitle"
-      :fixed="false"
+      :fixed="true"
       head-class="head-icon"
     >
       <template v-if="false" v-slot:right>
         <span class="my-customize-header" @click="choiceCity">
-          <span class="my-customize-header-text">{{ currentCity }}</span>
+          <span class="my-customize-header-text">{{
+            currentCity.name || '成都'
+          }}</span>
           <my-icon name="sear_ic_open" size="0.18rem" color="#cccccc"></my-icon>
         </span>
       </template>
@@ -23,10 +24,15 @@
     <Banner class="laowu-banner" :data="imageBanner" />
     <!-- E轮播图 -->
     <!-- S表单 -->
-    <Form class="laowu-form" :data="cardName" />
+    <!-- <Form class="laowu-form" :data="cardName" /> -->
     <!-- E表单 -->
     <!-- S推荐专利 热门行业 专利转让分类-->
-    <Advertising :page-planner="pagePlanner" />
+    <Advertising
+      :page-planner="pagePlanner"
+      :choiceness="choiceness"
+      :hot-list="hotList"
+      :make="make"
+    />
     <!-- E推荐专利 热门行业 专利转让分类 -->
     <!-- S列表 -->
     <ProductList
@@ -39,39 +45,78 @@
     <!-- E列表 -->
     <!-- S底部咨询 -->
     <!-- <FooterBottom :planner="pagePlanner" :md="fixedMd" /> -->
-    <BtnPlanner :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- E底部咨询 -->
     <!-- S IM在线咨询-->
-    <DggImCompany />
+    <!-- <DggImCompany /> -->
     <!-- E IM在线咨询-->
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread, plannerApi, newSpreadApi } from '~/api/spread'
 
-import { plannerApi } from '~/api/spread'
-
-import Header from '~/components/common/head/header'
-import NavBar from '~/components/spread/transactionPro/common/NavBar'
-import Banner from '~/components/spread/transactionPro/common/Banner'
-import Form from '~/components/spread/transactionPro/common/Form'
-import ProductList from '~/components/spread/transactionPro/common/ProductList'
-import Advertising from '~/components/spread/transactionPro/patent/Advertising'
+import Header from '~/components/common/head/header.vue'
+import NavBar from '~/components/spread/transactionPro/common/NavBar.vue'
+import Banner from '~/components/spread/transactionPro/common/Banner.vue'
+// import Form from '~/components/spread/transactionPro/common/Form'
+import ProductList from '~/components/spread/transactionPro/common/ProductList.vue'
+import Advertising from '~/components/spread/transactionPro/patent/Advertising.vue'
 // import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
-import BtnPlanner from '@/components/spread/transactionPro/common/BtnPlanner'
-import DggImCompany from '~/components/spread/DggImCompany'
+import BtnPlanner from '~/components/spread/common/BtnPlanner'
+// import DggImCompany from '~/components/spread/DggImCompany'
 export default {
   name: 'Index',
   components: {
-    DggImCompany,
+    // DggImCompany,
     Header,
     NavBar,
     Banner,
-    Form,
+    // Form,
     ProductList,
     Advertising,
     // FooterBottom,
     BtnPlanner,
+  },
+  async asyncData({ $axios }) {
+    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+    const url =
+      'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/list.do'
+    // const url =
+    //   'https://dspmicrouag.shupian.cn/crisps-app-wap-bff-api/service/nk/chipSpread/v1/productList.do'
+
+    // const locations = 'ad113250,ad113252,ad113257'
+    const locations = 'ad113291,ad113290,ad113289,ad113288,ad113287'
+    const code = 'nav100071'
+    const centerCode = 'CRISPS-C-ZLJY'
+    const dataRes = defaultRes
+    try {
+      // const res = await $axios.get(`${url}?locationCodes=${locations}`)
+      const res = await $axios.get(chipSpread.list, {
+        params: {
+          locationCodes: locations,
+          navCodes: code,
+          code: centerCode,
+        },
+      })
+      console.log(res.message)
+      if (res.code === 200) {
+        console.log('请求成功')
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    } catch (error) {
+      console.log('请求错误')
+      // return {
+      //   resultData: dataRes.data,
+      // }
+    }
   },
   data() {
     return {
@@ -198,39 +243,107 @@ export default {
           },
         },
       ],
-      // 表单
-      cardName: {
-        title: '免费查找专利  一键解决专利难题',
-        buttonName: '立即获取',
-        subInfo: ['价格透明', '信息安全', '官方保障'],
-        type: 'zljy', // 业态编码。固定几个业态编码。
-        md: { pageName: '专利交易聚合页' },
+      // 推介
+      choiceness: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/co0p9uk64q80000.png',
+          name: '',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/9vqi000ukcc0000.png',
+          name: '',
+          url: '',
+        },
+      ],
+      // 热门行业
+      hotList: [
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/34ov5aqag6y0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_农业牧林',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/6dg0enu4e2k0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_作业/运输',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/1ka3nwiyoao0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_包装印刷',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/62gnvw9ky000000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_机械/照明',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/fdy731w76z40000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_新能源',
+          url: '',
+        },
+        {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/66tffyndpwo0000.png',
+          marketingImg: '',
+          tex: '专利交易聚合页_电气自动化',
+          url: '',
+        },
+      ],
+      // 专利转让
+      make: {
+        maxMake: {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/9sklu1mitjw0000.jpg',
+          name: '设计专利',
+          url: '',
+        },
+        minMake: [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/bshj11eeftk0000.jpg',
+            name: '发明专利',
+            url: '',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/g1i3915lpr40000.jpg',
+            name: '实用新型专利',
+            url: '',
+          },
+        ],
       },
+      // 表单
+      // cardName: {
+      //   title: '免费查找专利  一键解决专利难题',
+      //   buttonName: '立即获取',
+      //   subInfo: ['价格透明', '信息安全', '官方保障'],
+      //   type: 'zljy', // 业态编码。固定几个业态编码。
+      //   md: { pageName: '专利交易聚合页' },
+      // },
       // 列表导航
       dataNavBar: {
         tabBtnList: [
-          { name: '热销专利', type: 'patentStatuse=1' },
-          { name: '精选专利', type: 'patentType=2' },
-          { name: '特价专利', type: 'priceUpper=5000' },
+          // { name: '热销专利', type: 'patentStatuse=1' },
+          // { name: '精选专利', type: 'patentType=2' },
+          // { name: '特价专利', type: 'priceUpper=5000' },
+          { name: '热销专利', type: '' },
+          { name: '精选专利', type: '' },
+          { name: '特价专利', type: '' },
         ],
-        marks: [
-          '医学医疗',
-          '交通运输',
-          '教育器械',
-          '工业机械',
-          '电子电器',
-          '新型能源',
-          '家居用品',
-          '食品保健',
-        ],
-        planner: {
-          id: '7862495547640840192',
-          name: '张毅',
-          jobNum: '107547',
-          telephone: '4000962540',
-          imgSrc:
-            'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-        },
+        // marks: [
+        //   '医学医疗',
+        //   '交通运输',
+        //   '教育器械',
+        //   '工业机械',
+        //   '电子电器',
+        //   '新型能源',
+        //   '家居用品',
+        //   '食品保健',
+        // ],
+        planner: {},
         md: {
           pageName: '专利交易聚合页',
         },
@@ -239,18 +352,11 @@ export default {
       goodList: [],
       // 更多提示
       more: {
-        loading: false, // 加载更多按钮点击时，显示的loading加载
+        loading: true, // 加载更多按钮点击时，显示的loading加载
         noMore: false, // 无更多加载数据
       },
       // 推荐规划师：默认数据
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc:
-          'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
-      },
+      pagePlanner: {},
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -264,7 +370,7 @@ export default {
         'https://cdn.shupian.cn/sp-pt/wap/cs4dlk7fo800000.jpg',
       ],
       // 当前分类下标
-      params: { type: 'patentStatuse=1', index: 0 },
+      params: { type: 'FL20201224136319', index: 0 },
       // 当前页
       pageNum: 1,
     }
@@ -273,53 +379,188 @@ export default {
     // 将接受的state混合进组件局部计算属性
     // 监听接受的state值
     ...mapState({
-      currentCity: (state) => state.city.currentCity.name || '成都',
+      currentCity: (state) => state.city.currentCity,
       isInApp: (state) => state.app.isInApp,
     }),
   },
   created() {
     if (process.client) {
       // 请求
-      this.getGoodList()
-      this.getPagePlanner()
+      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   mounted() {
+    // this.POSITION_CITY({
+    //   type: 'rest',
+    // })
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
-    // this.getGoodList()
-    // this.getPagePlanner()
+    const resData = this.resultData
+    try {
+      if (JSON.stringify(resData) !== '{}') {
+        // 导航
+        this.navList(resData.navs.nav100071 || [])
+        this.classListData(resData.classList || [])
+        // this.productTitle(resData.productClassList || [])
+        resData.adList.filter((elem) => {
+          // 轮播
+          if (elem.locationCode === 'ad113287') {
+            this.imageBannerData(elem.sortMaterialList)
+          }
+          // 热销专利
+          if (elem.locationCode === 'ad113291') {
+            this.choicenessData(elem.sortMaterialList)
+          }
+          // 热门行业
+          if (elem.locationCode === 'ad113288') {
+            this.hotListData(elem.sortMaterialList)
+          }
+          // 转让分类
+          if (elem.locationCode === 'ad113289') {
+            elem.sortMaterialList.length > 0 &&
+              this.maxMake(elem.sortMaterialList[0].materialList)
+          }
+          if (elem.locationCode === 'ad113290') {
+            this.minMake(elem.sortMaterialList)
+          }
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    this.getGoodList()
   },
   methods: {
+    ...mapActions({
+      POSITION_CITY: 'city/POSITION_CITY',
+    }),
     // 选择城市
     choiceCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
     jumpLink(url) {
       if (url) {
-        window.open(url, '_blank')
-      } else {
-        // 待改
-        window.spptMqMi.showPanel()
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
+    },
+    // 金刚区导航栏
+    navList(data) {
+      if (data.length !== 0) {
+        this.dataList = data.map((elem, index) => {
+          return {
+            sort: elem.sort,
+            img: elem.navigationImageUrl,
+            text: elem.name,
+            marketingImg: '',
+            url: elem.url,
+            md: {
+              type: '',
+              name: `专利交易聚合页_金刚区_${elem.name}`,
+            },
+          }
+        })
+        this.dataList.sort((a, b) => {
+          return a.sort - b.sort
+        })
+      }
+    },
+    // 导航选项
+    classListData(data) {
+      if (data.length !== 0) {
+        this.params.type = data[0].ext1
+        this.dataNavBar.tabBtnList = data.map((elem, index) => {
+          return { name: elem.name, type: elem.ext1 }
+        })
+      }
+    },
+    // 轮播
+    imageBannerData(data) {
+      if (data.length !== 0) {
+        this.imageBanner = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            md: {
+              type: '',
+              name: '',
+            },
+          }
+        })
+      }
+    },
+    // 推介
+    choicenessData(data) {
+      if (data.length !== 0) {
+        this.choiceness = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+      }
+    },
+    // 热门行业
+    hotListData(data) {
+      if (data.length !== 0) {
+        this.hotList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
+      }
+    },
+    // 热门行业
+    maxMake(data) {
+      if (data.length !== 0) {
+        this.make.maxMake = {
+          img: data[0].materialUrl,
+          name: data[0].name,
+          url: data[0].materialLink,
+        }
+      }
+    },
+    minMake(data) {
+      if (data.length !== 0) {
+        this.make.minMake = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            name: elem.materialList[0].name,
+            url: elem.materialList[0].materialLink,
+          }
+        })
       }
     },
     // 请求列表参数
     getGoodList() {
       this.more.loading = true
-      const api = '/xdy-portal-product-api/patent/list'
-      const cdn = 'https://microuag.dgg188.cn'
-      const params = `?${this.params.type}&pageSize=10&pageNum=${this.pageNum}`
+      const param = {
+        classCode: this.params.type,
+        limit: '10',
+        start: this.pageNum,
+        dictCode: 'CONDITION-JY-ZY',
+      }
       // 2、调用接口
       this.$axios
-        .get(cdn + api + params)
+        .get(newSpreadApi.trade_product_list, {
+          params: param,
+        })
         .then((res) => {
+          this.more.loading = true
           // 调用回调函数处理数据
-          const result = res.data.list || []
-          if (result.length > 0 && res.code === 'SYS_0000') {
-            this.more.loading = false
+          const result = res.data.records || []
+          if (result.length > 0 && res.code === 200) {
             result.forEach((elem) => {
+              const img =
+                'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png'
               const tabs = [
                 '人气商品',
                 '严选商品',
@@ -329,7 +570,7 @@ export default {
                 '资料齐全',
                 '可随时交易',
                 '热销商品',
-                '签署出售协议',
+                // '签署出售协议',
                 '陪同交易',
                 '超高性价',
                 '明码标价',
@@ -341,32 +582,45 @@ export default {
               ]
               const random = parseInt(Math.random() * (tabs.length - 3) + 3)
               const obj = {
-                img: this.listImg[elem.patentType - 1], // 商品本身的图片
+                // img: this.listImg[elem.patentType - 1], // 商品本身的图片
+                img: elem.img.split(',')[1] || img, // 商品本身的图片
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
-                price: elem.transferDiscountPrice, // 商品价格
-                name: elem.patentName, // 公司显示名称（有*号）
-                tabs: [
-                  `${tabs[random] || '人气产品'}`,
-                  `${tabs[random + 1] || '资料齐全'}`,
-                  `${tabs[random + 2] || '高咨询'}`,
-                ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
-                notes: [], // 以 | 字符分隔的注意，接口字段值
+                price: Number(elem.price), // 商品价格
+                name: elem.title, // 公司显示名称（有*号）
+                tabs: elem.field ? elem.field.join(' | ') : '',
+                // tabs:
+                //   elem.tabs.length !== 0
+                //     ? elem.tabs
+                //     : [
+                //         `${tabs[random] || '人气产品'}`,
+                //         `${tabs[random + 1] || '资料齐全'}`,
+                //         `${tabs[random + 2] || '高咨询'}`,
+                //       ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
+                notes: elem.desc, // 以 | 字符分隔的注意，接口字段值
+                id: elem.id,
               }
-              if (elem.patentTypeName) {
-                obj.notes.push(elem.patentTypeName)
-              }
-              if (elem.patentStatusName) {
-                obj.notes.push(elem.patentStatusName)
+              // if (elem.patentTypeName) {
+              //   obj.notes.push(elem.patentTypeName)
+              // }
+              // if (elem.patentStatusName) {
+              //   obj.notes.push(elem.patentStatusName)
+              // }
+              if (result.length < 10) {
+                this.more.noMore = true
+              } else {
+                this.more.noMore = false
               }
               this.goodList.push(obj)
+              this.more.loading = false
             })
-            if (result.length < 10) {
-              this.more.noMore = true
-            }
-            console.log(this.goodList)
+            return
           }
+          this.more.loading = false
+          this.more.noMore = true
         })
         .catch((err) => {
+          this.more.loading = false
+          this.more.noMore = true
           console.log(err)
         })
     },
@@ -386,22 +640,60 @@ export default {
       this.params = { type: item.type, index: 1 }
       this.getGoodList()
     },
-    async getPagePlanner() {
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+
+      // const url =
+      //   'https://tspmicrouag.shupian.cn/cloud-recomd-api/nk/recommendInfo/plannerRecom.do'
       try {
-        const res = await this.$axios.get(`${plannerApi.planner}`)
-        console.log('plannerApi.planner succes:', res.code + '--' + res.message)
-        if (res.code === 200) {
-          console.log(res, 4561)
-          this.pagePlanner = this.dataNavBar.planner = {
-            id: res.data.list[0].userCentreId,
-            name: res.data.list[0].realName,
-            jobNum: res.data.list[0].loginName,
-            telephone: res.data.list[0].userPhone,
-            imgSrc: res.data.list[0].userHeadUrl,
-          }
-        }
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20201224136341', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = this.dataNavBar.planner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
       } catch (error) {
-        console.log('plannerApi.planner error：', error.message)
+        console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
   },
@@ -453,7 +745,7 @@ export default {
     }
   }
   .nav-btn-margin {
-    margin-top: 24px;
+    padding-top: 24px;
   }
   .laowu-banner {
     margin-top: 20px;

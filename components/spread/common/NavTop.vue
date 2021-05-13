@@ -15,16 +15,18 @@
           :opacity="opacity"
           :icon-left="0.25"
           :type="type"
+          :disabled="disabled"
           :placeholder="placeholder"
           :maxlength="maxlength"
           @valChangeHandle="searchInputHandle"
           @searchKeydownHandle="searchKeydownHandle"
+          @clickInputHandle="clickInputHandle"
         >
           <template v-slot:left>
             <span class="serch-left" @click="onClickLeft"
               ><my-icon
-                size="0.32rem"
-                name="order_ic_listnext"
+                size="0.4rem"
+                name="nav_ic_back"
                 :style="{ color: `rgba(${colorVal},${colorVal},${colorVal})` }"
               />
               <span
@@ -82,6 +84,11 @@ export default {
     placeholder: {
       type: String,
       default: '请输入关键字',
+    },
+    // 是否禁用输入
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -160,6 +167,10 @@ export default {
         console.log(this.safeTop)
       }
     },
+    // 点击 事件
+    clickInputHandle() {
+      this.$emit('clickInputHandle')
+    },
   },
 }
 </script>
@@ -199,7 +210,7 @@ export default {
       }
       .input-box {
         height: 72px;
-        background: #ededed;
+        background: #ffffff;
         border-radius: 8px;
         border: none;
         input {

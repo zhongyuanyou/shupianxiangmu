@@ -4,7 +4,7 @@
       <div class="title">附带资产类型</div>
       <div class="content">
         <a
-          v-for="(item, index) in data"
+          v-for="(item, index) in assetsList"
           :key="index"
           class="item"
           :class="index > 1 ? 'item-no-margin' : ''"
@@ -15,8 +15,8 @@
           }"
           @click="jumpLink(item.url)"
         >
-          <p class="item-title">{{ item.title }}</p>
-          <p class="item-desc">{{ item.desc }}</p>
+          <p v-if="item.title" class="item-title">{{ item.title }}</p>
+          <p v-if="item.desc" class="item-desc">{{ item.desc }}</p>
         </a>
       </div>
     </div>
@@ -26,6 +26,14 @@
 <script>
 export default {
   name: 'WithAssetsType',
+  props: {
+    assetsList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
     return {
       data: [
@@ -34,7 +42,7 @@ export default {
           title: '自带商标',
           desc: '无形资产，具有商业价值，推动企业发展',
           marketingImg: '',
-          imgWidth: 329,
+          imgWidth: 331,
           imgHeight: 172,
         },
         {
@@ -42,7 +50,7 @@ export default {
           title: '网络资产',
           desc: '企业知名度高，规模大、市场中具备强竞争力',
           marketingImg: '',
-          imgWidth: 329,
+          imgWidth: 331,
           imgHeight: 172,
         },
         {
@@ -82,7 +90,7 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: calc(@spread-page-width - 30px);
+  width: calc(@spread-page-width - 40px);
   margin: 0 auto;
   background: #ffffff;
   border-radius: 24px;
@@ -90,7 +98,7 @@ export default {
   .title {
     font-size: 31px;
     line-height: 32px;
-    font-weight: 600;
+    font-weight: bold;
     color: #1a1a1a;
     margin-bottom: 24px;
   }
@@ -104,11 +112,11 @@ export default {
       background-repeat: no-repeat;
       background-size: cover;
       padding-left: 24px;
-      padding-right: 36px;
+      padding-right: 30px;
       padding-top: 36px;
       border-radius: 8px;
 
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       .item-title {
         flex: none;
         font-size: 28px;

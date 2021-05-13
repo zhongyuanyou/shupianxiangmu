@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="my-component">
-      <div class="title">热门行业分类</div>
+      <div class="title">热门行业</div>
       <div class="content">
         <a
-          v-for="(item, index) in data"
+          v-for="(item, index) in hotIndustry"
           :key="index"
           class="item"
           :class="index > 2 ? 'item-no-margin' : ''"
@@ -22,6 +22,14 @@
 <script>
 export default {
   name: 'HotIndustry',
+  props: {
+    hotIndustry: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+  },
   data() {
     return {
       data: [
@@ -66,6 +74,12 @@ export default {
   },
   methods: {
     jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
       this.$parent.jumpLink(url)
     },
   },
@@ -74,7 +88,7 @@ export default {
 
 <style lang="less" scoped>
 .my-component {
-  width: calc(@spread-page-width - 30px);
+  width: calc(@spread-page-width - 40px);
   margin: 0 auto;
   padding: 24px 21px;
   background: #ffffff;
@@ -83,7 +97,7 @@ export default {
     line-height: 32px;
     font-size: 32px;
     font-family: PingFang SC;
-    font-weight: 600;
+    font-weight: bold;
     color: #1a1a1a;
     margin-bottom: 24px;
   }
@@ -101,7 +115,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       border: 0.5px solid rgba(205, 205, 205, 0.5);
       border-radius: 8px;
       .item-title {

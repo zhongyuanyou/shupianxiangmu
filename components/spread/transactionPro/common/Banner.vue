@@ -57,14 +57,14 @@ export default {
   methods: {
     // 跳转链接-IM规划师
     onUrl(url) {
+      console.log(url, '跳转')
       if (url) {
         if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
+          window.location.href = url
+          return
         }
       }
+      this.$parent.jumpLink(url)
     },
   },
 }

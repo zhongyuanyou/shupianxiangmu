@@ -6,7 +6,7 @@
       :error.sync="error"
       finished-text="没有更多了"
       error-text=""
-      offset="100"
+      offset="20"
       @load="onLoad"
     >
       <div class="content">
@@ -21,9 +21,10 @@
             <div class="region-content">
               <p class="region-title">{{ item.title }}</p>
               <label>
-                <span v-for="(labels, labelKey) of item.label" :key="labelKey">
-                  {{ labels }}
-                </span>
+                <!-- <span v-for="(labels, labelKey) of item.label" :key="labelKey">
+                  {{ labels }} -->
+                <!-- </span> -->
+                <span>{{ item.label }}</span>
               </label>
               <div class="region-explain">{{ item.desc }}</div>
             </div>
@@ -129,12 +130,18 @@ export default {
     changeState: {
       type: Object,
       default: () => {
-        return {
-          code: 'FL20201224136019',
-          name: '许可证',
-          type: 0,
-        }
+        return {}
       },
+    },
+    titelList: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+    code: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -144,77 +151,81 @@ export default {
       error: false,
       pageNumber: 1,
       list: [],
-      defaultState: {},
+      classCode: '', // 分类code
+      check: false,
+      params: {},
     }
   },
+  created() {},
   mounted() {
     // 初始化推介数据
     // this.list = this.defaultList
     // this.initialize(this.changeState)
-    this.defaultState = this.changeState
+    // this.classCode = this.titelList[0].code
+    this.params = this.changeState
+    console.log(this.params)
   },
   methods: {
+    onLoad() {
+      this.params = this.changeState
+      // // 异步更新数据
+      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      this.list.length === 0 && (this.pageNumber = 1)
+      this.selectTab()
+    },
     initialize(changeObj) {
+      this.params = changeObj
       this.pageNumber = 1
       this.list = []
       this.finished = false
       this.loading = true
-      this.defaultState = this.changeState
-      // this.selectTab()
       this.onLoad()
-    },
-    onLoad(e) {
-      // // 异步更新数据
-      // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      this.defaultState = this.changeState
-      this.list.length === 0 && (this.pageNumber = 1)
-      this.selectTab()
+      //   this.selectTab()
     },
     onMore(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.classCode}&productId=${id}`
     },
     // 请求数据
-    selectTab(item) {
-      console.log(this.defaultState, '请求数据')
+    selectTab() {
       // 当前无数据不执行
       if (this.finished && !this.loading) return
-      const type = this.defaultState.type
       // 2、调用接口
+      const that = this
+      const url =
+        'https://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       this.$axios
-        .get(newSpreadApi.service_product_list, {
+        .get(newSpreadApi.trade_product_list, {
           params: {
-            pageNumber: this.pageNumber,
-            pageSize: '15',
-            classCodes: type,
+            start: this.pageNumber,
+            limit: '15',
+            classCode: this.params.code,
+            dictCode: this.params.dictCode,
           },
         })
         .then((res) => {
-          console.log(res, 456)
           // 调用回调函数处理数据
           const result = res.data.records
           if (res.code !== 200) {
             // this.list = this.defaultList
-            this.loading = false
-            this.finished = true
+            that.loading = false
+            that.finished = true
           }
           if (res.code === 200 && result.length !== 0) {
-            // if (res.data.pageNumber === 1) {
-            //   // console.log(res.data.pageNumber, this.defaultState, 1564)
-            //   this.list = []
-            // }
-            ++this.pageNumber
+            ++that.pageNumber
+            const msgList = []
             result.forEach((elem, index) => {
-              this.list.push({
+              msgList.push({
                 code: index + 1,
                 img:
                   elem.img.split(',')[1] ||
                   'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 title: elem.title,
-                label: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
+                label: elem.field ? elem.field.join(' | ') : '',
+                // label: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
                 currentPrice: elem.price,
                 originalPrice: 0,
                 url: '',
@@ -222,20 +233,22 @@ export default {
                 id: elem.id,
               })
             })
-            this.loading = false
-            if (result.length < 15) this.finished = true
+            that.list = msgList
+            that.loading = false
+            that.$forceUpdate()
+            if (result.length < 15) that.finished = true
 
             return
           }
-          this.loading = false
-          this.error = true
-          // this.list = this.defaultList
+          that.loading = false
+          that.error = true
+          that.list = that.defaultList
         })
         .catch((err) => {
-          // this.list = this.defaultList
-          this.loading = false
-          this.finished = true
-          this.error = true
+          that.list = that.defaultList
+          that.loading = false
+          that.finished = true
+          that.error = true
           console.log(err)
         })
     },
@@ -259,7 +272,6 @@ export default {
       .imge {
         width: 220px;
         height: 220px;
-        // background: #b2b2b2;
         border-radius: 12px;
         margin-right: 32px;
         img {
@@ -286,31 +298,31 @@ export default {
           label {
             display: flex;
             span {
-              background: #f0f2f5;
-              border-radius: 4px;
+              // background: #f0f2f5;
+              // border-radius: 4px;
               font-size: 20px;
               font-weight: 400;
-              color: #5c7499;
+              // color: #5c7499;
+              color: #222;
               line-height: 32px;
-              margin-right: 8px;
-              padding: 4px 6px;
-              max-width: 120px;
+              // margin-right: 8px;
+              // padding: 4px 6px;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
             }
           }
-          .region-explain {
-            margin-top: 20px;
-            height: 22px;
-            font-size: 22px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #222;
-            line-height: 22px;
-            .textOverflow(1);
-            width: 100%;
-          }
+        }
+        .region-explain {
+          margin-top: 20px;
+          min-height: 22px;
+          font-size: 22px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #222;
+          line-height: 26px;
+          .textOverflow(1);
+          width: 100%;
         }
         &-price {
           // height: 30px;

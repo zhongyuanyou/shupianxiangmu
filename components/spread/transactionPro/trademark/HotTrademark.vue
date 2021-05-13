@@ -3,7 +3,7 @@
     <span class="hot-trademark-title">热门商标</span>
     <div class="hot-trademark-content">
       <a
-        v-for="(item, index) in HotTrademark"
+        v-for="(item, index) in trademarkHot"
         :key="index"
         v-md-map
         v-md:webClick
@@ -18,54 +18,48 @@
 
 <script>
 export default {
-  data() {
-    return {
-      HotTrademark: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/10mhf9bggcq8000.jpg',
-          url: '',
-          name: '第03类化妆日用',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/blnijqibtxs0000.jpg',
-          url: '',
-          name: '第05类医药药品',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/crj3x70vv0o0000.jpg',
-          url: '',
-          name: '第11类家用电器',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/92ihdvtmr1o0000.jpg',
-          url: '',
-          name: '第18类皮革箱包',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bywj1i8uge00000.jpg',
-          url: '',
-          name: '第25类服装鞋帽',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2clxcnzlduqs000.jpg',
-          url: '',
-          name: '第29类食品行业',
-        },
-      ],
-    }
+  props: {
+    trademarkHot: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/10mhf9bggcq8000.jpg',
+            url: '',
+            name: '第03类化妆日用',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/blnijqibtxs0000.jpg',
+            url: '',
+            name: '第05类医药药品',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/crj3x70vv0o0000.jpg',
+            url: '',
+            name: '第11类家用电器',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/92ihdvtmr1o0000.jpg',
+            url: '',
+            name: '第18类皮革箱包',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/bywj1i8uge00000.jpg',
+            url: '',
+            name: '第25类服装鞋帽',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2clxcnzlduqs000.jpg',
+            url: '',
+            name: '第29类食品行业',
+          },
+        ]
+      },
+    },
   },
   methods: {
     jumpLink(url) {
-      if (url) {
-        if (url.indexOf('http') > -1) {
-          window.open(url)
-          // window.open(`${url}?code=${code}`)
-        } else {
-          this.$router.push(url)
-        }
-      } else {
-        this.$parent.jumpLink(url)
-      }
+      this.$parent.jumpLink(url)
     },
   },
 }
@@ -82,7 +76,7 @@ export default {
     font-size: 32px;
     line-height: 33px;
     font-family: PingFang SC;
-    font-weight: 500;
+    font-weight: bold;
     color: #1a1a1a;
   }
   .hot-trademark-content {

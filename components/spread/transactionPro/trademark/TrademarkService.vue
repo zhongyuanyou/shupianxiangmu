@@ -6,28 +6,28 @@
         <a
           v-md-map
           v-md:p_IMClick
-          :data-name="`商标交易聚合页_商标服务_${TrademarkService[0].name}_在线咨询`"
+          :data-name="`商标交易聚合页_商标服务_${trademarkService[0].name}_在线咨询`"
           href="javascript:;"
-          @click="chat(TrademarkService[0].url)"
-          ><img :src="TrademarkService[0].img" alt=""
+          @click="chat(trademarkService[0].url)"
+          ><img :src="trademarkService[0].img" alt=""
         /></a>
       </div>
       <div class="trademark-service-content-right">
         <a
           v-md-map
           v-md:p_IMClick
-          :data-name="`商标交易聚合页_商标服务_${TrademarkService[1].name}_在线咨询`"
+          :data-name="`商标交易聚合页_商标服务_${trademarkService[1].name}_在线咨询`"
           href="javascript:;"
-          @click="chat(TrademarkService[1].url)"
-          ><img :src="TrademarkService[1].img" alt=""
+          @click="chat(trademarkService[1].url)"
+          ><img :src="trademarkService[1].img" alt=""
         /></a>
         <a
           v-md-map
           v-md:p_IMClick
-          :data-name="`商标交易聚合页_商标服务_${TrademarkService[2].name}_在线咨询`"
+          :data-name="`商标交易聚合页_商标服务_${trademarkService[2].name}_在线咨询`"
           href="javascript:;"
-          @click="chat(TrademarkService[2].url)"
-          ><img :src="TrademarkService[2].img" alt=""
+          @click="chat(trademarkService[2].url)"
+          ><img :src="trademarkService[2].img" alt=""
         /></a>
       </div>
     </div>
@@ -36,38 +36,36 @@
 
 <script>
 export default {
-  data() {
-    return {
-      TrademarkService: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9fdf4f6ag0k0000.jpg',
-          url: '',
-          name: '商标注册',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ayfnw0im9740000.jpg',
-          url: '',
-          name: '商标信息变更',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8eqt8sxee380000.jpg',
-          url: '',
-          name: '商标异议处理',
-        },
-      ],
-    }
+  props: {
+    trademarkService: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/9fdf4f6ag0k0000.jpg',
+            url: '',
+            name: '商标注册',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/ayfnw0im9740000.jpg',
+            url: '',
+            name: '商标信息变更',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/8eqt8sxee380000.jpg',
+            url: '',
+            name: '商标异议处理',
+          },
+        ]
+      },
+    },
   },
+
   methods: {
     chat(url) {
       if (url) {
-        if (url.indexOf('http') > -1) {
-          window.open(url)
-        } else {
-          this.$router.push(url)
-        }
-        return
+        this.$parent.jumpLink(url)
       }
-      this.$parent.jumpLink(url)
     },
   },
 }
@@ -85,7 +83,7 @@ export default {
     font-size: 32px;
     line-height: 33px;
     font-family: PingFang SC;
-    font-weight: 500;
+    font-weight: bold;
     color: #1a1a1a;
   }
   .trademark-service-content {
