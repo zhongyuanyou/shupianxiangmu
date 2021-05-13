@@ -219,7 +219,7 @@ export default {
                   elem.img.split(',')[1] ||
                   'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 title: elem.title,
-                label: elem.field ? elem.field.join('|') : '',
+                label: elem.field ? elem.field.join(' | ') : '',
                 // label: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
                 currentPrice: elem.price,
                 originalPrice: 0,
@@ -308,12 +308,12 @@ export default {
         }
         .region-explain {
           margin-top: 20px;
-          height: 22px;
+          min-height: 22px;
           font-size: 22px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #222;
-          line-height: 22px;
+          line-height: 26px;
           .textOverflow(1);
           width: 100%;
         }
