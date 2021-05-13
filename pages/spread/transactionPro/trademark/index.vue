@@ -101,13 +101,7 @@ export default {
         noMore: false,
       },
       pageTitle: '商标交易',
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
       // 底部规划师埋点
       fixedMd: {
         imMd: {
