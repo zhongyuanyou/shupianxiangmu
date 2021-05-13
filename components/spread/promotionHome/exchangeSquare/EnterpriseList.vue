@@ -170,7 +170,6 @@ export default {
       // // 异步更新数据
       // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       this.list.length === 0 && (this.pageNumber = 1)
-      this.list = []
       this.selectTab()
     },
     initialize(changeObj) {
@@ -179,7 +178,7 @@ export default {
       this.list = []
       this.finished = false
       this.loading = true
-      this.selectTab()
+      this.onLoad()
     },
     onMore(id) {
       let base = ''
@@ -214,7 +213,7 @@ export default {
           if (res.code === 200 && result.length !== 0) {
             ++this.pageNumber
             result.forEach((elem, index) => {
-              const obj = {
+              this.list.push({
                 code: index + 1,
                 img:
                   elem.img.split(',')[1] ||
@@ -227,8 +226,7 @@ export default {
                 url: '',
                 desc: elem.desc,
                 id: elem.id,
-              }
-              this.list.push(obj)
+              })
             })
             this.loading = false
             if (result.length < 15) this.finished = true
