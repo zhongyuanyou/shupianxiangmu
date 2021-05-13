@@ -216,7 +216,6 @@ export default {
           }
           if (res.code === 200 && result.length !== 0) {
             ++that.pageNumber
-            debugger
             const msgList = []
             result.forEach((elem, index) => {
               msgList.push({
