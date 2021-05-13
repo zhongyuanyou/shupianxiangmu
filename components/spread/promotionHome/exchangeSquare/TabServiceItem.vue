@@ -172,7 +172,7 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.classCode}&productId=${id}`
     },
     // 请求数据
     selectTab(item) {
@@ -183,7 +183,7 @@ export default {
       const obj = {
         start: this.pageNumber,
         limit: '15',
-        classCodes: this.titleName[this.active].code,
+        classCode: this.titleName[this.active].code,
         dictCode: this.titleName[this.active].dictCode,
       }
       // naem: this.titleName[this.active].name,
@@ -191,7 +191,12 @@ export default {
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.trade_product_list, {
-          params: obj,
+          params: {
+            classCode: this.titleName[this.active].code,
+            start: this.pageNumber,
+            limit: '15',
+            dictCode: this.titleName[this.active].dictCode,
+          },
         })
         .then((res) => {
           console.log(res, 456)

@@ -59,7 +59,7 @@ import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { chipSpread } from '@/api/spread'
 import { newSpreadApi, plannerApi } from '~/api/spread'
-import { resultData } from '~/assets/spread/licence'
+// import { resultData } from '~/assets/spread/licence'
 
 export default {
   components: {
