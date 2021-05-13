@@ -26,14 +26,14 @@
 
     <!-- S 列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
-      <template v-slot:list>
-        <!-- <KnowledgeList /> -->
-        <EnterpriseList
+      <!-- <template v-if="true" v-slot:list> -->
+      <!-- <KnowledgeList /> -->
+      <!-- <EnterpriseList
           ref="enterprise"
           :default-list="defaultList"
           :change-state="changeState"
-        />
-      </template>
+        /> -->
+      <!-- </template> -->
     </TabServiceItem>
     <!-- E 列表 -->
 
@@ -55,7 +55,7 @@ import { plannerApi, newSpreadApi } from '@/api/spread'
 import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
-import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
+import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
 import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
 // import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
@@ -67,7 +67,7 @@ export default {
     Nav,
     Advertising,
     TabServiceItem,
-    EnterpriseList,
+    // EnterpriseList,
     BtnPlanner,
     // DggImCompany,
   },

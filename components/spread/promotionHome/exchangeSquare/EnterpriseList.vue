@@ -163,7 +163,6 @@ export default {
     // this.initialize(this.changeState)
     // this.classCode = this.titelList[0].code
     this.params = this.changeState
-    console.log(this.params)
   },
   methods: {
     onLoad() {
@@ -180,7 +179,6 @@ export default {
       this.finished = false
       this.loading = true
       this.onLoad()
-      //   this.selectTab()
     },
     onMore(id) {
       let base = ''
@@ -191,12 +189,10 @@ export default {
     },
     // 请求数据
     selectTab() {
+      console.log(this.params, '请求数据')
       // 当前无数据不执行
       if (this.finished && !this.loading) return
       // 2、调用接口
-      const that = this
-      const url =
-        'https://172.16.133.128:7001/service/nk/newChipSpread/v1/trade_product_list.do'
       this.$axios
         .get(newSpreadApi.trade_product_list, {
           params: {
@@ -211,14 +207,13 @@ export default {
           const result = res.data.records
           if (res.code !== 200) {
             // this.list = this.defaultList
-            that.loading = false
-            that.finished = true
+            this.loading = false
+            this.finished = true
           }
           if (res.code === 200 && result.length !== 0) {
-            ++that.pageNumber
-            const msgList = []
+            ++this.pageNumber
             result.forEach((elem, index) => {
-              msgList.push({
+              this.list.push({
                 code: index + 1,
                 img:
                   elem.img.split(',')[1] ||
@@ -233,22 +228,20 @@ export default {
                 id: elem.id,
               })
             })
-            that.list = msgList
-            that.loading = false
-            that.$forceUpdate()
-            if (result.length < 15) that.finished = true
+            this.loading = false
+            if (result.length < 15) this.finished = true
 
             return
           }
-          that.loading = false
-          that.error = true
-          that.list = that.defaultList
+          this.loading = false
+          this.error = true
+          this.list = this.defaultList
         })
         .catch((err) => {
-          that.list = that.defaultList
-          that.loading = false
-          that.finished = true
-          that.error = true
+          this.list = this.defaultList
+          this.loading = false
+          this.finished = true
+          this.error = true
           console.log(err)
         })
     },
@@ -315,7 +308,7 @@ export default {
         }
         .region-explain {
           margin-top: 20px;
-          min-height: 22px;
+          height: 22px;
           font-size: 22px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;

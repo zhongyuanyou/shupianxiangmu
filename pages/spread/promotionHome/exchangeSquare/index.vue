@@ -24,15 +24,14 @@
     <GiftBag :gift-bag-list="giftBagList" :gift-bag-msg="giftBagMsg"></GiftBag>
     <!-- 交易产品列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
-      <template v-slot:list>
-        <!-- <KnowledgeList /> -->
+      <!-- <template v-slot:list>
         <EnterpriseList
           ref="enterprise"
           :default-list="defaultList"
           :change-state="changeState"
           :titel-list="titleName"
         />
-      </template>
+      </template> -->
     </TabServiceItem>
 
     <!-- START 规划师-->
@@ -52,7 +51,7 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.vue'
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
-import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem.vue'
+import TabServiceItem from '@/components/spread/promotionHome/exchangeSquare/TabServiceItem'
 import EnterpriseList from '@/components/spread/promotionHome/exchangeSquare/EnterpriseList.vue'
 // import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
@@ -60,7 +59,7 @@ import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { chipSpread } from '@/api/spread'
 import { newSpreadApi, plannerApi } from '~/api/spread'
-import { resultData } from '~/assets/spread/licence'
+// import { resultData } from '~/assets/spread/licence'
 
 export default {
   components: {
@@ -73,7 +72,7 @@ export default {
     BtnPlanner,
     // DggImCompany,
     TabServiceItem,
-    EnterpriseList,
+    // EnterpriseList,
   },
   async asyncData({ $axios }) {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
@@ -244,7 +243,7 @@ export default {
           titleList.push(obj)
         })
         this.titleName = titleList
-        this.changeState = this.titleName[0]
+        // this.changeState = this.titleName[0]
         this.navDetail(this.result.data.navs.nav100059)
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
@@ -287,9 +286,9 @@ export default {
       window.location.href = 'https://m.shupian.cn/search/'
     },
     onChange(changeObj) {
-      this.changeState = changeObj
+      // this.changeState = changeObj
       // console.log(this.$refs.enterprise.initialize())
-      this.$refs.enterprise.initialize(changeObj)
+      // this.$refs.enterprise.initialize(changeObj)
       // if (obj.type === 1) {
       //   this.list = defaultList
       // }
