@@ -386,7 +386,6 @@ export default {
   created() {
     if (process.client) {
       // 请求
-
       this.getPagePlanner('app-ghsdgye-02')
     }
   },

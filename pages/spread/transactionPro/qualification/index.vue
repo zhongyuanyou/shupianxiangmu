@@ -376,15 +376,16 @@ export default {
       this.goodListData.tabBtnList = tabs
       // 请求
       this.params.classCode = this.goodListData.tabBtnList[0].type
-      this.getGoodList(this.params)
-      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   mounted() {
+    this.getGoodList(this.params)
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
+    this.getPagePlanner('app-ghsdgye-02')
+
     const resData = this.resultData
     try {
       if (JSON.stringify(resData) !== '{}') {
