@@ -173,9 +173,9 @@ export default {
     },
     // 请求数据
     selectTab(item) {
-      this.loading = true
       // 当前无数据不执行
       if (this.finished && !this.loading) return
+      this.loading = true
       const type = this.titleName[this.active].type
       const obj = {
         start: this.pageNumber,
@@ -194,15 +194,9 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res, 456)
           // 调用回调函数处理数据
           const result = res.data.records
-          if (res.code !== 200) {
-            this.loading = false
-            this.finished = true
-          }
           if (res.code === 200 && result.length !== 0) {
-            console.log(res.data.pageNumber === 1, 264684)
             if (res.data.pageNumber === 1) {
               this.list = []
             }
@@ -228,7 +222,7 @@ export default {
             return
           }
           this.loading = false
-          this.error = true
+          this.finished = true
         })
         .catch((err) => {
           this.loading = false

@@ -22,7 +22,14 @@ export function imInit(data = {}) {
     production: 'P',
   }
   const env = BASE[DGG_SERVER_ENV]
-  console.log(data)
+  let secretAddress = ''
+  if (env === 'D') {
+    secretAddress = '31b07a35b549a5046fb1cace1377c15e'
+  } else if (env === 'T') {
+    secretAddress = 'bda65845493c8f8f7e0a86536a889396'
+  } else {
+    secretAddress = 'bda65845493c8f8f7e0a86536a889396'
+  }
   imSdk.sdkInstance = null // 初始化前先重置
   const initSdk = imSdk.instance({
     env, // 'D|T|Y|P'
@@ -31,7 +38,7 @@ export function imInit(data = {}) {
     userId: data.userId,
     userTypeFlag: data.userType,
     sysCode: 'crisps-app',
-    secret: '31b07a35b549a5046fb1cace1377c15e',
+    secret: secretAddress,
     appKey: '4R29RHK10AQILT8ONUAOC5DDST',
     isConnectSocket: false,
     myInfo: (res) => {
