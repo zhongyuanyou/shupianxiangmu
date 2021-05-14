@@ -176,18 +176,9 @@ export default {
     },
     // 请求数据
     selectTab(item) {
-      this.loading = true
       // 当前无数据不执行
-      if (this.finished && !this.loading) return
-      const type = this.titleName[this.active].dictCode
-      const obj = {
-        start: this.pageNumber,
-        limit: '15',
-        classCode: this.titleName[this.active].code,
-        dictCode: this.titleName[this.active].dictCode,
-      }
-      // naem: this.titleName[this.active].name,
-      console.log(obj, '请求数据')
+      if (!this.loading && this.finished) return
+      this.loading = true
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.trade_product_list, {
@@ -202,12 +193,7 @@ export default {
           console.log(res, 456)
           // 调用回调函数处理数据
           const result = res.data.records
-          if (res.code !== 200) {
-            this.loading = false
-            this.finished = true
-          }
           if (res.code === 200 && result.length !== 0) {
-            console.log(res.data.pageNumber === 1, 264684)
             if (res.data.pageNumber === 1) {
               this.list = []
             }
@@ -229,12 +215,12 @@ export default {
               })
             })
             this.loading = false
-            if (result.length < 14) this.finished = true
+            if (result.length < 15) this.finished = true
 
             return
           }
           this.loading = false
-          this.error = true
+          this.finished = true
         })
         .catch((err) => {
           this.loading = false
