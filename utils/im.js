@@ -31,7 +31,18 @@ export function imInit(data = {}) {
     secretAddress = 'bda65845493c8f8f7e0a86536a889396'
   }
   let initSdk = null
-  try {
+  try{
+    console.log({
+      env, // 'D|T|Y|P'
+      token: data.token,
+      deviceId: data.deviceId,
+      userId: data.userId,
+      userTypeFlag: data.userType,
+      sysCode: 'crisps-app',
+      secret: secretAddress,
+      appKey: '4R29RHK10AQILT8ONUAOC5DDST',
+      isConnectSocket: false,
+    })
     initSdk = imSdk.instance({
       env, // 'D|T|Y|P'
       token: data.token,
@@ -43,6 +54,7 @@ export function imInit(data = {}) {
       appKey: '4R29RHK10AQILT8ONUAOC5DDST',
       isConnectSocket: false,
       myInfo: (res) => {
+        console.log('myInfo', res)
         if (data.userType === 'VISITOR') {
           localStorage.setItem('myInfo', JSON.stringify(res.data))
         } else {
@@ -50,10 +62,11 @@ export function imInit(data = {}) {
         }
       },
       onError: (res) => {
-        console.log(res)
+        console.log('onError', res)
       },
     })
-  } catch (error) {
+
+  }catch(error) {
     console.log(error)
     initSdk = null
   }
