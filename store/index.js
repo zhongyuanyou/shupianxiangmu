@@ -27,3 +27,4 @@ export const actions = {
       commit('user/SET_USER', { token, userId, userType })
   },
 }
+export const strict = false
