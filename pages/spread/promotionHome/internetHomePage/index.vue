@@ -17,6 +17,9 @@
     <Advertising :advertising-list="advertisingList"></Advertising>
     <!-- 产品列表 -->
     <Recommended></Recommended>
+
+    <!-- 规划师 -->
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
   </div>
 </template>
 
@@ -27,8 +30,9 @@ import Header from '@/components/spread/common/NavTop.vue'
 import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
 import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '@/components/spread/promotionHome/internetHomePage/Recommended.vue'
-import { chipSpread } from '@/api/spread'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 import { internetData } from '@/assets/spread/promotionHome/internetHomePage.js'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 export default {
   components: {
@@ -37,15 +41,16 @@ export default {
     GiftBag,
     Advertising,
     Recommended,
+    BtnPlanner,
   },
   async asyncData({ $axios }) {
     try {
-      const res = await $axios.get(chipSpread.list, {
+      const res = await $axios.get(newSpreadApi.list, {
         params: {
           locationCodes:
             'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
           navCodes: 'nav100061',
-          productCenterCode: 'Internet',
+          code: 'CRISPS-C-QYFW',
         },
       })
 
@@ -56,15 +61,15 @@ export default {
         }
       }
       console.log('请求失败')
-      return {
-        result: internetData,
-      }
+      // return {
+      //   result: internetData,
+      // }
     } catch (error) {
       console.log('请求错误')
       // 请求出错也要保证页面正常显示
-      return {
-        result: internetData,
-      }
+      // return {
+      //   result: internetData,
+      // }
     }
   },
   data() {
@@ -94,6 +99,8 @@ export default {
           product: [],
         },
       },
+      // 页面规划师
+      pagePlanner: {},
     }
   },
   computed: {
@@ -102,9 +109,16 @@ export default {
       appInfo: (state) => state.app.appInfo, // app信息
     }),
   },
+  created() {
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
+    }
+  },
   mounted() {
+    console.log(this.result, 456)
     try {
-      if (JSON.stringify(this.resultData) !== '{}') {
+      if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
@@ -225,6 +239,61 @@ export default {
           this.advertisingList.course.product = course
         }
       })
+    },
+    // 推介规划师
+    async getPagePlanner(scene) {
+      console.log('调用规划师')
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425163708', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
     },
   },
   head() {
