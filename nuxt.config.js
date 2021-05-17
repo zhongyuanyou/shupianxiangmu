@@ -17,9 +17,9 @@ const bablePlugin = [
     '@chipspc/vant-dgg',
   ],
 ]
-if (NODE_ENV === 'production') {
-  bablePlugin.push('transform-remove-console')
-}
+// if (NODE_ENV === 'production') {
+//   bablePlugin.push('transform-remove-console')
+// }
 module.exports = {
   telemetry: false,
   server: {
