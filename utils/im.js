@@ -31,7 +31,6 @@ export function imInit(data = {}) {
     secretAddress = 'bda65845493c8f8f7e0a86536a889396'
   }
   imSdk.sdkInstance = null // 初始化前先重置
-  console.log(data, 111111)
   const initSdk = imSdk.instance({
     env, // 'D|T|Y|P'
     token: data.token,
