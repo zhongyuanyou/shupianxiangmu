@@ -30,28 +30,33 @@ export function imInit(data = {}) {
   } else {
     secretAddress = 'bda65845493c8f8f7e0a86536a889396'
   }
-  imSdk.sdkInstance = null // 初始化前先重置
-  const initSdk = imSdk.instance({
-    env, // 'D|T|Y|P'
-    token: data.token,
-    deviceId: data.deviceId,
-    userId: data.userId,
-    userTypeFlag: data.userType,
-    sysCode: 'crisps-app',
-    secret: secretAddress,
-    appKey: '4R29RHK10AQILT8ONUAOC5DDST',
-    isConnectSocket: false,
-    myInfo: (res) => {
-      if (data.userType === 'VISITOR') {
-        localStorage.setItem('myInfo', JSON.stringify(res.data))
-      } else {
-        localStorage.removeItem('myInfo')
-      }
-    },
-    onError: (res) => {
-      console.log(res)
-    },
-  })
+  let initSdk = null
+  try {
+    initSdk = imSdk.instance({
+      env, // 'D|T|Y|P'
+      token: data.token,
+      deviceId: data.deviceId,
+      userId: data.userId,
+      userTypeFlag: data.userType,
+      sysCode: 'crisps-app',
+      secret: secretAddress,
+      appKey: '4R29RHK10AQILT8ONUAOC5DDST',
+      isConnectSocket: false,
+      myInfo: (res) => {
+        if (data.userType === 'VISITOR') {
+          localStorage.setItem('myInfo', JSON.stringify(res.data))
+        } else {
+          localStorage.removeItem('myInfo')
+        }
+      },
+      onError: (res) => {
+        console.log(res)
+      },
+    })
+  } catch (error) {
+    console.log(error)
+    initSdk = null
+  }
   return initSdk
 }
 
