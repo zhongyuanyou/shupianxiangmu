@@ -45,9 +45,9 @@ export function imInit(data = {}) {
     })
     initSdk = imSdk.instance({
       env, // 'D|T|Y|P'
-      token: data.token,
+      token: data.token || "",
       deviceId: data.deviceId,
-      userId: data.userId,
+      userId: data.userId || "",
       userTypeFlag: data.userType,
       sysCode: 'crisps-app',
       secret: secretAddress,
