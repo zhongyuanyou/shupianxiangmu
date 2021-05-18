@@ -1,6 +1,6 @@
 <template>
-  <div class="car-loans">
-    <Head title="车贷计算器"></Head>
+  <div class="house-loans">
+    <Head title="房贷计算器"></Head>
     <!-- 信息输入 -->
     <div class="form-box">
       <div class="car-value">
@@ -123,8 +123,8 @@ export default {
       value: '',
       valuePlaceholder: '请输入车价总额',
       pickerShow: false,
-      columns: ['6个月', '12个月', '24个月', '36个月', '48个月', '60个月'],
-      timeValue: '6个月',
+      columns: ['5年', '10年', '20年', '30年'],
+      timeValue: '5年',
       type: '',
       firstValue: '',
       firstPlaceholde: '请输入首付比率',
@@ -159,6 +159,19 @@ export default {
     // 立即办理
     handleBtn() {
       console.log('立即办理')
+    },
+    // 计算器(等额本息)
+    principalAndInterest(obj) {
+      /*
+       * P:贷款本金
+       * R:月利率
+       * N:还款期数
+       * 附：月利率 = 年利率/12
+       * */
+      const { P, R, N } = obj
+      // p*((r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1))
+      const result = P * ((R * (1 + R) ** N) / ((1 + R) ** N - 1))
+      return result * 10000 // 将万元换算成元
     },
     // 开始计算
     calculate() {
@@ -248,7 +261,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.car-loans {
+.house-loans {
   width: 750px;
   padding-bottom: 16px;
   height: 100%;
