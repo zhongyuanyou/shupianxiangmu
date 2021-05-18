@@ -52,9 +52,9 @@
 </template>
 
 <script>
+import { Picker } from '@chipspc/vant-dgg'
 import Head from '@/components/financing/common/Header'
 import Keyword from '@/components/financing/common/keyword'
-import { Picker } from '@chipspc/vant-dgg'
 export default {
   components: {
     Head,
