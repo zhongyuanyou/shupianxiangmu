@@ -221,9 +221,8 @@ export default {
       if (listAll.length === 0) return
 
       // 待改
-      const levelId = listAll[0].materialList[0].productDetail.parentClassCode.split(
-        ','
-      )[1]
+      const levelId =
+        listAll[0].materialList[0].productDetail.parentClassCode.split(',')[1]
       // 根据id查询钻展规划师
       const plannerObj = {
         limit: 3,

@@ -31,7 +31,7 @@ export function imInit(data = {}) {
     secretAddress = 'bda65845493c8f8f7e0a86536a889396'
   }
   let initSdk = null
-  try{
+  try {
     console.log({
       env, // 'D|T|Y|P'
       token: data.token,
@@ -65,8 +65,7 @@ export function imInit(data = {}) {
         console.log('onError', res)
       },
     })
-
-  }catch(error) {
+  } catch (error) {
     console.log(error)
     initSdk = null
   }

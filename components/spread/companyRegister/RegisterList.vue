@@ -148,8 +148,7 @@ export default {
             pric: 4000,
             bgImg: 'https://cdn.shupian.cn/sp-pt/wap/2x7bai1rkvy0000.png',
             title: '有限责任公司',
-            url:
-              'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801', // 跳详情
+            url: 'https://m.shupian.cn/detail/serviceDetails?productId=732138887167888801', // 跳详情
             serviceTag: [], // 服务标签
             activityTag: '', // 活动标签
             salesTag: '', // 销售标签
