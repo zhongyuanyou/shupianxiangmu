@@ -21,18 +21,17 @@
     <!-- banner -->
     <Banner :swipe-list="swipeList"></Banner>
     <!-- 新人红包 -->
-    <GiftBag :gift-bag-list="giftBagList"></GiftBag>
+    <GiftBag :gift-bag-list="giftBagList" :gift-bag-msg="giftBagMsg"></GiftBag>
     <!-- 交易产品列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
-      <template v-slot:list>
-        <!-- <KnowledgeList /> -->
+      <!-- <template v-slot:list>
         <EnterpriseList
           ref="enterprise"
           :default-list="defaultList"
           :change-state="changeState"
           :titel-list="titleName"
         />
-      </template>
+      </template> -->
     </TabServiceItem>
 
     <!-- START 规划师-->
@@ -52,7 +51,7 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.vue'
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
-import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem.vue'
+import TabServiceItem from '@/components/spread/promotionHome/exchangeSquare/TabServiceItem'
 import EnterpriseList from '@/components/spread/promotionHome/exchangeSquare/EnterpriseList.vue'
 // import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
@@ -60,6 +59,7 @@ import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { chipSpread } from '@/api/spread'
 import { newSpreadApi, plannerApi } from '~/api/spread'
+// import { resultData } from '~/assets/spread/licence'
 
 export default {
   components: {
@@ -72,7 +72,7 @@ export default {
     BtnPlanner,
     // DggImCompany,
     TabServiceItem,
-    EnterpriseList,
+    // EnterpriseList,
   },
   async asyncData({ $axios }) {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
@@ -86,7 +86,7 @@ export default {
           code: 'CRISPS-C-JYGC',
         },
       })
-      console.log(res, 123123)
+
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -105,6 +105,7 @@ export default {
   },
   data() {
     return {
+      giftBagMsg: {},
       placeholder: '请输入关键字',
       // 当前列表状态
       changeState: {
@@ -137,13 +138,7 @@ export default {
       ],
       marginTop: 0,
       // 页面规划师
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
 
       // 底部规划师埋点
       fixedMd: {
@@ -232,16 +227,23 @@ export default {
   mounted() {
     try {
       if (JSON.stringify(this.result.data) !== '{}') {
+        const dictCode = [
+          'CONDITION-JY-ZZ',
+          'CONDITION-JY-ZY',
+          'CONDITION-JY-GS',
+          'CONDITION-JY-SB',
+        ]
         const titleList = []
-        this.result.data.classList.forEach((item) => {
+        this.result.data.classList.forEach((item, index) => {
           const obj = {
             name: item.name,
             code: item.ext1,
+            dictCode: dictCode[index] || '',
           }
           titleList.push(obj)
         })
         this.titleName = titleList
-        this.changeState = titleList[0]
+        // this.changeState = this.titleName[0]
         this.navDetail(this.result.data.navs.nav100059)
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
@@ -254,12 +256,39 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
+      if (this.isInApp) {
+        const iOSRouter = {
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
       window.location.href = 'https://m.shupian.cn/search/'
     },
     onChange(changeObj) {
-      this.changeState = changeObj
+      // this.changeState = changeObj
       // console.log(this.$refs.enterprise.initialize())
-      this.$refs.enterprise.initialize(changeObj)
+      // this.$refs.enterprise.initialize(changeObj)
       // if (obj.type === 1) {
       //   this.list = defaultList
       // }
@@ -317,6 +346,8 @@ export default {
         }
         // 新人红包广告位
         if (item.locationCode === 'ad113246') {
+          const giftBagMsg = { name: '', giftBagList: [] }
+          giftBagMsg.name = item.locationName
           const giftBag = []
           item.sortMaterialList.forEach((elem, idx) => {
             const msg = elem.materialList[0].materialDescription.split('#')
@@ -331,6 +362,8 @@ export default {
             giftBag.push(obj)
           })
           this.giftBagList = giftBag
+          giftBagMsg.giftBagList = giftBag
+          this.giftBagMsg = giftBagMsg
         }
       })
     },

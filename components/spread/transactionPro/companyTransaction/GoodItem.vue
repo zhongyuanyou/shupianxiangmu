@@ -13,7 +13,7 @@
       @click="jump(good.id)"
       class="my-component"
     > -->
-    <a ref="goodItem" @click="jump(good.id)" class="my-component">
+    <a ref="goodItem" class="my-component" @click="jump(good.id)">
       <!-- S 左侧商品图片 -->
       <div class="item-img"><img :src="data.industryImg" /></div>
       <!-- E 左侧商品图片 -->
@@ -22,13 +22,14 @@
       <div class="item-content">
         <p class="item-title">{{ data.name }}</p>
         <div class="item-tabs">
-          <span
+          <!-- <span
             v-for="(item, index) in data.tabs"
             :key="index"
             class="item-tab"
           >
             {{ item }}
-          </span>
+          </span> -->
+          <span class="item-tab">{{ data.tabs }}</span>
         </div>
         <div class="item-notes">
           <span class="item-note">
@@ -142,10 +143,11 @@ export default {
         recommendText: this.getArrayItems(this.slogans, 3).join(','),
         price: obj.price,
         name: obj.title,
-        tabs:
-          obj.tabs.length !== 0
-            ? obj.tabs
-            : this.getArrayItems(this.slogans, 3),
+        tabs: obj.field ? obj.field.join(' | ') : '',
+        // tabs:
+        //   obj.tabs.length !== 0
+        //     ? obj.tabs
+        //     : this.getArrayItems(this.slogans, 3),
         notes: obj.desc,
         id: obj.id,
       }
@@ -302,19 +304,22 @@ export default {
   margin-top: 20px;
   .item-img {
     flex-shrink: 0;
-    width: 220px;
-    height: 220px;
+    width: 230px;
+    height: 230px;
     margin-right: 32px;
     border-radius: 4px;
-    img {
-      width: 100%;
-      height: 100%;
+    > img {
+      width: 220px;
+      height: 220px;
       border-radius: 4px;
     }
   }
   .item-content {
     flex-shrink: 0;
     width: 418px;
+    // display: inline-block;
+    min-height: 220px;
+    position: relative;
     .item-title {
       font-size: 32px;
       font-weight: bold;
@@ -323,7 +328,12 @@ export default {
       width: 100%;
       font-family: PingFang SC;
       max-height: 82px;
-      min-height: 82px;
+      // min-height: 82px;
+      font-family: PingFang SC;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
       .textOverflow(2);
     }
     .item-tabs {
@@ -333,17 +343,18 @@ export default {
       .item-tab {
         font-size: 22px;
         font-weight: 400;
-        color: #5c7499;
-        // line-height: 22px;
-        max-width: 110px;
-        height: 32px;
-        background: #f0f2f5;
-        border-radius: 4px;
-        display: flex;
-        justify-content: center;
-        padding: 0px 10px 0px 8px;
-        margin-right: 12px;
-        margin-bottom: 6px;
+        color: #222;
+        // color: #5c7499;
+        // // line-height: 22px;
+        // max-width: 120px;
+        // height: 32px;
+        // background: #f0f2f5;
+        // border-radius: 4px;
+        // display: flex;
+        // justify-content: center;
+        // padding: 0px 10px 0px 8px;
+        // margin-right: 12px;
+        // margin-bottom: 6px;
         .textOverflow(1);
       }
     }
@@ -368,10 +379,11 @@ export default {
       font-weight: 400;
       color: #ec5330;
       line-height: 36px;
+      position: absolute;
+      bottom: 0px;
       .item-price-num {
         font-size: 36px;
         line-height: 36px;
-
         font-weight: bold;
       }
     }

@@ -100,9 +100,7 @@ export default ({ app, store }) => {
           userType = 'VISITOR'
           token = info.token
           userId = info.userId
-        } else {
-          localStorage.removeItem('myInfo')
-        }
+        } 
 
         // if (!store.state.im.imExample && token) {
         // 初始化IM

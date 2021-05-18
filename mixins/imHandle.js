@@ -14,6 +14,7 @@ export default {
       userId: (state) => state.user.userId,
       userType: (state) => state.user.userType,
       imExample: (state) => state.im.imExample, // IM 实例
+      isInApp: (state) => state.app.isInApp,
     }),
   },
   methods: {
@@ -52,9 +53,14 @@ export default {
         }
       } else {
         const imUserType = type || 'MERCHANT_B' // 用户类型: ORDINARY_B 启大顺 ;MERCHANT_S 启大包
+        const operUserType =
+          this.userType ||
+          this.$cookies.get('userType', { path: '/' }) ||
+          'VISITOR'
         this.creatImSessionMixin({
           imUserId: mchUserId,
           imUserType,
+          operUserType,
         })
       }
     },
@@ -117,6 +123,7 @@ export default {
         let params = {
           imUserId: '',
           imUserType: '',
+          operUserType: '',
           ext: {
             intentionType: '',
             intentionCity: '',

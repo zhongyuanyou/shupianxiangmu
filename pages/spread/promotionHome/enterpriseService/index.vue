@@ -26,14 +26,14 @@
 
     <!-- S 列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
-      <template v-slot:list>
-        <!-- <KnowledgeList /> -->
-        <EnterpriseList
+      <!-- <template v-if="true" v-slot:list> -->
+      <!-- <KnowledgeList /> -->
+      <!-- <EnterpriseList
           ref="enterprise"
           :default-list="defaultList"
           :change-state="changeState"
-        />
-      </template>
+        /> -->
+      <!-- </template> -->
     </TabServiceItem>
     <!-- E 列表 -->
 
@@ -42,7 +42,7 @@
     <!-- END 规划师-->
 
     <!-- START IM在线咨询-->
-    <DggImCompany></DggImCompany>
+    <!-- <DggImCompany></DggImCompany> -->
     <!-- END IM在线咨询-->
   </div>
 </template>
@@ -55,9 +55,9 @@ import { plannerApi, newSpreadApi } from '@/api/spread'
 import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
-import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
+import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
 import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
-import DggImCompany from '@/components/spread/DggImCompany'
+// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 // import { resultData } from '~/assets/spread/licence'
 export default {
@@ -67,9 +67,9 @@ export default {
     Nav,
     Advertising,
     TabServiceItem,
-    EnterpriseList,
+    // EnterpriseList,
     BtnPlanner,
-    DggImCompany,
+    // DggImCompany,
   },
   async asyncData({ $axios }) {
     const locations = 'ad113257,ad113252,ad113250,ad113227'
@@ -460,7 +460,7 @@ export default {
             this.proDiscountsData(elem.sortMaterialList)
           }
           if (elem.locationCode === 'ad113257') {
-            this.introduceData(elem.sortMaterialList)
+            this.introduceData(elem.sortMaterialList, resData)
           }
         })
       }
@@ -471,8 +471,35 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      window.location.href = 'https://m.shupian.cn/search/'
       console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 请求数据
     onChange(changeObj) {
@@ -505,12 +532,14 @@ export default {
     // 薯片推广企业服务新人专属礼页面
     giftData(data) {
       if (data.length !== 0) {
-        this.gift = data.map((elem) => {
+        this.gift = data.map((elem, index) => {
           return {
+            mainTitle:
+              index === 0 ? elem.materialList[0].materialDescription : '',
             img: elem.materialList[0].materialUrl,
             url: elem.materialList[0].materialLink,
-            title: elem.materialList[0].materialDescription.split(',')[0],
-            price: elem.materialList[0].materialDescription.split(',')[1],
+            title: elem.materialList[0].materialDescription.split(',')[0] || '',
+            price: elem.materialList[0].materialDescription.split(',')[1] || '',
           }
         })
       } else {
@@ -519,8 +548,6 @@ export default {
     },
     // 直播 补贴
     proDiscountsData(data) {
-      // console.log(data, 46546)
-
       this.proDiscounts = data.map((elem, index) => {
         const labelData = ['直播中', '优惠放送']
         return {
@@ -534,7 +561,7 @@ export default {
       console.log(this.proDiscountsData, 46546)
     },
     // 活动广告位
-    introduceData(data) {
+    introduceData(data, resData) {
       if (data.length !== 0) {
         this.introduce = data.map((elem, index) => {
           return {

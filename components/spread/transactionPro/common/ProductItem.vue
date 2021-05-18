@@ -9,13 +9,14 @@
       <div class="item-content">
         <p class="item-title">{{ data.name }}</p>
         <div class="item-tabs">
-          <span
+          <!-- <span
             v-for="(item, index) in data.tabs"
             :key="index"
             class="item-tab"
           >
-            {{ item }}
-          </span>
+            {{ item }} -->
+          <!-- </span> -->
+          <span class="item-tab">{{ data.tabs }}</span>
         </div>
         <div class="item-notes">
           <span class="item-note">
@@ -99,14 +100,20 @@ export default {
   .item-content {
     flex: none;
     width: 418px;
+    min-height: 220px;
+    position: relative;
     .item-title {
-      min-height: 84px;
+      // min-height: 84px;
       max-height: 84px;
       font-size: 32px;
       font-weight: bold;
       color: #222222;
       line-height: 42px;
       font-family: PingFang SC;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
     }
     .item-tabs {
       display: flex;
@@ -115,16 +122,16 @@ export default {
       .item-tab {
         font-size: 22px;
         font-weight: 400;
-        color: #5c7499;
+        // color: #5c7499;
         // line-height: 22px;
-        height: 32px;
-        background: #f0f2f5;
-        border-radius: 4px;
-        display: flex;
-        justify-content: center;
-        padding: 0px 10px 0px 8px;
-        margin-right: 12px;
-        margin-bottom: 6px;
+        // height: 32px;
+        // background: #f0f2f5;
+        // border-radius: 4px;
+        // display: flex;
+        // justify-content: center;
+        // padding: 0px 10px 0px 8px;
+        // margin-right: 12px;
+        // margin-bottom: 6px;
       }
     }
     .item-notes {
@@ -147,6 +154,8 @@ export default {
       font-weight: 400;
       color: #ec5330;
       line-height: 36px;
+      position: absolute;
+      bottom: 0px;
       .item-price-num {
         font-size: 36px;
         line-height: 36px;

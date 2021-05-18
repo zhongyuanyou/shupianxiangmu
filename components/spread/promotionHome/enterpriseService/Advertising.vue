@@ -3,7 +3,7 @@
     <!-- 新人专属 -->
     <div v-show="gift.length > 0" class="exclusive-floor">
       <div class="exclusive-floor-top">
-        <span class="title">新人专属礼</span>
+        <span class="title">{{ gift[0].mainTitle }}</span>
         <a class="more" href="javascript:;">
           <span
             v-md-map
@@ -17,25 +17,33 @@
       </div>
       <div class="exclusive-floor-item">
         <!-- 红包 -->
-        <div class="event">
-          <!-- <p class="event-title">新人红包</p>
+        <!-- <div class="event"> -->
+        <!-- <p class="event-title">新人红包</p>
           <p class="event-content">多重优惠</p> -->
-        </div>
+        <!-- </div> -->
         <div
           v-for="(gifts, proKey) of gift"
           :key="proKey"
           class="product"
+          :style="{
+            backgroundImage: `url(
+              ${gifts.img}
+            )`,
+          }"
           @click="onMore(gifts.url)"
         >
-          <div class="imge">
-            <img :src="gifts.img" />
-            <span class="icon">新人礼</span>
-          </div>
-          <div class="title">{{ gifts.title }}</div>
-          <div class="price">
-            <span>
-              {{ gifts.price }}
-            </span>
+          <div v-if="proKey > 0">
+            <div class="imge">
+              <div class="placeholder"></div>
+              <!-- <img :src="gifts.img" /> -->
+              <span class="icon">新人礼</span>
+            </div>
+            <div class="title">{{ gifts.title }}</div>
+            <div class="price">
+              <span>
+                {{ gifts.price }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -50,7 +58,7 @@
       >
         <div class="title">
           {{ item.proTitle }}
-          <span class="title-live">
+          <span v-if="false" class="title-live">
             <span v-if="proKey === 0" class="living-margin">
               <span class="living-icon">
                 <span class="living-bar living-bar1"></span>
@@ -133,7 +141,7 @@ export default {
           {
             proTitle: '企服直播',
             subheading: '行业大牛助力企业',
-            label: '直播中',
+            label: '直播中5646',
             bgImg: 'https://cdn.shupian.cn/sp-pt/wap/g3rg0424lp40000.png',
             url: '',
           },
@@ -297,6 +305,7 @@ export default {
         border: 1px solid rgba(205, 205, 205, 0.5);
         padding: 10px;
         margin-left: 8px;
+        background-size: cover;
         .title {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -310,8 +319,9 @@ export default {
         }
         .imge {
           position: relative;
-          background-color: rgba(244, 244, 244, 1);
-          img {
+          // background-color: rgba(244, 244, 244, 1);
+          .placeholder {
+            display: block;
             width: 140px;
             height: 140px;
           }

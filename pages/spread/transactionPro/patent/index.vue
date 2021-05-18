@@ -61,7 +61,7 @@ import Header from '~/components/common/head/header.vue'
 import NavBar from '~/components/spread/transactionPro/common/NavBar.vue'
 import Banner from '~/components/spread/transactionPro/common/Banner.vue'
 // import Form from '~/components/spread/transactionPro/common/Form'
-import ProductList from '~/components/spread/transactionPro/common/ProductList'
+import ProductList from '~/components/spread/transactionPro/common/ProductList.vue'
 import Advertising from '~/components/spread/transactionPro/patent/Advertising.vue'
 // import FooterBottom from '~/components/spread/transactionPro/common/FooterBottom'
 import BtnPlanner from '~/components/spread/common/BtnPlanner'
@@ -343,14 +343,7 @@ export default {
         //   '家居用品',
         //   '食品保健',
         // ],
-        planner: {
-          id: '7862495547640840192',
-          name: '张毅',
-          jobNum: '107547',
-          telephone: '4000962540',
-          imgSrc:
-            'https://cdn.shupian.cn/6b36906ec8c649a5aaee0bb274f6daeb1618991541795.jpeg',
-        },
+        planner: {},
         md: {
           pageName: '专利交易聚合页',
         },
@@ -359,7 +352,7 @@ export default {
       goodList: [],
       // 更多提示
       more: {
-        loading: false, // 加载更多按钮点击时，显示的loading加载
+        loading: true, // 加载更多按钮点击时，显示的loading加载
         noMore: false, // 无更多加载数据
       },
       // 推荐规划师：默认数据
@@ -393,7 +386,6 @@ export default {
   created() {
     if (process.client) {
       // 请求
-
       this.getPagePlanner('app-ghsdgye-02')
     }
   },
@@ -552,8 +544,9 @@ export default {
       this.more.loading = true
       const param = {
         classCode: this.params.type,
-        limit: '15',
+        limit: '10',
         start: this.pageNum,
+        dictCode: 'CONDITION-JY-ZY',
       }
       // 2、调用接口
       this.$axios
@@ -561,10 +554,10 @@ export default {
           params: param,
         })
         .then((res) => {
+          this.more.loading = true
           // 调用回调函数处理数据
           const result = res.data.records || []
           if (result.length > 0 && res.code === 200) {
-            this.more.loading = false
             result.forEach((elem) => {
               const img =
                 'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png'
@@ -594,14 +587,15 @@ export default {
                 industryName: '电子贸易', // 行业名称（会根据行业名称显示相应的行业图片）
                 price: Number(elem.price), // 商品价格
                 name: elem.title, // 公司显示名称（有*号）
-                tabs:
-                  elem.tabs.length !== 0
-                    ? elem.tabs
-                    : [
-                        `${tabs[random] || '人气产品'}`,
-                        `${tabs[random + 1] || '资料齐全'}`,
-                        `${tabs[random + 2] || '高咨询'}`,
-                      ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
+                tabs: elem.field ? elem.field.join(' | ') : '',
+                // tabs:
+                //   elem.tabs.length !== 0
+                //     ? elem.tabs
+                //     : [
+                //         `${tabs[random] || '人气产品'}`,
+                //         `${tabs[random + 1] || '资料齐全'}`,
+                //         `${tabs[random + 2] || '高咨询'}`,
+                //       ], // 有背景色的标签tab，每个页面有单独的标签列表，随机取几个传进来
                 notes: elem.desc, // 以 | 字符分隔的注意，接口字段值
                 id: elem.id,
               }
@@ -612,10 +606,12 @@ export default {
               //   obj.notes.push(elem.patentStatusName)
               // }
               if (result.length < 10) {
-                this.more.loading = false
                 this.more.noMore = true
+              } else {
+                this.more.noMore = false
               }
               this.goodList.push(obj)
+              this.more.loading = false
             })
             return
           }

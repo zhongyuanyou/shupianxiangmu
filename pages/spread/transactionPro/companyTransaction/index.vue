@@ -22,7 +22,7 @@
     <!-- END   导航部-金刚区-->
 
     <!-- START 轮播Banner-->
-    <Banner class="banner-margin" :images="imageBanner" />
+    <Banner class="banner-margin" :data="imageBanner" />
 
     <!-- END   轮播Banner-->
 
@@ -69,7 +69,7 @@ import Banner from '@/components/spread/transactionPro/common/Banner.vue'
 // import Form from '~/components/spread/transactionPro/common/Form'
 import HotIndustry from '@/components/spread/transactionPro/companyTransaction/HotIndustry.vue'
 import WithAssetsType from '@/components/spread/transactionPro/companyTransaction/WithAssetsType.vue'
-import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany'
+import RecommendCompany from '@/components/spread/transactionPro/companyTransaction/RecommendCompany.vue'
 
 export default {
   name: 'Index',
@@ -282,7 +282,6 @@ export default {
     if (process.client) {
       // 请求
       this.getPagePlanner('app-ghsdgye-02')
-      console.log(this.resultData)
     }
   },
   mounted() {

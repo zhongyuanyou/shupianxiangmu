@@ -22,29 +22,54 @@ export function imInit(data = {}) {
     production: 'P',
   }
   const env = BASE[DGG_SERVER_ENV]
-  console.log(data)
-  imSdk.sdkInstance = null // 初始化前先重置
-  const initSdk = imSdk.instance({
-    env, // 'D|T|Y|P'
-    token: data.token,
-    deviceId: data.deviceId,
-    userId: data.userId,
-    userTypeFlag: data.userType,
-    sysCode: 'crisps-app',
-    secret: '31b07a35b549a5046fb1cace1377c15e',
-    appKey: '4R29RHK10AQILT8ONUAOC5DDST',
-    isConnectSocket: false,
-    myInfo: (res) => {
-      if (data.userType === 'VISITOR') {
-        localStorage.setItem('myInfo', JSON.stringify(res.data))
-      } else {
-        localStorage.removeItem('myInfo')
-      }
-    },
-    onError: (res) => {
-      console.log(res)
-    },
-  })
+  let secretAddress = ''
+  if (env === 'D') {
+    secretAddress = '31b07a35b549a5046fb1cace1377c15e'
+  } else if (env === 'T') {
+    secretAddress = 'bda65845493c8f8f7e0a86536a889396'
+  } else {
+    secretAddress = 'bda65845493c8f8f7e0a86536a889396'
+  }
+  let initSdk = null
+  try{
+    console.log({
+      env, // 'D|T|Y|P'
+      token: data.token,
+      deviceId: data.deviceId,
+      userId: data.userId,
+      userTypeFlag: data.userType,
+      sysCode: 'crisps-app',
+      secret: secretAddress,
+      appKey: '4R29RHK10AQILT8ONUAOC5DDST',
+      isConnectSocket: false,
+    })
+    initSdk = imSdk.instance({
+      env, // 'D|T|Y|P'
+      token: data.token,
+      deviceId: data.deviceId,
+      userId: data.userId,
+      userTypeFlag: data.userType,
+      sysCode: 'crisps-app',
+      secret: secretAddress,
+      appKey: '4R29RHK10AQILT8ONUAOC5DDST',
+      isConnectSocket: false,
+      myInfo: (res) => {
+        console.log('myInfo', res)
+        if (data.userType === 'VISITOR') {
+          localStorage.setItem('myInfo', JSON.stringify(res.data))
+        } else {
+          localStorage.removeItem('myInfo')
+        }
+      },
+      onError: (res) => {
+        console.log('onError', res)
+      },
+    })
+
+  }catch(error) {
+    console.log(error)
+    initSdk = null
+  }
   return initSdk
 }
 

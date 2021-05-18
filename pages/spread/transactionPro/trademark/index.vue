@@ -31,12 +31,10 @@
       @getMore="getMore"
     ></ProductList>
     <!-- 站位 -->
-    <!-- <div class="box"></div> -->
     <!-- 底部按钮 -->
     <!-- <FixedBottom :planner="pagePlanner" :md="bottomMd" /> -->
     <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- START IM在线咨询-->
-    <!-- <DggImCompany></DggImCompany> -->
   </div>
 </template>
 
@@ -103,13 +101,7 @@ export default {
         noMore: false,
       },
       pageTitle: '商标交易',
-      pagePlanner: {
-        id: '7862495547640840192',
-        name: '张毅',
-        jobNum: '107547',
-        telephone: '18402858698',
-        imgSrc: '',
-      },
+      pagePlanner: {},
       // 底部规划师埋点
       fixedMd: {
         imMd: {
@@ -325,15 +317,9 @@ export default {
         //   '服装鞋帽',
         //   '食品行页',
         // ],
-        planner: {
-          id: '7862495547640840192',
-          name: '张毅',
-          jobNum: '107547',
-          telephone: '18402858698',
-          imgSrc: '',
-        },
+        planner: {},
         md: {
-          pageName: '资质交易聚合页',
+          pageName: '商标交易聚合页',
         },
       },
       // 商品列表
@@ -370,9 +356,11 @@ export default {
       highQualityList: [], // 优质商标列表
       specialOfferList: [], // 特价急售商标列表
       paramData: {
-        start: 1,
-        limit: 15,
         classCode: 0,
+        limit: 15,
+        start: 1,
+        dictCode: 'CONDITION-JY-SB',
+        // dictCode: 'CONDITION-JY-ZY',
       },
       firstScreen: '',
     }
@@ -396,10 +384,10 @@ export default {
       this.goodListData.tabBtnList = tabs
       // 请求
       this.paramData.classCode = this.goodListData.tabBtnList[0].type
-      this.getGoodList(this.paramData)
     }
   },
   mounted() {
+    this.getGoodList(this.paramData)
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
@@ -564,19 +552,21 @@ export default {
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
-                tabs:
-                  obj.tabs.length !== 0
-                    ? obj.tabs
-                    : this.getArrayItems(this.slogans, 3),
+                tabs: obj.field ? obj.field.join(' | ') : '',
+                // tabs:
+                //   obj.tabs.length !== 0
+                //     ? obj.tabs
+                //     : this.getArrayItems(this.slogans, 3),
                 notes: obj.desc,
                 id: obj.id,
               }
               this.goodList.push(item)
             })
             // 2、当展示的商品列表和商品总条数相等时，显示'无更多数据啦'
-            if (this.goodList.length === res.data.total) {
-              this.more.loading = false
+            if (data.length < 10) {
               this.more.noMore = true
+            } else {
+              this.more.noMore = false
             }
             return
           }
@@ -665,6 +655,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+iframe {
+  display: none;
+}
 .trademark-page {
   background: #ffffff;
   width: @spread-page-width;

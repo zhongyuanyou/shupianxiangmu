@@ -25,6 +25,7 @@
                   {{ labels }}
                 </span>
               </label>
+              <div class="region-explain">{{ item.desc }}</div>
             </div>
             <div
               v-show="item.currentPrice !== '' && item.currentPrice"
@@ -144,6 +145,7 @@ export default {
       pageNumber: 1,
       list: [],
       defaultState: {},
+      count: 0,
     }
   },
   mounted() {
@@ -155,18 +157,21 @@ export default {
   methods: {
     initialize(changeObj) {
       this.pageNumber = 1
-      this.list = []
       this.finished = false
       this.loading = true
-      this.defaultState = this.changeState
-      // this.selectTab()
-      this.onLoad()
+      this.defaultState = changeObj
+      this.selectTab()
+      // this.onLoad(changeObj)
     },
-    onLoad(e) {
+    onLoad(changeObj) {
       // // 异步更新数据
+      if (this.pageNumber === 1) {
+        this.list = []
+      }
+      // if (this.loading) return
       // // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       this.defaultState = this.changeState
-      this.list.length === 0 && (this.pageNumber = 1)
+      // this.list.length === 0 && (this.pageNumber = 1)
       this.selectTab()
     },
     onMore(id) {
@@ -179,6 +184,7 @@ export default {
     // 请求数据
     selectTab(item) {
       console.log(this.defaultState, '请求数据')
+      this.loading = true
       // 当前无数据不执行
       if (this.finished && !this.loading) return
       const type = this.defaultState.type
@@ -186,8 +192,8 @@ export default {
       this.$axios
         .get(newSpreadApi.service_product_list, {
           params: {
-            pageNumber: this.pageNumber,
-            pageSize: '15',
+            start: this.pageNumber,
+            limit: '4',
             classCodes: type,
           },
         })
@@ -217,11 +223,12 @@ export default {
                 currentPrice: elem.price,
                 originalPrice: 0,
                 url: '',
+                desc: elem.desc,
                 id: elem.id,
               })
             })
             this.loading = false
-            if (result.length < 15) this.finished = true
+            if (result.length < 4) this.finished = true
 
             return
           }
@@ -257,7 +264,7 @@ export default {
       .imge {
         width: 220px;
         height: 220px;
-        background: #b2b2b2;
+        // background: #b2b2b2;
         border-radius: 12px;
         margin-right: 32px;
         img {
@@ -292,7 +299,22 @@ export default {
               line-height: 32px;
               margin-right: 8px;
               padding: 4px 6px;
+              max-width: 120px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
+          }
+          .region-explain {
+            margin-top: 20px;
+            height: 22px;
+            font-size: 22px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #222;
+            line-height: 22px;
+            .textOverflow(1);
+            width: 100%;
           }
         }
         &-price {

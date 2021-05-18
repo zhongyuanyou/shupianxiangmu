@@ -2,8 +2,11 @@
   <div class="gift-bag">
     <div class="gift-bag-box">
       <div class="giftbag-box-title">
-        <div class="giftbag-box-title-left">新人专属礼</div>
-        <a class="giftbag-box-title-right" @click="prompt(giftBagList[0].url)">
+        <div class="giftbag-box-title-left">{{ giftBagMsg.name }}</div>
+        <a
+          class="giftbag-box-title-right"
+          @click="prompt(giftBagMsg.giftBagList[0].url)"
+        >
           <span>更多</span>
           <my-icon
             class="next-icon"
@@ -14,26 +17,35 @@
         </a>
       </div>
       <div class="giftbag-content-box">
-        <div
+        <!-- <div
           class="giftbag-content-left"
           :style="{ backgroundImage: 'url(' + bg + ')' }"
-          @click="prompt(giftBagList[0].url)"
-        >
-          <!-- <span class="title">新人红包</span>
+          @click="prompt(giftBagMsg.giftBagList[0].url)"
+        > -->
+        <!-- <span class="title">新人红包</span>
           <span class="title-describe">立享多重优惠</span> -->
-        </div>
+        <!-- </div> -->
         <div class="giftbag-content-right">
           <div
-            v-for="item in giftBagList"
-            :key="item.code"
+            v-for="(item, index) in giftBagMsg.giftBagList"
+            :key="index"
+            :style="{ backgroundImage: 'url(' + item.img + ')' }"
             class="product"
             @click="prompt(item.url)"
           >
             <a href="javascript:;">
-              <div class="img-box"><img :src="item.img" alt="" /></div>
-              <span class="product-title">{{ item.title }}</span>
-              <span class="product-price">{{ item.price }}</span>
-              <span class="product-label">{{ item.label }}</span>
+              <div class="img-box">
+                <!-- <img :src="item.img" alt="" /> -->
+              </div>
+              <span v-show="item.title" class="product-title">{{
+                item.title
+              }}</span>
+              <span v-show="item.price" class="product-price">{{
+                item.price
+              }}</span>
+              <span v-show="index !== 0" class="product-label">{{
+                item.label
+              }}</span>
             </a>
           </div>
         </div>
@@ -53,6 +65,12 @@ export default {
       type: Array,
       default: () => {
         return []
+      },
+    },
+    giftBagMsg: {
+      type: Object,
+      default: () => {
+        return {}
       },
     },
   },
@@ -80,7 +98,7 @@ export default {
   margin-top: 20px;
   .gift-bag-box {
     width: 100%;
-    height: 310px;
+    height: 340px;
     background: #ffffff;
     border-radius: 24px;
     padding: 24px 20px;
@@ -159,25 +177,32 @@ export default {
         }
       }
       .giftbag-content-right {
-        margin-left: 12px;
+        // margin-left: 12px;
         flex: 1;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        // justify-content: space-between;
+        .product:not(:first-child) {
+          margin-left: 12px;
+        }
         .product {
           width: 160px;
-          height: 206px;
-          background: #ffffff;
+          height: 234px;
+          //   background: #ffffff;
           border-radius: 12px;
           padding: 8px 8px 16px 8px;
           border: 1px solid rgba(205, 205, 205, 0.5);
           position: relative;
+          background-repeat: no-repeat;
+          background-position: 0px 0px;
+          background-size: 100% 100%;
           > a {
             width: 100%;
             .img-box {
               width: 144px;
-              height: 100px;
+              height: 135px;
               border-radius: 12px 12px 0px 0px;
+              border: 1px solid transparent;
               display: flex;
               > img {
                 width: 100%;
@@ -185,11 +210,11 @@ export default {
             }
             .product-title {
               display: block;
-              font-size: 24px;
+              font-size: 22px;
               font-family: PingFangSC-Medium, PingFang SC;
-              font-weight: bold;
+              font-weight: 700;
               color: #222222;
-              line-height: 32px;
+              line-height: 30px;
               margin-top: 12px;
               .textOverflow(1);
             }
@@ -215,7 +240,7 @@ export default {
               text-align: center;
               position: absolute;
               right: 4px;
-              top: 80px;
+              top: 120px;
             }
           }
         }

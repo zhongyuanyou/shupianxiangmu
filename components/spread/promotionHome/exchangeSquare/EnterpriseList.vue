@@ -21,10 +21,12 @@
             <div class="region-content">
               <p class="region-title">{{ item.title }}</p>
               <label>
-                <span v-for="(labels, labelKey) of item.label" :key="labelKey">
-                  {{ labels }}
-                </span>
+                <!-- <span v-for="(labels, labelKey) of item.label" :key="labelKey">
+                  {{ labels }} -->
+                <!-- </span> -->
+                <span>{{ item.label }}</span>
               </label>
+              <div class="region-explain">{{ item.desc }}</div>
             </div>
             <div
               v-show="item.currentPrice !== '' && item.currentPrice"
@@ -197,6 +199,7 @@ export default {
             start: this.pageNumber,
             limit: '15',
             classCode: this.params.code,
+            dictCode: this.params.dictCode,
           },
         })
         .then((res) => {
@@ -216,10 +219,12 @@ export default {
                   elem.img.split(',')[1] ||
                   'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 title: elem.title,
-                label: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
+                label: elem.field ? elem.field.join(' | ') : '',
+                // label: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
                 currentPrice: elem.price,
                 originalPrice: 0,
                 url: '',
+                desc: elem.desc,
                 id: elem.id,
               })
             })
@@ -286,16 +291,31 @@ export default {
           label {
             display: flex;
             span {
-              background: #f0f2f5;
-              border-radius: 4px;
+              // background: #f0f2f5;
+              // border-radius: 4px;
               font-size: 20px;
               font-weight: 400;
-              color: #5c7499;
+              // color: #5c7499;
+              color: #222;
               line-height: 32px;
-              margin-right: 8px;
-              padding: 4px 6px;
+              // margin-right: 8px;
+              // padding: 4px 6px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
           }
+        }
+        .region-explain {
+          margin-top: 20px;
+          height: 22px;
+          font-size: 22px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #222;
+          line-height: 26px;
+          .textOverflow(1);
+          width: 100%;
         }
         &-price {
           // height: 30px;

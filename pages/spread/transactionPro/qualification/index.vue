@@ -311,8 +311,9 @@ export default {
       // @--S 推荐公司板块
       params: {
         start: 1,
-        limit: 15,
+        limit: 10,
         classCode: 0,
+        dictCode: 'CONDITION-JY-ZZ',
       },
       // 选项卡、规划师
       goodListData: {
@@ -375,15 +376,16 @@ export default {
       this.goodListData.tabBtnList = tabs
       // 请求
       this.params.classCode = this.goodListData.tabBtnList[0].type
-      this.getGoodList(this.params)
-      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   mounted() {
+    this.getGoodList(this.params)
     // @--判断页面是否在app里打开
     if (this.isInApp) {
       this.$appFn.dggSetTitle({ title: this.pageTitle }, () => {})
     }
+    this.getPagePlanner('app-ghsdgye-02')
+
     const resData = this.resultData
     try {
       if (JSON.stringify(resData) !== '{}') {
@@ -516,10 +518,11 @@ export default {
                 industryName: '',
                 price: Number(obj.price),
                 name: obj.title,
-                tabs:
-                  obj.tabs.length !== 0
-                    ? obj.tabs
-                    : this.getArrayItems(this.slogans, 3),
+                tabs: obj.field ? obj.field.join(' | ') : '',
+                // tabs:
+                //   obj.tabs.length !== 0
+                //     ? obj.tabs
+                //     : this.getArrayItems(this.slogans, 3),
                 notes: obj.desc,
                 id: obj.id,
               }
