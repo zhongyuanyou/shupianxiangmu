@@ -263,8 +263,7 @@ export default {
             product: [
               {
                 code: 1,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '成都****有限责任公司成都****有限责任公司',
                 labels: [
                   { code: 1, label: '精选资质TOP1', type: 'saleTag' },
@@ -280,8 +279,7 @@ export default {
               },
               {
                 code: 2,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '成都****有限责任公司成都****有限责任公司',
                 labels: [
                   { code: 1, label: '限时秒杀', type: 'sactiveTag' },
@@ -297,8 +295,7 @@ export default {
               },
               {
                 code: 3,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '成都****有限责任公司',
                 labels: [
                   { code: 1, label: '可领优惠券', type: 'saleTag' },
@@ -314,8 +311,7 @@ export default {
               },
               {
                 code: 4,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '成都****有限责任公司成都****有限责任公司',
                 labels: [
                   { code: 1, label: '千万补贴', type: 'sactiveTag' },
@@ -337,8 +333,7 @@ export default {
             product: [
               {
                 code: 1,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '一种用于预处理农作一种用于预处理农作…',
                 labels: [
                   { code: 1, label: '精选资质TOP1', type: 'saleTag' },
@@ -354,8 +349,7 @@ export default {
               },
               {
                 code: 2,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '一种用于预处理农作…一种用于预处理农作…',
                 labels: [
                   { code: 1, label: '限时秒杀', type: 'sactiveTag' },
@@ -371,8 +365,7 @@ export default {
               },
               {
                 code: 3,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '一种用于预处理农作',
                 labels: [
                   { code: 1, label: '可领优惠券', type: 'saleTag' },
@@ -388,8 +381,7 @@ export default {
               },
               {
                 code: 4,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '一种用于预处理农作一种用于预处理农作…',
                 labels: [
                   { code: 1, label: '千万补贴', type: 'sactiveTag' },
@@ -411,8 +403,7 @@ export default {
             product: [
               {
                 code: 1,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '房建市政公路三级+四专三级',
                 labels: [
                   { code: 1, label: '精选资质TOP1', type: 'saleTag' },
@@ -428,8 +419,7 @@ export default {
               },
               {
                 code: 2,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '房建市政公路三级+四专三级房建市政公路三级+四专…',
                 labels: [
                   { code: 1, label: '限时秒杀', type: 'sactiveTag' },
@@ -445,8 +435,7 @@ export default {
               },
               {
                 code: 3,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '房建市政公路三级+四专三级房建市政公路三级+四专…',
                 labels: [
                   { code: 1, label: '可领优惠券', type: 'saleTag' },
@@ -462,8 +451,7 @@ export default {
               },
               {
                 code: 4,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
                 title: '房建市政公路三级+四专三级房建市政公路三级+四专…',
                 labels: [
                   { code: 1, label: '千万补贴', type: 'sactiveTag' },

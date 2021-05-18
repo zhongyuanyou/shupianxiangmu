@@ -194,20 +194,23 @@ export default {
       const length = this.adList[0].sortMaterialList.length
       for (let i = 0; i < length; i++) {
         const obj = {
-          showName: this.adList[0].sortMaterialList[i].materialList[0]
-            .productDetail.operating.showName,
-          slogan: this.adList[0].sortMaterialList[i].materialList[0]
-            .productDetail.operating.slogan,
+          showName:
+            this.adList[0].sortMaterialList[i].materialList[0].productDetail
+              .operating.showName,
+          slogan:
+            this.adList[0].sortMaterialList[i].materialList[0].productDetail
+              .operating.slogan,
           num1: this.adList[0].sortMaterialList[i].materialList[0].productDetail
             .operating.actualViews,
           num2: this.adList[0].sortMaterialList[i].materialList[0].productDetail
             .operating.defaultSales,
           num3: this.adList[0].sortMaterialList[i].materialList[0].productDetail
             .operating.actualSales,
-          price: this.adList[0].sortMaterialList[i].materialList[0]
-            .productDetail.referencePrice,
-          detailsUrl: this.adList[0].sortMaterialList[i].materialList[0]
-            .materialLink,
+          price:
+            this.adList[0].sortMaterialList[i].materialList[0].productDetail
+              .referencePrice,
+          detailsUrl:
+            this.adList[0].sortMaterialList[i].materialList[0].materialLink,
           productName: '增值税筹划',
           planner: {
             person: this.planlerList[i % this.planlerList.length].userHeadUrl,

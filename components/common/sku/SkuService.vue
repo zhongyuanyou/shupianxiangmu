@@ -80,7 +80,8 @@
                   <span
                     class="sku-resource__item-operation"
                     :class="{
-                      'sku-resource__item-operation--placehodler': !resourceService.serviceItemValId,
+                      'sku-resource__item-operation--placehodler':
+                        !resourceService.serviceItemValId,
                     }"
                     >{{
                       resourceService.serviceItemValId

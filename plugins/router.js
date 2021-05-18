@@ -100,7 +100,7 @@ export default ({ app, store }) => {
           userType = 'VISITOR'
           token = info.token
           userId = info.userId
-        } 
+        }
 
         // if (!store.state.im.imExample && token) {
         // 初始化IM
