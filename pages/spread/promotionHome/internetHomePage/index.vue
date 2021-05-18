@@ -76,7 +76,14 @@ export default {
     return {
       // marginTop: -120,
       rollNav: [],
-      giftBagList: [],
+      giftBagList: [
+        {
+          img: '',
+          url: '',
+          title: '有限公司注册',
+          price: '0元',
+        },
+      ],
       advertisingList: {
         limitedTime: {
           title: '限时秒杀',
@@ -106,6 +113,7 @@ export default {
   computed: {
     ...mapState({
       isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
   },
@@ -154,6 +162,7 @@ export default {
         data.forEach((item, index) => {
           const obj = {
             code: index + 1,
+            sort: item.sort,
             name: item.name,
             url: item.url,
             size: 'small',
@@ -163,6 +172,9 @@ export default {
           navList.push(obj)
         })
         this.rollNav = navList.reverse()
+        // this.rollNav.sort((a, b) => {
+        //   return a.sort - b.sort
+        // })
       }
     },
     // 新人红包数据处理
@@ -173,10 +185,12 @@ export default {
           item.sortMaterialList.forEach((elem, index) => {
             const msg = elem.materialList[0].materialDescription.split('#')
             const obj = {
+              // maxTitle: elem.materialList[0].materialName.split('#')[1],
               code: index + 1,
               headImage: elem.materialList[0].materialUrl,
-              label: msg[0],
-              title: elem.materialList[0].materialName.split('#')[1],
+              // label: msg[0],
+              // title: elem.materialList[0].materialName.split('#')[1],
+              title: msg[0],
               price: msg[1],
               url: elem.materialList[0].materialLink,
             }
@@ -185,6 +199,7 @@ export default {
           this.giftBagList = bagList
         }
         if (item.locationCode === 'ad113280') {
+          console.log(item.sortMaterialList, 123456)
           const seckill = []
           item.sortMaterialList.forEach((elem, index) => {
             const obj = {
@@ -242,7 +257,6 @@ export default {
     },
     // 推介规划师
     async getPagePlanner(scene) {
-      console.log('调用规划师')
       const device = await this.$getFinger().then((res) => {
         return res
       })
@@ -280,6 +294,7 @@ export default {
             }
           )
           .then((res) => {
+            console.log(res, '调用规划师')
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
@@ -294,6 +309,15 @@ export default {
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
+    },
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
   head() {
