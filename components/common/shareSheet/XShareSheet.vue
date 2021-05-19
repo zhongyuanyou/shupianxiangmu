@@ -2,8 +2,8 @@
   <sp-share-sheet
     v-model="showShare"
     :options="spOptions"
-    @select="onSelect"
     class="x-share"
+    @select="onSelect"
   />
 </template>
 

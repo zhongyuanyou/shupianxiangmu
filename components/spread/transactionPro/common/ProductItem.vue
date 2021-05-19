@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="goodItem" @click="jump(data.id)" class="my-component">
+    <div ref="goodItem" class="my-component" @click="jump(data.id)">
       <!-- S 左侧商品图片 -->
       <div class="item-img"><img :src="data.img" /></div>
       <!-- E 左侧商品图片 -->
