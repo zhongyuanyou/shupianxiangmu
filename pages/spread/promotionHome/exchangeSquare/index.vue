@@ -225,6 +225,19 @@ export default {
     }
   },
   mounted() {
+    // @--神策埋点-浏览事件-只执行一次
+    window.spptMd.spptTrackRow('pageview', {
+      name: `推广交易广场聚合页浏览`,
+      track_code: 'SPTG000002',
+    })
+    // @--神策埋点-浏览事件-只执行一次
+    window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+      name: `推荐规划师浏览`,
+      track_code: 'SPTG000006',
+      recommend_number: '',
+      planner_number: this.pagePlanner.jobNum,
+      planner_name: this.pagePlanner.name,
+    })
     try {
       if (JSON.stringify(this.result.data) !== '{}') {
         const dictCode = [
