@@ -31,11 +31,6 @@ export default {
     LoanTool,
     BtnPlanner,
   },
-  computed: {
-    ...mapState({
-      isInApp: (state) => state.app.isInApp,
-    }),
-  },
   data() {
     return {
       planner: {
@@ -51,6 +46,11 @@ export default {
         desc: '神器在手，算遍所有',
       },
     }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+    }),
   },
   head() {
     return {
