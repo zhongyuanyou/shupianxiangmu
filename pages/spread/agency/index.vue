@@ -224,8 +224,7 @@ export default {
     this.getPlanner('app-cpxqye-02') // 获取钻展规划师
     this.getPlanner('app-ghsdgye-01') // 获取规划师列表
     this.nums = this.result.data.nums
-    this.classCode =
-      this.result.data.adList[0].sortMaterialList[0].materialList[0].productDetail.parentClassCode
+    this.classCode = this.result.data.adList[0].sortMaterialList[0].materialList[0].productDetail.parentClassCode
   },
   methods: {
     // 获取规划师列表
@@ -361,10 +360,9 @@ export default {
         })
         this.plannersList = guiHuaShiList
         if (id === 'app-cpxqye-02') {
-          this.planner =
-            this.plannersList[
-              Math.floor(Math.random() * this.plannersList.length)
-            ]
+          this.planner = this.plannersList[
+            Math.floor(Math.random() * this.plannersList.length)
+          ]
         }
       } else {
         return this.planner

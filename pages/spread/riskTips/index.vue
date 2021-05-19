@@ -59,8 +59,9 @@ export default {
   },
   mounted() {
     console.log(this.hideHeader)
-    document.getElementsByClassName('content-body')[0].innerHTML =
-      this.getMessage
+    document.getElementsByClassName(
+      'content-body'
+    )[0].innerHTML = this.getMessage
   },
   methods: {
     onClickLeft() {

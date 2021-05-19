@@ -67,10 +67,7 @@
             v-md-map
             v-md:webClick
             data-form_name="印章服务表单_验证码"
-            class="
-              seal-banner-form-content-input-tel
-              seal-banner-form-content-input-code
-            "
+            class="seal-banner-form-content-input-tel seal-banner-form-content-input-code"
             placeholder="请输入验证码"
             type="tel"
             maxlength="6"

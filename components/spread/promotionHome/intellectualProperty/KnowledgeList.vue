@@ -201,7 +201,8 @@ export default {
             result.filter((elem, index) => {
               this.list.push({
                 code: index + 1,
-                img: 'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
+                img:
+                  'https://cdn.shupian.cn/sp-pt/wap/images/79lmibooz5s000.png',
                 title: elem.name,
                 label: ['套餐优惠', '热销好品', '金牌团队'],
                 currentPrice:
