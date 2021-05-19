@@ -4,11 +4,12 @@
       v-model="show"
       position="bottom"
       :close-on-popstate="true"
+      :overlay="true"
       :overlay-style="overlay"
     >
       <div class="keyword">
         <div class="left">
-          <div v-for="(num, idx) in nums" :key="idx" @click="btn(idx)">
+          <div v-for="(num, idx) in nums" :key="idx" @click="btn(idx, num)">
             {{ num.num }}
           </div>
         </div>
@@ -16,8 +17,8 @@
           <div class="del" @click="delBtn">删除</div>
           <div class="confirm" @click="confirmBtn">确认</div>
         </div>
-      </div></sp-popup
-    >
+      </div>
+    </sp-popup>
   </div>
 </template>
 
@@ -50,22 +51,11 @@ export default {
     }
   },
   methods: {
-    btn(i) {
-      if (this.nums[i].type === '.') {
-        this.$parent.value.indexOf('.') === -1 &&
-          this.$parent.value.length !== 0 &&
-          (this.$parent.value = this.$parent.value + '.')
-      } else if (this.nums[i].type === 'close') {
-        this.show = false
-      } else {
-        this.$parent.value += this.nums[i].type
-      }
+    btn(idx, num) {
+      this.$emit('number', num)
     },
     delBtn() {
-      this.$parent.value = this.$parent.value.substring(
-        0,
-        this.$parent.value.length - 1
-      )
+      this.$emit('delBtn')
     },
     confirmBtn() {
       this.show = false
@@ -110,7 +100,7 @@ export default {
     display: flex;
     flex-direction: column;
     .del {
-      width: 192px;
+      width: 194px;
       height: 199px;
       background: #f6f6f7;
 
@@ -122,7 +112,7 @@ export default {
     }
     .confirm {
       width: 194px;
-      height: 200px;
+      height: 201px;
       background: #4974f5;
       text-align: center;
       font-size: 42px;

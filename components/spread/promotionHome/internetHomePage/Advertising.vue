@@ -2,11 +2,14 @@
   <div class="advertising">
     <div class="advertising-box">
       <!-- 限时秒杀 -->
-      <div class="advertising-limited-time">
+      <div
+        class="advertising-limited-time"
+        @click="prompt(advertisingList.limitedTime.url)"
+      >
         <div class="advertising-limited-time-title">
-          <span class="limited-time-title">{{
-            advertisingList.limitedTime.title
-          }}</span>
+          <span class="limited-time-title"
+            >{{ advertisingList.limitedTime.title }}
+          </span>
           <!-- 倒计时 -->
           <!-- <div>
             <sp-count-down :time="time" class="countdown">
@@ -24,24 +27,28 @@
           advertisingList.limitedTime.describe
         }}</span>
         <div class="limited-time-product">
-          <a
+          <!-- <a
             v-for="(item, index) in advertisingList.limitedTime.product"
             :key="index"
             href="javascript:;"
             @click="prompt"
-          >
-            <div><img :src="item.imgUrl" alt="" /></div>
+          > -->
+          <div><img :src="advertisingList.limitedTime.imgUrl" alt="" /></div>
+
+          <!-- <div><img :src="item.imgUrl" alt="" /></div>
             <span class="limited-time-product-title">{{ item.name }}</span>
-            <span class="limited-time-product-label">{{ item.label }}</span>
-          </a>
+            <span class="limited-time-product-label">{{ item.label }}</span> -->
+          <!-- </a> -->
         </div>
       </div>
       <!-- 企服直播板块 -->
-      <div class="advertising-live">
+      <div class="advertising-live" @click="prompt(advertisingList.live.url)">
         <div class="advertising-live-title">
           <div class="live-title-box">
             <span>{{ advertisingList.live.title }}</span>
-            <!-- <div>直播中</div> -->
+            <!-- <div v-if="advertisingList.live.label !== ''" class="live-label">
+              直播中
+            </div> -->
           </div>
           <span class="advertising-live-describe">
             {{ advertisingList.live.describe }}
@@ -49,9 +56,8 @@
           <div
             class="live-product-box"
             :style="{
-              backgroundImage: 'url(' + bg + ')',
+              backgroundImage: 'url(' + advertisingList.live.imgUrl + ')',
             }"
-            @click="prompt"
           >
             <!-- <div class="live-product-price">
               <span>100</span>
@@ -62,52 +68,66 @@
           </div>
         </div>
       </div>
-      <!-- 免费试用 -->
-      <div class="advertising-free-trial">
+      <!-- 千万奖金 -->
+      <div
+        class="advertising-free-trial"
+        @click="prompt(advertisingList.freeTrial.url)"
+      >
         <div class="advertising-free-trial-title">
           <span class="free-trial-title">{{
             advertisingList.freeTrial.title
           }}</span>
-          <span class="free-trial-label">先到先得</span>
+          <span
+            v-if="advertisingList.freeTrial.describe !== ''"
+            class="free-trial-label"
+            >{{ advertisingList.freeTrial.label }}</span
+          >
         </div>
         <span class="advertising-free-trial-describe">{{
           advertisingList.freeTrial.describe
         }}</span>
         <div class="free-trial-product">
-          <a
+          <!-- <a
             v-for="(item, index) in advertisingList.freeTrial.product"
             :key="index"
             href="javascript:;"
             @click="prompt"
-          >
-            <div><img :src="item.imgUrl" alt="" /></div>
-            <span class="free-trial-product-title">{{ item.name }}</span>
-            <span class="free-trial-product-label">{{ item.label }}</span>
-          </a>
+          > -->
+          <div><img :src="advertisingList.freeTrial.imgUrl" alt="" /></div>
+          <!-- <span class="free-trial-product-title">{{ item.name }}</span>
+            <span class="free-trial-product-label">{{ item.label }}</span> -->
+          <!-- </a> -->
         </div>
       </div>
       <!-- 薯片课程 -->
-      <div class="advertising-course">
+      <div
+        class="advertising-course"
+        @click="prompt(advertisingList.course.url)"
+      >
         <div class="advertising-course-title">
           <span class="course-title">{{ advertisingList.course.title }}</span>
-          <span class="course-label">品质推荐</span>
+          <span
+            v-if="advertisingList.course.label !== ''"
+            class="course-label"
+            >{{ advertisingList.course.label }}</span
+          >
         </div>
         <span class="advertising-course-describe">{{
           advertisingList.course.describe
         }}</span>
         <div class="course-product">
-          <a
+          <!-- <a
             v-for="(item, index) in advertisingList.course.product"
             :key="index"
             href="javascript:;"
             @click="prompt"
-          >
-            <div><img :src="item.imgUrl" alt="" /></div>
-            <span class="course-product-title">{{ item.name }}</span>
+          > -->
+          <div><img :src="advertisingList.course.imgUrl" alt="" /></div>
+          <!-- <span class="course-product-title">{{ item.name }}</span>
             <span v-show="item.label" class="course-product-label">{{
               item.label
-            }}</span>
-          </a>
+            }}</span> -->
+          <!-- </a> -->
         </div>
       </div>
     </div>
@@ -136,8 +156,9 @@ export default {
     }
   },
   methods: {
-    prompt() {
-      Toast('功能正在建设中，敬请期待')
+    prompt(url) {
+      console.log(url)
+      this.$parent.jumpLink(url)
     },
   },
 }
@@ -167,8 +188,14 @@ export default {
     }
     > div:nth-child(2) {
       border-bottom-color: transparent;
+      border-bottom: none;
     }
     > div:nth-child(3) {
+      border-bottom: none;
+      border-right-color: transparent;
+    }
+    > div:last-child {
+      border-bottom: none;
       border-right-color: transparent;
     }
     .advertising-limited-time {
@@ -222,48 +249,55 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        > a {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
-          > div {
-            width: 154px;
-            height: 124px;
-            background: #f4f4f4;
-            border-radius: 12px;
-            display: flex;
-            > img {
-              width: 100%;
-              height: 100%;
-            }
-          }
-          > .limited-time-product-title {
-            display: block;
-            height: 26px;
-            font-size: 24px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: bold;
-            color: #222222;
-            line-height: 27px;
-            margin-top: 14px;
-          }
-          > .limited-time-product-label {
-            width: 60px;
-            height: 32px;
-            background: #ff676a;
-            border-radius: 16px 32px 32px 0px;
-            font-size: 18px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: bold;
-            color: #ffffff;
-            line-height: 37px;
-            text-align: center;
-            position: absolute;
-            left: 8px;
-            top: 84px;
+        div {
+          > img {
+            width: 100%;
+            height: 162px;
           }
         }
+
+        // > a {
+        //   display: flex;
+        //   flex-direction: column;
+        //   align-items: center;
+        //   position: relative;
+        // > div {
+        //   width: 154px;
+        //   height: 124px;
+        //   background: #f4f4f4;
+        //   border-radius: 12px;
+        //   display: flex;
+        //   > img {
+        //     width: 100%;
+        //     height: 100%;
+        //   }
+        // }
+        // > .limited-time-product-title {
+        //   display: block;
+        //   height: 26px;
+        //   font-size: 24px;
+        //   font-family: PingFangSC-Regular, PingFang SC;
+        //   font-weight: bold;
+        //   color: #222222;
+        //   line-height: 27px;
+        //   margin-top: 14px;
+        // }
+        // > .limited-time-product-label {
+        //   width: 60px;
+        //   height: 32px;
+        //   background: #ff676a;
+        //   border-radius: 16px 32px 32px 0px;
+        //   font-size: 18px;
+        //   font-family: PingFangSC-Medium, PingFang SC;
+        //   font-weight: bold;
+        //   color: #ffffff;
+        //   line-height: 37px;
+        //   text-align: center;
+        //   position: absolute;
+        //   left: 8px;
+        //   top: 84px;
+        // }
+        // }
       }
     }
     .advertising-live {
@@ -404,48 +438,48 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        > a {
+        // > a {
+        //   display: flex;
+        //   flex-direction: column;
+        //   align-items: center;
+        //   position: relative;
+        > div {
+          width: 100%;
+          height: 162px;
+          background: #f4f4f4;
+          border-radius: 12px;
           display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
-          > div {
-            width: 154px;
-            height: 124px;
-            background: #f4f4f4;
-            border-radius: 12px;
-            display: flex;
-            > img {
-              width: 100%;
-              height: 100%;
-            }
-          }
-          > .free-trial-product-title {
-            display: block;
-            height: 26px;
-            font-size: 24px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: bold;
-            color: #222222;
-            line-height: 27px;
-            margin-top: 14px;
-          }
-          > .free-trial-product-label {
-            width: 92px;
-            height: 32px;
-            background: #ff676a;
-            border-radius: 16px 32px 32px 0px;
-            font-size: 18px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: bold;
-            color: #ffffff;
-            line-height: 37px;
-            text-align: center;
-            position: absolute;
-            left: 8px;
-            top: 84px;
+          > img {
+            width: 100%;
+            height: 100%;
           }
         }
+        > .free-trial-product-title {
+          display: block;
+          height: 26px;
+          font-size: 24px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+          margin-top: 14px;
+        }
+        > .free-trial-product-label {
+          width: 92px;
+          height: 32px;
+          background: #ff676a;
+          border-radius: 16px 32px 32px 0px;
+          font-size: 18px;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: bold;
+          color: #ffffff;
+          line-height: 37px;
+          text-align: center;
+          position: absolute;
+          left: 8px;
+          top: 84px;
+        }
+        // }
       }
     }
 
@@ -492,49 +526,49 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        > a {
+        // > a {
+        //   display: flex;
+        //   flex-direction: column;
+        //   align-items: center;
+        //   position: relative;
+        > div {
+          width: 100%;
+          height: 162px;
+          background: #f4f4f4;
+          border-radius: 12px;
           display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
-          > div {
-            width: 154px;
-            height: 124px;
-            background: #f4f4f4;
-            border-radius: 12px;
-            display: flex;
-            > img {
-              width: 100%;
-              height: 100%;
-            }
-          }
-          > .course-product-title {
-            display: block;
-            height: 26px;
-            font-size: 24px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: bold;
-            color: #222222;
-            line-height: 27px;
-            margin-top: 14px;
-          }
-          > .course-product-label {
-            width: 92px;
-            height: 32px;
-            background: #ff676a;
-            border-radius: 16px 32px 32px 0px;
-            font-size: 18px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: bold;
-            color: #ffffff;
-            line-height: 37px;
-            text-align: center;
-            position: absolute;
-            left: 8px;
-            top: 84px;
+          > img {
+            width: 100%;
+            height: 100%;
           }
         }
+        > .course-product-title {
+          display: block;
+          height: 26px;
+          font-size: 24px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: bold;
+          color: #222222;
+          line-height: 27px;
+          margin-top: 14px;
+        }
+        > .course-product-label {
+          width: 92px;
+          height: 32px;
+          background: #ff676a;
+          border-radius: 16px 32px 32px 0px;
+          font-size: 18px;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: bold;
+          color: #ffffff;
+          line-height: 37px;
+          text-align: center;
+          position: absolute;
+          left: 8px;
+          top: 84px;
+        }
       }
+      // }
     }
   }
 }

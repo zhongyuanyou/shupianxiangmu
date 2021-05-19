@@ -2,7 +2,12 @@
   <div class="internet">
     <!-- 头部 -->
     <div class="head">
-      <Header title="IT互联网" />
+      <Header
+        title="IT互联网"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <Nav :roll-nav="rollNav" class="nav"></Nav>
     </div>
     <!-- 金刚区 -->
@@ -16,7 +21,7 @@
     <!-- 活动功能展示 -->
     <Advertising :advertising-list="advertisingList"></Advertising>
     <!-- 产品列表 -->
-    <Recommended></Recommended>
+    <Recommended :title-name="titleName"></Recommended>
 
     <!-- 规划师 -->
     <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
@@ -47,8 +52,10 @@ export default {
     try {
       const res = await $axios.get(newSpreadApi.list, {
         params: {
+          //  locationCodes:
+          //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
           locationCodes:
-            'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
+            'ad113229,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045',
           navCodes: 'nav100061',
           code: 'CRISPS-C-QYFW',
         },
@@ -74,38 +81,42 @@ export default {
   },
   data() {
     return {
+      placeholder: '请输入关键字',
       // marginTop: -120,
       rollNav: [],
-      giftBagList: [
-        {
-          img: '',
-          url: '',
-          title: '有限公司注册',
-          price: '0元',
-        },
-      ],
+      giftBagList: [{}],
       advertisingList: {
         limitedTime: {
-          title: '限时秒杀',
-          describe: '爆款低价',
-          product: [],
+          title: '限时秒杀1',
+          describe: '爆款低价1',
+          imgUrl: '',
+          label: '',
+          url: '',
         },
         live: {
-          title: '企服直播',
-          describe: '无门槛 新用户专享',
+          title: '企服直播1',
+          describe: '无门槛 新用户专享1',
           product: [],
         },
         freeTrial: {
-          title: '免费试用',
-          describe: '0元体验 名额有限',
+          title: '免费试用1',
+          describe: '0元体验 名额有限1',
           product: [],
         },
         course: {
-          title: '薯片课程',
-          describe: '优质课程 创业首选',
+          title: '薯片课程1',
+          describe: '优质课程 创业首选1',
           product: [],
         },
       },
+      titleName: [
+        {
+          code: 'FL20210425163778',
+          type: 'FL20210425163778',
+          name: '推荐',
+          describe: '猜你喜欢',
+        },
+      ],
       // 页面规划师
       pagePlanner: {},
     }
@@ -128,10 +139,11 @@ export default {
     try {
       if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)
+        this.productClassData(this.result.data.classList || [])
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
         } else {
-          this.getData(internetData.data.adList)
+          // this.getData(internetData.data.adList)
         }
       }
     } catch (error) {
@@ -139,20 +151,36 @@ export default {
     }
   },
   methods: {
-    // 跳转判断
-    openIM(url) {
-      if (url) {
-        window.location.href = url
-      } else {
-        const guiHuaShi = this.planner
-        this.$root.$emit(
-          'openIMM',
-          guiHuaShi.id,
-          guiHuaShi.name || '',
-          guiHuaShi.jobNum || '',
-          guiHuaShi.imgSrc || ''
+    // 搜索
+    clickInputHandle(e) {
+      console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
         )
+        return
       }
+      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 金刚区数据处
     navDetail(data) {
@@ -177,9 +205,24 @@ export default {
         // })
       }
     },
-    // 新人红包数据处理
+    // 产品分类
+    productClassData(data) {
+      if (data.length === 0) return
+      // const classArr = []
+      data.forEach((item, index) => {
+        this.titleName.push({
+          type: item.ext1,
+          code: item.ext1,
+          name: item.name,
+          describe: '优质选购',
+        })
+      })
+      // this.titleName = classArr
+      console.log(this.titleName, 78979)
+    },
     getData(data) {
       data.forEach((item, idx) => {
+        // 新人红包数据处理
         if (item.locationCode === 'ad113229') {
           const bagList = []
           item.sortMaterialList.forEach((elem, index) => {
@@ -198,60 +241,62 @@ export default {
           })
           this.giftBagList = bagList
         }
-        if (item.locationCode === 'ad113280') {
+        if (item.locationCode === 'ad113270') {
           console.log(item.sortMaterialList, 123456)
-          const seckill = []
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              imgUrl: elem.materialList[0].materialUrl,
-              label: elem.materialList[0].materialDescription,
-              name: elem.materialList[0].materialName,
-              url: elem.materialList[0].materialLink,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            seckill.push(obj)
+            this.advertisingList.limitedTime = obj
           })
-          this.advertisingList.limitedTime.product = seckill
         }
-        if (item.locationCode === 'ad113271') {
-          const live = []
+        if (item.locationCode === (this.isInApp ? 'ad100042' : 'ad113271')) {
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              url: elem.materialList[0].materialLink,
-              imgUrl: elem.materialList[0].materialUrl,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            live.push(obj)
+            this.advertisingList.live = obj
           })
-          this.advertisingList.live.product = live
         }
         if (item.locationCode === 'ad113272') {
-          const freeTrial = []
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              imgUrl: elem.materialList[0].materialUrl,
-              label: elem.materialList[0].materialDescription,
-              name: elem.materialList[0].materialName.split('#')[1],
-              url: elem.materialList[0].materialLink,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            freeTrial.push(obj)
+            this.advertisingList.freeTrial = obj
           })
-          this.advertisingList.freeTrial.product = freeTrial
         }
-        if (item.locationCode === 'ad113274') {
-          const course = []
+        if (item.locationCode === (this.isInApp ? 'ad100045' : 'ad113274')) {
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              imgUrl: elem.materialList[0].materialUrl,
-              label: elem.materialList[0].materialDescription,
-              name: elem.materialList[0].materialName.split('#')[1],
-              url: elem.materialList[0].materialLink,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            course.push(obj)
+            this.advertisingList.course = obj
           })
-          this.advertisingList.course.product = course
         }
       })
     },
