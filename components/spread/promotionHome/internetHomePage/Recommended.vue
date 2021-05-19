@@ -4,16 +4,20 @@
       v-model="active"
       sticky
       title-active-color="#222222"
+      :swipe-threshold="titleName.length - 1"
       title-inactive-color="#555555"
       :offset-top="offsetTop"
       :background="isFixed === true ? fixedColor : bgColor"
       @scroll="scroll"
+      @click="onClick()"
     >
-      <sp-tab v-for="(item, index) of product" :key="index">
+      <sp-tab v-for="(item, itemKey) of titleName" :key="itemKey">
         <template #title>
           <div class="title">
-            <span>{{ item.title }}</span>
-            <span>{{ item.describe }}</span>
+            <span>{{ item.name }}</span>
+            <span :class="active === itemKey ? 'span--active' : ''">{{
+              item.describe
+            }}</span>
           </div>
         </template>
         <!-- 二级分类 -->
@@ -27,70 +31,37 @@
         <sp-list
           v-model="loading"
           :finished="finished"
+          :error.sync="error"
           finished-text="没有更多了"
+          error-text=""
           @load="onLoad"
         >
-          <div class="product-list">
-            <div
-              v-for="(list, listcode) in item.list"
-              v-show="listcode < max"
-              :key="listcode"
-              class="product"
-            >
-              <div class="img-box"><img :src="list.imageUrl" alt="" /></div>
-              <div class="product-title-box">
-                <span
-                  v-if="list.activeTag || list.activeTag !== ''"
-                  class="title-tag"
-                  >{{ list.activeTag }}</span
-                >
-                <span
-                  class="product-title"
-                  :style="{ marginLeft: list.activeTag !== '' ? '12px' : 0 }"
-                  >{{ list.title }}</span
-                >
+          <div class="product-box">
+            <div v-if="oddList.length > 0" class="product-odd">
+              <product
+                v-for="(proItem, proKey) of oddList"
+                :key="proKey"
+                class="product-item"
+                :product="proItem"
+              />
+            </div>
+            <div class="product-event">
+              <div
+                v-show="active === 0"
+                class="hot-product"
+                @click="jumpLink('https://www.baidu.com/')"
+              >
+                <img
+                  src="https://cdn.shupian.cn/sp-pt/wap/images/5a270klvc280000.png"
+                  alt=""
+                />
               </div>
-              <div class="product-field-box">
-                <!-- 活动标签 -->
-                <span
-                  v-if="list.saleTage && list.saleTage !== ''"
-                  class="sale-tag"
-                  >{{ list.saleTage }}</span
-                >
-                <!-- 评分 -->
-                <span
-                  v-if="list.score && list.score !== '' && list.saleTage === ''"
-                  class="score"
-                  >{{ list.score }}分</span
-                >
-                <div
-                  v-if="
-                    (list.saleTage && list.saleTage !== '') ||
-                    (list.score && list.score !== '')
-                  "
-                  class="line"
-                ></div>
-                <!-- 销量 -->
-                <span class="sales">月销量{{ list.sales }}</span>
-              </div>
-              <div class="product-label-box">
-                <ul>
-                  <li
-                    v-for="(label, labelcode) in list.labels"
-                    v-show="labelcode < 3"
-                    :key="labelcode"
-                  >
-                    {{ label }}
-                  </li>
-                </ul>
-              </div>
-              <div class="price-btn-box">
-                <div class="price-box">
-                  <span class="price">{{ list.price }} </span>
-                  <span>元 起</span>
-                </div>
-                <a class="btn" href="javascript:;">立即购买</a>
-              </div>
+              <product
+                v-for="(proItem, proKey) of eventList"
+                :key="proKey"
+                class="product-item"
+                :product="proItem"
+              />
             </div>
           </div>
         </sp-list>
@@ -102,9 +73,18 @@
 <script>
 import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
+// import Waterfall from 'vue-waterfall2'
+import product from '@/components/spread/promotionHome/internetHomePage/Product'
+import { newSpreadApi } from '@/api/spread'
 export default {
   name: 'Recommended',
-  components: { [Tab.name]: Tab, [Tabs.name]: Tabs, [List.name]: List },
+  components: {
+    [Tab.name]: Tab,
+    [Tabs.name]: Tabs,
+    [List.name]: List,
+    product,
+    // Waterfall,
+  },
   props: {
     product: {
       type: Array,
@@ -271,17 +251,52 @@ export default {
         ]
       },
     },
+    titleName: {
+      type: Array,
+      default: () => {
+        return [
+          {
+            code: 1,
+            type: 1,
+            name: '推荐',
+            describe: '猜你喜欢',
+          },
+          {
+            code: 'FL20210425163778',
+            type: 'FL20210425163778',
+            name: '电商运营',
+            describe: '品质保障',
+          },
+          {
+            code: 3,
+            type: 1,
+            name: '营销推广',
+            describe: '品质保障',
+          },
+          {
+            code: 4,
+            type: 1,
+            name: '小程序建设',
+            describe: '品质保障',
+          },
+        ]
+      },
+    },
   },
   data() {
     return {
+      active: 0,
       offsetTop: 0,
+      isFixed: false,
       fixedColor: '#ffffff',
       bgColor: '#f5f5f5',
-      isFixed: false,
-      active: '',
-      secondaryLabel: ['全部', '免费维护', '极速交付', '多方案维护'],
+      // secondaryLabel: ['全部', '免费维护', '极速交付', '多方案维护'],
       loading: false,
       finished: false,
+      list: [],
+      oddList: [],
+      eventList: [],
+      error: false,
       max: 2,
     }
   },
@@ -298,28 +313,102 @@ export default {
   },
   mounted() {
     if (this.isInApp) {
-      this.offsetTop = this.appInfo.statusBarHeight + 58 + 'px'
+      this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
     } else {
-      this.offsetTop = 58 + 'px'
+      this.offsetTop = 57 + 'px'
     }
   },
   methods: {
     scroll(e) {
       this.isFixed = e.isFixed
     },
+    onClick() {
+      this.initialize()
+    },
+    initialize(changeObj) {
+      this.pageNumber = 1
+      this.finished = false
+      this.loading = true
+      this.onLoad()
+    },
     onLoad() {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        this.max = this.max + 3
-        // 加载状态结束
-        this.loading = false
+      // // 异步更新数据
+      if (this.pageNumber === 1) {
+        this.oddList = []
+        this.eventList = []
+      }
+      this.selectTab()
+    },
+    jumpLink(url) {
+      this.$parent.jumpLink(url)
+    },
+    // 请求数据
+    selectTab(item) {
+      // 当前无数据不执行
+      if (this.finished && !this.loading) return
+      this.loading = true
+      const type = this.titleName[this.active].type
+      const obj = {
+        start: this.pageNumber,
+        limit: '4',
+        classCodes: type,
+        naem: this.titleName[this.active].name,
+      }
+      console.log(obj, '请求数据')
+      // 2、调用接口
+      this.$axios
+        .get(newSpreadApi.service_product_list, {
+          params: {
+            start: this.pageNumber,
+            limit: '14',
+            classCodes: type,
+          },
+        })
+        .then((res) => {
+          // 调用回调函数处理数据
+          const result = res.data.records
+          if (res.code === 200 && result.length !== 0) {
+            if (res.data.pageNumber === 1) {
+              this.list = []
+            }
+            ++this.pageNumber
+            result.forEach((elem, index) => {
+              const obj = {
+                code: index + 1,
+                imageUrl:
+                  elem.img ||
+                  'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
+                title: elem.title,
+                labels: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
+                price: elem.price,
+                sales: elem.saleNum || 0,
+                activeTag: '', // 活动标签
+                url: '',
+                // desc: elem.desc, // 说明
+                id: elem.id,
+              }
+              console.log(obj, 5464)
+              if (index % 2 === 0) {
+                this.oddList.push(obj)
+              } else {
+                this.eventList.push(obj)
+              }
+            })
+            console.log(this.eventList, this.oddList, 654885)
+            this.loading = false
+            if (result.length < 13) this.finished = true
 
-        // 数据全部加载完成
-        if (this.max > 6) {
+            return
+          }
+          this.loading = false
           this.finished = true
-        }
-      }, 1000)
+        })
+        .catch((err) => {
+          this.loading = false
+          this.finished = true
+          this.error = true
+          console.log(err)
+        })
     },
   },
 }
@@ -330,15 +419,20 @@ export default {
   width: 100%;
   margin-top: 27px;
   ::v-deep.sp-tabs__nav {
-    width: 750px;
     margin: 0 auto;
   }
 
-  ::v-deep.sp-tab__text {
-    font-size: 32px;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #999999;
+  ::v-deep.sp-tabs__nav--line {
+    padding-left: 20px;
+  }
+  ::v-deep.sp-tab {
+    padding: 0 32px;
+    .sp-tab__text {
+      font-size: 32px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #999999;
+    }
   }
 
   ::v-deep.sp-tabs__line {
@@ -347,21 +441,45 @@ export default {
     background-color: transparent;
     background-image: linear-gradient(to right, #4974f5, transparent);
     top: 32px;
+    display: none;
+  }
+  ::v-deep.sp-tab--active {
+    // line-height: 32px;
+    .sp-tab__text {
+      // font-size: 32px;
+      font-weight: bold;
+      font-family: PingFangSC-Regular, PingFang SC;
+      color: #222222;
+    }
   }
   .title {
     display: flex;
     flex-direction: column;
     align-items: center;
     > span:last-child {
-      height: 22px;
+      // height: 22px;
       font-size: 22px;
       font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: bold;
+      font-weight: 400;
       color: #999999;
       line-height: 22px;
-      margin-top: 16px;
+      margin-top: 10px;
+    }
+    > .span--active {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      height: 32px !important;
+      background: #4974f5;
+      border-radius: 16px;
+      font-size: 22px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #ffffff !important;
+      line-height: 33px;
     }
   }
+
   .secondary-label {
     > ul {
       width: 100%;
@@ -384,171 +502,28 @@ export default {
       }
     }
   }
-  .product-list {
-    padding: 0 20px;
-    margin-top: 20px;
+  .product-box {
+    margin-top: 32px;
     width: 100%;
-
     display: flex;
-    flex-flow: row wrap;
-    align-content: flex-start;
-    .product:nth-child(even) {
-      margin-left: 19px;
+    min-height: 1000px;
+    .product-box {
+      width: 50%;
+      padding-left: 20px;
     }
-    .product {
+    .product-odd {
+      padding-left: 20px;
+    }
+    .product-event {
+      padding-left: 20px;
+    }
+    .hot-product {
       width: 345px;
-      display: flex;
-      flex-direction: column;
-      background: #ffffff;
-      height: 100%;
-      border-radius: 24px;
-      padding: 20px 20px 24px;
-      .img-box {
-        width: 305px;
-        height: 305px;
-        background: linear-gradient(
-          178deg,
-          #46494d 0%,
-          #797d83 0%,
-          #414347 100%
-        );
-        border-radius: 12px;
-        > img {
-          width: 100%;
-          height: 100%;
-          border-radius: 12px;
-        }
+      height: 518px;
+      img {
+        width: 345px;
+        height: 518px;
       }
-      .product-title-box {
-        display: flex;
-        margin-top: 16px;
-        .title-tag {
-          display: inline-block;
-          width: 52px;
-          height: 32px;
-          background: #ec5330;
-          border-radius: 4px;
-          font-size: 20px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: bold;
-          color: #ffffff;
-          text-align: center;
-          line-height: 36px;
-        }
-        .product-title {
-          display: block;
-          font-size: 32px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: bold;
-          color: #222222;
-          line-height: 40px;
-          .textOverflow(2);
-        }
-      }
-
-      .product-field-box {
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-        .sale-tag {
-          display: block;
-          width: 52px;
-          height: 32px;
-          background: #ec5330;
-          border-radius: 4px;
-          font-size: 20px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: bold;
-          color: #ffffff;
-          line-height: 36px;
-        }
-        .score {
-          display: block;
-          font-size: 22px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: bold;
-          color: #fdb032;
-        }
-        .line {
-          width: 1px;
-          height: 20px;
-          background: #cdcdcd;
-          margin: 0 12px;
-        }
-        .sales {
-          display: block;
-          font-size: 22px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: bold;
-          color: #555555;
-        }
-      }
-      .product-label-box {
-        margin-top: 20px;
-        > ul {
-          display: flex;
-          align-items: center;
-          > li {
-            width: 92px;
-            height: 28px;
-            background: #f0f2f5;
-            border-radius: 4px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: bold;
-            color: #5c7499;
-            line-height: 34px;
-            text-align: center;
-          }
-          > li:not(:first-child) {
-            margin-left: 8px;
-          }
-        }
-      }
-      .price-btn-box {
-        margin-top: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .price-box {
-          display: flex;
-
-          .price {
-            display: block;
-            font-size: 36px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: bold;
-            color: #ec5330;
-            line-height: 36px;
-          }
-          > span:last-child {
-            display: block;
-            font-size: 22px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: bold;
-            color: #ec5330;
-            line-height: 36px;
-            margin-left: 2px;
-            margin-top: 3px;
-          }
-        }
-        .btn {
-          display: block;
-          width: 120px;
-          height: 48px;
-          background: rgba(73, 116, 245, 0.1);
-          border-radius: 8px;
-          font-size: 24px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: bold;
-          color: #4974f5;
-          line-height: 52px;
-          text-align: center;
-        }
-      }
-    }
-    > div:nth-child(2) ~ div {
-      margin-top: 20px;
     }
   }
   ::v-deep.sp-tab--active {
