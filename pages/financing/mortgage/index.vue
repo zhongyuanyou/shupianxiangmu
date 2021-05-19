@@ -7,7 +7,7 @@
     <!-- 产品列表 -->
     <ProductList></ProductList>
     <!--贷款工具-->
-    <LoanTool :toolMsg="toolMsg"></LoanTool>
+    <LoanTool :tool-msg="toolMsg"></LoanTool>
     <!-- 底部展示 -->
     <div class="bottom-show">薯片助贷服务，让更多人生活更美好</div>
     <!-- 规划师占位 -->

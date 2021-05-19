@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="footer" v-if="isShow">
+    <div v-if="isShow" class="footer">
       <div class="service">
         <img :src="planner.imgSrc" alt="" />
         <div class="waiter">
