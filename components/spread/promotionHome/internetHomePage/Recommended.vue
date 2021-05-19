@@ -46,6 +46,7 @@
               />
             </div>
             <div class="product-event">
+              <!-- 待改跳转 -->
               <div
                 v-show="active === 0"
                 class="hot-product"
@@ -354,7 +355,6 @@ export default {
         classCodes: type,
         naem: this.titleName[this.active].name,
       }
-      console.log(obj, '请求数据')
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {
@@ -387,14 +387,12 @@ export default {
                 // desc: elem.desc, // 说明
                 id: elem.id,
               }
-              console.log(obj, 5464)
               if (index % 2 === 0) {
                 this.oddList.push(obj)
               } else {
                 this.eventList.push(obj)
               }
             })
-            console.log(this.eventList, this.oddList, 654885)
             this.loading = false
             if (result.length < 13) this.finished = true
 
@@ -520,6 +518,8 @@ export default {
     .hot-product {
       width: 345px;
       height: 518px;
+      background: #ffffff;
+      border-radius: 24px;
       img {
         width: 345px;
         height: 518px;

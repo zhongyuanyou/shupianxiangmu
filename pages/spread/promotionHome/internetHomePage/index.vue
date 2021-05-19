@@ -57,7 +57,7 @@ export default {
           locationCodes:
             'ad113229,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045',
           navCodes: 'nav100061',
-          code: 'CRISPS-C-QYFW',
+          code: 'CRISPS-HLW',
         },
       })
 
@@ -214,7 +214,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
-          describe: '优质选购',
+          describe: item.ext2 || '优质选购',
         })
       })
       // this.titleName = classArr
