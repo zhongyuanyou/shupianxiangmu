@@ -140,16 +140,16 @@ export default {
               ? JSON.parse(localStorage.getItem('myInfo'))
               : {}
             const token =
-              this.token ||
               this.$cookies.get('token', { path: '/' }) ||
+              this.token ||
               myInfo.token
             const userId =
-              this.userId ||
               this.$cookies.get('userId', { path: '/' }) ||
+              this.userId ||
               myInfo.userId
             const userType =
-              this.userType ||
               this.$cookies.get('userType', { path: '/' }) ||
+              this.userType ||
               'VISITOR'
             window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}`
           } else if (res.code === 5223) {
