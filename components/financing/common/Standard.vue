@@ -2,24 +2,33 @@
   <div class="standard">
     <div class="car-value">
       <span class="title">每月还款</span>
-      <span class="input-value">3627.99</span>
+      <span class="input-value">{{ constant.mrepayment }}</span>
       <span class="unit">元</span>
     </div>
     <div class="car-value">
       <span class="title">支付利息</span>
-      <span class="input-value">16894.99</span>
+      <span class="input-value">{{ constant.interest }}</span>
       <span class="unit">元</span>
     </div>
     <div class="car-value">
       <span class="title">总还款额</span>
-      <span class="input-value">265894.88</span>
+      <span class="input-value">{{ constant.sum }}</span>
       <span class="unit">元</span>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    constant: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
