@@ -474,7 +474,8 @@ export default {
       console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path:
+            'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },

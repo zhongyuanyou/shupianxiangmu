@@ -206,28 +206,22 @@ export default {
       const length = this.adList[0].sortMaterialList.length
       for (let i = 0; i < length; i++) {
         const obj = {
-          title:
-            this.adList[0].sortMaterialList[i].materialList[0].productDetail
-              .name,
+          title: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.name,
           titleLabel:
             'https://cdn.shupian.cn/sp-pt/wap/images/7vjh29crwc00000.png',
-          titleContent:
-            this.adList[0].sortMaterialList[i].materialList[0].productDetail
-              .operating.productDescribe,
-          actualViews:
-            this.adList[0].sortMaterialList[i].materialList[0].productDetail
-              .operating.actualViews,
-          defaultSales:
-            this.adList[0].sortMaterialList[i].materialList[0].productDetail
-              .operating.defaultSales,
-          actualSales:
-            this.adList[0].sortMaterialList[i].materialList[0].productDetail
-              .operating.actualSales,
-          price:
-            this.adList[0].sortMaterialList[i].materialList[0].productDetail
-              .referencePrice,
-          detailsUrl:
-            this.adList[0].sortMaterialList[i].materialList[0].materialLink,
+          titleContent: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.operating.productDescribe,
+          actualViews: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.operating.actualViews,
+          defaultSales: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.operating.defaultSales,
+          actualSales: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.operating.actualSales,
+          price: this.adList[0].sortMaterialList[i].materialList[0]
+            .productDetail.referencePrice,
+          detailsUrl: this.adList[0].sortMaterialList[i].materialList[0]
+            .materialLink,
           // bgImg: this.adList[0].sortMaterialList[i].materialList[0].materialUrl,
           bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/8jllc0prmmw0000.jpg',
           planner: {

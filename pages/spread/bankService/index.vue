@@ -292,8 +292,7 @@ export default {
     }
     this.getPlanner('app-cpxqye-02') // 获取钻展规划师
     this.getPlanner('app-ghsdgye-01') // 获取规划师列表
-    this.classCode =
-      this.result.data.adList[0].sortMaterialList[0].materialList[0].productDetail.parentClassCode
+    this.classCode = this.result.data.adList[0].sortMaterialList[0].materialList[0].productDetail.parentClassCode
   },
   methods: {
     async getPlanner(id) {
@@ -384,14 +383,13 @@ export default {
             // bgImg: item.materialList[0].materialUrl,
             bgImg:
               'https://cdn.shupian.cn/sp-pt/wap/images/62j4vzw5ivk0000.png',
-            planner:
-              this.plannersList[
-                `${
-                  index < this.plannersList.length
-                    ? index
-                    : Math.floor(Math.random() * this.plannersList.length)
-                }`
-              ],
+            planner: this.plannersList[
+              `${
+                index < this.plannersList.length
+                  ? index
+                  : Math.floor(Math.random() * this.plannersList.length)
+              }`
+            ],
           }
           const serviceLabel = []
           item.materialList[0].productDetail.tags.forEach((item) => {
@@ -433,10 +431,9 @@ export default {
         })
         this.plannersList = guiHuaShiList
         if (id === 'app-cpxqye-02') {
-          this.planner =
-            this.plannersList[
-              Math.floor(Math.random() * this.plannersList.length)
-            ]
+          this.planner = this.plannersList[
+            Math.floor(Math.random() * this.plannersList.length)
+          ]
         }
       } else {
         return this.planner
