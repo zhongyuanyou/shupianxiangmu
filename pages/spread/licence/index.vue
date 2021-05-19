@@ -225,13 +225,14 @@ export default {
               actualSales: res.operating.actualSales,
               standard: this.standardList[index].standard,
               flow: this.standardList[index].flow,
-              planner: this.plannerList[
-                `${
-                  index < this.plannerList.length
-                    ? index
-                    : Math.floor(Math.random() * this.plannerList.length)
-                }`
-              ],
+              planner:
+                this.plannerList[
+                  `${
+                    index < this.plannerList.length
+                      ? index
+                      : Math.floor(Math.random() * this.plannerList.length)
+                  }`
+                ],
             },
           }
           productList.push(obj)

@@ -275,9 +275,8 @@ export default {
 
               // 从规划师列表随机取个规划师
               const num = Math.floor(Math.random() * this.plannerList.length)
-              this.hotIndustryRecommendList[index].planner = this.plannerList[
-                num
-              ]
+              this.hotIndustryRecommendList[index].planner =
+                this.plannerList[num]
             })
             break
           }

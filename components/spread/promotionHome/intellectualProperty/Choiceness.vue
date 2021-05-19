@@ -64,13 +64,11 @@ export default {
             title: '免费体验',
             imgVal: [
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
                 imgNmae: '商标查询',
               },
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
                 imgNmae: '版权服务',
               },
             ],
@@ -79,13 +77,11 @@ export default {
             title: '薯片课程',
             imgVal: [
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
                 imgNmae: '商标案件如...',
               },
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
                 imgNmae: '高企认定政...',
               },
             ],

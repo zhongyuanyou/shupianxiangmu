@@ -143,8 +143,7 @@ export default {
       // 聊天信息
       currentChatData: [
         {
-          text:
-            '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
+          text: '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
           createTime: new Date().getTime(),
           isUser: false,
         },
@@ -180,8 +179,7 @@ export default {
         // 当关闭对话框时，除了第一句问好，清除聊天数据，下次打开接口获取
         this.currentChatData = [
           {
-            text:
-              '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
+            text: '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
             createTime: new Date().getTime(),
             isUser: false, // true是用户，false是规划师
           },
@@ -472,8 +470,7 @@ export default {
           if (res.code === 200) {
             that.currentChatData = [
               {
-                text:
-                  '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
+                text: '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
                 createTime: new Date().getTime(),
                 isUser: false,
               },
@@ -490,8 +487,7 @@ export default {
             } else {
               that.currentChatData = [
                 {
-                  text:
-                    '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
+                  text: '您好，欢迎来到【顶呱呱平台】，我是您的专属接待客服，请问有什么可以帮助您呢？',
                   createTime: new Date().getTime(),
                   isUser: false,
                 },
@@ -614,8 +610,7 @@ export default {
       })
       axios({
         method: 'POST',
-        url:
-          'https://microuag.dgg188.cn/dgg-tac-imapi-server/api/v1/imserver/msg_user/get_user.do',
+        url: 'https://microuag.dgg188.cn/dgg-tac-imapi-server/api/v1/imserver/msg_user/get_user.do',
         data: params,
         headers,
       }).then((res) => {
