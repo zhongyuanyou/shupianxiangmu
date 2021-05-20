@@ -67,6 +67,9 @@ export default {
 <style lang="less" scoped>
 ::v-deep.sp-popup--bottom {
   width: 750px;
+  position: fixed;
+  left: 50%;
+  margin-left: -375px;
 }
 .keyword {
   width: 750px;
@@ -74,7 +77,7 @@ export default {
   // background: #cccccc;
   display: flex;
   justify-content: space-between;
-
+  position: relative;
   .left {
     height: 100%;
     width: 558px;
