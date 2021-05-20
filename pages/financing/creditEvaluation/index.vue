@@ -1,23 +1,26 @@
 <template>
   <div class="credit-evaluation">
-    <div class="heaa-box">
-      <Head title="额度评估">
-        <template #left>
-          <my-icon
-            class="back-icon"
-            name="nav_ic_back"
-            size="0.4rem"
-            color="#FFFFFF"
-            @click.native="onLeftClick"
-          ></my-icon>
-        </template>
-      </Head>
-      <div class="num-box">
-        <span class="head-msg">最高额度(元)</span>
-        <span class="lines">{{ num }}</span>
+    <sp-sticky>
+      <div class="heaa-box">
+        <Head title="额度评估">
+          <template #left>
+            <my-icon
+              class="back-icon"
+              name="nav_ic_back"
+              size="0.4rem"
+              color="#FFFFFF"
+              @click.native="onLeftClick"
+            ></my-icon>
+          </template>
+        </Head>
+        <div class="num-box">
+          <span class="head-msg">最高额度(元)</span>
+          <span class="lines">{{ price }}</span>
+        </div>
+        <div class="prompt">输入以下信息，获取贷款额度</div>
       </div>
-      <div class="prompt">输入以下信息，获取贷款额度</div>
-    </div>
+    </sp-sticky>
+
     <div class="content">
       <!-- 所在城市 -->
       <div class="list-content">
@@ -30,32 +33,129 @@
           class="city-input"
           @focus="chooseShow"
         />
-        <div class="icon-box"></div>
+        <div class="icon-box">
+          <my-icon
+            class="back-icon"
+            name="list_ic_next"
+            size="0.32rem"
+            color="#CCCCCC"
+            @click.native="onLeftClick"
+          ></my-icon>
+        </div>
       </div>
       <!-- 有无公积金 -->
       <div class="list-content">
         <span class="chooseTitle">有无缴满2年的公积金</span>
         <div class="gender-box">
           <span
-            v-for="(sex, idx) in isHave"
+            v-for="(item, idx) in isHave"
             :key="idx"
             :class="idx === reserveActived ? 'active' : ''"
-            @click="reserve(idx)"
-            >{{ sex }}</span
+            @click="insurance(idx, 'reserve')"
+            >{{ item }}</span
           >
         </div>
       </div>
       <div v-show="reserveActived === 0" class="personal">
         <span class="personal-title">个人月缴金额</span>
         <input
-          type="number"
           v-model="amount"
+          type="number"
           class="personal-input"
           placeholder="请输入"
         />
         <span class="unit">元</span>
       </div>
+      <!-- 是否缴纳保单 -->
+      <div class="list-content">
+        <span class="chooseTitle">有无生效2年的保单</span>
+        <div class="gender-box">
+          <span
+            v-for="(item, idx) in isHave"
+            :key="idx"
+            :class="idx === insuranceActived ? 'active' : ''"
+            @click="insurance(idx, 'insurance')"
+            >{{ item }}</span
+          >
+        </div>
+      </div>
+      <div v-show="insuranceActived === 0" class="personal">
+        <span class="personal-title">年缴保费</span>
+        <input
+          v-model="insuranceNum"
+          type="number"
+          class="insurance-input"
+          placeholder="请输入"
+        />
+        <span class="unit">万元</span>
+      </div>
+      <!-- 有无房贷 -->
+      <div class="list-content">
+        <span class="chooseTitle">有无房贷</span>
+        <div class="gender-box">
+          <span
+            v-for="(item, idx) in isHave"
+            :key="idx"
+            :class="idx === isTimeActived ? 'active' : ''"
+            @click="insurance(idx, 'isTime')"
+            >{{ item }}</span
+          >
+        </div>
+      </div>
+      <div v-show="isTimeActived === 0" class="reimbursement">
+        <div class="reimbursement-box">
+          <span class="reimbursement-title">房贷已还时间</span>
+          <div class="time-box">
+            <span
+              v-for="(item, idx) in time"
+              :key="idx"
+              :class="timeActived === idx ? 'time-active' : ''"
+              @click="insurance(idx, 'time')"
+              >{{ item }}</span
+            >
+          </div>
+        </div>
+      </div>
+      <div v-show="isTimeActived === 0" class="reimbursement-num">
+        <span class="reimbursement-num-title">月供还款</span>
+        <input
+          v-model="reimbursementNum"
+          type="number"
+          class="reimbursement-num-input"
+          placeholder="请输入"
+        />
+        <span class="reimbursement-unit">元</span>
+      </div>
     </div>
+    <div class="phone-box">
+      <!-- 电话号码 -->
+      <div class="phone-content">
+        <span class="phone-title">手机号</span>
+        <input
+          v-model="phone"
+          type="number"
+          placeholder="请输入手机号"
+          class="phone-input"
+        />
+      </div>
+      <!-- 获取验证码 -->
+      <div class="phone-content">
+        <span class="phone-title">验证码</span>
+        <input
+          v-model="sms"
+          type="number"
+          placeholder="输入短信校验码"
+          class="sms-input"
+        />
+        <div class="line"></div>
+        <span class="verification">{{ test }}</span>
+      </div>
+    </div>
+    <div class="btn-box">
+      <button @click="onForm">立即申请</button>
+      <div v-show="isShow" class="mask"></div>
+    </div>
+    <span class="btn-msg">薯片助贷服务，让更多人生活更美好！</span>
     <sp-popup v-model="pickerShow" position="bottom" :close-on-popstate="true">
       <sp-picker
         show-toolbar
@@ -71,13 +171,14 @@
 </template>
 
 <script>
-import { Picker, Popup } from '@chipspc/vant-dgg'
+import { Picker, Popup, Sticky } from '@chipspc/vant-dgg'
 import Head from '@/components/financing/common/Header'
 export default {
   components: {
     Head,
     [Picker.name]: Picker,
     [Popup.name]: Popup,
+    [Sticky.name]: Sticky,
   },
   data() {
     return {
@@ -96,11 +197,65 @@ export default {
         },
       ],
       isHave: ['有', '无'],
-      reserveActived: 0,
+      reserveActived: 1, // 是否有缴纳公积金
+      city: '',
       amount: '', // 金额
+      insuranceActived: 1,
+      insuranceNum: '', // 保单缴费
+      houseActived: 0, // 房贷已还时间
+      isTimeActived: 1,
+      time: ['半年-1年', '1年-3年', '3年-5年', '5年以上'],
+      timeActived: 0,
+      test: '获取验证码',
+      phone: '', // 电话号码
+      sms: '', // 验证码
+      reimbursementNum: '',
+      timeLimit: 20,
     }
   },
+  computed: {
+    isShow() {
+      if (this.phone && this.sms && this.city) {
+        return false
+      } else {
+        return true
+      }
+    },
+    price() {
+      if (this.amount && this.insuranceNum) {
+        const num =
+          50000 +
+          (this.amount - 280) * 575 +
+          this.insuranceNum * 10000 * 25 +
+          this.reimbursementNum * this.timeLimit
+
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.insuranceNum && this.reimbursementNum) {
+        const num =
+          50000 +
+          this.insuranceNum * 10000 * 25 +
+          this.reimbursementNum * this.timeLimit
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.amount && this.reimbursementNum) {
+        const num =
+          50000 +
+          (this.amount - 280) * 575 +
+          this.reimbursementNum * this.timeLimit
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.amount && this.insuranceNum && this.reimbursementNum) {
+        const num =
+          50000 +
+          (this.amount - 280) * 575 +
+          this.insuranceNum * 10000 * 25 +
+          this.reimbursementNum * this.timeLimit
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else {
+        return '0.00'
+      }
+    },
+  },
   methods: {
+    onForm() {},
     chooseShow() {
       this.pickerShow = true
     },
@@ -118,8 +273,28 @@ export default {
     onCancel() {
       this.pickerShow = false
     },
-    reserve(idx) {
-      this.reserveActived = idx
+
+    insurance(idx, type) {
+      type === 'insurance' && (this.insuranceActived = idx)
+      type === 'reserve' && (this.reserveActived = idx)
+      type === 'house' && (this.houseActived = idx)
+      type === 'isTime' && (this.isTimeActived = idx)
+      if (type === 'time') {
+        this.timeActived = idx
+        switch (this.time[idx]) {
+          case '半年-1年':
+            this.timeLimit = 20
+            break
+          case '1年-3年':
+            this.timeLimit = 45
+            break
+          case '3年-5年':
+            this.timeLimit = 70
+            break
+          default:
+            this.timeLimit = 100
+        }
+      }
     },
   },
 }
@@ -130,19 +305,22 @@ export default {
   width: 100vw;
   margin: 0 auto;
   background: #f5f5f5;
+  padding-bottom: 40px;
+  //   border: 1px solid;
   .heaa-box {
     width: 100%;
     background: #4974f5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: fixed;
-    top: 0;
+    // position: fixed;
+    // top: 0;
     ::v-deep.my-head {
-      width: 750px !important;
-      position: fixed !important;
-      left: 50% !important;
-      margin-left: -375px !important;
+      //   width: 750px !important;
+      //   position: fixed !important;
+      //   left: 50% !important;
+      //   margin-left: -375px !important;
+      position: relative;
       background: transparent;
       .title {
         color: #ffffff;
@@ -150,6 +328,9 @@ export default {
     }
     .num-box {
       padding-bottom: 65px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       > span {
         display: block;
       }
@@ -183,7 +364,7 @@ export default {
     line-height: 40px;
   }
   .content {
-    margin-top: 420px;
+    // margin-top: 420px;
     background: #ffffff;
     padding: 0 40px;
     > div {
@@ -259,7 +440,7 @@ export default {
       .icon-box {
         width: 18px;
         height: 32px;
-        background: #cccccc;
+        // background: #cccccc;
         margin-left: 47px;
       }
       .city-input {
@@ -273,6 +454,7 @@ export default {
         font-weight: 700;
         color: #222222;
         line-height: 45px;
+        width: 192px;
       }
       .personal-input {
         display: block;
@@ -289,6 +471,21 @@ export default {
       .personal-input:-moz-placeholder {
         color: #999999;
       }
+      .insurance-input {
+        display: block;
+        margin-left: 60px;
+        width: 314px;
+        font-size: 32px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #222222;
+        line-height: 45px;
+        border: none;
+        text-align: right;
+      }
+      .insurance-input:-moz-placeholder {
+        color: #999999;
+      }
       .unit {
         height: 32px;
         font-size: 32px;
@@ -299,6 +496,171 @@ export default {
         margin-left: auto;
       }
     }
+    .reimbursement {
+      width: 100%;
+      height: 200px;
+      background: #ffffff;
+      .reimbursement-box {
+        border-bottom: 1px solid #f4f4f4;
+        font-size: 0;
+        .reimbursement-title {
+          font-size: 32px;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: 700;
+          color: #222222;
+          line-height: 45px;
+        }
+        .time-box {
+          display: flex;
+          font-size: 0;
+          margin-top: 24px;
+          > span:not(:first-child) {
+            margin-left: 20px;
+          }
+          > span {
+            width: 152px;
+            height: 56px;
+            border-radius: 8px;
+            border: 1px solid #dddddd;
+            font-size: 26px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #555555;
+            line-height: 56px;
+            text-align: center;
+          }
+          .time-active {
+            color: #4974f5;
+            background: #f2f5ff;
+            border: 1px solid #4974f5;
+          }
+        }
+      }
+    }
+    .reimbursement-num {
+      .reimbursement-num-title {
+        width: 192px;
+        font-size: 32px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 700;
+        color: #222222;
+        line-height: 45px;
+      }
+      .reimbursement-num-input {
+        width: 346px;
+        font-size: 32px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #222222;
+        line-height: 45px;
+        text-align: right;
+        border: none;
+        margin-left: 60px;
+      }
+      .reimbursement-num-input:-moz-placeholder {
+        color: #999999;
+      }
+      .reimbursement-unit {
+        font-size: 32px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #222222;
+        line-height: 32px;
+        margin-left: auto;
+      }
+    }
+  }
+  .phone-box {
+    background: #ffffff;
+    padding: 0 40px;
+    margin-top: 20px;
+    .phone-content {
+      height: 120px;
+      width: 100%;
+      border-bottom: 1px solid #f4f4f4;
+      font-size: 0;
+      display: flex;
+      align-items: center;
+      > span {
+        display: block;
+      }
+      .phone-title {
+        width: 130px;
+        height: 45px;
+        font-size: 32px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 700;
+        color: #222222;
+        line-height: 45px;
+      }
+      > input {
+        width: 238px;
+        height: 45px;
+        font-size: 32px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        line-height: 45px;
+        border: none;
+        margin-left: 58px;
+        color: #222222;
+      }
+      > input:-ms-input-placeholder {
+        color: #999999;
+      }
+      .sms-input {
+        width: 274px;
+      }
+      .line {
+        width: 1px;
+        height: 40px;
+        border: 1px solid #dddddd;
+        margin-left: 24px;
+      }
+      .verification {
+        font-size: 32px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: #4974f5;
+        line-height: 45px;
+        margin-left: 20px;
+      }
+    }
+  }
+  .btn-box {
+    padding: 0 40px;
+    font-size: 0;
+    position: relative;
+    > button {
+      margin-top: 48px;
+      width: 670px;
+      height: 96px;
+      background: #4974f5;
+      border-radius: 8px;
+      font-size: 32px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 96px;
+    }
+    .mask {
+      width: 670px;
+      height: 96px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      position: absolute;
+      top: 48px;
+    }
+  }
+  .btn-msg {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 26px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #cccccc;
+    line-height: 37px;
+    margin-top: 40px;
   }
 }
 </style>

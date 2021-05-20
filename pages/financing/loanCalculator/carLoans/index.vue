@@ -46,12 +46,12 @@
           readonly
           @focus="timeBlur"
         />
-        <!-- <my-icon
-          class="back-icon"
-          name="you"
+        <my-icon
+          class="list-icon"
+          name="list_ic_next"
           size="0.32rem"
           color="#CCCCCC"
-        ></my-icon> -->
+        ></my-icon>
       </div>
       <!-- 还款方式 -->
       <div class="car-value">
@@ -74,7 +74,9 @@
     <Constant v-show="constant" :standardNum="standardNum"></Constant>
     <div v-show="constant" class="check" @click="jump">
       <span>查看每月还款</span>
-      <div class="check-icon"></div>
+      <div class="check-icon">
+        <my-icon name="list_ic_next" size="0.2rem" color="#4974F5"></my-icon>
+      </div>
     </div>
     <!-- 按钮 -->
     <div class="btn-box">
@@ -386,6 +388,9 @@ export default {
         line-height: 32px;
         margin-left: auto;
       }
+      .list-icon {
+        margin-left: auto;
+      }
       .choose-box {
         display: flex;
         margin-left: 60px;
@@ -429,7 +434,8 @@ export default {
       margin-left: 12px;
       width: 11px;
       height: 20px;
-      background: #4974f5;
+      font-size: 0;
+      //   background: #4974f5;
     }
   }
   .btn-box {
