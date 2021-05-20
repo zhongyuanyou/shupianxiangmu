@@ -31,11 +31,6 @@ export default {
     LoanTool,
     BtnPlanner,
   },
-  computed: {
-    ...mapState({
-      isInApp: (state) => state.app.isInApp,
-    }),
-  },
   data() {
     return {
       planner: {
@@ -47,6 +42,11 @@ export default {
           'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
       },
     }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+    }),
   },
   head() {
     return {

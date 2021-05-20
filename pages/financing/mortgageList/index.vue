@@ -1,13 +1,13 @@
 <template>
   <div class="enterprise">
     <!-- 头部 -->
-    <Head title="无抵押贷款"></Head>
+    <Head title="有抵押贷款"></Head>
     <!-- Banner -->
     <Banner></Banner>
     <!-- 产品列表 -->
     <ProductList></ProductList>
     <!--贷款工具-->
-    <LoanTool></LoanTool>
+    <LoanTool :tool-msg="toolMsg"></LoanTool>
     <!-- 底部展示 -->
     <div class="bottom-show">薯片助贷服务，让更多人生活更美好</div>
     <!-- 规划师占位 -->
@@ -22,6 +22,7 @@ import Banner from '@/components/financing/common/Banner'
 import ProductList from '@/components/financing/common/ProductList'
 import LoanTool from '@/components/financing/common/LoanTool'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+
 export default {
   components: {
     Head,
@@ -40,6 +41,10 @@ export default {
         imgSrc:
           'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
       },
+      toolMsg: {
+        title: '贷款计算器',
+        desc: '神器在手，算遍所有',
+      },
     }
   },
   computed: {
@@ -49,7 +54,7 @@ export default {
   },
   head() {
     return {
-      title: '无抵押贷款',
+      title: '有抵押贷款',
     }
   },
 }

@@ -4,14 +4,13 @@
     <!-- 信息输入 -->
     <div class="form-box">
       <div class="car-value">
-        <span class="title">车价总额</span>
+        <span class="title">房价总额</span>
         <input
           v-model="value"
           class="input-value"
-          type="text"
+          type="number"
           :placeholder="valuePlaceholder"
-          maxlength="7"
-          @focus="blur"
+          @input="blur"
         />
         <span class="unit">万元</span>
       </div>
@@ -20,9 +19,9 @@
         <input
           v-model="firstValue"
           class="input-value"
-          type="text"
+          type="number"
           :placeholder="firstPlaceholde"
-          @focus="paymentBlur"
+          @input="paymentBlur"
         />
         <span class="unit">%</span>
       </div>
@@ -31,9 +30,9 @@
         <input
           v-model="rateValue"
           class="input-value"
-          type="text"
+          type="number"
           :placeholder="ratePlaceholde"
-          @focus="loanBlur"
+          @input="loanBlur"
         />
         <span class="unit">%</span>
       </div>
@@ -41,18 +40,18 @@
       <div class="car-value">
         <span class="title">贷款期限</span>
         <input
-          v-model="timeValue"
+          v-model="yaer"
           class="input-value"
           type="text"
           readonly
           @focus="timeBlur"
         />
-        <!-- <my-icon
-          class="back-icon"
-          name="you"
+        <my-icon
+          class="list-icon"
+          name="list_ic_next"
           size="0.32rem"
           color="#CCCCCC"
-        ></my-icon> -->
+        ></my-icon>
       </div>
       <!-- 还款方式 -->
       <div class="car-value">
@@ -70,12 +69,14 @@
       </div>
     </div>
     <!-- 等额本息计算结果 -->
-    <Standard v-show="standard"></Standard>
+    <Standard v-show="standard" :constant="constants"></Standard>
     <!-- 等额本金计算结果 -->
-    <Constant v-show="constant"></Constant>
+    <Constant v-show="constant" :standard-num="standardNum"></Constant>
     <div v-show="constant" class="check" @click="jump">
       <span>查看每月还款</span>
-      <div class="check-icon"></div>
+      <div class="check-icon">
+        <my-icon name="list_ic_next" size="0.2rem" color="#4974F5"></my-icon>
+      </div>
     </div>
     <!-- 按钮 -->
     <div class="btn-box">
@@ -84,10 +85,8 @@
         <button class="recalculate" @click="recalculateBtn">重新计算</button>
         <button class="handle" @click="handleBtn">立即办理</button>
       </div>
-      <div v-show="maskShow" class="mask"></div>
+      <div v-show="isShow" class="mask"></div>
     </div>
-    <!-- 自定义数字键盘 -->
-    <Keyword ref="keyword" @number="number" @delBtn="delBtn"></Keyword>
     <!-- 贷款期限选择器 -->
     <sp-popup v-model="pickerShow" position="bottom" :close-on-popstate="true">
       <sp-picker
@@ -108,11 +107,9 @@ import { Picker, Popup } from '@chipspc/vant-dgg'
 import Head from '@/components/financing/common/Header'
 import Standard from '@/components/financing/common/Standard'
 import Constant from '@/components/financing/common/Constant'
-import Keyword from '@/components/financing/common/keyword'
 export default {
   components: {
     Head,
-    Keyword,
     Standard,
     Constant,
     [Picker.name]: Picker,
@@ -124,7 +121,8 @@ export default {
       valuePlaceholder: '请输入车价总额',
       pickerShow: false,
       columns: ['5年', '10年', '20年', '30年'],
-      timeValue: '5年',
+      yaer: '5年',
+      timeValue: 5,
       type: '',
       firstValue: '',
       firstPlaceholde: '请输入首付比率',
@@ -142,7 +140,31 @@ export default {
       standard: false,
       constant: false,
       btnShow: true,
+      constants: {
+        sum: 0, // 总额
+        mrepayment: 0, // 月还款
+        interest: 0, // 利息
+      },
+      standardNum: {
+        sum: 0, // 总额
+        mrepayment: 0, // 月还款
+        interest: 0, // 利息
+        diminishing: 0, // 每月递减
+      },
+      // 每期还款记录
+      nplist: [],
+      // 当前期数
+      dn: 1,
     }
+  },
+  computed: {
+    isShow() {
+      if (this.rateValue && this.firstValue && this.value) {
+        return false
+      } else {
+        return true
+      }
+    },
   },
   mounted() {},
   methods: {
@@ -154,11 +176,22 @@ export default {
     },
     // 查看每月还款
     jump() {
-      console.log('查看每月还款')
+      this.$router.push({
+        path: '/financing/loanCalculator/reimbursement',
+        query: { list: this.nplist },
+      })
     },
     // 立即办理
     handleBtn() {
       console.log('立即办理')
+    },
+    // 去小数后两位
+    toFixedFun(num, length) {
+      if (isNaN(num) || num < 0) {
+        return '0.00'
+      } else {
+        return Number(num).toFixed(length)
+      }
     },
     // 计算器(等额本息)
     principalAndInterest(obj) {
@@ -173,67 +206,113 @@ export default {
       const result = P * ((R * (1 + R) ** N) / ((1 + R) ** N - 1))
       return result * 10000 // 将万元换算成元
     },
+    // 计算器(等额本金)
+    principal(obj) {
+      /*
+       * P:贷款本金
+       * R:月利率
+       * N:还款期数
+       * NP:已归还本金累计额
+       * 附：月利率 = 年利率/12
+       * */
+      if (this.dn === 1) {
+        // 每次递归之前清除上一次脏数据
+        this.nplist = []
+        this.sum = 0
+      }
+      const { P, R, N } = obj
+      if (this.dn > N) {
+        // 当超出还款期限，停止计算
+        this.dn = 1 // 计算结束时,当前期数回归到初始值
+        return null
+      } else {
+        // 计算得到当期还款金额
+        // （贷款本金/ 还款月数）+（本金 — 已归还本金累计额）×每月利率
+        const result = P / N + (P - (P / N) * (this.dn - 1)) * R
+        // 累加本次还款金额
+        this.standardNum.sum += result
+        // 把本次还款金额和期数保存
+        this.nplist.push({
+          number: `第${this.dn}个月`, // 期数
+          data: this.toFixedFun(result * 10000, 2), // 金额(金额由万换算为元)
+          principal: this.toFixedFun((P / N) * 10000, 2), // 本金（贷款金额除以还款期数）
+          interest: this.toFixedFun((result - P / N) * 10000, 2), // 利息
+        })
+        // 本次金额保存完整时，我当前期数+1
+        this.dn += 1
+        //
+        this.principal({
+          P,
+          R,
+          N,
+        })
+      }
+    },
     // 开始计算
     calculate() {
       if (this.actived === 0) {
         this.standard = true
+        const reset = this.principalAndInterest({
+          P:
+            Number(this.value) -
+            Number(this.value) * Number(this.firstValue / 100),
+          R: Number(this.rateValue) / 12 / 100,
+          N: Number(this.timeValue) * 12,
+        })
+        // console.log(reset)
+        // 总额
+        this.constants.sum = (reset * 12 * Number(this.timeValue)).toFixed(2)
+        // 月还款
+        this.constants.mrepayment = reset.toFixed(2)
+        // 利息(还款额-贷款额)
+        this.constants.interest = (
+          this.constants.sum === '0'
+            ? 0
+            : this.constants.sum -
+              (this.value - this.value * Number(this.firstValue / 100)) * 10000
+        ).toFixed(2)
       } else {
         this.constant = true
+        // 等额本金
+        this.principal({
+          P:
+            Number(this.value) -
+            Number(this.value) * Number(this.firstValue / 100), // 贷款金额
+          R: Number(this.rateValue) / 12 / 100, // 根据年利率，算出月利率
+          N: Number(this.timeValue) * 12, // 根据年算出自然月还款期数
+        })
+        this.standardNum.mrepayment = this.nplist[0] ? this.nplist[0].data : 0
+        this.standardNum.interest = (
+          this.constants.sum === '0'
+            ? 0
+            : this.constants.sum -
+              (this.value - this.value * Number(this.firstValue / 100)) * 10000
+        ).toFixed(2)
+        this.standardNum.sum = (this.standardNum.sum * 10000).toFixed(2)
+        this.standardNum.diminishing = (
+          this.nplist[0].data - this.nplist[1].data
+        ).toFixed(2)
       }
+
       this.btnShow = false
     },
-    number(e) {
-      let agm = ''
-      this.type === 'price' && (agm = this.value)
-      this.type === 'payment' && (agm = this.firstValue)
-      this.type === 'loan' && (agm = this.rateValue)
-      if (e.type === '.') {
-        agm.indexOf('.') === -1 && agm.length !== 0 && (agm = agm + '.')
-      } else if (e.type === '0') {
-        agm.length !== 0 && (agm = agm + '0')
-      } else if (e.type === 'close') {
-        this.$refs.keyword.show = false
-      } else {
-        agm += e.type
-      }
-      this.type === 'price' && (this.value = agm)
-      this.type === 'payment' && (this.firstValue = agm)
-      this.type === 'loan' && (this.rateValue = agm)
-      if (this.value && this.rateValue && this.firstValue) {
-        this.maskShow = false
-      }
-    },
-    delBtn() {
-      let agm = ''
-      this.type === 'price' && (agm = this.value)
-      this.type === 'payment' && (agm = this.firstValue)
-      this.type === 'loan' && (agm = this.rateValue)
-      agm = agm.substring(0, agm.length - 1)
-      this.type === 'price' && (this.value = agm)
-      this.type === 'payment' && (this.firstValue = agm)
-      this.type === 'loan' && (this.rateValue = agm)
-    },
     // 车价总额
-    blur() {
-      document.activeElement.blur()
-      this.$refs.keyword.show = true
-      //   this.valuePlaceholder = ''
-      this.type = 'price'
+    blur(e) {
+      e.target.value =
+        e.target.value.match(/^(\d{0,4})(\.?\d{0,2})/g)[0] || null
+      this.value = e.target.value > 10000 ? '9999.99' : e.target.value
     },
-
     // 首付款
-    paymentBlur() {
-      document.activeElement.blur()
-      this.$refs.keyword.show = true
-      //   this.firstPlaceholde = ''
-      this.type = 'payment'
+    paymentBlur(e) {
+      e.target.value =
+        e.target.value.match(/^(\d{0,2})(\.?\d{0,2})/g)[0] || null
+      this.firstValue = e.target.value > 101 ? '100' : e.target.value
     },
     // 贷款年利率
-    loanBlur() {
-      document.activeElement.blur()
-      this.$refs.keyword.show = true
-      //   this.ratePlaceholde = ''
-      this.type = 'loan'
+    loanBlur(e) {
+      e.target.value =
+        e.target.value.match(/^(\d{0,2})(\.?\d{0,2})/g)[0] || null
+      this.rateValue = e.target.value > 101 ? '100' : e.target.value
     },
     // 贷款期限
     timeBlur() {
@@ -241,12 +320,20 @@ export default {
     },
     // 贷款期限弹出层确认按钮
     onConfirm(value, index) {
-      this.timeValue = value
+      this.yaer = value
+      value === '5年' && (this.timeValue = 5)
+      value === '10年' && (this.timeValue = 10)
+      value === '20年' && (this.timeValue = 20)
+      value === '30年' && (this.timeValue = 30)
       this.pickerShow = false
     },
     // 贷款期限切换方法
     onChange(picker, value, index) {
-      this.timeValue = value
+      this.yaer = value
+      value === '5年' && (this.timeValue = 5)
+      value === '10年' && (this.timeValue = 10)
+      value === '20年' && (this.timeValue = 20)
+      value === '30年' && (this.timeValue = 30)
       this.pickerShow = false
     },
     // 贷款期限弹出层取消按钮
@@ -268,10 +355,10 @@ export default {
   margin: 0 auto;
   background: #f5f5f5;
   ::v-deep.my-head {
-    width: 750px;
-    position: fixed;
-    left: 50%;
-    margin-left: -375px;
+    width: 750px !important;
+    position: fixed !important;
+    left: 50% !important;
+    margin-left: -375px !important;
   }
   .form-box {
     margin-top: 20px;
@@ -320,6 +407,9 @@ export default {
         line-height: 32px;
         margin-left: auto;
       }
+      .list-icon {
+        margin-left: auto;
+      }
       .choose-box {
         display: flex;
         margin-left: 60px;
@@ -363,7 +453,8 @@ export default {
       margin-left: 12px;
       width: 11px;
       height: 20px;
-      background: #4974f5;
+      font-size: 0;
+      //   background: #4974f5;
     }
   }
   .btn-box {

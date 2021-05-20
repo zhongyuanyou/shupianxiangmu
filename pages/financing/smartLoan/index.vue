@@ -1,6 +1,6 @@
 <template>
-  <div class="mortgage">
-    <Head title="房贷"></Head>
+  <div class="smart-loan">
+    <Head title="智能贷款"></Head>
     <!-- banner图展示 -->
     <div class="banner">
       <sp-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
@@ -325,7 +325,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.mortgage {
+.smart-loan {
   width: 750px;
   margin: 0 auto;
   ::v-deep.my-head {

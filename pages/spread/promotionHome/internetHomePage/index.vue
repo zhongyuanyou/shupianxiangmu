@@ -34,7 +34,7 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
 import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
 import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
-import Recommended from '@/components/spread/promotionHome/internetHomePage/Recommended.vue'
+import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
 import { internetData } from '@/assets/spread/promotionHome/internetHomePage.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
@@ -135,7 +135,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.result, 456)
     try {
       if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)
@@ -184,8 +183,7 @@ export default {
     },
     // 金刚区数据处
     navDetail(data) {
-      if (data.length === 0) {
-      } else {
+      if (data.length !== 0) {
         const navList = []
         data.forEach((item, index) => {
           const obj = {
@@ -199,10 +197,11 @@ export default {
           }
           navList.push(obj)
         })
-        this.rollNav = navList.reverse()
-        // this.rollNav.sort((a, b) => {
-        //   return a.sort - b.sort
-        // })
+        // this.rollNav = navList.reverse()
+        this.rollNav = navList
+        this.rollNav.sort((a, b) => {
+          return a.sort - b.sort
+        })
       }
     },
     // 产品分类
@@ -218,7 +217,6 @@ export default {
         })
       })
       // this.titleName = classArr
-      console.log(this.titleName, 78979)
     },
     getData(data) {
       data.forEach((item, idx) => {
@@ -242,7 +240,6 @@ export default {
           this.giftBagList = bagList
         }
         if (item.locationCode === 'ad113270') {
-          console.log(item.sortMaterialList, 123456)
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
