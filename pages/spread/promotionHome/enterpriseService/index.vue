@@ -18,6 +18,7 @@
 
     <!--S 广告区 -->
     <Advertising
+      v-if="gift.length > 0"
       :gift="gift"
       :pro-discounts="proDiscounts"
       :introduce="introduce"
@@ -26,24 +27,12 @@
 
     <!-- S 列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
-      <!-- <template v-if="true" v-slot:list> -->
-      <!-- <KnowledgeList /> -->
-      <!-- <EnterpriseList
-          ref="enterprise"
-          :default-list="defaultList"
-          :change-state="changeState"
-        /> -->
-      <!-- </template> -->
     </TabServiceItem>
     <!-- E 列表 -->
 
     <!-- START 规划师-->
     <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
-
-    <!-- START IM在线咨询-->
-    <!-- <DggImCompany></DggImCompany> -->
-    <!-- END IM在线咨询-->
   </div>
 </template>
 
@@ -56,10 +45,7 @@ import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
-import EnterpriseList from '@/components/spread/promotionHome/enterpriseService/EnterpriseList.vue'
-// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
-// import { resultData } from '~/assets/spread/licence'
 export default {
   name: 'Index',
   components: {
@@ -67,9 +53,7 @@ export default {
     Nav,
     Advertising,
     TabServiceItem,
-    // EnterpriseList,
     BtnPlanner,
-    // DggImCompany,
   },
   async asyncData({ $axios }) {
     const locations = 'ad113257,ad113252,ad113250,ad113227'
@@ -422,7 +406,7 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '公司交易聚合页_底部展位_在线咨询',
+          name: '企业服务聚合页_底部展位_在线咨询',
           type: '售前',
         },
       },
