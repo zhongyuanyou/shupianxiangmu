@@ -37,7 +37,15 @@
             class="city-input"
             @focus="chooseShow"
           />
-          <div class="icon-box"></div>
+          <div class="icon-box">
+            <my-icon
+              class="back-icon"
+              name="list_ic_next"
+              size="0.32rem"
+              color="#CCCCCC"
+              @click.native="onLeftClick"
+            ></my-icon>
+          </div>
         </div>
         <!-- 额度 -->
         <div class="list-content">
@@ -414,7 +422,7 @@ export default {
         .icon-box {
           width: 18px;
           height: 32px;
-          background: #cccccc;
+          //   background: #cccccc;
           margin-left: 47px;
         }
         .city-input {
