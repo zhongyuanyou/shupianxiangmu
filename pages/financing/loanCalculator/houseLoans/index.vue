@@ -10,7 +10,7 @@
           class="input-value"
           type="number"
           :placeholder="valuePlaceholder"
-          @focus="blur"
+          @input="blur"
         />
         <span class="unit">万元</span>
       </div>
@@ -21,7 +21,7 @@
           class="input-value"
           type="number"
           :placeholder="firstPlaceholde"
-          @focus="paymentBlur"
+          @input="paymentBlur"
         />
         <span class="unit">%</span>
       </div>
@@ -32,7 +32,7 @@
           class="input-value"
           type="number"
           :placeholder="ratePlaceholde"
-          @focus="loanBlur"
+          @input="loanBlur"
         />
         <span class="unit">%</span>
       </div>
@@ -253,7 +253,9 @@ export default {
       if (this.actived === 0) {
         this.standard = true
         const reset = this.principalAndInterest({
-          P: Number(this.value * Number(this.firstValue / 100)),
+          P:
+            Number(this.value) -
+            Number(this.value) * Number(this.firstValue / 100),
           R: Number(this.rateValue) / 12 / 100,
           N: Number(this.timeValue) * 12,
         })
@@ -264,21 +266,27 @@ export default {
         this.constants.mrepayment = reset.toFixed(2)
         // 利息(还款额-贷款额)
         this.constants.interest = (
-          this.constants.sum -
-          this.value * Number(this.firstValue / 100) * 10000
+          this.constants.sum === '0'
+            ? 0
+            : this.constants.sum -
+              (this.value - this.value * Number(this.firstValue / 100)) * 10000
         ).toFixed(2)
       } else {
         this.constant = true
         // 等额本金
         this.principal({
-          P: Number(this.value * Number(this.firstValue / 100)), // 贷款金额
+          P:
+            Number(this.value) -
+            Number(this.value) * Number(this.firstValue / 100), // 贷款金额
           R: Number(this.rateValue) / 12 / 100, // 根据年利率，算出月利率
           N: Number(this.timeValue) * 12, // 根据年算出自然月还款期数
         })
         this.standardNum.mrepayment = this.nplist[0] ? this.nplist[0].data : 0
         this.standardNum.interest = (
-          (this.standardNum.sum - this.value * Number(this.firstValue / 100)) *
-          10000
+          this.constants.sum === '0'
+            ? 0
+            : this.constants.sum -
+              (this.value - this.value * Number(this.firstValue / 100)) * 10000
         ).toFixed(2)
         this.standardNum.sum = (this.standardNum.sum * 10000).toFixed(2)
         this.standardNum.diminishing = (
@@ -289,11 +297,23 @@ export default {
       this.btnShow = false
     },
     // 车价总额
-    blur() {},
+    blur(e) {
+      e.target.value =
+        e.target.value.match(/^(\d{0,4})(\.?\d{0,2})/g)[0] || null
+      this.value = e.target.value > 10000 ? '9999.99' : e.target.value
+    },
     // 首付款
-    paymentBlur() {},
+    paymentBlur(e) {
+      e.target.value =
+        e.target.value.match(/^(\d{0,2})(\.?\d{0,2})/g)[0] || null
+      this.firstValue = e.target.value > 101 ? '100' : e.target.value
+    },
     // 贷款年利率
-    loanBlur() {},
+    loanBlur(e) {
+      e.target.value =
+        e.target.value.match(/^(\d{0,2})(\.?\d{0,2})/g)[0] || null
+      this.rateValue = e.target.value > 101 ? '100' : e.target.value
+    },
     // 贷款期限
     timeBlur() {
       this.pickerShow = true

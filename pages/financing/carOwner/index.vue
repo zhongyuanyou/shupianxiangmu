@@ -55,6 +55,7 @@
             type="number"
             placeholder="请输入额度"
             class="lines-input"
+            @input="linesReg"
           />
           <span class="unit">万元</span>
         </div>
@@ -166,6 +167,10 @@ export default {
     },
   },
   methods: {
+    linesReg(e) {
+      e.target.value = e.target.value.match(/^(\d{0,3})/g)[0] || null
+      this.lines = e.target.value
+    },
     // 后台规定获取当前时间作为json字符串，来当做一个唯一标识
     getDate() {
       const timeStamp = new Date()
