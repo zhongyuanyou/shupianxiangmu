@@ -34,7 +34,7 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
 import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
 import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
-import Recommended from '@/components/spread/promotionHome/internetHomePage/Recommended.vue'
+import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
 import { internetData } from '@/assets/spread/promotionHome/internetHomePage.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
@@ -135,7 +135,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.result, 456)
     try {
       if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)

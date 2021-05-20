@@ -29,11 +29,12 @@
     <!--E 免费体验 薯片课程-->
 
     <!-- S 列表 -->
-    <TabServiceItem :title-name="titleName" @change="onChange">
+    <IntellectualList :title-name="titleName" />
+    <!-- <TabServiceItem :title-name="titleName" @change="onChange">
       <template v-slot:list>
         <KnowledgeList ref="intellectual" :default-list="defaultList" />
       </template>
-    </TabServiceItem>
+    </TabServiceItem> -->
     <!-- E 列表 -->
 
     <!-- START 规划师-->
@@ -51,25 +52,27 @@ import NavTop from '@/components/spread/common/NavTop'
 import Nav from '@/components/spread/common/Nav'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
-import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
-import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList.vue'
+import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList'
+// import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
+// import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'IntellectualProperty',
   components: {
     NavTop,
+    Nav,
     Exclusive,
     Choiceness,
-    TabServiceItem,
-    KnowledgeList,
-    Nav,
+    IntellectualList,
+    // TabServiceItem,
+    // KnowledgeList,
     BtnPlanner,
   },
   async asyncData({ $axios }) {
     // const locations = 'ad113279,ad113277,ad113265,ad113236,ad113235,ad113224'
     const locationCodes = 'ad113236,ad113279,ad113265,ad113277,ad100046'
     const navCodes = 'nav100060'
-    const code = 'CRISPS-HLW'
+    const code = 'CRISPS-C-ZSCQ'
     const dataRes = defaultRes
     try {
       const res = await $axios.get(newSpreadApi.list, {
@@ -274,28 +277,8 @@ export default {
       titleName: [
         {
           code: 1,
-          type: 1,
+          type: 'FL20210425163778',
           name: '热门服务',
-        },
-        {
-          code: 2,
-          type: 1,
-          name: '商标服务',
-        },
-        {
-          code: 3,
-          type: 1,
-          name: '专利服务',
-        },
-        {
-          code: 4,
-          type: 1,
-          name: '知识服务',
-        },
-        {
-          code: 5,
-          type: 1,
-          name: '版权服务',
         },
       ],
       // 当前列表状态
@@ -397,7 +380,7 @@ export default {
     try {
       if (JSON.stringify(resData) !== '{}') {
         this.navList(resData.navs.nav100060 || [])
-        // this.productTitle(resData.productClassList || [])
+        this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
           if (elem.locationCode === 'ad113236') {
             this.proTitleData(elem.sortMaterialList)
@@ -545,29 +528,18 @@ export default {
     },
 
     // 列表导航
-    productTitle(data) {
-      if (data.length !== 0) {
-        this.changeState = {
-          type: 0,
-          code: data[0].code,
-          name: data[0].name,
-        }
-        // this.$refs.intellectual.initialize(this.changeState)
-
-        // 初始化请求数据
-        this.titleName = data.map((elem, index) => {
-          return {
-            type: index,
-            code: elem.code,
-            name: elem.name,
-          }
+    productClassData(data) {
+      console.log(1344, data)
+      if (data.length === 0) return
+      // const classArr = []
+      data.forEach((item, index) => {
+        this.titleName.push({
+          type: item.ext1,
+          code: item.ext1,
+          name: item.name,
         })
-        // if (this.$refs.intellectual !== undefined) {
-        // this.$refs.intellectual.initialize(this.changeState)
-        // }
-
-        // this.onChange(this.changeState)
-      }
+      })
+      // this.titleName = classArr
     },
     // 推介规划师
     async getPagePlanner(scene) {

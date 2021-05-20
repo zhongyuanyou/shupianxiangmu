@@ -1,8 +1,9 @@
 <template>
-  <div class="recommended">
+  <div class="intellectual-list">
     <sp-tabs
       v-model="active"
       sticky
+      :animated="false"
       title-active-color="#222222"
       :swipe-threshold="titleName.length - 1"
       title-inactive-color="#555555"
@@ -11,23 +12,17 @@
       @scroll="scroll"
       @click="onClick()"
     >
-      <sp-tab v-for="(item, itemKey) of titleName" :key="itemKey">
+      <sp-tab
+        v-for="(item, itemKey) of titleName"
+        :key="itemKey"
+        :title="item.name"
+      >
         <template #title>
           <div class="title">
-            <span>{{ item.name }}</span>
-            <span :class="active === itemKey ? 'span--active' : ''">{{
-              item.describe
-            }}</span>
+            <span class="title_name">{{ item.name }}</span>
+            <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
-        <!-- 二级分类 -->
-        <!-- <div class="secondary-label">
-          <ul>
-            <li v-for="(item, index) in secondaryLabel" :key="index">
-              {{ item }}
-            </li>
-          </ul>
-        </div> -->
         <sp-list
           v-model="loading"
           :finished="finished"
@@ -75,10 +70,10 @@
 import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
-import product from '@/components/spread/promotionHome/internetHomePage/Product'
+import product from '@/components/spread/promotionHome/intellectualProperty/Product'
 import { newSpreadApi } from '@/api/spread'
 export default {
-  name: 'Recommended',
+  name: 'IntellectualList',
   components: {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
@@ -87,171 +82,6 @@ export default {
     // Waterfall,
   },
   props: {
-    product: {
-      type: Array,
-      default: () => {
-        return [
-          {
-            title: '推荐',
-            describe: '猜你喜欢',
-            list: [
-              {
-                code: 1,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/5swgfx9bv0w0000.png',
-                title: '商品名称商品名称…',
-                score: '',
-                saleTage: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 2,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/adwjgxcjzc80000.png',
-                title: '商品名称商品名称',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 3,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/oj7zb1uxhi8000.png',
-                title: '商品名称商品名',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 4,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dwbvvb27alc0000.png',
-                title: '商品名称商品名',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 5,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
-                title: '商品名称商品',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-            ],
-          },
-          {
-            title: '电商运营',
-            describe: '品质保障',
-            list: [
-              {
-                code: 4,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dwbvvb27alc0000.png',
-                title: '商品名称商品名',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 5,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/680am47b74k0000.png',
-                title: '商品名称商品',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-            ],
-          },
-          {
-            title: '营销推广',
-            describe: '品质保障',
-            list: [
-              {
-                code: 1,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/5swgfx9bv0w0000.png',
-                title: '商品名称商品名称…',
-                score: '5.0',
-                saleTage: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 2,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/adwjgxcjzc80000.png',
-                title: '商品名称商品名称',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-            ],
-          },
-          {
-            title: '小程序建设',
-            describe: '品质保障',
-            list: [
-              {
-                code: 2,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/adwjgxcjzc80000.png',
-                title: '商品名称商品名称',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 3,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/oj7zb1uxhi8000.png',
-                title: '商品名称商品名',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-              {
-                code: 4,
-                imageUrl:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/dwbvvb27alc0000.png',
-                title: '商品名称商品名',
-                score: '',
-                activeTag: '',
-                sales: '1200',
-                labels: ['套餐优惠', '热销好评', '金牌团队'],
-                price: '688',
-              },
-            ],
-          },
-        ]
-      },
-    },
     titleName: {
       type: Array,
       default: () => {
@@ -260,25 +90,21 @@ export default {
             code: 1,
             type: 1,
             name: '推荐',
-            describe: '猜你喜欢',
           },
           {
             code: 'FL20210425163778',
             type: 'FL20210425163778',
             name: '电商运营',
-            describe: '品质保障',
           },
           {
             code: 3,
             type: 1,
             name: '营销推广',
-            describe: '品质保障',
           },
           {
             code: 4,
             type: 1,
             name: '小程序建设',
-            describe: '品质保障',
           },
         ]
       },
@@ -394,7 +220,7 @@ export default {
               }
             })
             this.loading = false
-            if (result.length < 13) this.finished = true
+            if (result.length < 14) this.finished = true
 
             return
           }
@@ -413,7 +239,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.recommended {
+.intellectual-list {
   width: 100%;
   margin-top: 27px;
   ::v-deep.sp-tabs__nav {
@@ -428,54 +254,68 @@ export default {
     .sp-tab__text {
       font-size: 32px;
       font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
       color: #999999;
     }
   }
 
   ::v-deep.sp-tabs__line {
+    display: none;
     width: 60px;
     height: 12px;
-    background-color: transparent;
-    background-image: linear-gradient(to right, #4974f5, transparent);
-    top: 32px;
-    display: none;
+    background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
+    border-radius: 6px;
+    top: 47px;
+    left: 34px;
   }
   ::v-deep.sp-tab--active {
-    // line-height: 32px;
+    font-weight: bold;
+    line-height: 32px;
     .sp-tab__text {
-      // font-size: 32px;
-      font-weight: bold;
+      font-size: 32px;
       font-family: PingFangSC-Regular, PingFang SC;
       color: #222222;
     }
   }
   .title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    > span:last-child {
-      // height: 22px;
-      font-size: 22px;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
-      color: #999999;
-      line-height: 22px;
-      margin-top: 10px;
+    position: relative;
+    &_name {
+      position: relative;
+      z-index: 2;
     }
-    > .span--active {
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      height: 32px !important;
-      background: #4974f5;
-      border-radius: 16px;
-      font-size: 22px;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
-      color: #ffffff !important;
-      line-height: 33px;
+    &_tag {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 12px;
+      background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
+      border-radius: 6px;
     }
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // > span:last-child {
+    //   // height: 22px;
+    //   font-size: 22px;
+    //   font-family: PingFangSC-Regular, PingFang SC;
+    //   font-weight: 400;
+    //   color: #999999;
+    //   line-height: 22px;
+    //   margin-top: 10px;
+    // }
+    // > .span--active {
+    //   display: flex;
+    //   align-items: center;
+    //   padding: 0 12px;
+    //   height: 32px !important;
+    //   background: #4974f5;
+    //   border-radius: 16px;
+    //   font-size: 22px;
+    //   font-family: PingFangSC-Regular, PingFang SC;
+    //   font-weight: 400;
+    //   color: #ffffff !important;
+    //   line-height: 33px;
+    // }
   }
 
   .secondary-label {
@@ -501,7 +341,7 @@ export default {
     }
   }
   .product-box {
-    margin-top: 32px;
+    // margin-top: 32px;
     width: 100%;
     display: flex;
     min-height: 1000px;
@@ -517,9 +357,10 @@ export default {
     }
     .hot-product {
       width: 345px;
-      height: 518px;
+      height: 523px;
       background: #ffffff;
       border-radius: 24px;
+      margin-bottom: 20px;
       img {
         width: 345px;
         height: 518px;
