@@ -71,7 +71,7 @@
     <!-- 等额本息计算结果 -->
     <Standard v-show="standard" :constant="constants"></Standard>
     <!-- 等额本金计算结果 -->
-    <Constant v-show="constant" :standardNum="standardNum"></Constant>
+    <Constant v-show="constant" :standard-num="standardNum"></Constant>
     <div v-show="constant" class="check" @click="jump">
       <span>查看每月还款</span>
       <div class="check-icon">
