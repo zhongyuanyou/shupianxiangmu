@@ -30,6 +30,7 @@ export default {
   background: #ffffff;
   border-radius: 24px;
   margin: 0px 20px;
+  margin-top: 20px;
   padding: 40px 32px;
   .row1 {
     display: flex;

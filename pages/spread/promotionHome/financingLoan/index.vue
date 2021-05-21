@@ -2,7 +2,12 @@
   <div class="page-content">
     <!-- S 头部Header -->
     <div class="header-bg">
-      <Header title="企业助贷" />
+      <Header
+        title="企业助贷"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <div class="header-content">
         <h1 class="header-title">薯片借钱 · 安全放心</h1>
         <p class="header-desc">钱好还人情难还，借钱这里更方便</p>
@@ -15,7 +20,7 @@
     <!-- E 金刚区 -->
 
     <!-- S 工具 -->
-    <Tools class="tools" />
+    <Tools v-if="false" class="tools" />
     <!-- E 工具 -->
 
     <!-- S 我要借款 -->
@@ -35,17 +40,24 @@
     <!-- E 活动 -->
 
     <!-- S 产品推荐列表 -->
-    <ProductList />
+    <!-- <ProductList /> -->
+    <FinancingList :title-name="titleName" />
     <!-- E 产品推荐列表 -->
 
     <!-- S 底部注释 -->
     <BottomNotes class="bottom-notes" />
     <!-- E 底部注释 -->
+
+    <!-- START 规划师-->
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
+    <!-- END 规划师-->
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Toast } from '@chipspc/vant-dgg'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
 import Activities from '@/components/spread/promotionHome/financingLoan/Activities.vue'
@@ -53,13 +65,14 @@ import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
 import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
 import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
 import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
-import ProductList from '@/components/spread/promotionHome/financingLoan/ProductList.vue'
+// import ProductList from '@/components/spread/promotionHome/financingLoan/ProductList.vue'
+import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
-import { chipSpread } from '@/api/spread'
-
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'Index',
   components: {
+    [Toast.name]: Toast,
     Header,
     Nav,
     Activities,
@@ -67,20 +80,20 @@ export default {
     Loan,
     NewcomerPack,
     Tools,
-    ProductList,
+    // ProductList,
+    FinancingList,
     BottomNotes,
-    [Toast.name]: Toast,
+    BtnPlanner,
   },
   async asyncData({ $axios }) {
     // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-    console.log(`${chipSpread.list}`)
     try {
-      const res = await $axios.get(`${chipSpread.list}`, {
+      const res = await $axios.get(`${newSpreadApi.list}`, {
         // const res = await $axios.get(url, {
         params: {
-          locationCodes: 'ad113242,ad113239,ad113237,ad113234',
+          locationCodes: 'ad113242,ad113239,ad100048,ad113237,ad113234',
           navCodes: 'nav100058',
-          productCenterCode: 'FinancingLoan',
+          code: 'CRISPS-C-QYFW',
         },
       })
       console.log(
@@ -93,19 +106,20 @@ export default {
         }
       } else {
         return {
-          resultData: null,
+          // resultData: null,
         }
       }
     } catch (error) {
       console.log('chipSpread.list error：', error.message)
       // 请求出错也要保证页面正常显示
       return {
-        resultData: null,
+        // resultData: null,
       }
     }
   },
   data() {
     return {
+      placeholder: '请输入关键字',
       // 默认数据
       rollNav: [
         {
@@ -260,6 +274,7 @@ export default {
           desc: '年利率7%起',
           url: '',
         },
+        {},
       ],
       toolList: [
         {
@@ -288,16 +303,82 @@ export default {
           url: '',
         },
       ],
+      // 列表导航
+      titleName: [
+        {
+          code: 1,
+          type: 'FL20210425163778',
+          name: '精选贷款',
+        },
+      ],
+      // 页面规划师
+      pagePlanner: {},
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: '知识产权聚合页_底部展位_在线咨询',
+          type: '售前',
+        },
+      },
     }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
   mounted() {
     // 请求出错也要保证页面正常显示：使用默认数据
-    if (this.resultData) {
-      this.handleNavData(this.resultData.data.navs)
-      this.handleAdData(this.resultData.data.adList)
+    try {
+      if (JSON.stringify(this.resultData) !== '{}') {
+        this.productClassData(this.resultData.data.classList || [])
+        this.handleNavData(this.resultData.data.navs)
+        this.handleAdData(this.resultData.data.adList)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  created() {
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
     }
   },
   methods: {
+    // 搜索
+    clickInputHandle(e) {
+      console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      window.location.href = 'https://m.shupian.cn/search/'
+    },
     toast() {
       Toast('功能正在建设中，敬请期待')
     },
@@ -323,7 +404,6 @@ export default {
       })
       rollNav.reverse()
       this.rollNav = rollNav
-
       const toolArr = navsData.nav100063 || []
       toolArr.forEach((item, index) => {
         this.toolList[navArr.length - 1 - index].name = item.name
@@ -350,43 +430,40 @@ export default {
             break
           }
           // 资讯直播广告位
-          case 'ad113239': {
-            const splitArr = item.locationName.split('#')
-            const list = item.sortMaterialList
+          case this.isInApp ? 'ad100048' : 'ad113239': {
+            // const splitArr = item.locationName.split('#')
+            const list = item.sortMaterialList[0].materialList[0]
             const index = 1
 
-            this.liveList[index].title = splitArr[0]
-            this.liveList[index].label = splitArr[1]
+            this.liveList[index].title = list.materialDescription.split('#')[0]
+            this.liveList[index].label = list.materialName.split('#')[1] || ''
 
-            this.liveList[index].desc =
-              list[0].materialList[0].materialDescription
-            this.liveList[index].img = list[0].materialList[0].materialUrl
-            this.liveList[index].url = list[0].materialList[0].materialLink
-
+            this.liveList[index].desc = list.materialDescription.split('#')[1]
+            this.liveList[index].img = list.materialUrl
+            this.liveList[index].url = list.materialLink
             break
           }
           // 点我咨询广告位
           case 'ad113237': {
-            const splitArr = item.locationName.split('#')
-            const list = item.sortMaterialList
+            // const splitArr = item.locationName.split('#')
+            const list = item.sortMaterialList[0].materialList[0]
             const index = 0
 
-            this.liveList[index].title = splitArr[0]
-            this.liveList[index].label = splitArr[1]
+            this.liveList[index].title = list.materialDescription.split('#')[0]
+            this.liveList[index].label = list.materialName.split('#')[1] || ''
 
-            this.liveList[index].desc =
-              list[0].materialList[0].materialDescription
-            this.liveList[index].img = list[0].materialList[0].materialUrl
-            this.liveList[index].url = list[0].materialList[0].materialLink
-
+            this.liveList[index].desc = list.materialDescription.split('#')[1]
+            this.liveList[index].img = list.materialUrl
+            this.liveList[index].url = list.materialLink
             break
           }
           // 新人礼包广告位
           case 'ad113234': {
             const list = item.sortMaterialList
             for (let i = 0; i < list.length; i++) {
-              const title = list[i].materialList[0].materialName.split('#')[1]
-
+              const title =
+                list[i].materialList[0].materialName.split('#')[1] || ''
+              console.log(title)
               this.newcomerPackList[i].title = title
               this.newcomerPackList[i].desc =
                 list[i].materialList[0].materialDescription
@@ -394,11 +471,87 @@ export default {
               this.newcomerPackList[i].url =
                 list[i].materialList[0].materialLink
             }
-
             break
           }
         }
       })
+    },
+    // 列表导航
+    productClassData(data) {
+      if (data.length === 0) return
+      // const classArr = []
+      data.forEach((item, index) => {
+        this.titleName.push({
+          type: item.ext1,
+          code: item.ext1,
+          name: item.name,
+        })
+      })
+      // this.titleName = classArr
+    },
+    // 推介规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425163708', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res, '调用规划师')
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
+    jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
 }

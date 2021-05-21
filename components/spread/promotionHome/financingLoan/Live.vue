@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div v-if="list.length > 0">
     <div class="my-component">
       <div
         v-for="(item, index) in list"
         :key="index"
         class="item"
-        @click="() => $parent.toast()"
+        @click="() => $parent.jumpLink(item.url)"
       >
         <div class="item-title">
           <span class="item-title-text">{{ item.title }}</span>
-          <span class="item-title-label">
+          <span v-if="item.label !== ''" class="item-title-label">
             <span v-if="index === 1" class="living-margin">
               <span class="living-icon">
                 <span class="living-bar living-bar1"></span>

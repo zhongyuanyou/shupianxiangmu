@@ -5,7 +5,7 @@
         v-for="(item, index) in list"
         :key="index"
         class="item"
-        @click="() => $parent.toast()"
+        @click="() => $parent.jumpLink(item.url)"
       >
         <div class="item-title">{{ item.title }}</div>
         <div class="item-desc">{{ item.desc }}</div>

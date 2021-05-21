@@ -24,6 +24,7 @@
             }}
           </span>
           <span v-if="product.price > 10000" class="item-price-unit">万</span>
+          <span v-else class="item-price-unit">元</span>
           <span class="item-price-note">最高可借</span>
         </div>
       </div>
@@ -45,6 +46,7 @@ export default {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/6671aj4ro3g0000.png',
           url: '',
           labels: ['月利率低至0.35%', '贷款期限最长24期'],
+          id: '',
         }
       },
     },
@@ -58,7 +60,7 @@ export default {
 <style lang="less" scoped>
 .my-component {
   display: flex;
-  margin-right: 32px;
+  // margin-right: 32px;
   margin-bottom: 20px;
   padding: 28px 20px 32px 20px;
   background-color: #fff;
@@ -77,6 +79,7 @@ export default {
   }
 
   .item-content {
+    position: relative;
     .item-title {
       height: 34px;
       font-size: 32px;
@@ -119,7 +122,9 @@ export default {
     }
 
     .item-price {
-      margin-top: 33px;
+      // margin-top: 33px;
+      position: absolute;
+      bottom: 0px;
       display: flex;
       align-items: baseline;
       .item-price-num {

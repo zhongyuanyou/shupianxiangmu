@@ -37,7 +37,7 @@
                 <div class="region">
                   <div class="region-content">
                     <p class="region-title">{{ item.title }}</p>
-                    <label>
+                    <label v-if="item.label.length > 0">
                       <span
                         v-for="(labels, labelKey) of item.label"
                         :key="labelKey"
@@ -264,7 +264,6 @@ export default {
           &-content {
             min-height: 150px;
             .region-title {
-              margin-bottom: 20px;
               font-size: 32px;
               font-family: PingFang;
               font-weight: bold;
@@ -278,6 +277,7 @@ export default {
             }
             label {
               display: flex;
+              margin-top: 20px;
               span {
                 background: #f0f2f5;
                 border-radius: 4px;
