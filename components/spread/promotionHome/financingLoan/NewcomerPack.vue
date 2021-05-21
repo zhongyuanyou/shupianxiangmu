@@ -70,19 +70,20 @@ export default {
 <style lang="less" scoped>
 .my-component {
   background: #ffffff;
+  height: 340px;
   border-radius: 24px;
   margin: 0px 20px;
-  padding: 24px 20px;
+  padding: 18px 20px 26px;
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     .header-title {
       font-size: 32px;
       font-weight: bold;
       color: #222222;
-      line-height: 32px;
+      line-height: 44px;
     }
     .header-btn {
       font-size: 22px;
@@ -90,6 +91,7 @@ export default {
       color: #555555;
       line-height: 22px;
       background-color: #fff;
+      line-height: 44px;
     }
   }
 

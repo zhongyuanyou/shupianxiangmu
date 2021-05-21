@@ -40,7 +40,6 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-
 import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
