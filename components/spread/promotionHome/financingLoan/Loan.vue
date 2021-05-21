@@ -30,11 +30,11 @@ export default {
   background: #ffffff;
   border-radius: 24px;
   margin: 0px 20px;
-  padding: 40px 32px;
+  padding: 32px 32px 34px;
+  height: 228px;
   .row1 {
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
     img {
       flex: none;
       width: 40px;
@@ -43,46 +43,47 @@ export default {
     }
     .row1-text {
       flex: none;
-      height: 24px;
       font-size: 26px;
-      // font-weight: bold;
       color: #222222;
-      line-height: 24px;
+      line-height: 40px;
     }
     .row1-desc {
+      line-height: 40px;
       flex: none;
       color: #999999;
     }
   }
 
   .row2 {
+    margin-top: 6px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
     .row2-price {
       font-size: 52px;
       font-family: @Bebas;
-      color: #ec5330;
-      line-height: 52px;
+      color: #4974f5;
+      line-height: 70px;
       letter-spacing: 1px;
     }
     .row2-btn {
+      width: 220px;
       height: 72px;
       background: #4974f5;
       border-radius: 8px;
       font-size: 30px;
       font-weight: bold;
       color: #ffffff;
-      line-height: 30px;
+      line-height: 42px;
     }
   }
 
   .desc {
+    margin-top: 10px;
     font-size: 26px;
     // font-weight: bold;
     color: #222222;
-    line-height: 24px;
+    line-height: 36px;
   }
 }
 </style>

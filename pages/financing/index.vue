@@ -15,11 +15,11 @@
     <!-- E 金刚区 -->
 
     <!-- S 工具 -->
-    <Tools class="tools" />
+    <!-- <Tools class="tools" /> -->
     <!-- E 工具 -->
 
     <!-- S 我要借款 -->
-    <Loan />
+    <Loan class="loan" />
     <!-- E 我要借款 -->
 
     <!-- S 新人专属礼包 -->
@@ -52,11 +52,10 @@ import Activities from '@/components/spread/promotionHome/financingLoan/Activiti
 import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
 import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
 import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
-import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
+// import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
 import ProductList from '@/components/spread/promotionHome/financingLoan/ProductList.vue'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
-import { newSpreadApi } from '@/api/spread'
-import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
+import { chipSpread } from '@/api/spread'
 
 export default {
   name: 'Index',
@@ -67,22 +66,21 @@ export default {
     Live,
     Loan,
     NewcomerPack,
-    Tools,
+    // Tools,
     ProductList,
     BottomNotes,
     [Toast.name]: Toast,
   },
   async asyncData({ $axios }) {
-    // const url = 'http://127.0.0.1:7001/service/nk/newChipSpread/v1/list.do'
-    // console.log(`${newSpreadApi.list}`)
+    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
+    console.log(`${chipSpread.list}`)
     try {
-      const res = await $axios.get(`${newSpreadApi.list}`, {
+      const res = await $axios.get(`${chipSpread.list}`, {
         // const res = await $axios.get(url, {
         params: {
           locationCodes: 'ad113242,ad113239,ad113237,ad113234',
           navCodes: 'nav100058',
-          dataRes: defaultRes,
-          code: 'CRISPS-C-RZDK',
+          productCenterCode: 'FinancingLoan',
         },
       })
       console.log(
@@ -157,30 +155,30 @@ export default {
         },
         {
           code: 6,
-          name: '大额借款',
+          name: '额度评估',
           url: '',
           label: '',
           size: 'small',
           imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/204jg9dseeo000.png',
+            'https://cdn.shupian.cn/sp-pt/wap/images/pwiw477dz74000.png',
         },
         {
           code: 7,
-          name: '快速借钱',
+          name: '贷款计算器',
           url: '',
           label: '',
           size: 'small',
           imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/1ic9r4qxwdsw000.png',
+            'https://cdn.shupian.cn/sp-pt/wap/images/dnbq2ccjmcg0000.png',
         },
         {
           code: 8,
-          name: '信用贷款',
+          name: '智能贷款',
           url: '',
           label: '',
           size: 'small',
           imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6a280h75tbk0000.png',
+            'https://cdn.shupian.cn/sp-pt/wap/images/92669o1ejqc0000.png',
         },
         {
           code: 9,
@@ -189,7 +187,7 @@ export default {
           label: '',
           size: 'small',
           imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/dl1corse37s0000.png',
+            'https://cdn.shupian.cn/sp-pt/wap/images/e7fwq24ywoo0000.png',
         },
         {
           code: 10,
@@ -198,7 +196,7 @@ export default {
           label: '',
           size: 'small',
           imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/5mym0kibchg000.png',
+            'https://cdn.shupian.cn/sp-pt/wap/images/2e3w2c6lecu8000.png',
         },
       ],
       activityList: [
@@ -412,6 +410,14 @@ export default {
   height: auto;
   background: #f5f5f5;
   margin: 0 auto;
+  .loan {
+    margin-top: 20px;
+  }
+  ::v-deep.input-box {
+    > input {
+      background: red;
+    }
+  }
   .header-bg {
     width: 100%;
     height: 420px;
