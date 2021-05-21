@@ -36,16 +36,19 @@ export default {
 <style lang="less" scoped>
 .banner {
   width: 100%;
-  height: 240px;
-  background: #dddddd;
+  height: 278px;
+  padding: 32px 40px;
+  background: #fff;
   .my-swipe .sp-swipe-item {
     font-size: 20px;
-    height: 100%;
+    height: 214px;
     text-align: center;
+    border-radius: 12px;
+    background: #dddddd;
     > img {
       width: 100%;
-      //   height: 100%;
-      object-fit: cover;
+      height: 100%;
+      //   object-fit: cover;
     }
   }
 }

@@ -46,6 +46,14 @@
         <div class="advertising-live-title">
           <div class="live-title-box">
             <span>{{ advertisingList.live.title }}</span>
+            <div v-if="advertisingList.live.label !== ''" class="live-label">
+              <span class="living-icon">
+                <span class="living-bar living-bar1"></span>
+                <span class="living-bar living-bar2"></span>
+                <span class="living-bar living-bar3"></span>
+              </span>
+              {{ advertisingList.live.label }}
+            </div>
             <!-- <div v-if="advertisingList.live.label !== ''" class="live-label">
               直播中
             </div> -->
@@ -314,18 +322,52 @@ export default {
             color: #222222;
             line-height: 32px;
           }
-          > div {
-            width: 96px;
-            height: 32px;
+          > .live-label {
             border-radius: 4px;
             border: 1px solid #ec5330;
             margin-left: 12px;
             font-size: 20px;
+            line-height: 20px;
             font-family: PingFangSC-Medium, PingFang SC;
             font-weight: bold;
             color: #ec5330;
-            text-align: center;
-            line-height: 32px;
+            display: flex;
+            padding: 6px 8px;
+            // 直播动态图标
+            .living-icon {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-end;
+              width: 16px;
+              height: 16px;
+              margin-right: 4px;
+              .living-bar {
+                padding: 0 1px;
+                background-color: #ec5330;
+                animation-name: living-bar;
+                animation-duration: 0.5s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate-reverse;
+                animation-timing-function: linear;
+              }
+              .living-bar1 {
+                animation-delay: 0.2s;
+              }
+              .living-bar2 {
+                animation-delay: 0s;
+              }
+              .living-bar3 {
+                animation-delay: 0.4s;
+              }
+              @keyframes living-bar {
+                from {
+                  height: 16px;
+                }
+                to {
+                  height: 6px;
+                }
+              }
+            }
           }
         }
         .advertising-live-describe {

@@ -28,8 +28,8 @@
           >
             <div class="content">
               <div
-                v-for="(item, proKey) of list"
-                :key="proKey"
+                v-for="(item, itemKey) of list"
+                :key="itemKey"
                 class="content-list"
                 @click="onMore(item.id)"
               >
