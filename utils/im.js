@@ -26,7 +26,7 @@ export function imInit(data = {}) {
   if (env === 'D') {
     secretAddress = '31b07a35b549a5046fb1cace1377c15e'
   } else if (env === 'T') {
-    secretAddress = 'bda65845493c8f8f7e0a86536a889396'
+    secretAddress = '6876d18cdced5214d580c85464841cab'
   } else {
     secretAddress = 'bda65845493c8f8f7e0a86536a889396'
   }
