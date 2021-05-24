@@ -265,11 +265,11 @@ export default {
       },
       // 列表导航
       titleName: [
-        {
-          code: 1,
-          type: 'FL20210425163778',
-          name: '热门服务',
-        },
+        // {
+        // code: 1,
+        // type: 'FL20210425163778',
+        // name: '热门服务',
+        // },
       ],
       // 当前列表状态
       changeState: {
