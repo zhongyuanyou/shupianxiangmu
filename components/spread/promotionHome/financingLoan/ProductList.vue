@@ -27,8 +27,8 @@
             @load="getMoreData"
           >
             <ProductItem
-              v-for="(product, index) in item.productList"
-              :key="index"
+              v-for="(product, proKey) in item.productList"
+              :key="proKey"
               :product="product"
             ></ProductItem>
           </sp-list>
