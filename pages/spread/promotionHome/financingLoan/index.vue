@@ -400,6 +400,7 @@ export default {
         //   item.navigationImageUrl
 
         rollNav.push({
+          sort: item.sort,
           code: index + 1,
           name: item.name,
           url: item.url,
@@ -408,8 +409,11 @@ export default {
           imageUrl: item.navigationImageUrl,
         })
       })
-      rollNav.reverse()
+      // rollNav.reverse()
       this.rollNav = rollNav
+      this.rollNav.sort((a, b) => {
+        return a.sort - b.sort
+      })
       const toolArr = navsData.nav100063 || []
       toolArr.forEach((item, index) => {
         this.toolList[navArr.length - 1 - index].name = item.name
