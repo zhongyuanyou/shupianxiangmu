@@ -556,7 +556,7 @@ export default {
               platform: 'app',
               productId: '', //
               thirdTypeCodes: '', // 三级code
-              firstTypeCode: 'FL20210425163708', // 一级code
+              firstTypeCode: 'FL20210425164319', // 一级code
             },
             {
               headers: {

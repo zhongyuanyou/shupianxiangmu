@@ -24,40 +24,24 @@
     <GiftBag :gift-bag-list="giftBagList" :gift-bag-msg="giftBagMsg"></GiftBag>
     <!-- 交易产品列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
-      <!-- <template v-slot:list>
-        <EnterpriseList
-          ref="enterprise"
-          :default-list="defaultList"
-          :change-state="changeState"
-          :titel-list="titleName"
-        />
-      </template> -->
     </TabServiceItem>
 
     <!-- START 规划师-->
     <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
     <!-- END 规划师-->
-
-    <!-- START IM在线咨询-->
-    <!-- <DggImCompany></DggImCompany> -->
-    <!-- END IM在线咨询-->
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import Header from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.vue'
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
 import TabServiceItem from '@/components/spread/promotionHome/exchangeSquare/TabServiceItem'
-import EnterpriseList from '@/components/spread/promotionHome/exchangeSquare/EnterpriseList.vue'
-// import Transaction from '@/components/spread/promotionHome/exchangeSquare/Transaction.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
-// import DggImCompany from '@/components/spread/DggImCompany'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
-// import { chipSpread } from '@/api/spread'
 import { newSpreadApi, plannerApi } from '~/api/spread'
 // import { resultData } from '~/assets/spread/licence'
 
@@ -68,21 +52,16 @@ export default {
     Activity,
     Banner,
     GiftBag,
-    // Transaction,
     BtnPlanner,
-    // DggImCompany,
     TabServiceItem,
-    // EnterpriseList,
   },
   async asyncData({ $axios }) {
     const url = 'http://172.16.133.68:7002/service/nk/newChipSpread/v1/list.do'
     try {
-      // chipSpread.list
       const res = await $axios.get(newSpreadApi.list, {
         params: {
           locationCodes: 'ad113246,ad113244,ad113281',
           navCodes: 'nav100059',
-          // productCenterCode: 'TradingPlatform',
           code: 'CRISPS-C-JYGC',
         },
       })
@@ -119,21 +98,6 @@ export default {
           code: 1,
           type: 1,
           name: '商标交易',
-        },
-        {
-          code: 2,
-          type: 1,
-          name: '公司交易',
-        },
-        {
-          code: 3,
-          type: 1,
-          name: '专利交易',
-        },
-        {
-          code: 4,
-          type: 1,
-          name: '资质交易',
         },
       ],
       marginTop: 0,
