@@ -317,7 +317,7 @@ export default {
     // margin-top: 32px;
     width: 100%;
     // display: flex;
-    min-height: 1000px;
+    min-height: 600px;
     .product-item {
       padding: 0 20px;
     }

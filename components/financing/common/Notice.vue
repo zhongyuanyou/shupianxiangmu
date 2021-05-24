@@ -36,14 +36,17 @@ export default {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
   },
-  data() {
-    return {
-      swipeList: [
-        '1文读懂贷款利息的计算标准',
-        '2文读懂贷款利息的计算标准',
-        '3文读懂贷款利息的计算标准文读懂贷款利息的计算标准',
-      ],
-    }
+  props: {
+    swipeList: {
+      type: Array,
+      default: () => {
+        return [
+          '1文读懂贷款利息的计算标准',
+          '2文读懂贷款利息的计算标准',
+          '3文读懂贷款利息的计算标准文读懂贷款利息的计算标准',
+        ]
+      },
+    },
   },
   methods: {
     // 跳转必懂详情

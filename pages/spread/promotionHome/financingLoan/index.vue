@@ -39,6 +39,10 @@
     <Activities class="activities" />
     <!-- E 活动 -->
 
+    <!-- S 轮播咨询 -->
+    <Notice />
+    <!-- E 轮播咨询 -->
+
     <!-- S 产品推荐列表 -->
     <!-- <ProductList /> -->
     <FinancingList :title-name="titleName" />
@@ -65,7 +69,7 @@ import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
 import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
 import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
 import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
-// import ProductList from '@/components/spread/promotionHome/financingLoan/ProductList.vue'
+import Notice from '@/components/financing/common/Notice'
 import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
@@ -80,8 +84,8 @@ export default {
     Loan,
     NewcomerPack,
     Tools,
-    // ProductList,
     FinancingList,
+    Notice,
     BottomNotes,
     BtnPlanner,
   },
@@ -90,7 +94,8 @@ export default {
       const res = await $axios.get(`${newSpreadApi.list}`, {
         // const res = await $axios.get(url, {
         params: {
-          locationCodes: 'ad113242,ad113239,ad100048,ad113237,ad113234',
+          locationCodes:
+            'ad113242,ad113239,ad100048,ad113237,ad113234,ad100050',
           navCodes: 'nav100058',
           code: 'CRISPS-C-RZDK',
         },
@@ -302,6 +307,8 @@ export default {
           url: '',
         },
       ],
+      // 我要借贷
+      loans: {},
       // 列表导航
       titleName: [
         {
@@ -471,6 +478,15 @@ export default {
                 list[i].materialList[0].materialLink
             }
             break
+          }
+          // 广告图
+          case 'ad100050': {
+            const list = item.sortMaterialList[0].materialList[0]
+            const obj = {
+              image: list.materialUrl || '',
+              url: list.materialLink,
+            }
+            this.loans = obj
           }
         }
       })
