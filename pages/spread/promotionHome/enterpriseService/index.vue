@@ -255,26 +255,6 @@ export default {
           type: 1,
           name: '为你推荐',
         },
-        // {
-        //   code: 2,
-        //   type: 1,
-        //   name: '工商服务',
-        // },
-        // {
-        //   code: 3,
-        //   type: 1,
-        //   name: '会计服务',
-        // },
-        // {
-        //   code: 4,
-        //   type: 1,
-        //   name: '知识服务',
-        // },
-        // {
-        //   code: 5,
-        //   type: 1,
-        //   name: '资质服务',
-        // },
       ],
       // 当前列表状态
       changeState: {

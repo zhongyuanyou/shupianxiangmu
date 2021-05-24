@@ -50,7 +50,7 @@
 import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
-import product from '@/components/spread/promotionHome/financingLoan/ProductItem'
+import product from '@/components/spread/promotionHome/financingLoan/ProductItem.vue'
 import { newSpreadApi } from '@/api/spread'
 export default {
   name: 'FinacingList',

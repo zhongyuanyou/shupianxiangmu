@@ -80,6 +80,7 @@ export default {
 
   .item-content {
     position: relative;
+    width: 100%;
     .item-title {
       height: 34px;
       font-size: 32px;
@@ -97,10 +98,9 @@ export default {
       font-weight: 400;
       color: #222222;
       line-height: 26px;
-      // 超出省略号
       overflow: hidden;
       text-overflow: ellipsis;
-
+      white-space: nowrap;
       height: 26px;
       margin-bottom: 14px;
     }
