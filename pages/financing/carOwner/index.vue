@@ -106,8 +106,9 @@
 import { Swipe, SwipeItem, Picker, Popup, Toast } from '@chipspc/vant-dgg'
 
 import Head from '@/components/financing/common/Header'
-
+import imHandle from '@/mixins/imHandle'
 export default {
+  mixins: [imHandle],
   components: {
     Head,
     [Swipe.name]: Swipe,
@@ -135,7 +136,7 @@ export default {
   data() {
     return {
       name: '', // 用户姓名
-      city: '', // 所造城市
+      city: '', // 所在城市
       lines: '', // 申请额度
       phone: '', // 用户电话
       sms: '', // 验证码
@@ -216,7 +217,6 @@ export default {
           if (res.error === 0) {
             let i = 59
             clearInterval(this.time)
-
             this.test = i + 's'
             this.time = setInterval(() => {
               if (i > 1) {
@@ -272,15 +272,22 @@ export default {
         name: '匿名用户', // 姓名
         tel: _tel, // 电话
         url: webUrl, // 链接
-        // type: 'gszc', // 业态编码
-        place: _city, // 地区编码（需传编码）cd
+        type: 'FL', // 业态编码
+        place: 'cd', // 地区编码（需传编码）cd
         device: 'wap', // 设备：pc,wap
         web: 'SP', // 归属渠道：xmt,zytg,wxgzh
         smsCode: _code, // 验证码
         content: JSON.stringify(contentStr), // 二级属性
       }
       window.promotion.privat.consultForm(params, (res) => {
+        console.log(res, 544444)
         if (res.error === 0) {
+          const planner = {
+            mchUserId: '222222',
+            userName: 'sadas',
+            type: '232212',
+          }
+          this.uPIM(planner)
           // 这里写表单提交成功后的函数，如二级表单弹出，提示提交成功，清空DOM中表单的数据等
           // Toast('提交成功，请注意接听电话')
           this.$root.$emit('Dialog')
@@ -288,7 +295,7 @@ export default {
           this.city = ''
           this.name = ''
           this.sms = ''
-          this.phoneV = ''
+          this.phone = ''
           this.test = '获取验证码'
           // 表单成功买点
           //   window.spptMd.spptTrackRow('p_formSubmitResult', {
@@ -322,10 +329,21 @@ export default {
     onCancel() {
       this.pickerShow = false
     },
-    send() {
-      console.log('发送验证码')
-    },
+
     calculate() {},
+  },
+  head() {
+    return {
+      title: '车主贷',
+      script: [
+        {
+          src: 'https://tgform.dgg.cn/form/new_form/promotion-sdk-v1.0.min.js',
+          ssr: false,
+          type: 'text/javascript',
+          charset: 'utf-8',
+        },
+      ],
+    }
   },
 }
 </script>

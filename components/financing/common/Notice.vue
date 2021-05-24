@@ -16,7 +16,7 @@
         lazy-render
       >
         <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
-          <div class="advertising" @click="jump(item)">{{ item }}</div>
+          <div class="advertising" @click="jump(item.id)">{{ item.title }}</div>
         </sp-swipe-item>
       </sp-swipe>
     </div>
@@ -31,27 +31,72 @@
 
 <script>
 import { Swipe, SwipeItem } from '@chipspc/vant-dgg'
+import { financingApi } from '@/api/spread'
+
 export default {
   components: {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
   },
-  props: {
-    swipeList: {
-      type: Array,
-      default: () => {
-        return [
-          '1文读懂贷款利息的计算标准',
-          '2文读懂贷款利息的计算标准',
-          '3文读懂贷款利息的计算标准文读懂贷款利息的计算标准',
-        ]
-      },
-    },
+  //   props: {
+  //     swipeList: {
+  //       type: Array,
+  //       default: () => {
+  //         return [
+  //           '1文读懂贷款利息的计算标准',
+  //           '2文读懂贷款利息的计算标准',
+  //           '3文读懂贷款利息的计算标准文读懂贷款利息的计算标准',
+  //         ]
+  //       },
+  //     },
+  //   },
+  data() {
+    return {
+      swipeList: [],
+    }
+  },
+  mounted() {
+    this.getKnowledgeCode()
   },
   methods: {
     // 跳转必懂详情
     jump(item) {
       console.log(item)
+    },
+    // 获取必懂分类id
+    getKnowledgeCode() {
+      this.$axios.get(financingApi.knowledge_code).then((res) => {
+        res.data.forEach((item) => {
+          if (item.name === '融资') {
+            const code = item.id
+            this.$axios
+              .post(
+                financingApi.knowledge_list,
+                {
+                  categorIds: [code],
+                  orderBy: 'applaudCount=desc',
+                },
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    terminalCode: 'COMDIC_TERMINAL_APP',
+                    platformCode: 'COMDIC_PLATFORM_CRISPS',
+                  },
+                }
+              )
+              .then((res) => {
+                console.log(res)
+                res.data.rows.forEach((txt) => {
+                  const obj = {
+                    id: txt.id,
+                    title: txt.title,
+                  }
+                  this.swipeList.push(obj)
+                })
+              })
+          }
+        })
+      })
     },
   },
 }

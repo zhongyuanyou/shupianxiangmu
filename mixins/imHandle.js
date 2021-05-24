@@ -212,6 +212,7 @@ export default {
           },
         }
         params = Object.assign(params, sessionParams)
+
         // 发送模板消息前先创建会话
         this.imExample.createSession(params, (res) => {
           if (res.code === 200) {
