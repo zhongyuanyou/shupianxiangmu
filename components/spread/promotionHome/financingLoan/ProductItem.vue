@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="my-component">
+    <div class="my-component" @click="onMore(product.id)">
       <div class="item-img">
         <img :src="product.img" />
       </div>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { newSpreadApi } from '@/api/spread'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'ProductItem',
   props: {
@@ -53,6 +55,15 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    onMore(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+    },
   },
 }
 </script>

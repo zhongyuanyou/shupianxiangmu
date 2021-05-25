@@ -75,7 +75,6 @@ import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomN
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'Index',
-  mixins: ['imHandle'],
   components: {
     [Toast.name]: Toast,
     Header,
@@ -90,6 +89,7 @@ export default {
     BottomNotes,
     BtnPlanner,
   },
+  mixins: ['imHandle'],
   async asyncData({ $axios }) {
     try {
       const res = await $axios.get(`${newSpreadApi.list}`, {
