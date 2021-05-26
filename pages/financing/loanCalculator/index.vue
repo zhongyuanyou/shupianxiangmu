@@ -26,13 +26,13 @@ export default {
         {
           title: '车贷计算器',
           desc: '测测如何优雅的买车',
-          path: '',
+          path: '/financing/loanCalculator/carLoans',
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/dhvgphn58hk0000.png',
         },
         {
           title: '房贷计算器',
           desc: '测测我的月供是多少',
-          path: '',
+          path: '/financing/loanCalculator/houseLoans',
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/dhvgphn58hk0000.png',
         },
       ],
@@ -57,10 +57,10 @@ export default {
   background: #f5f5f5;
   padding: 0 20px;
   ::v-deep.my-head {
-    width: 750px;
-    position: fixed;
-    left: 50%;
-    margin-left: -375px;
+    width: 750px !important;
+    position: fixed !important;
+    left: 50% !important;
+    margin-left: -375px !important;
     // box-shadow: none !important;
   }
   .card {

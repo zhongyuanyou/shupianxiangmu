@@ -32,6 +32,7 @@
 <script>
 import { Swipe, SwipeItem } from '@chipspc/vant-dgg'
 import { financingApi } from '@/api/spread'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 
 export default {
   components: {
@@ -61,7 +62,11 @@ export default {
   methods: {
     // 跳转必懂详情
     jump(item) {
-      console.log(item)
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/known/detail/article?id=${item}`
     },
     // 获取必懂分类id
     getKnowledgeCode() {

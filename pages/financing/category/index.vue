@@ -27,7 +27,7 @@
             @click="handleClick(index)"
           >
             <div v-show="TabNavList == index" class="line"></div>
-            {{ item.name }}
+            {{ item.title }}
           </li>
           <li class="category_con_lf_item"></li>
         </ul>
@@ -36,12 +36,7 @@
       <!--S 二级分类区域-->
       <section ref="r_list" class="category_con_rt">
         <div>
-          <div
-            v-if="recommendData.length"
-            ref="good"
-            class="proList swiper"
-            style="padding-top: 0"
-          >
+          <div ref="good" class="proList swiper" style="padding-top: 0">
             <div class="swiper_con">
               <swiper
                 ref="mySwiper"
@@ -50,15 +45,8 @@
                 :options="swiperOptions"
                 @click-slide="handleClickSlide"
               >
-                <swiper-slide
-                  v-for="(item, index) of recommendData"
-                  :key="index"
-                >
-                  <sp-image
-                    fit="cover"
-                    class="swipe_img"
-                    :src="item.materialList[0].materialUrl"
-                  />
+                <swiper-slide v-for="(item, index) of req" :key="index">
+                  <sp-image fit="cover" class="swipe_img" :src="item" />
                 </swiper-slide>
                 <div slot="pagination" class="swiper-pagination"></div>
               </swiper>
@@ -70,18 +58,18 @@
             ref="good"
             class="proList"
           >
-            <div class="title">{{ item.name }}</div>
+            <div class="title">{{ item.title }}</div>
             <div
               :class="['item_con', { hidden_child: item.name == '为您推荐' }]"
             >
               <div
-                v-for="(cItem, cIndex) in item.children"
+                v-for="(cItem, cIndex) in item.product"
                 v-show="isApplets ? cItem.name != '资质交易' : true"
                 :key="cIndex"
                 class="item_con_child"
-                @click="handleItem(cItem)"
+                @click="handleItem(cItem.id)"
               >
-                {{ cItem.name }}
+                {{ cItem.title }}
               </div>
             </div>
           </div>
@@ -103,10 +91,11 @@ import { mapState } from 'vuex'
 import Better from 'better-scroll'
 import { Swipe, SwipeItem, Image } from '@chipspc/vant-dgg'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import { category } from '@/api'
+import { financingApi } from '@/api'
 import LoadingCenter from '@/components/common/loading/LoadingCenter'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import 'swiper/swiper-bundle.css'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'Index',
   components: {
@@ -170,7 +159,7 @@ export default {
       })
       this.rgt.on('scroll', (res) => {
         if (this.flag) {
-          this.scrollY = Math.abs(res.y) + 64
+          this.scrollY = Math.abs(res.y) + 100
           for (let i = 0; i < this.arr.length; i++) {
             if (this.scrollY > this.arr[i] && this.scrollY < this.arr[i + 1]) {
               this.TabNavList = i - 1 // 左右联动取值
@@ -214,13 +203,17 @@ export default {
       this.loading = true
       // 获取产品分类集合
       try {
-        const params = {
-          isRecommend: 1,
-        }
-        const data = await category.home({ axios: this.$axios }, params)
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/product_list.do'
+        // financingApi.productList
+        await this.$axios
+          .get(url, {
+            params: { code: 'CRISPS-C-RZDKALL' },
+          })
+          .then((res) => {
+            this.categoryList = res.data.records
+          })
         this.loading = false
-        this.categoryList = data.categoryList
-        this.recommendData = data.recommendData
         this.$nextTick(() => {
           this._initScroll()
           this._getHeight()
@@ -229,19 +222,12 @@ export default {
         this.loading = false
       }
     },
-    handleItem(item) {
-      // 点击每一个二级分类
-      if (item.level === 2) {
-        sessionStorage.categoryData = JSON.stringify(item)
-        this.$router.push('/list/serveList')
-      } else {
-        this.$router.push({
-          name: 'list-jyList',
-          query: {
-            typeCode: item.code,
-          },
-        })
-      }
+    handleItem(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
     },
     back() {
       this.$router.back()

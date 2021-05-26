@@ -3,6 +3,7 @@
     <sp-list
       v-model="loading"
       :finished="finished"
+      :offset="200"
       finished-text="没有更多了"
       @load="onLoad"
     >
@@ -27,56 +28,39 @@ export default {
   props: {},
   data() {
     return {
-      productList: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6at0si4uxz80000.png', // 商品图片
-          title: '这是两行列表标题这是列表标题这是列表标题', // 商品名称
-          desc: '这是描述信息，默认展示一行', // 商品描述
-          label: ['月利息低至0.35%', '贷款期限最长24期'], // 商品标签
-          price: '100', // 最高可贷金额
-          classCodeLevel: '', // 商品的一级分类
-          classCode: '', // 商品分类
-          id: '', // 商品id
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6at0si4uxz80000.png', // 商品图片
-          title: '这是单行列表标题', // 商品名称
-          desc: '这是描述信息，默认展示一行', // 商品描述
-          label: ['月利息低至0.35%', '贷款期限最长24期'], // 商品标签
-          price: '100', // 最高可贷金额
-          classCodeLevel: '', // 商品的一级分类
-          classCode: '', // 商品分类
-          id: '', // 商品id
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6at0si4uxz80000.png', // 商品图片
-          title: '这是两行列表标题这是列表标题这是列表标题', // 商品名称
-          desc: '这是描述信息，默认展示一行', // 商品描述
-          label: ['月利息低至0.35%', '贷款期限最长24期'], // 商品标签
-          price: '100', // 最高可贷金额
-          classCodeLevel: '', // 商品的一级分类
-          classCode: '', // 商品分类
-          id: '', // 商品id
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6at0si4uxz80000.png', // 商品图片
-          title: '这是两行列表标题这是列表标题这是列表标题', // 商品名称
-          desc: '这是描述信息，默认展示一行', // 商品描述
-          label: ['月利息低至0.35%', '贷款期限最长24期'], // 商品标签
-          price: '100', // 最高可贷金额
-          classCodeLevel: '', // 商品的一级分类
-          classCode: '', // 商品分类
-          id: '', // 商品id
-        },
-      ],
+      productList: [],
       loading: false,
       finished: false,
+      start: 1,
     }
   },
   methods: {
     onLoad() {
-      console.log('请求数据')
-      this.finished = true
+      if (this.finished) return
+      this.loading = true
+      const url =
+        'http://127.0.0.1:7001/service/nk/newChipSpread/v1/service_product_list.do'
+      this.$axios
+        .get(url, {
+          params: {
+            classCodes: 'FL20210425164558',
+            start: this.start,
+            limit: 15,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.start++
+            this.loading = false
+            res.data.records.forEach((ele) => {
+              this.productList.push(ele)
+            })
+          }
+          if (res.data.records.length < 15) {
+            this.finished = true
+            this.loading = false
+          }
+        })
     },
   },
 }

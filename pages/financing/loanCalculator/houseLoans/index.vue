@@ -103,10 +103,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Picker, Popup } from '@chipspc/vant-dgg'
 import Head from '@/components/financing/common/Header'
 import Standard from '@/components/financing/common/Standard'
 import Constant from '@/components/financing/common/Constant'
+import { financingApi, plannerApi } from '@/api/spread'
+import imHandle from '@/mixins/imHandle'
 export default {
   components: {
     Head,
@@ -115,8 +118,11 @@ export default {
     [Picker.name]: Picker,
     [Popup.name]: Popup,
   },
+  mixins: [imHandle],
   data() {
     return {
+      // 页面规划师
+      pagePlanner: {},
       value: '',
       valuePlaceholder: '请输入车价总额',
       pickerShow: false,
@@ -158,6 +164,11 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
     isShow() {
       if (this.rateValue && this.firstValue && this.value) {
         return false
@@ -166,8 +177,65 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.getPagePlanner('app-ghsdgye-02')
+  },
   methods: {
+    // 推介规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425164558', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res, '调用规划师')
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
     // 重新计算
     recalculateBtn() {
       this.btnShow = true
@@ -183,7 +251,12 @@ export default {
     },
     // 立即办理
     handleBtn() {
-      console.log('立即办理')
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+      }
+      this.uPIM(planner)
     },
     // 去小数后两位
     toFixedFun(num, length) {
@@ -283,9 +356,9 @@ export default {
         })
         this.standardNum.mrepayment = this.nplist[0] ? this.nplist[0].data : 0
         this.standardNum.interest = (
-          this.constants.sum === '0'
+          this.standardNum.sum === '0'
             ? 0
-            : this.constants.sum -
+            : this.standardNum.sum * 10000 -
               (this.value - this.value * Number(this.firstValue / 100)) * 10000
         ).toFixed(2)
         this.standardNum.sum = (this.standardNum.sum * 10000).toFixed(2)

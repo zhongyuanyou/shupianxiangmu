@@ -7,7 +7,7 @@
     <!-- 产品列表 -->
     <ProductList></ProductList>
     <!--贷款工具-->
-    <LoanTool></LoanTool>
+    <LoanTool :toolMsg="toolMsg"></LoanTool>
     <!-- 底部展示 -->
     <div class="bottom-show">薯片助贷服务，让更多人生活更美好</div>
     <!-- 规划师占位 -->
@@ -42,6 +42,12 @@ export default {
           name: '知识产权聚合页_底部展位_在线咨询',
           type: '售前',
         },
+      },
+      toolMsg: {
+        title: '额度评估',
+        desc: '测测您的信用额度',
+        icon: '',
+        path: '/financing/creditEvaluation',
       },
     }
   },

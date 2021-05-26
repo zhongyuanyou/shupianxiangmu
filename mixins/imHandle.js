@@ -134,7 +134,7 @@ export default {
         }
         params = Object.assign(params, data)
         this.imExample.createSession(params, (res) => {
-          console.log(res)
+          console.log(res, 5555)
           if (res.code === 200) {
             const myInfo = localStorage.getItem('myInfo')
               ? JSON.parse(localStorage.getItem('myInfo'))
@@ -212,17 +212,19 @@ export default {
           },
         }
         params = Object.assign(params, sessionParams)
-
         // 发送模板消息前先创建会话
         this.imExample.createSession(params, (res) => {
           if (res.code === 200) {
             const tepMsgParams = {
               templateId: '', // 模板 id
-              receiver: res.data.groupId, // 会话 id
+              receiver: res.data.receiveId, // 会话 id
               senderName: userInfo.nickName || '访客', // 发送者昵称
               msgType: msgParams.msgType, // 消息类型
               extContent: JSON.stringify(msgParams.extContent), // 路由参数
               paramJsonStr: {
+                title: msgParams.title, // 客户名称
+                area: msgParams.area, // 客户地址
+                intention: msgParams.intention, // 客户意向
                 productName: msgParams.productName, // 产品名称
                 productContent: msgParams.productContent, // 产品信息
                 // eslint-disable-next-line eqeqeq
@@ -244,6 +246,9 @@ export default {
               case 1:
                 tepMsgParams.templateId = '5fcef0aec24ddd00065a8c83' // 模板id
                 break
+              case 2:
+                tepMsgParams.templateId = '60a46c4e344fb6000633c37a' // 模板id
+                break
               default:
                 break
             }
@@ -252,6 +257,7 @@ export default {
             )
             // 发送模板消息
             this.imExample.sendTemplateMsg(tepMsgParams, (resData) => {
+              console.log(resData)
               if (resData.code === 200) {
                 // 延时1s进入IM,避免模板消息未发生完成就已进入IM
                 this.$xToast.showLoading({ message: '正在联系规划师...' })

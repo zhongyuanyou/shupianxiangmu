@@ -23,13 +23,14 @@ export default {
           title: '额度评估',
           desc: '测测您的信用额度',
           icon: '',
+          path: '',
         }
       },
     },
   },
   methods: {
     jump() {
-      console.log('跳转页面')
+      this.$router.push(this.toolMsg.path)
     },
   },
 }

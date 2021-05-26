@@ -5,7 +5,7 @@
         v-for="(item, index) in list"
         :key="index"
         class="item"
-        @click="() => $parent.jumpLink(item.url)"
+        @click="() => $parent.jumpLink2(item.url)"
       >
         <div class="item-title">
           <span class="item-title-text">{{ item.title }}</span>

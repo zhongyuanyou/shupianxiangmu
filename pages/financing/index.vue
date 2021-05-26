@@ -386,9 +386,6 @@ export default {
       }
       window.location.href = 'https://m.shupian.cn/search/'
     },
-    toast() {
-      Toast('功能正在建设中，敬请期待')
-    },
     // 处理导航数据
     handleNavData(navsData) {
       if (!navsData) return
@@ -565,6 +562,18 @@ export default {
       }
     },
     jumpLink(url) {
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        } else {
+          this.$router.push(url)
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
+    },
+    jumpLink2(url) {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
