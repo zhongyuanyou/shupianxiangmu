@@ -312,11 +312,11 @@ export default {
       loans: {},
       // 列表导航
       titleName: [
-        {
-          code: 1,
-          type: 'FL20210425163778',
-          name: '精选贷款',
-        },
+        // {
+        //   code: 1,
+        //   type: 'FL20210425163778',
+        //   name: '精选贷款',
+        // },
       ],
       // 页面规划师
       pagePlanner: {},

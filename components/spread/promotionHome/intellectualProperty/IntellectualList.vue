@@ -339,33 +339,35 @@ export default {
       }
     }
   }
-  .product-box {
-    // margin-top: 32px;
-    width: 100%;
-    display: flex;
+  .sp-list {
     min-height: 1000px;
     .product-box {
-      width: 50%;
-      padding-left: 20px;
-    }
-    .product-odd {
-      padding-left: 20px;
-    }
-    .product-event {
-      padding-left: 20px;
-    }
-    .hot-product {
-      width: 345px;
-      height: 523px;
-      background: #ffffff;
-      border-radius: 24px;
-      margin-bottom: 20px;
-      img {
+      width: 100%;
+      display: flex;
+      .product-box {
+        width: 50%;
+        padding-left: 20px;
+      }
+      .product-odd {
+        padding-left: 20px;
+      }
+      .product-event {
+        padding-left: 20px;
+      }
+      .hot-product {
         width: 345px;
-        height: 518px;
+        height: 523px;
+        background: #ffffff;
+        border-radius: 24px;
+        margin-bottom: 20px;
+        img {
+          width: 345px;
+          height: 518px;
+        }
       }
     }
   }
+
   ::v-deep.sp-tab--active {
     // line-height: 32px;
     .sp-tab__text {

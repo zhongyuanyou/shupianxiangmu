@@ -19,19 +19,22 @@
           <!-- E 自定义选项显示-->
 
           <!-- S 产品列表-->
-          <sp-list
-            v-model="isLoading"
-            :finished="isNoMoreData"
-            finished-text=""
-            class="list-content"
-            @load="getMoreData"
-          >
-            <ProductItem
-              v-for="(product, proKey) in item.productList"
-              :key="proKey"
-              :product="product"
-            ></ProductItem>
-          </sp-list>
+          <div class="list">
+            <sp-list
+              v-model="isLoading"
+              :finished="isNoMoreData"
+              finished-text=""
+              class="list-content"
+              @load="getMoreData"
+            >
+              <ProductItem
+                v-for="(product, proKey) in item.productList"
+                :key="proKey"
+                :product="product"
+              ></ProductItem>
+            </sp-list>
+          </div>
+
           <!-- E 产品列表-->
         </sp-tab>
       </sp-tabs>

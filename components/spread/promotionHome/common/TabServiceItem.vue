@@ -2,6 +2,7 @@
   <div class="tab-service-item">
     <sp-tabs
       v-model="active"
+      :animated="false"
       :background="isFixed ? '#ffffff' : '#F5F5F5'"
       :swipe-threshold="titleName.length - 1"
       sticky
@@ -15,6 +16,12 @@
         :key="proKey"
         :title="items.name"
       >
+        <template #title>
+          <div class="title">
+            <span class="title_name">{{ items.name }}</span>
+            <span v-show="active === proKey" class="title_tag"></span>
+          </div>
+        </template>
         <!-- <slot name="list"></slot> -->
         <div class="enterprise-list">
           <sp-list
@@ -342,7 +349,22 @@ export default {
       // padding-left: 20px;
     }
   }
-
+  .title {
+    position: relative;
+    &_name {
+      position: relative;
+      z-index: 2;
+    }
+    &_tag {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 12px;
+      background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
+      border-radius: 6px;
+    }
+  }
   ::v-deep.sp-tabs__nav--line {
     padding-left: 20px;
   }
@@ -363,6 +385,7 @@ export default {
     -webkit-justify-content: flex-start;
   }
   ::v-deep.sp-tabs__line {
+    display: none;
     width: 60px;
     height: 12px;
     background: linear-gradient(90deg, rgba(73, 116, 245, 0.8), #dbe4fc);

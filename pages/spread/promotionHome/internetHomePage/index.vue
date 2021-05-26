@@ -110,12 +110,12 @@ export default {
         },
       },
       titleName: [
-        {
-          code: 'FL20210425163778',
-          type: 'FL20210425163778',
-          name: '推荐',
-          describe: '猜你喜欢',
-        },
+        // {
+        //   code: 'FL20210425163778',
+        //   type: 'FL20210425163778',
+        //   name: '推荐',
+        //   describe: '猜你喜欢',
+        // },
       ],
       // 页面规划师
       pagePlanner: {},
