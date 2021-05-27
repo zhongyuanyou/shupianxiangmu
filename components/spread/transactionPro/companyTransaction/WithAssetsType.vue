@@ -13,7 +13,7 @@
             width: `${item.imgWidth / 100}rem`,
             height: `${item.imgHeight / 100}rem`,
           }"
-          @click="jumpLink(item.url)"
+          @click="jumpLink(item.url, item.description, item.execution)"
         >
           <p v-if="item.title" class="item-title">{{ item.title }}</p>
           <p v-if="item.desc" class="item-desc">{{ item.desc }}</p>
@@ -81,8 +81,8 @@ export default {
     }
   },
   methods: {
-    jumpLink(url) {
-      this.$parent.jumpLink(url)
+    jumpLink(url, description, execution) {
+      this.$parent.jumpLink(url, description, execution)
     },
   },
 }

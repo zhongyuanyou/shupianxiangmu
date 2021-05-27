@@ -298,6 +298,7 @@ export default {
       oddList: [],
       eventList: [],
       error: false,
+      pageNumber: 1,
       max: 2,
     }
   },
@@ -349,12 +350,6 @@ export default {
       if (this.finished && !this.loading) return
       this.loading = true
       const type = this.titleName[this.active].type
-      const obj = {
-        start: this.pageNumber,
-        limit: '4',
-        classCodes: type,
-        naem: this.titleName[this.active].name,
-      }
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {

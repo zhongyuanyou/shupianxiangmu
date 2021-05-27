@@ -7,8 +7,10 @@
         v-md-map
         v-md:webClick
         :data-type="item.name"
-        :data-name="`专利交易聚合页_${item.name}`"
-        @click="onMessage(item.url || '', $event)"
+        :data-name="`专利交易聚合页_${item.description}`"
+        @click="
+          onMessage(item.url || '', item.description, item.execution, $event)
+        "
       >
         <sp-image radius="0.08rem" :src="item.img" />
       </a>
@@ -25,7 +27,14 @@
             :data-name="`${item.tex}`"
             radius="0.08rem"
             :src="item.img"
-            @click="onMessage(item.url, $event)"
+            @click="
+              onMessage(
+                item.url || '',
+                item.description,
+                item.execution,
+                $event
+              )
+            "
         /></a>
       </div>
     </div>
@@ -41,7 +50,14 @@
             radius="0.08rem"
             class="img"
             :src="make.maxMake.img"
-            @click="onMessage(make.maxMake.url || '', $event)"
+            @click="
+              onMessage(
+                make.maxMake.url || '',
+                make.maxMake.description,
+                make.maxMake.execution,
+                $event
+              )
+            "
           />
         </a>
         <div>
@@ -54,7 +70,14 @@
               radius="0.08rem"
               class="img"
               :src="item.img"
-              @click="onMessage(item.url || '', $event)"
+              @click="
+                onMessage(
+                  item.url || '',
+                  item.description,
+                  item.execution,
+                  $event
+                )
+              "
           /></a>
         </div>
       </div>
@@ -166,14 +189,14 @@ export default {
     },
   },
   methods: {
-    onMessage(url, e) {
-      if (url) {
-        if (url.indexOf('http') > -1) {
-          window.location.href = url
-          return
-        }
-      }
-      this.$parent.jumpLink(url)
+    onMessage(url, description, execution, e) {
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //     return
+      //   }
+      // }
+      this.$parent.jumpLink(url, description, execution)
     },
   },
 }

@@ -123,6 +123,7 @@ export default {
       oddList: [],
       eventList: [],
       error: false,
+      pageNumber: 1,
       max: 2,
     }
   },
@@ -174,12 +175,6 @@ export default {
       if (this.finished && !this.loading) return
       this.loading = true
       const type = this.titleName[this.active].type
-      const obj = {
-        start: this.pageNumber,
-        limit: '4',
-        classCodes: type,
-        naem: this.titleName[this.active].name,
-      }
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {
@@ -212,11 +207,9 @@ export default {
                 // desc: elem.desc, // 说明
                 id: elem.id,
               }
-              if (index % 2 === 0) {
-                this.oddList.push(obj)
-              } else {
-                this.eventList.push(obj)
-              }
+              index % 2 === 0
+                ? this.oddList.push(obj)
+                : this.eventList.push(obj)
             })
             this.loading = false
             if (result.length < 14) this.finished = true
@@ -290,31 +283,6 @@ export default {
       background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
       border-radius: 6px;
     }
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // > span:last-child {
-    //   // height: 22px;
-    //   font-size: 22px;
-    //   font-family: PingFangSC-Regular, PingFang SC;
-    //   font-weight: 400;
-    //   color: #999999;
-    //   line-height: 22px;
-    //   margin-top: 10px;
-    // }
-    // > .span--active {
-    //   display: flex;
-    //   align-items: center;
-    //   padding: 0 12px;
-    //   height: 32px !important;
-    //   background: #4974f5;
-    //   border-radius: 16px;
-    //   font-size: 22px;
-    //   font-family: PingFangSC-Regular, PingFang SC;
-    //   font-weight: 400;
-    //   color: #ffffff !important;
-    //   line-height: 33px;
-    // }
   }
 
   .secondary-label {

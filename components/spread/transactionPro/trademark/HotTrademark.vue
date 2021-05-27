@@ -9,7 +9,7 @@
         v-md:webClick
         :data-name="`商标交易聚合页_热门商标_${item.name}`"
         href="javascript:;"
-        @click="jumpLink(item.url)"
+        @click="jumpLink(item.url, item.description, item.execution)"
         ><img :src="item.img" alt=""
       /></a>
     </div>
@@ -58,8 +58,8 @@ export default {
     },
   },
   methods: {
-    jumpLink(url) {
-      this.$parent.jumpLink(url)
+    jumpLink(url, description, execution) {
+      this.$parent.jumpLink(url, description, execution)
     },
   },
 }

@@ -16,7 +16,7 @@
             width: `${item.imgWidth / 100}rem`,
             height: `${item.imgHeight / 100}rem`,
           }"
-          @click="jumpLink(item.url)"
+          @click="jumpLink(item.url, item.description, item.execution)"
         ></a>
       </div>
     </div>
@@ -81,8 +81,8 @@ export default {
     },
   },
   methods: {
-    jumpLink(url) {
-      this.$parent.jumpLink(url)
+    jumpLink(url, description, execution) {
+      this.$parent.jumpLink(url, description, execution)
     },
   },
 }
