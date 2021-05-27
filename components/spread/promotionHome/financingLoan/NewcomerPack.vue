@@ -19,7 +19,7 @@
             :key="itemKey"
             :style="{ backgroundImage: 'url(' + item.img + ')' }"
             class="content-right-item"
-            @click="() => $parent.jumpLink(item.url)"
+            @click="() => $parent.jumpLink2(item.url)"
           >
             <div v-if="itemKey > 0">
               <div class="content-right-item-img">

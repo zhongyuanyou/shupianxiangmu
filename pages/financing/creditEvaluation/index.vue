@@ -39,7 +39,6 @@
             name="list_ic_next"
             size="0.32rem"
             color="#CCCCCC"
-            @click.native="onLeftClick"
           ></my-icon>
         </div>
       </div>
@@ -132,23 +131,27 @@
       <div class="phone-content">
         <span class="phone-title">手机号</span>
         <input
+          v-if="!isLogin"
           v-model="phone"
           type="number"
           placeholder="请输入手机号"
           class="phone-input"
+          @input="phoneReg"
         />
+        <span v-else class="user-phone-input">{{ userPhone }}</span>
       </div>
       <!-- 获取验证码 -->
-      <div class="phone-content">
+      <div v-if="!isLogin" class="phone-content">
         <span class="phone-title">验证码</span>
         <input
           v-model="sms"
           type="number"
           placeholder="输入短信校验码"
           class="sms-input"
+          @input="smsReg"
         />
         <div class="line"></div>
-        <span class="verification">{{ test }}</span>
+        <span class="verification" @click="getSms">{{ test }}</span>
       </div>
     </div>
     <div class="btn-box">
@@ -171,31 +174,29 @@
 </template>
 
 <script>
-import { Picker, Popup, Sticky } from '@chipspc/vant-dgg'
+import { mapState } from 'vuex'
+import { Picker, Popup, Sticky, Toast } from '@chipspc/vant-dgg'
 import Head from '@/components/financing/common/Header'
+import { financingApi, plannerApi } from '@/api/spread'
+import imHandle from '@/mixins/imHandle'
+import isLogin from '@/mixins/isLogin'
 export default {
   components: {
     Head,
     [Picker.name]: Picker,
     [Popup.name]: Popup,
     [Sticky.name]: Sticky,
+    [Toast.name]: Toast,
   },
+  mixins: [imHandle, isLogin],
   data() {
     return {
+      // 页面规划师
+      pagePlanner: {},
       num: '0.00',
       pickerShow: false,
-      columns: [
-        // 第一列
-        {
-          values: ['成都市', '南充市', '绵阳市', '北京市', '上海市'],
-          defaultIndex: 2,
-        },
-        // 第二列
-        {
-          values: ['锦江区', '西充', '游仙区', '北京市', '上海市'],
-          defaultIndex: 1,
-        },
-      ],
+      columns: [],
+      cityList: {},
       isHave: ['有', '无'],
       reserveActived: 1, // 是否有缴纳公积金
       city: '',
@@ -214,21 +215,38 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
     isShow() {
       if (this.phone && this.sms && this.city) {
+        return false
+      } else if (this.isLogin && this.city) {
         return false
       } else {
         return true
       }
     },
     price() {
-      if (this.amount && this.insuranceNum) {
+      if (this.amount) {
+        if (this.amount >= 280) {
+          const num = 50000 + (this.amount - 280) * 575
+          return num > 10000000 ? '10000000.00' : num.toFixed(2)
+        } else {
+          const num = 0
+          return num > 10000000 ? '10000000.00' : num.toFixed(2)
+        }
+      } else if (this.insuranceNum) {
+        const num = this.insuranceNum * 10000 * 25
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.reimbursementNum) {
+        const num = this.reimbursementNum * this.timeLimit
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.amount && this.insuranceNum) {
         const num =
-          50000 +
-          (this.amount - 280) * 575 +
-          this.insuranceNum * 10000 * 25 +
-          this.reimbursementNum * this.timeLimit
-
+          50000 + (this.amount - 280) * 575 + this.insuranceNum * 10000 * 25
         return num > 10000000 ? '10000000.00' : num.toFixed(2)
       } else if (this.insuranceNum && this.reimbursementNum) {
         const num =
@@ -254,8 +272,154 @@ export default {
       }
     },
   },
+  mounted() {
+    this.getPagePlanner('app-ghsdgye-02')
+    this.getCity()
+  },
   methods: {
-    onForm() {},
+    getCity() {
+      const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
+      this.$axios.get(url, { params: { code: 2147483647 } }).then((res) => {
+        if (res.code === 200) {
+          this.cityList = res.data.city
+          this.columns = [
+            { values: Object.keys(this.cityList) },
+            { values: this.cityList['北京市'] },
+          ]
+        }
+      })
+    },
+    onChange(picker, value) {
+      picker.setColumnValues(1, this.cityList[value[0]])
+    },
+    // 推介规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425164558', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res, '调用规划师')
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
+    getSms() {
+      if (this.test === '获取验证码') {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/get_smsCode.do'
+        // financingApi.smsCode
+        this.$axios
+          .get(url, {
+            params: {
+              phone: this.phone,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              Toast('验证码发送成功,请注意查收！')
+              this.smsRes = res.data
+            } else {
+              Toast(res.data)
+            }
+          })
+      }
+      let i = 59
+      clearInterval(this.time)
+      this.test = i + 's'
+      this.time = setInterval(() => {
+        if (i > 1) {
+          i--
+          this.test = i + 's'
+        } else {
+          this.test = '获取验证码'
+          clearInterval(this.time)
+        }
+      }, 1000)
+    },
+    onForm() {
+      if (!this.isLogin) {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financing.check_smsCode
+        this.$axios
+          .get(url, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              this.$xToast.showLoading({ message: '正在联系规划师...' })
+              const planner = {
+                mchUserId: this.pagePlanner.id,
+                userName: this.pagePlanner.name,
+                type: this.pagePlanner.type,
+              }
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不真确！')
+            }
+          })
+      } else {
+        this.$xToast.showLoading({ message: '正在联系规划师...' })
+        const planner = {
+          mchUserId: this.pagePlanner.id,
+          userName: this.pagePlanner.name,
+          type: this.pagePlanner.type,
+        }
+        this.uPIM(planner)
+      }
+    },
+    // 返回上一页
+    onLeftClick() {
+      this.$router.back(-1)
+      this.$emit('backHandle')
+    },
     chooseShow() {
       this.pickerShow = true
     },
@@ -264,16 +428,18 @@ export default {
       this.city = value
       this.pickerShow = false
     },
-    // 贷款期限切换方法
-    onChange(picker, value, index) {
-      this.city = value
-      this.pickerShow = false
-    },
     // 贷款期限弹出层取消按钮
     onCancel() {
       this.pickerShow = false
     },
-
+    phoneReg(e) {
+      e.target.value = e.target.value.match(/^(\d{0,11})/g)[0] || null
+      this.phone = e.target.value
+    },
+    smsReg(e) {
+      e.target.value = e.target.value.match(/^(\d{0,6})/g)[0] || null
+      this.sms = e.target.value
+    },
     insurance(idx, type) {
       type === 'insurance' && (this.insuranceActived = idx)
       type === 'reserve' && (this.reserveActived = idx)
@@ -306,6 +472,7 @@ export default {
   margin: 0 auto;
   background: #f5f5f5;
   padding-bottom: 40px;
+  height: 100%;
   //   border: 1px solid;
   .heaa-box {
     width: 100%;
@@ -435,6 +602,7 @@ export default {
           background: #f2f5ff;
           border-radius: 8px;
           border: 1px solid #4974f5;
+          color: #4974f5;
         }
       }
       .icon-box {
@@ -581,6 +749,17 @@ export default {
       font-size: 0;
       display: flex;
       align-items: center;
+      .user-phone-input {
+        width: 482px;
+        height: 45px;
+        font-size: 32px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        line-height: 45px;
+        border: none;
+        margin-left: 58px;
+        color: #222222;
+      }
       > span {
         display: block;
       }

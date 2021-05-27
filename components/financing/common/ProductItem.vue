@@ -1,6 +1,6 @@
 <template>
   <div class="product-item">
-    <div class="content">
+    <div class="content" @click="junmpUrl(item.id)">
       <div class="img-box">
         <img :src="item.img" alt="" />
       </div>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
     item: {
@@ -39,6 +40,15 @@ export default {
           id: '', // 商品id
         }
       },
+    },
+  },
+  methods: {
+    junmpUrl(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
     },
   },
 }

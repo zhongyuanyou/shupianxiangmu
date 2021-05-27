@@ -12,9 +12,11 @@ const newSpreadApi = {
 }
 // 融资贷款
 const financingApi = {
-  smsCode: `${CHIPS_WAP_BASE_URL}/nk/login/v1/smsCode.do`,
+  smsCode: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_smsCode.do`,
+  check_smsCode: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/validation_smsCode.do`,
   knowledge_code: `${CHIPS_WAP_BASE_URL}/nk/known_category/v1/list.do`,
   knowledge_list: `${CHIPS_WAP_BASE_URL}/nk/question_article/v2/find_page.do`,
+  productList: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/product_list.do`,
 }
 const spreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/list.do`,

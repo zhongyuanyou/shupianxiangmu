@@ -46,6 +46,8 @@ export default {
       toolMsg: {
         title: '贷款计算器',
         desc: '神器在手，算遍所有',
+        path: '/financing/loanCalculator',
+        icon: 'https://cdn.shupian.cn/sp-pt/wap/images/fvjgqvalqvs0000.png',
       },
     }
   },
@@ -131,11 +133,12 @@ export default {
   width: 750px;
   margin: 0 auto;
   background: #f5f5f5;
+  height: 100%;
   ::v-deep.my-head {
-    width: @spread-page-width;
-    position: fixed;
-    left: 50%;
-    margin-left: calc(-@spread-page-width / 2);
+    width: @spread-page-width !important;
+    position: fixed !important;
+    left: 50% !important;
+    margin-left: calc(-@spread-page-width / 2) !important;
     box-shadow: none !important;
   }
   .bottom-show {

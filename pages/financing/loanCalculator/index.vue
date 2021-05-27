@@ -26,14 +26,14 @@ export default {
         {
           title: '车贷计算器',
           desc: '测测如何优雅的买车',
-          path: '',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/dhvgphn58hk0000.png',
+          path: '/financing/loanCalculator/carLoans',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/80e1vbnvzhg0000.png',
         },
         {
           title: '房贷计算器',
           desc: '测测我的月供是多少',
-          path: '',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/dhvgphn58hk0000.png',
+          path: '/financing/loanCalculator/houseLoans',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/eb7v5k8uiqw0000.png',
         },
       ],
     }
@@ -57,10 +57,10 @@ export default {
   background: #f5f5f5;
   padding: 0 20px;
   ::v-deep.my-head {
-    width: 750px;
-    position: fixed;
-    left: 50%;
-    margin-left: -375px;
+    width: 750px !important;
+    position: fixed !important;
+    left: 50% !important;
+    margin-left: -375px !important;
     // box-shadow: none !important;
   }
   .card {
@@ -73,8 +73,8 @@ export default {
     font-size: 0;
     position: relative;
     background-repeat: no-repeat;
-    background-position: 450px 30px;
-    background-size: 180px 180px;
+    background-position: 0 0;
+    background-size: 100% 100%;
     .title {
       font-size: 32px;
       font-family: PingFangSC-Medium, PingFang SC;
