@@ -120,7 +120,6 @@ import Head from '@/components/financing/common/Header'
 import isLogin from '@/mixins/isLogin'
 
 export default {
-  mixins: [imHandle, isLogin],
   components: {
     Head,
     [Swipe.name]: Swipe,
@@ -129,6 +128,7 @@ export default {
     [Popup.name]: Popup,
     [Toast.name]: Toast,
   },
+  mixins: [imHandle, isLogin],
   props: {
     imgList: {
       type: Array,

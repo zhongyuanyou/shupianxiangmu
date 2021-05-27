@@ -352,7 +352,11 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url) {
+    jumpLink(url, name) {
+      if (name === '全部服务') {
+        this.$router.push('/financing/category')
+        return
+      }
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
