@@ -134,7 +134,6 @@ export default {
         }
         params = Object.assign(params, data)
         this.imExample.createSession(params, (res) => {
-          console.log(res, 5555)
           if (res.code === 200) {
             const myInfo = localStorage.getItem('myInfo')
               ? JSON.parse(localStorage.getItem('myInfo'))
