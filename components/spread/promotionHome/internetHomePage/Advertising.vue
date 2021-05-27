@@ -314,13 +314,15 @@ export default {
         .live-title-box {
           display: flex;
           align-items: center;
+          line-height: 44px;
+          height: 44px;
           > span {
             display: block;
             font-size: 32px;
             font-family: PingFangSC-Medium, PingFang SC;
             font-weight: bold;
             color: #222222;
-            line-height: 32px;
+            // line-height: 33px;
           }
           > .live-label {
             border-radius: 4px;
@@ -332,7 +334,8 @@ export default {
             font-weight: bold;
             color: #ec5330;
             display: flex;
-            padding: 6px 8px;
+            padding: 4px 8px;
+            margin-bottom: 6px;
             // 直播动态图标
             .living-icon {
               display: flex;
@@ -372,20 +375,19 @@ export default {
         }
         .advertising-live-describe {
           display: block;
-          height: 26px;
           font-size: 26px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: bold;
           color: #999999;
-          line-height: 27px;
-          margin-top: 14px;
+          line-height: 36px;
+          margin-top: 4px;
         }
         .live-product-box {
           width: 100%;
           height: 162px;
           background: linear-gradient(135deg, #5d85ff 0%, #3b67ec 100%);
           border-radius: 12px;
-          margin-top: 16px;
+          margin-top: 12px;
           padding: 22px 0 17px 18px;
           background-repeat: no-repeat;
           background-position: 0px 0px;

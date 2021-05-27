@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="my-component">
+    <div class="my-component" @click="onMore(product.id)">
       <div class="item-img">
         <img :src="product.img" />
       </div>
@@ -24,6 +24,7 @@
             }}
           </span>
           <span v-if="product.price > 10000" class="item-price-unit">万</span>
+          <span v-else class="item-price-unit">元</span>
           <span class="item-price-note">最高可借</span>
         </div>
       </div>
@@ -32,6 +33,8 @@
 </template>
 
 <script>
+import { newSpreadApi } from '@/api/spread'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'ProductItem',
   props: {
@@ -45,6 +48,7 @@ export default {
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/6671aj4ro3g0000.png',
           url: '',
           labels: ['月利率低至0.35%', '贷款期限最长24期'],
+          id: '',
         }
       },
     },
@@ -52,13 +56,22 @@ export default {
   data() {
     return {}
   },
+  methods: {
+    onMore(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
 .my-component {
   display: flex;
-  margin-right: 32px;
+  // margin-right: 32px;
   margin-bottom: 20px;
   padding: 28px 20px 32px 20px;
   background-color: #fff;
@@ -77,6 +90,8 @@ export default {
   }
 
   .item-content {
+    position: relative;
+    width: 100%;
     .item-title {
       height: 34px;
       font-size: 32px;
@@ -94,10 +109,9 @@ export default {
       font-weight: 400;
       color: #222222;
       line-height: 26px;
-      // 超出省略号
       overflow: hidden;
       text-overflow: ellipsis;
-
+      white-space: nowrap;
       height: 26px;
       margin-bottom: 14px;
     }
@@ -119,7 +133,9 @@ export default {
     }
 
     .item-price {
-      margin-top: 33px;
+      // margin-top: 33px;
+      position: absolute;
+      bottom: 0px;
       display: flex;
       align-items: baseline;
       .item-price-num {

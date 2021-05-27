@@ -9,7 +9,7 @@
           class="item"
           :class="index > 2 ? 'item-no-margin' : ''"
           :style="{ backgroundImage: `url(${item.img})` }"
-          @click="jumpLink(item.url)"
+          @click="jumpLink(item.url, item.description, item.execution)"
         >
           <p class="item-title">{{ item.title }}</p>
           <p class="item-desc">{{ item.desc }}</p>
@@ -73,14 +73,14 @@ export default {
     }
   },
   methods: {
-    jumpLink(url) {
-      if (url) {
-        if (url.indexOf('http') > -1) {
-          window.location.href = url
-          return
-        }
-      }
-      this.$parent.jumpLink(url)
+    jumpLink(url, description, execution) {
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //     return
+      //   }
+      // }
+      this.$parent.jumpLink(url, description, execution)
     },
   },
 }

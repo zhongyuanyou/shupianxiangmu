@@ -375,15 +375,19 @@ export default {
   },
   created() {
     if (process.client) {
-      const tabs = []
-      this.resultData.classList &&
-        this.resultData.classList.forEach((item) => {
-          const obj = { name: item.name, type: item.ext1 }
-          tabs.push(obj)
-        })
-      this.goodListData.tabBtnList = tabs
-      // 请求
-      this.paramData.classCode = this.goodListData.tabBtnList[0].type
+      try {
+        const tabs = []
+        this.resultData.classList &&
+          this.resultData.classList.forEach((item) => {
+            const obj = { name: item.name, type: item.ext1 }
+            tabs.push(obj)
+          })
+        this.goodListData.tabBtnList = tabs
+        // 请求
+        this.paramData.classCode = this.goodListData.tabBtnList[0].type
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   mounted() {
@@ -456,6 +460,8 @@ export default {
             text: elem.name,
             marketingImg: '',
             url: elem.url,
+            description: elem.description || '',
+            execution: elem.executionParameters || '',
             md: {
               type: '',
               name: `专利交易聚合页_金刚区_${elem.name}`,
@@ -484,13 +490,14 @@ export default {
     },
     // 热门商标
     trademarkHotData(data) {
-      // console.log(data, 4687132)
       if (data.length !== 0) {
         this.trademarkHot = data.map((elem, index) => {
           return {
             img: elem.materialList[0].materialUrl,
             name: elem.materialList[0].name,
             url: elem.materialList[0].materialLink,
+            description: elem.materialList[0].materialDescription || '',
+            execution: elem.materialList[0].executeParam || '',
           }
         })
       }
@@ -503,6 +510,8 @@ export default {
             img: elem.materialUrl,
             name: elem.name,
             url: elem.materialLink,
+            description: elem.materialDescription || '',
+            execution: elem.executeParam || '',
           }
         })
       }
@@ -592,7 +601,23 @@ export default {
           this.more.noMore = true
         })
     },
-    jumpLink(url) {
+    jumpLink(url, description, execution) {
+      // app跳转
+      try {
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          console.log(lastObj, execution.split(':')[0])
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
+      }
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url

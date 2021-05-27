@@ -28,8 +28,8 @@
           >
             <div class="content">
               <div
-                v-for="(item, proKey) of list"
-                :key="proKey"
+                v-for="(item, itemKey) of list"
+                :key="itemKey"
                 class="content-list"
                 @click="onMore(item.id)"
               >
@@ -277,16 +277,12 @@ export default {
             label {
               display: flex;
               span {
-                // background: #f0f2f5;
-                // border-radius: 4px;
+                width: 400px;
                 font-size: 20px;
                 font-weight: 400;
-                // color: #5c7499;
                 color: #222;
                 line-height: 32px;
                 margin-right: 8px;
-                // padding: 4px 6px;
-                // max-width: 120px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;

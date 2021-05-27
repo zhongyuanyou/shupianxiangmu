@@ -30,11 +30,6 @@
 
     <!-- S 列表 -->
     <IntellectualList :title-name="titleName" />
-    <!-- <TabServiceItem :title-name="titleName" @change="onChange">
-      <template v-slot:list>
-        <KnowledgeList ref="intellectual" :default-list="defaultList" />
-      </template>
-    </TabServiceItem> -->
     <!-- E 列表 -->
 
     <!-- START 规划师-->
@@ -53,8 +48,6 @@ import Nav from '@/components/spread/common/Nav'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
 import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList'
-// import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
-// import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'IntellectualProperty',
@@ -64,12 +57,9 @@ export default {
     Exclusive,
     Choiceness,
     IntellectualList,
-    // TabServiceItem,
-    // KnowledgeList,
     BtnPlanner,
   },
   async asyncData({ $axios }) {
-    // const locations = 'ad113279,ad113277,ad113265,ad113236,ad113235,ad113224'
     const locationCodes = 'ad113236,ad113279,ad113265,ad113277,ad100046'
     const navCodes = 'nav100060'
     const code = 'CRISPS-C-ZSCQ'
@@ -275,11 +265,11 @@ export default {
       },
       // 列表导航
       titleName: [
-        {
-          code: 1,
-          type: 'FL20210425163778',
-          name: '热门服务',
-        },
+        // {
+        // code: 1,
+        // type: 'FL20210425163778',
+        // name: '热门服务',
+        // },
       ],
       // 当前列表状态
       changeState: {
@@ -445,9 +435,6 @@ export default {
     },
     // 金刚区导航栏
     navList(data) {
-      data.sort((a, b) => {
-        return a.sort - b.sort
-      })
       if (data.length !== 0) {
         this.rollNav = data.map((elem, index) => {
           return {
@@ -523,7 +510,6 @@ export default {
             url: data.materialLink || '',
           }
         })
-        console.log(this.content, 4561)
       }
     },
 
@@ -570,7 +556,7 @@ export default {
               platform: 'app',
               productId: '', //
               thirdTypeCodes: '', // 三级code
-              firstTypeCode: 'FL20210425163708', // 一级code
+              firstTypeCode: 'FL20210425164319', // 一级code
             },
             {
               headers: {
@@ -596,7 +582,11 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url) {
+    jumpLink(url, name) {
+      if (name === '全部服务') {
+        this.$router.push('/financing/category')
+        return
+      }
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url

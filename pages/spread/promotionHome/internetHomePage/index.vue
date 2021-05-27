@@ -110,12 +110,12 @@ export default {
         },
       },
       titleName: [
-        {
-          code: 'FL20210425163778',
-          type: 'FL20210425163778',
-          name: '推荐',
-          describe: '猜你喜欢',
-        },
+        // {
+        //   code: 'FL20210425163778',
+        //   type: 'FL20210425163778',
+        //   name: '推荐',
+        //   describe: '猜你喜欢',
+        // },
       ],
       // 页面规划师
       pagePlanner: {},
@@ -326,7 +326,7 @@ export default {
               platform: 'app',
               productId: '', //
               thirdTypeCodes: '', // 三级code
-              firstTypeCode: 'FL20210425163708', // 一级code
+              firstTypeCode: 'FL20210425164016', // 一级code
             },
             {
               headers: {
@@ -352,7 +352,11 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url) {
+    jumpLink(url, name) {
+      if (name === '全部服务') {
+        this.$router.push('/financing/category')
+        return
+      }
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url

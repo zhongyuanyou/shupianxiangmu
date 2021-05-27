@@ -23,7 +23,7 @@ const bablePlugin = [
 module.exports = {
   telemetry: false,
   server: {
-    port: 3001, // default: 3001
+    port: 3002, // default: 3001
     host: 'localhost', // default: localhost,
   },
   env: {

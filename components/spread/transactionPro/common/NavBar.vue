@@ -8,7 +8,7 @@
         v-md:webClick
         class="item"
         :class="index > 4 ? 'item-no-margin' : ''"
-        @click="jumpLink(item.url, item.text)"
+        @click="jumpLink(item.url, item.description, item.execution)"
       >
         <div
           class="item-img-big"
@@ -38,14 +38,14 @@ export default {
   },
   methods: {
     // 跳转链接-IM规划师
-    jumpLink(url, code) {
-      if (url) {
-        if (url.indexOf('http') > -1) {
-          window.location.href = url
-          return
-        }
-      }
-      this.$parent.jumpLink(url)
+    jumpLink(url, description, execution) {
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //     return
+      //   }
+      // }
+      this.$parent.jumpLink(url, description, execution)
     },
   },
 }

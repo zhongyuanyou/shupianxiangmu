@@ -1,5 +1,5 @@
 <template>
-  <div class="intellectual-list">
+  <div class="finacing-list">
     <sp-tabs
       v-model="active"
       sticky
@@ -32,30 +32,10 @@
           @load="onLoad"
         >
           <div class="product-box">
-            <div v-if="oddList.length > 0" class="product-odd">
+            <div v-if="list.length > 0" class="product-item">
               <product
-                v-for="(proItem, proKey) of oddList"
+                v-for="(proItem, proKey) of list"
                 :key="proKey"
-                class="product-item"
-                :product="proItem"
-              />
-            </div>
-            <div class="product-event">
-              <!-- 待改跳转 -->
-              <div
-                v-show="active === 0"
-                class="hot-product"
-                @click="jumpLink('https://www.baidu.com/')"
-              >
-                <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/images/5a270klvc280000.png"
-                  alt=""
-                />
-              </div>
-              <product
-                v-for="(proItem, proKey) of eventList"
-                :key="proKey"
-                class="product-item"
                 :product="proItem"
               />
             </div>
@@ -69,10 +49,11 @@
 <script>
 import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
-import product from '@/components/spread/promotionHome/intellectualProperty/Product'
+// import Waterfall from 'vue-waterfall2'
+import product from '@/components/spread/promotionHome/financingLoan/ProductItem.vue'
 import { newSpreadApi } from '@/api/spread'
 export default {
-  name: 'IntellectualList',
+  name: 'FinacingList',
   components: {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
@@ -120,10 +101,7 @@ export default {
       loading: false,
       finished: false,
       list: [],
-      oddList: [],
-      eventList: [],
       error: false,
-      pageNumber: 1,
       max: 2,
     }
   },
@@ -161,8 +139,7 @@ export default {
     onLoad() {
       // // 异步更新数据
       if (this.pageNumber === 1) {
-        this.oddList = []
-        this.eventList = []
+        this.list = []
       }
       this.selectTab()
     },
@@ -175,6 +152,12 @@ export default {
       if (this.finished && !this.loading) return
       this.loading = true
       const type = this.titleName[this.active].type
+      const obj = {
+        start: this.pageNumber,
+        limit: '4',
+        classCodes: type,
+        naem: this.titleName[this.active].name,
+      }
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {
@@ -195,21 +178,19 @@ export default {
             result.forEach((elem, index) => {
               const obj = {
                 code: index + 1,
-                imageUrl:
+                img:
                   elem.img ||
                   'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 title: elem.title,
                 labels: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
                 price: elem.price,
                 sales: elem.saleNum || 0,
-                activeTag: '', // 活动标签
+                // activeTag: '', // 活动标签
                 url: '',
-                // desc: elem.desc, // 说明
+                desc: elem.desc, // 说明
                 id: elem.id,
               }
-              index % 2 === 0
-                ? this.oddList.push(obj)
-                : this.eventList.push(obj)
+              this.list.push(obj)
             })
             this.loading = false
             if (result.length < 14) this.finished = true
@@ -231,7 +212,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.intellectual-list {
+.finacing-list {
   width: 100%;
   margin-top: 27px;
   ::v-deep.sp-tabs__nav {
@@ -308,19 +289,11 @@ export default {
     }
   }
   .sp-list {
-    min-height: 1000px;
+    min-height: 800px;
     .product-box {
       width: 100%;
-      display: flex;
-      .product-box {
-        width: 50%;
-        padding-left: 20px;
-      }
-      .product-odd {
-        padding-left: 20px;
-      }
-      .product-event {
-        padding-left: 20px;
+      .product-item {
+        padding: 0 20px;
       }
       .hot-product {
         width: 345px;
