@@ -73,6 +73,8 @@ import Notice from '@/components/financing/common/Notice'
 import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import imHandle from '@/mixins/imHandle'
+import isLogin from '@/mixins/isLogin'
 export default {
   name: 'Index',
   components: {
@@ -89,7 +91,7 @@ export default {
     BottomNotes,
     BtnPlanner,
   },
-  mixins: ['imHandle'],
+  mixins: [imHandle, isLogin],
   async asyncData({ $axios }) {
     try {
       const res = await $axios.get(`${newSpreadApi.list}`, {
@@ -130,7 +132,7 @@ export default {
         {
           code: 1,
           name: '企业贷',
-          url: '',
+          url: '/financing/enterprise',
           label: '',
           size: 'big',
           imageUrl:
@@ -139,7 +141,7 @@ export default {
         {
           code: 2,
           name: '有抵押贷',
-          url: '',
+          url: '/financing/mortgageList',
           label: '',
           size: 'big',
           imageUrl:
@@ -148,7 +150,7 @@ export default {
         {
           code: 3,
           name: '无抵押贷',
-          url: '',
+          url: '/financing/unsecured',
           label: '',
           size: 'big',
           imageUrl:
@@ -157,7 +159,7 @@ export default {
         {
           code: 4,
           name: '我有车',
-          url: '',
+          url: '/financing/carOwner',
           label: '',
           size: 'big',
           imageUrl:
@@ -166,7 +168,7 @@ export default {
         {
           code: 5,
           name: '我有房',
-          url: '',
+          url: '/financing/mortgage',
           label: '',
           size: 'big',
           imageUrl:
@@ -471,7 +473,6 @@ export default {
             for (let i = 0; i < list.length; i++) {
               const title =
                 list[i].materialList[0].materialName.split('#')[1] || ''
-              console.log(title)
               this.newcomerPackList[i].title = title
               this.newcomerPackList[i].desc =
                 list[i].materialList[0].materialDescription

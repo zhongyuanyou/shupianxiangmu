@@ -68,15 +68,17 @@
         <div class="list-content">
           <span class="title">手机号</span>
           <input
+            v-if="!isLogin"
             v-model="phone"
             type="number"
             placeholder="请输入手机号"
             class="phone-input"
             @input="phoneReg"
           />
+          <span v-else class="user-phone-input">{{ userPhone }}</span>
         </div>
         <!-- 获取验证码 -->
-        <div class="list-content">
+        <div v-if="!isLogin" class="list-content">
           <span class="title">验证码</span>
           <input
             v-model="sms"
@@ -115,6 +117,7 @@ import { Swipe, SwipeItem, Picker, Popup, Toast } from '@chipspc/vant-dgg'
 import Head from '@/components/financing/common/Header'
 import { financingApi, plannerApi } from '@/api/spread'
 import imHandle from '@/mixins/imHandle'
+import isLogin from '@/mixins/isLogin'
 export default {
   components: {
     Head,
@@ -124,7 +127,7 @@ export default {
     [Popup.name]: Popup,
     [Toast.name]: Toast,
   },
-  mixins: [imHandle],
+  mixins: [imHandle, isLogin],
   props: {
     imgList: {
       type: Array,
@@ -166,6 +169,8 @@ export default {
     }),
     isShow() {
       if (this.name && this.city && this.lines && this.phone && this.sms) {
+        return false
+      } else if (this.name && this.city && this.lines && this.isLogin) {
         return false
       } else {
         return true
@@ -291,28 +296,38 @@ export default {
         })
     },
     onForm() {
-      const url =
-        'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
-      this.$axios
-        .get(url, {
-          params: {
-            phone: this.phone,
-            smsCode: this.sms,
-          },
-        })
-        .then((res) => {
-          if (res.code === 200 && res.data === true) {
-            this.$xToast.showLoading({ message: '正在联系规划师...' })
-            const planner = {
-              mchUserId: this.pagePlanner.id,
-              userName: this.pagePlanner.name,
-              type: this.pagePlanner.type,
+      if (!this.isLogin) {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        this.$axios
+          .get(url, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              this.$xToast.showLoading({ message: '正在联系规划师...' })
+              const planner = {
+                mchUserId: this.pagePlanner.id,
+                userName: this.pagePlanner.name,
+                type: this.pagePlanner.type,
+              }
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不真确！')
             }
-            this.uPIM(planner)
-          } else {
-            Toast('验证码不真确！')
-          }
-        })
+          })
+      } else {
+        this.$xToast.showLoading({ message: '正在联系规划师...' })
+        const planner = {
+          mchUserId: this.pagePlanner.id,
+          userName: this.pagePlanner.name,
+          type: this.pagePlanner.type,
+        }
+        this.uPIM(planner)
+      }
     },
     choose(idx) {
       this.actived = idx
@@ -396,6 +411,17 @@ export default {
         font-size: 0;
         display: flex;
         align-items: center;
+        .user-phone-input {
+          width: 482px;
+          height: 45px;
+          font-size: 32px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          line-height: 45px;
+          border: none;
+          margin-left: 58px;
+          color: #222222;
+        }
         > span {
           display: block;
         }

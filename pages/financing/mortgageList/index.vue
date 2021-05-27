@@ -47,6 +47,7 @@ export default {
         title: '贷款计算器',
         desc: '神器在手，算遍所有',
         path: '/financing/loanCalculator',
+        icon: 'https://cdn.shupian.cn/sp-pt/wap/images/fvjgqvalqvs0000.png',
       },
     }
   },
@@ -132,6 +133,7 @@ export default {
   width: 750px;
   margin: 0 auto;
   background: #f5f5f5;
+  height: 100%;
   ::v-deep.my-head {
     width: @spread-page-width !important;
     position: fixed !important;

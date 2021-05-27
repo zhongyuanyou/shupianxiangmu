@@ -131,15 +131,17 @@
       <div class="phone-content">
         <span class="phone-title">手机号</span>
         <input
+          v-if="!isLogin"
           v-model="phone"
           type="number"
           placeholder="请输入手机号"
           class="phone-input"
           @input="phoneReg"
         />
+        <span v-else class="user-phone-input">{{ userPhone }}</span>
       </div>
       <!-- 获取验证码 -->
-      <div class="phone-content">
+      <div v-if="!isLogin" class="phone-content">
         <span class="phone-title">验证码</span>
         <input
           v-model="sms"
@@ -177,6 +179,7 @@ import { Picker, Popup, Sticky, Toast } from '@chipspc/vant-dgg'
 import Head from '@/components/financing/common/Header'
 import { financingApi, plannerApi } from '@/api/spread'
 import imHandle from '@/mixins/imHandle'
+import isLogin from '@/mixins/isLogin'
 export default {
   components: {
     Head,
@@ -185,7 +188,7 @@ export default {
     [Sticky.name]: Sticky,
     [Toast.name]: Toast,
   },
-  mixins: [imHandle],
+  mixins: [imHandle, isLogin],
   data() {
     return {
       // 页面规划师
@@ -220,18 +223,30 @@ export default {
     isShow() {
       if (this.phone && this.sms && this.city) {
         return false
+      } else if (this.isLogin && this.city) {
+        return false
       } else {
         return true
       }
     },
     price() {
-      if (this.amount && this.insuranceNum) {
+      if (this.amount) {
+        if (this.amount >= 280) {
+          const num = 50000 + (this.amount - 280) * 575
+          return num > 10000000 ? '10000000.00' : num.toFixed(2)
+        } else {
+          const num = 0
+          return num > 10000000 ? '10000000.00' : num.toFixed(2)
+        }
+      } else if (this.insuranceNum) {
+        const num = this.insuranceNum * 10000 * 25
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.reimbursementNum) {
+        const num = this.reimbursementNum * this.timeLimit
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.amount && this.insuranceNum) {
         const num =
-          50000 +
-          (this.amount - 280) * 575 +
-          this.insuranceNum * 10000 * 25 +
-          this.reimbursementNum * this.timeLimit
-
+          50000 + (this.amount - 280) * 575 + this.insuranceNum * 10000 * 25
         return num > 10000000 ? '10000000.00' : num.toFixed(2)
       } else if (this.insuranceNum && this.reimbursementNum) {
         const num =
@@ -366,29 +381,39 @@ export default {
       }, 1000)
     },
     onForm() {
-      const url =
-        'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
-      // financing.check_smsCode
-      this.$axios
-        .get(url, {
-          params: {
-            phone: this.phone,
-            smsCode: this.sms,
-          },
-        })
-        .then((res) => {
-          if (res.code === 200 && res.data === true) {
-            this.$xToast.showLoading({ message: '正在联系规划师...' })
-            const planner = {
-              mchUserId: this.pagePlanner.id,
-              userName: this.pagePlanner.name,
-              type: this.pagePlanner.type,
+      if (!this.isLogin) {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financing.check_smsCode
+        this.$axios
+          .get(url, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              this.$xToast.showLoading({ message: '正在联系规划师...' })
+              const planner = {
+                mchUserId: this.pagePlanner.id,
+                userName: this.pagePlanner.name,
+                type: this.pagePlanner.type,
+              }
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不真确！')
             }
-            this.uPIM(planner)
-          } else {
-            Toast('验证码不真确！')
-          }
-        })
+          })
+      } else {
+        this.$xToast.showLoading({ message: '正在联系规划师...' })
+        const planner = {
+          mchUserId: this.pagePlanner.id,
+          userName: this.pagePlanner.name,
+          type: this.pagePlanner.type,
+        }
+        this.uPIM(planner)
+      }
     },
     // 返回上一页
     onLeftClick() {
@@ -447,6 +472,7 @@ export default {
   margin: 0 auto;
   background: #f5f5f5;
   padding-bottom: 40px;
+  height: 100%;
   //   border: 1px solid;
   .heaa-box {
     width: 100%;
@@ -723,6 +749,17 @@ export default {
       font-size: 0;
       display: flex;
       align-items: center;
+      .user-phone-input {
+        width: 482px;
+        height: 45px;
+        font-size: 32px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        line-height: 45px;
+        border: none;
+        margin-left: 58px;
+        color: #222222;
+      }
       > span {
         display: block;
       }

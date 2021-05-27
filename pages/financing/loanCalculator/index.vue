@@ -27,13 +27,13 @@ export default {
           title: '车贷计算器',
           desc: '测测如何优雅的买车',
           path: '/financing/loanCalculator/carLoans',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/dhvgphn58hk0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/80e1vbnvzhg0000.png',
         },
         {
           title: '房贷计算器',
           desc: '测测我的月供是多少',
           path: '/financing/loanCalculator/houseLoans',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/dhvgphn58hk0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/eb7v5k8uiqw0000.png',
         },
       ],
     }
@@ -73,8 +73,8 @@ export default {
     font-size: 0;
     position: relative;
     background-repeat: no-repeat;
-    background-position: 450px 30px;
-    background-size: 180px 180px;
+    background-position: 0 0;
+    background-size: 100% 100%;
     .title {
       font-size: 32px;
       font-family: PingFangSC-Medium, PingFang SC;

@@ -1,13 +1,13 @@
 <template>
   <div class="loan-tool" @click="jump()">
     <span class="title">贷款工具</span>
-    <div class="content">
+    <div
+      class="content"
+      :style="{ backgroundImage: 'url(' + toolMsg.icon + ')' }"
+    >
       <div class="msg">
         <span class="msg-title">{{ toolMsg.title }}</span>
         <span class="msg-desc">{{ toolMsg.desc }}</span>
-      </div>
-      <div class="img-box">
-        <img :src="toolMsg.icon" alt="" />
       </div>
     </div>
   </div>
@@ -40,9 +40,10 @@ export default {
 .loan-tool {
   width: 750px;
   height: 296px;
-  background: #ffffff;
+  //   background: #ffffff;
   padding: 40px;
   font-size: 0;
+
   .title {
     height: 32px;
     font-size: 32px;
@@ -52,9 +53,12 @@ export default {
     line-height: 32px;
   }
   .content {
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    background-size: 100% 100%;
     width: 670px;
     height: 152px;
-    background: #f8f8f8;
+    // background: #f8f8f8;
     border-radius: 12px;
     margin-top: 32px;
     padding: 32px 32px 30px;

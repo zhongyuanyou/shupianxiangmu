@@ -7,7 +7,7 @@
     <!-- 产品列表 -->
     <ProductList></ProductList>
     <!--贷款工具-->
-    <LoanTool :toolMsg="toolMsg"></LoanTool>
+    <LoanTool :tool-msg="toolMsg"></LoanTool>
     <!-- 底部展示 -->
     <div class="bottom-show">薯片助贷服务，让更多人生活更美好</div>
     <!-- 规划师占位 -->
@@ -45,7 +45,7 @@ export default {
       toolMsg: {
         title: '额度评估',
         desc: '测测您的信用额度',
-        icon: '',
+        icon: 'https://cdn.shupian.cn/sp-pt/wap/images/lf5jywbwdxc000.png',
         path: '/financing/creditEvaluation',
       },
     }
@@ -132,6 +132,7 @@ export default {
   width: 750px;
   margin: 0 auto;
   background: #f5f5f5;
+  height: 100%;
   ::v-deep.my-head {
     width: @spread-page-width !important;
     position: fixed !important;

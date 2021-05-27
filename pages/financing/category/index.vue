@@ -36,7 +36,7 @@
       <!--S 二级分类区域-->
       <section ref="r_list" class="category_con_rt">
         <div>
-          <div ref="good" class="proList swiper" style="padding-top: 0">
+          <!-- <div ref="good" class="proList swiper" style="padding-top: 0">
             <div class="swiper_con">
               <swiper
                 ref="mySwiper"
@@ -51,7 +51,7 @@
                 <div slot="pagination" class="swiper-pagination"></div>
               </swiper>
             </div>
-          </div>
+          </div> -->
           <div
             v-for="(item, index) in categoryList"
             :key="index"
@@ -208,7 +208,7 @@ export default {
         // financingApi.productList
         await this.$axios
           .get(url, {
-            params: { code: 'CRISPS-C-RZDKALL' },
+            params: { code: 'CRISPS-C-RZDKALL', adCode: 'ad100052' },
           })
           .then((res) => {
             this.categoryList = res.data.records
