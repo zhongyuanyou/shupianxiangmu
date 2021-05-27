@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <Head title="企业贷款"></Head>
     <!-- Banner -->
-    <Banner></Banner>
+    <Banner v-if="bannerList.length !== 0" :img-list="bannerList"></Banner>
     <!-- 产品列表 -->
     <ProductList></ProductList>
     <!--贷款工具-->
@@ -49,6 +49,7 @@ export default {
         icon: 'https://cdn.shupian.cn/sp-pt/wap/images/fpcgt5asi0w0000.png',
         path: '/financing/creditEvaluation',
       },
+      bannerList: [],
     }
   },
   computed: {

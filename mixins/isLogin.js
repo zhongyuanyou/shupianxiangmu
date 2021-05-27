@@ -16,11 +16,14 @@ export default {
   created() {},
   mounted() {
     this.strcookie = document.cookie
+    if (this.isInApp) {
+      this.isLogin = true
+      this.getUserInfo()
+    }
     if (this.strcookie.indexOf('userPhone') !== -1) {
       this.isLogin = true
       this.getCookie('userPhone')
     }
-    this.getUserInfo()
   },
   methods: {
     getCookie(name) {
@@ -35,7 +38,7 @@ export default {
     },
     getUserInfo() {
       this.$appFn.dggGetUserInfo((res) => {
-        console.log(res, 222)
+        this.userPhone = res.data.nickName
       })
     },
   },

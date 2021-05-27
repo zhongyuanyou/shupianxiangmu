@@ -70,7 +70,8 @@ export function checkPassword(password) {
   // 至少6-15个字符 可以包含\"#$%&'()*+,-./:;<=>?@[]^_`{|}~等特殊字符
   // eslint-disable-next-line
   /* eslint-disable */
-  const Regex = /^[A-Za-z0-9!\\"#\$%&'\(\)\*\+,-.\/\:;<=>\?@\[\]\^_`\{\|\}\~]{6,15}$/
+  const Regex =
+    /^[A-Za-z0-9!\\"#\$%&'\(\)\*\+,-.\/\:;<=>\?@\[\]\^_`\{\|\}\~]{6,15}$/
   return Regex.test(password)
 }
 

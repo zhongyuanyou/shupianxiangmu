@@ -42,7 +42,6 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-
 import NavTop from '@/components/spread/common/NavTop'
 import Nav from '@/components/spread/common/Nav'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'

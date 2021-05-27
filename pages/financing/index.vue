@@ -498,6 +498,7 @@ export default {
     productClassData(data) {
       if (data.length === 0) return
       // const classArr = []
+      console.log(data, 1111)
       data.forEach((item, index) => {
         this.titleName.push({
           type: item.ext1,

@@ -2,7 +2,7 @@
   <div class="mortgage">
     <Head title="房贷"></Head>
     <!-- banner图展示 -->
-    <div class="banner">
+    <div v-if="imgList.length !== 0" class="banner">
       <sp-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
           ><img :src="item.img" alt=""
@@ -128,22 +128,7 @@ export default {
     [Toast.name]: Toast,
   },
   mixins: [imHandle, isLogin],
-  props: {
-    imgList: {
-      type: Array,
-      default: () => {
-        return [
-          {
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2oggsns53y80000.png',
-            url: '', // 外链
-            iosUrl: '', // 内链接ios
-            adrUrl: '', // 内链安卓链接
-            wapUrl: '', // wap内链
-          },
-        ]
-      },
-    },
-  },
+
   data() {
     return {
       name: '', // 用户姓名
@@ -157,6 +142,7 @@ export default {
       columns: [],
       cityList: {},
       pickerShow: false,
+      imgList: [], // banner
     }
   },
   computed: {
@@ -182,15 +168,17 @@ export default {
   methods: {
     getCity() {
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
-      this.$axios.get(url, { params: { code: 2147483647 } }).then((res) => {
-        if (res.code === 200) {
-          this.cityList = res.data.city
-          this.columns = [
-            { values: Object.keys(this.cityList) },
-            { values: this.cityList['北京市'] },
-          ]
-        }
-      })
+      this.$axios
+        .get(financingApi.get_city, { params: { code: 2147483647 } })
+        .then((res) => {
+          if (res.code === 200) {
+            this.cityList = res.data.city
+            this.columns = [
+              { values: Object.keys(this.cityList) },
+              { values: this.cityList['北京市'] },
+            ]
+          }
+        })
     },
     onChange(picker, value) {
       picker.setColumnValues(1, this.cityList[value[0]])
@@ -278,7 +266,7 @@ export default {
       }, 1000)
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_smsCode.do'
       this.$axios
-        .get(url, {
+        .get(financingApi.smsCode, {
           params: {
             phone: phones,
           },
@@ -298,7 +286,7 @@ export default {
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         // financingApi.check_smsCode
         this.$axios
-          .get(url, {
+          .get(financingApi.check_smsCode, {
             params: {
               phone: this.phone,
               smsCode: this.sms,

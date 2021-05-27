@@ -11,6 +11,7 @@
           <span
             v-for="(label, index) in product.labels"
             :key="index"
+            v-show="index < 3"
             class="item-label"
             >{{ label }}</span
           >
@@ -99,6 +100,7 @@ export default {
       color: #222222;
       line-height: 34px;
       margin-bottom: 10px;
+      width: 418px;
       // 超出省略号
       overflow: hidden;
       text-overflow: ellipsis;
@@ -109,6 +111,7 @@ export default {
       font-weight: 400;
       color: #222222;
       line-height: 26px;
+      width: 418px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -119,6 +122,7 @@ export default {
       display: flex;
       align-items: center;
       overflow: hidden;
+      width: 418px;
       .item-label {
         flex: none;
         background: #f0f2f5;
