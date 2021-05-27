@@ -207,7 +207,7 @@ export default {
           'http://127.0.0.1:7001/service/nk/financing/v1/product_list.do'
         // financingApi.productList
         await this.$axios
-          .get(url, {
+          .get(financingApi.productList, {
             params: { code: 'CRISPS-C-RZDKALL', adCode: 'ad100052' },
           })
           .then((res) => {

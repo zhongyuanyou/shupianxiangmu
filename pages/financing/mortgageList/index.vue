@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <Head title="有抵押贷款"></Head>
     <!-- Banner -->
-    <Banner></Banner>
+    <Banner v-if="bannerList.length !== 0" img-list="bannerList"></Banner>
     <!-- 产品列表 -->
     <ProductList></ProductList>
     <!--贷款工具-->
@@ -49,6 +49,7 @@ export default {
         path: '/financing/loanCalculator',
         icon: 'https://cdn.shupian.cn/sp-pt/wap/images/fvjgqvalqvs0000.png',
       },
+      bannerList: [],
     }
   },
   computed: {

@@ -54,25 +54,37 @@ export default {
   data() {
     return {
       swipeList: [],
+      base: '',
+      clasCode: '',
     }
   },
   mounted() {
     this.getKnowledgeCode()
+    switch (DGG_SERVER_ENV) {
+      case 'development':
+        this.base = 'd'
+        this.clasCode = ''
+        break
+      case 'release':
+        this.base = 't'
+        this.clasCode = 'bdsp100216'
+        break
+      case 'production':
+        this.base = ''
+        this.clasCode = 'bdsp100102'
+        break
+    }
   },
   methods: {
     // 跳转必懂详情
     jump(item) {
-      let base = ''
-      DGG_SERVER_ENV === 'development' && (base = 'd')
-      DGG_SERVER_ENV === 'release' && (base = 't')
-      DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/known/detail/article?id=${item}`
+      window.location.href = `https://${this.base}m.shupian.cn/known/detail/article?id=${item}`
     },
     // 获取必懂分类id
     getKnowledgeCode() {
       this.$axios.get(financingApi.knowledge_code).then((res) => {
         res.data.forEach((item) => {
-          if (item.name === '融资') {
+          if (item.code === this.clasCode) {
             const code = item.id
             this.$axios
               .post(

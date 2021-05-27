@@ -184,15 +184,17 @@ export default {
   methods: {
     getCity() {
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
-      this.$axios.get(url, { params: { code: 2147483647 } }).then((res) => {
-        if (res.code === 200) {
-          this.cityList = res.data.city
-          this.columns = [
-            { values: Object.keys(this.cityList) },
-            { values: this.cityList['北京市'] },
-          ]
-        }
-      })
+      this.$axios
+        .get(financingApi.get_city, { params: { code: 2147483647 } })
+        .then((res) => {
+          if (res.code === 200) {
+            this.cityList = res.data.city
+            this.columns = [
+              { values: Object.keys(this.cityList) },
+              { values: this.cityList['北京市'] },
+            ]
+          }
+        })
     },
     onChange(picker, value) {
       picker.setColumnValues(1, this.cityList[value[0]])
@@ -281,7 +283,7 @@ export default {
       }, 1000)
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_smsCode.do'
       this.$axios
-        .get(url, {
+        .get(financingApi.smsCode, {
           params: {
             phone: phones,
           },
@@ -300,7 +302,7 @@ export default {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         this.$axios
-          .get(url, {
+          .get(financingApi.check_smsCode, {
             params: {
               phone: this.phone,
               smsCode: this.sms,

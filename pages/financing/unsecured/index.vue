@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <Head title="无抵押贷款"></Head>
     <!-- Banner -->
-    <Banner></Banner>
+    <Banner v-if="bannerList.length !== 0" :img-list="banner"></Banner>
     <!-- 产品列表 -->
     <ProductList></ProductList>
     <!--贷款工具-->
@@ -48,6 +48,7 @@ export default {
         icon: 'https://cdn.shupian.cn/sp-pt/wap/images/lf5jywbwdxc000.png',
         path: '/financing/creditEvaluation',
       },
+      bannerList: [],
     }
   },
   computed: {
