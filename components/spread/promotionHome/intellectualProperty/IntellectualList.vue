@@ -243,6 +243,7 @@ export default {
   }
   ::v-deep.sp-tab {
     padding: 0 32px;
+    flex: 0 0 auto;
     .sp-tab__text {
       font-size: 32px;
       font-family: PingFangSC-Regular, PingFang SC;

@@ -247,7 +247,7 @@ export default {
         height: 26px;
         font-size: 26px;
         font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: bold;
+        font-weight: 400;
         color: #999999;
         line-height: 26px;
         margin-top: 14px;
@@ -377,7 +377,7 @@ export default {
           display: block;
           font-size: 26px;
           font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: bold;
+          font-weight: 400;
           color: #999999;
           line-height: 36px;
           margin-top: 4px;
@@ -472,7 +472,7 @@ export default {
         height: 26px;
         font-size: 26px;
         font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: bold;
+        font-weight: 400;
         color: #999999;
         line-height: 26px;
         margin-top: 14px;
@@ -560,7 +560,7 @@ export default {
         height: 26px;
         font-size: 26px;
         font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: bold;
+        font-weight: 400;
         color: #999999;
         line-height: 26px;
         margin-top: 14px;
