@@ -154,6 +154,9 @@ export default {
       this.loading = true
       const type = this.titleName[this.active].type
       // 2、调用接口
+      const url =
+        'http://127.0.0.1:7001/service/nk/newChipSpread/v1/service_product_list.do'
+      //   newSpreadApi.service_product_list
       this.$axios
         .get(newSpreadApi.service_product_list, {
           params: {
