@@ -305,6 +305,7 @@ export default {
       p:last-child {
         color: #999999;
         font-size: 24px;
+        font-weight: 400;
       }
       img {
         position: absolute;
@@ -316,6 +317,7 @@ export default {
     }
     &-list:first-child {
       > p {
+        font-weight: 400;
         width: 100px;
       }
     }

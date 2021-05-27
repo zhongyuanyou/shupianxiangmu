@@ -79,7 +79,7 @@ export default {
         font-size: 32px;
         font-weight: bold;
         color: #222222;
-        line-height: 32px;
+        line-height: 34px;
         margin-right: 8px;
       }
 
@@ -102,7 +102,7 @@ export default {
 
     .item-desc {
       font-size: 26px;
-      font-weight: bold;
+      font-weight: 400;
       color: #999999;
       line-height: 26px;
       margin-top: 16px;

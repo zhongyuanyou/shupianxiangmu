@@ -126,7 +126,7 @@ export default {
     }
     .product-title {
       display: block;
-      font-size: 32px;
+      font-size: 30px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #222222;

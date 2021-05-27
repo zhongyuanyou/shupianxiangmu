@@ -633,7 +633,7 @@ export default {
   }
   .activities {
     margin-top: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
   }
   .bottom-notes {
     margin-top: 40px;
