@@ -220,6 +220,14 @@ const appHandler = {
       handleRequest(res, fn)
     })
   },
+  dggProperty: (
+    data = { classCode: '', field: { url: 'title' } },
+    fn = () => {}
+  ) => {
+    Bridge.callHandler('dgg_property', data, (res) => {
+      handleRequest(res, fn)
+    })
+  },
 }
 
 // 注册APP调用的js方法

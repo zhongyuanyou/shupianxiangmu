@@ -1,26 +1,24 @@
 <template>
   <div class="exclusive">
     <!-- 新人专属 -->
-    <div class="exclusive-floor" v-show="proTitle.length > 0">
+    <div v-show="proTitle.length > 0" class="exclusive-floor">
       <div class="exclusive-floor-top">
         <span class="title">新人专属礼</span>
-        <a class="more" href="javascript:;">
-          <span
-            v-md-map
-            v-md:webClick
-            data-name="工商注册_服务介绍_展开更多"
-            @click="onMore('')"
-            >更多
+        <a class="more" @click="onMore(proTitle[0].url)">
+          <span v-md-map v-md:webClick data-name="工商注册_服务介绍_展开更多"
+            >更多</span
+          >
+          <span>
             <my-icon
               name="list_ic_next"
               size="0.15rem"
-              color="#555555"
+              color="#4974f5"
             ></my-icon>
           </span>
         </a>
       </div>
       <div class="exclusive-floor-item">
-        <div class="event" @click="onMore('')">
+        <div class="event" @click="onMore(proTitle[0].url)">
           <div class="bgimg"></div>
           <!-- <p class="event-title">新人红包</p>
           <p class="event-content">立享多重优惠</p> -->
@@ -48,12 +46,12 @@
       </div>
     </div>
     <!-- 广告介绍 -->
-    <div class="advertising" @click="onServe">
+    <div class="advertising">
       <div
         v-for="(item, pro) of imgContent"
         :key="pro"
         class="advertising-list"
-        @click="onServe"
+        @click="onMore(item.url)"
       >
         <p>{{ item.title }}</p>
         <img :src="item.bgImg" alt="" />
@@ -100,24 +98,28 @@ export default {
               'https://cdn.shupian.cn/sp-pt/wap/images/84tta2vzooc0000.png',
             title: '先服务后收费',
             assistantTitle: '',
+            url: '',
           },
           {
             bgImg:
               'https://cdn.shupian.cn/sp-pt/wap/images/co9djdht52g0000.png',
             title: '千万补贴',
             assistantTitle: '精选好服务',
+            url: '',
           },
           {
             bgImg:
               'https://cdn.shupian.cn/sp-pt/wap/images/2cxu5ow9hmhw000.png',
             title: '政府补贴',
             assistantTitle: '政策解析',
+            url: '',
           },
           {
             bgImg:
               'https://cdn.shupian.cn/sp-pt/wap/images/e0b8ph3n46o0000.png',
             title: '快速通道',
             assistantTitle: '加急办理',
+            url: '',
           },
         ]
       },
@@ -125,21 +127,8 @@ export default {
   },
   methods: {
     onMore(url) {
-      if (url !== '') {
-        window.location.href = url
-      } else {
-        Toast('功能正在建设中，敬请期待')
-        // this.$root.$emit(
-        //   'openIMM',
-        //   this.listCount[index].id,
-        //   this.listCount[index].name,
-        //   this.listCount[index].jobNum,
-        //   this.listCount[index].imgSrc
-        // )
-      }
-    },
-    onServe() {
-      Toast('功能正在建设中，敬请期待')
+      console.log(url, 46546)
+      this.$parent.jumpLink(url)
     },
   },
 }
@@ -170,7 +159,7 @@ export default {
       .more {
         font-size: 22px;
         font-weight: 500;
-        color: #555555;
+        color: #4974f5;
         // line-height: 46px;
         height: 100%;
         display: flex;
@@ -197,23 +186,23 @@ export default {
           height: 160px;
           font-size: 1px;
         }
-        .event-title {
-          text-align: center;
-          font-size: 22px;
-          height: 22px;
-          margin-top: 26px;
-          margin-bottom: 8px;
-          font-weight: bold;
-          color: #fff9ef;
-        }
-        .event-content {
-          text-align: center;
-          font-size: 18px;
-          height: 17px;
-          font-weight: 400;
-          color: #fff9ef;
-          white-space: nowrap;
-        }
+        // .event-title {
+        //   text-align: center;
+        //   font-size: 22px;
+        //   height: 22px;
+        //   margin-top: 26px;
+        //   margin-bottom: 8px;
+        //   font-weight: bold;
+        //   color: #fff9ef;
+        // }
+        // .event-content {
+        //   text-align: center;
+        //   font-size: 18px;
+        //   height: 17px;
+        //   font-weight: 400;
+        //   color: #fff9ef;
+        //   white-space: nowrap;
+        // }
       }
       .product {
         border: 1px solid rgba(205, 205, 205, 0.5);

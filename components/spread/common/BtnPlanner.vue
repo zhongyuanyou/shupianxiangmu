@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     onlineConsult() {
+      if (JSON.stringify(this.planner) === '{}') return
       const planner = {
         mchUserId: this.planner.id,
         userName: this.planner.name,

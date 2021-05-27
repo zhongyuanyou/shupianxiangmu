@@ -379,6 +379,19 @@ export default {
     }
   },
   mounted() {
+    // @--神策埋点-浏览事件-只执行一次
+    window.spptMd.spptTrackRow('pageview', {
+      name: `推广资质交易聚合页浏览`,
+      track_code: 'SPTG000002',
+    })
+    // @--神策埋点-浏览事件-只执行一次
+    window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+      name: `推荐规划师浏览`,
+      track_code: 'SPTG000006',
+      recommend_number: '',
+      planner_number: this.pagePlanner.jobNum,
+      planner_name: this.pagePlanner.name,
+    })
     this.getGoodList(this.params)
     // @--判断页面是否在app里打开
     if (this.isInApp) {
@@ -436,6 +449,8 @@ export default {
             text: elem.name,
             marketingImg: '',
             url: elem.url,
+            description: elem.description,
+            execution: elem.executionParameters,
             md: {
               type: '',
               name: `专利交易聚合页_金刚区_${elem.name}`,
@@ -454,7 +469,6 @@ export default {
           return {
             img: elem.materialList[0].materialUrl,
             url: elem.materialList[0].materialLink,
-            name: elem.materialList[0].name,
             md: {
               name: `资质交易聚合页_${elem.materialList[0].name}`,
             },
@@ -470,17 +484,37 @@ export default {
             imgWidth: sizeData.imgWidth,
             imgHeight: sizeData.imgHeight,
             url: elem.materialList[0].materialLink,
-            name: elem.materialList[0].name,
+            description: elem.materialList[0].materialDescription || '',
+            execution: elem.materialList[0].executeParam || '',
             md: {
-              name: `资质交易聚合页_${elem.materialList[0].name}`,
+              name: `资质交易聚合页_${elem.materialList[0].materialDescription}`,
             },
           }
           this.lification.push(obj)
         })
+        console.log(this.lification)
       }
     },
     // 跳转链接-IM规划师
-    jumpLink(url) {
+    jumpLink(url, description, execution) {
+      // app跳转
+      try {
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          this.$appFn.dggProperty(jsonObj, (res) => {
+            console.log(res, 7777)
+          })
+          return
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url

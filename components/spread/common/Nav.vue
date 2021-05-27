@@ -14,7 +14,7 @@
           :data-name="`${item.name}`"
         >
           <div v-if="item.label">{{ item.label }}</div>
-          <a @click="onHerf(item.url)">
+          <a @click="onHerf(item.url, item.name)">
             <img
               v-if="item.size === 'small'"
               v-lazy="item.imageUrl + $ossImgSet(48, 48)"
@@ -92,14 +92,14 @@ export default {
       const scroLeft = Math.floor((scrollLeft / this.canScrollWidth) * 100) // 计算导航容器滚动百分比
       this.scroLeft = scroLeft / 2
     },
-    onHerf(url) {
-      if (url) {
-        if (url.indexOf('http') > -1) {
-          window.location.href = url
-          return
-        }
-      }
-      this.$parent.jumpLink(url)
+    onHerf(url, name) {
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //     // return
+      //   }
+      // }
+      this.$parent.jumpLink(url, name)
     },
     jumpHandle(item) {
       let url = ''

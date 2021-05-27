@@ -1,12 +1,23 @@
-import { CHIPS_WAP_SPREAD_BASE_URL } from '../../config/constant'
+import {
+  CHIPS_WAP_SPREAD_BASE_URL,
+  CHIPS_WAP_BASE_URL,
+} from '../../config/constant'
 
 const newSpreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/list.do`,
   service_product_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/service_product_list.do`,
   trade_product_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/trade_product_list.do`,
+
   // trade_product_list: `http://172.16.132.116:7001/service/nk/newChipSpread/v1/trade_product_list.do`,
 }
-
+// 融资贷款
+const financingApi = {
+  smsCode: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_smsCode.do`,
+  check_smsCode: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/validation_smsCode.do`,
+  knowledge_code: `${CHIPS_WAP_BASE_URL}/nk/known_category/v1/list.do`,
+  knowledge_list: `${CHIPS_WAP_BASE_URL}/nk/question_article/v2/find_page.do`,
+  productList: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/product_list.do`,
+}
 const spreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/list.do`,
 }
@@ -42,4 +53,5 @@ export {
   chipSpread,
   newSpreadApi,
   productListApi,
+  financingApi,
 }

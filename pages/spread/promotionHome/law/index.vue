@@ -433,8 +433,7 @@ export default {
               })
               const obj = {
                 code: index + 1,
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/6671aj4ro3g0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/6671aj4ro3g0000.png',
                 title: item.name,
                 desc: item.productDescription,
                 currentPrice:
@@ -538,9 +537,8 @@ export default {
       data.forEach((item, idx) => {
         if (item.locationCode === 'ad113254') {
           item.sortMaterialList.forEach((elem, idx) => {
-            const lawyerMsg = elem.materialList[0].materialDescription.split(
-              '#'
-            )
+            const lawyerMsg =
+              elem.materialList[0].materialDescription.split('#')
             const obj = {
               code: idx + 1,
               name: elem.materialList[0].materialName,

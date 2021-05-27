@@ -2,7 +2,12 @@
   <div class="intellectual-property">
     <!-- S 头部和金刚区 -->
     <div class="top-background">
-      <NavTop title="知识产权" @searchKeydownHandle="searchKeydownHandle" />
+      <NavTop
+        title="知识产权"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <Nav
         :roll-nav="rollNav"
         class="navs"
@@ -12,7 +17,11 @@
     <!-- E 头部和金刚区 -->
 
     <!-- S 新人专属 -->
-    <Exclusive :pro-title="proTitle" :img-content="imgContent" />
+    <Exclusive
+      v-if="proTitle.length > 0"
+      :pro-title="proTitle"
+      :img-content="imgContent"
+    />
     <!-- E 新人专属 -->
 
     <!--S 免费体验 薯片课程 -->
@@ -20,47 +29,47 @@
     <!--E 免费体验 薯片课程-->
 
     <!-- S 列表 -->
-    <TabServiceItem :title-name="titleName" @change="onChange">
-      <template v-slot:list>
-        <KnowledgeList ref="intellectual" :default-list="defaultList" />
-      </template>
-    </TabServiceItem>
+    <IntellectualList :title-name="titleName" />
     <!-- E 列表 -->
+
+    <!-- START 规划师-->
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
+    <!-- END 规划师-->
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
-import { chipSpread } from '@/api/spread'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 
 import NavTop from '@/components/spread/common/NavTop'
 import Nav from '@/components/spread/common/Nav'
-import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive'
-import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness'
-import TabServiceItem from '@/components/spread/promotionHome/intellectualProperty/TabServiceItem'
-import KnowledgeList from '@/components/spread/promotionHome/intellectualProperty/KnowledgeList.vue'
+import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
+import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
+import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'IntellectualProperty',
   components: {
     NavTop,
+    Nav,
     Exclusive,
     Choiceness,
-    TabServiceItem,
-    KnowledgeList,
-    Nav,
+    IntellectualList,
+    BtnPlanner,
   },
   async asyncData({ $axios }) {
-    // const url = 'http://172.16.132.70:7001/service/nk/chipSpread/v1/list.do'
-    const locations = 'ad113279,ad113277,ad113265,ad113236,ad113235,ad113224'
-    const code = 'nav100060'
-    const centerCode = 'IntellectualProperty'
+    const locationCodes = 'ad113236,ad113279,ad113265,ad113277,ad100046'
+    const navCodes = 'nav100060'
+    const code = 'CRISPS-C-ZSCQ'
     const dataRes = defaultRes
     try {
-      const res = await $axios.get(chipSpread.list, {
+      const res = await $axios.get(newSpreadApi.list, {
         params: {
-          locationCodes: locations,
-          navCodes: code,
-          productCenterCode: centerCode,
+          locationCodes,
+          navCodes,
+          code,
         },
       })
       if (res.code === 200) {
@@ -71,17 +80,18 @@ export default {
       }
       console.log('请求失败')
       return {
-        resultData: dataRes.data,
+        // resultData: dataRes.data,
       }
     } catch (error) {
       console.log('请求错误')
       return {
-        resultData: dataRes.data,
+        // resultData: dataRes.data,
       }
     }
   },
   data() {
     return {
+      placeholder: '请输入关键字',
       marginTop: 0,
       // 金刚区
       rollNav: [
@@ -217,64 +227,49 @@ export default {
       // 体验 课程
       content: {
         experience: {
-          title: '免费体验',
           imgVal: [
             {
-              img:
-                'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+              img: 'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+              title: '免费体验',
               imgNmae: '商标查询',
+              label: '限时免费',
+              url: '',
             },
             {
-              img:
-                'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+              img: 'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+              title: '',
               imgNmae: '版权服务',
+              label: '限时免费',
+              url: '',
             },
           ],
         },
         curriculum: {
-          title: '薯片课程',
           imgVal: [
             {
-              img:
-                'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+              img: 'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+              title: '薯片课程',
               imgNmae: '商标案件如...',
+              label: '包办包过',
+              url: '',
             },
             {
-              img:
-                'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+              img: 'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+              title: '',
               imgNmae: '高企认定政...',
+              label: '包办包过',
+              url: '',
             },
           ],
         },
       },
-
       // 列表导航
       titleName: [
-        {
-          code: 1,
-          type: 1,
-          name: '热门服务',
-        },
-        {
-          code: 2,
-          type: 1,
-          name: '商标服务',
-        },
-        {
-          code: 3,
-          type: 1,
-          name: '专利服务',
-        },
-        {
-          code: 4,
-          type: 1,
-          name: '知识服务',
-        },
-        {
-          code: 5,
-          type: 1,
-          name: '版权服务',
-        },
+        // {
+        // code: 1,
+        // type: 'FL20210425163778',
+        // name: '热门服务',
+        // },
       ],
       // 当前列表状态
       changeState: {
@@ -349,7 +344,23 @@ export default {
           url: '',
         },
       ],
+      // 页面规划师
+      pagePlanner: {},
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: '知识产权聚合页_底部展位_在线咨询',
+          type: '售前',
+        },
+      },
     }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
   mounted() {
     // 初始化数据
@@ -359,7 +370,7 @@ export default {
     try {
       if (JSON.stringify(resData) !== '{}') {
         this.navList(resData.navs.nav100060 || [])
-        // this.productTitle(resData.productClassList || [])
+        this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
           if (elem.locationCode === 'ad113236') {
             this.proTitleData(elem.sortMaterialList)
@@ -370,7 +381,7 @@ export default {
           if (elem.locationCode === 'ad113265') {
             this.experience(elem.sortMaterialList)
           }
-          if (elem.locationCode === 'ad113277') {
+          if (elem.locationCode === (this.isInApp ? 'ad100046' : 'ad113277')) {
             this.curriculum(elem.sortMaterialList)
           }
         })
@@ -379,24 +390,55 @@ export default {
       console.log(error)
     }
   },
+
+  created() {
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
+    }
+  },
   methods: {
     // 搜索
-    searchKeydownHandle(e) {
-      console.log(e)
+    clickInputHandle(e) {
+      console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 请求数据
     onChange(changeObj) {
-      // this.changeState = changeObj
       this.$refs.intellectual.initialize(changeObj)
     },
     // 金刚区导航栏
     navList(data) {
-      data.sort((a, b) => {
-        return a.sort - b.sort
-      })
       if (data.length !== 0) {
         this.rollNav = data.map((elem, index) => {
           return {
+            sort: elem.sort,
             code: index,
             name: elem.name,
             url: elem.url,
@@ -406,21 +448,23 @@ export default {
           }
         })
         // this.rollNav.reverse()
+        this.rollNav.sort((a, b) => {
+          return a.sort - b.sort
+        })
       }
     },
     // 新人专属
     proTitleData(data) {
       if (data.length !== 0) {
         this.proTitle = data.map((elem, index) => {
+          const data = elem.materialList[0]
           return {
-            title: elem.materialList[0].materialName,
-            price: parseInt(
-              elem.materialList[0].materialDescription.split('#')[0]
-            ),
-            label: elem.materialList[0].materialDescription.split('#')[1],
-            count: elem.materialList[0].materialDescription.split('#')[2],
-            img: elem.materialList[0].materialUrl,
-            url: '',
+            title: data.materialName.split('#')[1] || '',
+            price: parseInt(data.materialDescription.split('#')[0]),
+            label: data.materialDescription.split('#')[1],
+            count: data.materialDescription.split('#')[2],
+            img: data.materialUrl,
+            url: data.materialLink,
           }
         })
       }
@@ -429,10 +473,12 @@ export default {
     imgContentData(data) {
       if (data.length !== 0) {
         this.imgContent = data.map((elem, index) => {
+          const data = elem.materialList[0]
           return {
-            bgImg: elem.materialList[0].materialUrl,
-            title: elem.materialList[0].materialName,
-            assistantTitle: elem.materialList[0].materialDescription,
+            bgImg: data.materialUrl,
+            title: data.materialName.split('#')[1] || '',
+            assistantTitle: data.materialDescription,
+            url: data.materialLink,
           }
         })
       }
@@ -441,11 +487,13 @@ export default {
     experience(data) {
       if (data.length !== 0) {
         this.content.experience.imgVal = data.map((elem, index) => {
+          const data = elem.materialList[0]
           return {
-            img: elem.materialList[0].materialUrl,
-            imgNmae: elem.materialList[0].materialDescription.split('#')[0],
-            label: elem.materialList[0].materialDescription.split('#')[1],
-            url: '',
+            img: data.materialUrl,
+            title: data.materialName.split('#')[1],
+            imgNmae: data.materialDescription.split('#')[0],
+            label: data.materialDescription.split('#')[1],
+            url: data.materialLink || '',
           }
         })
       }
@@ -453,40 +501,99 @@ export default {
     curriculum(data) {
       if (data.length !== 0) {
         this.content.curriculum.imgVal = data.map((elem, index) => {
+          const data = elem.materialList[0]
           return {
-            img: elem.materialList[0].materialUrl,
-            imgNmae: elem.materialList[0].materialDescription.split('#')[0],
-            label: elem.materialList[0].materialDescription.split('#')[1],
-            url: '',
+            img: data.materialUrl,
+            title: data.materialName.split('#')[1],
+            imgNmae: data.materialDescription.split('#')[0],
+            label: data.materialDescription.split('#')[1],
+            url: data.materialLink || '',
           }
         })
       }
     },
 
     // 列表导航
-    productTitle(data) {
-      if (data.length !== 0) {
-        this.changeState = {
-          type: 0,
-          code: data[0].code,
-          name: data[0].name,
-        }
-        // this.$refs.intellectual.initialize(this.changeState)
-
-        // 初始化请求数据
-        this.titleName = data.map((elem, index) => {
-          return {
-            type: index,
-            code: elem.code,
-            name: elem.name,
-          }
+    productClassData(data) {
+      console.log(1344, data)
+      if (data.length === 0) return
+      // const classArr = []
+      data.forEach((item, index) => {
+        this.titleName.push({
+          type: item.ext1,
+          code: item.ext1,
+          name: item.name,
         })
-        // if (this.$refs.intellectual !== undefined) {
-        // this.$refs.intellectual.initialize(this.changeState)
-        // }
-
-        // this.onChange(this.changeState)
+      })
+      // this.titleName = classArr
+    },
+    // 推介规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
       }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425164319', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res, '调用规划师')
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
+    jumpLink(url, name) {
+      if (name === '全部服务') {
+        this.$router.push('/financing/category')
+        return
+      }
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
   head() {

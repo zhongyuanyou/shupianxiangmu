@@ -2,9 +2,11 @@
   <div class="giftbag">
     <div class="giftbag-box">
       <div class="giftbag-box-title">
-        <div class="giftbag-box-title-left">新人专属礼</div>
-        <a href="javascrpt:;" class="giftbag-box-title-right">
-          <span>更多</span>
+        <div class="giftbag-box-title-left">
+          {{ giftBagList[0].title || '新人专属礼' }}
+        </div>
+        <a class="giftbag-box-title-right" @click="jump(giftBagList[0].url)">
+          <span @click="jump(giftBagList[0].url)">更多</span>
           <my-icon
             class="next-icon"
             name="list_ic_next"
@@ -14,14 +16,14 @@
         </a>
       </div>
       <div class="giftbag-box-content">
-        <div
+        <!-- <div
           class="new-people-giftbag"
           :style="{ backgroundImage: 'url(' + bg + ')' }"
           @click="prompt"
-        >
-          <!-- <span class="new-people-giftbag-title">新人红包</span>
+        > -->
+        <!-- <span class="new-people-giftbag-title">新人红包</span>
           <span class="new-people-giftbag-price">100<span>元</span></span> -->
-          <!-- <div class="new-people-giftbag-icon">
+        <!-- <div class="new-people-giftbag-icon">
             <my-icon
               class="search-icon"
               name="list_ic_next"
@@ -29,19 +31,23 @@
               color="#FFFFFF"
             ></my-icon>
           </div> -->
-        </div>
+        <!-- </div> -->
         <div class="new-people-giftbag-show">
           <ul>
             <li
-              v-for="(item, index) in giftBagList"
-              :key="index"
-              @click="prompt"
+              v-for="(item, Gifkey) in giftBagList"
+              :key="Gifkey"
+              :style="{ backgroundImage: 'url(' + item.headImage + ')' }"
+              @click="jump(item.url)"
             >
               <!-- @click="jump(item.url)" -->
-              <div class="head-img"><img :src="item.headImage" alt="" /></div>
-              <span class="title">{{ item.title }}</span>
-              <span class="price">{{ item.price }}</span>
-              <span class="label">{{ item.label }}</span>
+              <!-- <div class="head-img"><img :src="item.headImage" alt="" /></div> -->
+              <div v-if="Gifkey > 0">
+                <!-- <div class="head-img"></div> -->
+                <span class="title">{{ item.title }}</span>
+                <span class="price">{{ item.price }}</span>
+                <!-- <span class="label">{{ item.label }}</span> -->
+              </div>
             </li>
           </ul>
         </div>
@@ -59,7 +65,26 @@ export default {
     giftBagList: {
       type: Array,
       default: () => {
-        return []
+        return [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/oqnu6gqeojk000.png',
+            url: '',
+            title: '有限公司注册',
+            price: '0元',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/13ue2gpa99mo000.png',
+            url: '',
+            title: '一般纳税人…',
+            price: '1元/月',
+          },
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/b9s8062zh1s0000.png',
+            url: '',
+            title: '服务代金券',
+            price: '600元',
+          },
+        ]
       },
     },
   },
@@ -70,7 +95,13 @@ export default {
   },
   methods: {
     jump(url) {
-      window.location.href = url
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$parent.jumpLink(url)
     },
     prompt() {
       Toast('功能正在建设中，敬请期待')
@@ -175,9 +206,9 @@ export default {
       }
     }
     .new-people-giftbag-show {
-      width: 490px;
+      // width: 490px;
       height: 100%;
-      padding: 10px 10px 12px 10px;
+      // padding: 10px 10px 12px 10px;
       > ul {
         height: 100%;
         width: 100%;
@@ -185,13 +216,14 @@ export default {
         justify-content: space-between;
         align-items: center;
         > li {
-          width: 150px;
+          width: 167px;
           height: 100%;
+          background-size: cover;
           position: relative;
           .head-img {
             width: 150px;
             height: 140px;
-            background: #f4f4f4;
+            // background: #f4f4f4;
             border-radius: 8px;
             > img {
               width: 100%;
@@ -208,6 +240,9 @@ export default {
             display: block;
             .textOverflow(1);
             width: 150px;
+            position: absolute;
+            bottom: 42px;
+            left: 10px;
           }
           .price {
             display: block;
@@ -218,22 +253,25 @@ export default {
             color: #ec5330;
             line-height: 22px;
             margin-top: 12px;
-          }
-          .label {
-            width: 74px;
-            height: 32px;
-            border-radius: 15px 32px 32px 2px;
-            font-size: 18px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: bold;
-            color: #ffffff;
-            line-height: 37px;
-            background: #ff676a;
-            text-align: center;
             position: absolute;
-            left: 12px;
-            top: 96px;
+            bottom: 8px;
+            left: 10px;
           }
+          // .label {
+          //   width: 74px;
+          //   height: 32px;
+          //   border-radius: 15px 32px 32px 2px;
+          //   font-size: 18px;
+          //   font-family: PingFangSC-Medium, PingFang SC;
+          //   font-weight: bold;
+          //   color: #ffffff;
+          //   line-height: 37px;
+          //   background: #ff676a;
+          //   text-align: center;
+          //   position: absolute;
+          //   left: 12px;
+          //   top: 96px;
+          // }
         }
       }
     }

@@ -2,7 +2,12 @@
   <div class="internet">
     <!-- 头部 -->
     <div class="head">
-      <Header title="IT互联网" />
+      <Header
+        title="IT互联网"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
       <Nav :roll-nav="rollNav" class="nav"></Nav>
     </div>
     <!-- 金刚区 -->
@@ -16,7 +21,10 @@
     <!-- 活动功能展示 -->
     <Advertising :advertising-list="advertisingList"></Advertising>
     <!-- 产品列表 -->
-    <Recommended></Recommended>
+    <Recommended :title-name="titleName"></Recommended>
+
+    <!-- 规划师 -->
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
   </div>
 </template>
 
@@ -26,9 +34,10 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
 import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
 import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
-import Recommended from '@/components/spread/promotionHome/internetHomePage/Recommended.vue'
-import { chipSpread } from '@/api/spread'
+import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 import { internetData } from '@/assets/spread/promotionHome/internetHomePage.js'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 export default {
   components: {
@@ -37,15 +46,18 @@ export default {
     GiftBag,
     Advertising,
     Recommended,
+    BtnPlanner,
   },
   async asyncData({ $axios }) {
     try {
-      const res = await $axios.get(chipSpread.list, {
+      const res = await $axios.get(newSpreadApi.list, {
         params: {
+          //  locationCodes:
+          //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
           locationCodes:
-            'ad113267,ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
+            'ad113229,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045',
           navCodes: 'nav100061',
-          productCenterCode: 'Internet',
+          code: 'CRISPS-HLW',
         },
       })
 
@@ -56,60 +68,81 @@ export default {
         }
       }
       console.log('请求失败')
-      return {
-        result: internetData,
-      }
+      // return {
+      //   result: internetData,
+      // }
     } catch (error) {
       console.log('请求错误')
       // 请求出错也要保证页面正常显示
-      return {
-        result: internetData,
-      }
+      // return {
+      //   result: internetData,
+      // }
     }
   },
   data() {
     return {
+      placeholder: '请输入关键字',
       // marginTop: -120,
       rollNav: [],
-      giftBagList: [],
+      giftBagList: [{}],
       advertisingList: {
         limitedTime: {
-          title: '限时秒杀',
-          describe: '爆款低价',
-          product: [],
+          title: '限时秒杀1',
+          describe: '爆款低价1',
+          imgUrl: '',
+          label: '',
+          url: '',
         },
         live: {
-          title: '企服直播',
-          describe: '无门槛 新用户专享',
+          title: '企服直播1',
+          describe: '无门槛 新用户专享1',
           product: [],
         },
         freeTrial: {
-          title: '免费试用',
-          describe: '0元体验 名额有限',
+          title: '免费试用1',
+          describe: '0元体验 名额有限1',
           product: [],
         },
         course: {
-          title: '薯片课程',
-          describe: '优质课程 创业首选',
+          title: '薯片课程1',
+          describe: '优质课程 创业首选1',
           product: [],
         },
       },
+      titleName: [
+        // {
+        //   code: 'FL20210425163778',
+        //   type: 'FL20210425163778',
+        //   name: '推荐',
+        //   describe: '猜你喜欢',
+        // },
+      ],
+      // 页面规划师
+      pagePlanner: {},
     }
   },
   computed: {
     ...mapState({
       isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
   },
+  created() {
+    if (process.client) {
+      // 请求
+      this.getPagePlanner('app-ghsdgye-02')
+    }
+  },
   mounted() {
     try {
-      if (JSON.stringify(this.resultData) !== '{}') {
+      if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)
+        this.productClassData(this.result.data.classList || [])
         if (this.result.data.adList.length > 0) {
           this.getData(this.result.data.adList)
         } else {
-          this.getData(internetData.data.adList)
+          // this.getData(internetData.data.adList)
         }
       }
     } catch (error) {
@@ -117,29 +150,45 @@ export default {
     }
   },
   methods: {
-    // 跳转判断
-    openIM(url) {
-      if (url) {
-        window.location.href = url
-      } else {
-        const guiHuaShi = this.planner
-        this.$root.$emit(
-          'openIMM',
-          guiHuaShi.id,
-          guiHuaShi.name || '',
-          guiHuaShi.jobNum || '',
-          guiHuaShi.imgSrc || ''
+    // 搜索
+    clickInputHandle(e) {
+      console.log(this.$router)
+      if (this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
         )
+        return
       }
+      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 金刚区数据处
     navDetail(data) {
-      if (data.length === 0) {
-      } else {
+      if (data.length !== 0) {
         const navList = []
         data.forEach((item, index) => {
           const obj = {
             code: index + 1,
+            sort: item.sort,
             name: item.name,
             url: item.url,
             size: 'small',
@@ -148,21 +197,41 @@ export default {
           }
           navList.push(obj)
         })
-        this.rollNav = navList.reverse()
+        // this.rollNav = navList.reverse()
+        this.rollNav = navList
+        this.rollNav.sort((a, b) => {
+          return a.sort - b.sort
+        })
       }
     },
-    // 新人红包数据处理
+    // 产品分类
+    productClassData(data) {
+      if (data.length === 0) return
+      // const classArr = []
+      data.forEach((item, index) => {
+        this.titleName.push({
+          type: item.ext1,
+          code: item.ext1,
+          name: item.name,
+          describe: item.ext2 || '优质选购',
+        })
+      })
+      // this.titleName = classArr
+    },
     getData(data) {
       data.forEach((item, idx) => {
+        // 新人红包数据处理
         if (item.locationCode === 'ad113229') {
           const bagList = []
           item.sortMaterialList.forEach((elem, index) => {
             const msg = elem.materialList[0].materialDescription.split('#')
             const obj = {
+              // maxTitle: elem.materialList[0].materialName.split('#')[1],
               code: index + 1,
               headImage: elem.materialList[0].materialUrl,
-              label: msg[0],
-              title: elem.materialList[0].materialName.split('#')[1],
+              // label: msg[0],
+              // title: elem.materialList[0].materialName.split('#')[1],
+              title: msg[0],
               price: msg[1],
               url: elem.materialList[0].materialLink,
             }
@@ -170,61 +239,131 @@ export default {
           })
           this.giftBagList = bagList
         }
-        if (item.locationCode === 'ad113280') {
-          const seckill = []
+        if (item.locationCode === 'ad113270') {
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              imgUrl: elem.materialList[0].materialUrl,
-              label: elem.materialList[0].materialDescription,
-              name: elem.materialList[0].materialName,
-              url: elem.materialList[0].materialLink,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            seckill.push(obj)
+            this.advertisingList.limitedTime = obj
           })
-          this.advertisingList.limitedTime.product = seckill
         }
-        if (item.locationCode === 'ad113271') {
-          const live = []
+        if (item.locationCode === (this.isInApp ? 'ad100042' : 'ad113271')) {
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              url: elem.materialList[0].materialLink,
-              imgUrl: elem.materialList[0].materialUrl,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            live.push(obj)
+            this.advertisingList.live = obj
           })
-          this.advertisingList.live.product = live
         }
         if (item.locationCode === 'ad113272') {
-          const freeTrial = []
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              imgUrl: elem.materialList[0].materialUrl,
-              label: elem.materialList[0].materialDescription,
-              name: elem.materialList[0].materialName.split('#')[1],
-              url: elem.materialList[0].materialLink,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            freeTrial.push(obj)
+            this.advertisingList.freeTrial = obj
           })
-          this.advertisingList.freeTrial.product = freeTrial
         }
-        if (item.locationCode === 'ad113274') {
-          const course = []
+        if (item.locationCode === (this.isInApp ? 'ad100045' : 'ad113274')) {
           item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
             const obj = {
-              code: index + 1,
-              imgUrl: elem.materialList[0].materialUrl,
-              label: elem.materialList[0].materialDescription,
-              name: elem.materialList[0].materialName.split('#')[1],
-              url: elem.materialList[0].materialLink,
+              code: index,
+              title: resObj.materialDescription.split('#')[0] || '',
+              describe: resObj.materialDescription.split('#')[1] || '',
+              imgUrl: resObj.materialUrl,
+              label: resObj.materialName.split('#')[1] || '',
+              url: resObj.materialLink,
             }
-            course.push(obj)
+            this.advertisingList.course = obj
           })
-          this.advertisingList.course.product = course
         }
       })
+    },
+    // 推介规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425164016', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res, '调用规划师')
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
+    jumpLink(url, name) {
+      if (name === '全部服务') {
+        this.$router.push('/financing/category')
+        return
+      }
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
   head() {

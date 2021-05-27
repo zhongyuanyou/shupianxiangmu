@@ -3,27 +3,31 @@
     <div class="my-component">
       <div class="header">
         <span class="header-title">新人专属礼</span>
-        <button class="header-btn">
+        <button class="header-btn" @click="() => $parent.jumpLink(list[0].url)">
           更多<my-icon name="list_ic_next" size="0.14rem"></my-icon>
         </button>
       </div>
-      <div class="content" @click="() => $parent.toast()">
-        <div class="content-left">
+      <div class="content">
+        <!-- <div class="content-left">
           <img
             src="https://cdn.shupian.cn/sp-pt/wap/images/bxe8tldrtk00000.png"
           />
-        </div>
+        </div> -->
         <div class="content-right">
           <div
-            v-for="(item, index) in list"
-            :key="index"
+            v-for="(item, itemKey) in list"
+            :key="itemKey"
+            :style="{ backgroundImage: 'url(' + item.img + ')' }"
             class="content-right-item"
+            @click="() => $parent.jumpLink2(item.url)"
           >
-            <div class="content-right-item-img">
-              <img :src="item.img" />
+            <div v-if="itemKey > 0">
+              <div class="content-right-item-img">
+                <!-- <img :src="item.img" /> -->
+              </div>
+              <div class="content-right-item-title">{{ item.title }}</div>
+              <div class="content-right-item-desc">{{ item.desc }}</div>
             </div>
-            <div class="content-right-item-title">{{ item.title }}</div>
-            <div class="content-right-item-desc">{{ item.desc }}</div>
           </div>
         </div>
       </div>
@@ -66,19 +70,20 @@ export default {
 <style lang="less" scoped>
 .my-component {
   background: #ffffff;
+  height: 340px;
   border-radius: 24px;
   margin: 0px 20px;
-  padding: 24px 20px;
+  padding: 18px 20px 26px;
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     .header-title {
       font-size: 32px;
       font-weight: bold;
       color: #222222;
-      line-height: 32px;
+      line-height: 44px;
     }
     .header-btn {
       font-size: 22px;
@@ -86,6 +91,7 @@ export default {
       color: #555555;
       line-height: 22px;
       background-color: #fff;
+      line-height: 44px;
     }
   }
 
@@ -105,16 +111,16 @@ export default {
       .content-right-item {
         width: 160px;
         height: 234px;
-        background: #ffffff;
+        // background: #ffffff;
         border-radius: 8px;
         border: 1px solid rgba(205, 205, 205, 0.5);
-
+        background-size: 100%;
         padding: 10px;
         margin-right: 10px;
         .content-right-item-img {
           width: 140px;
           height: 140px;
-          background-color: #f4f4f4;
+          // background-color: #f4f4f4;
           img {
             width: 140px;
             height: 140px;
@@ -124,14 +130,16 @@ export default {
           font-size: 22px;
           font-weight: bold;
           color: #222222;
-          line-height: 22px;
-          margin: 12px 0;
+          line-height: 30px;
+          margin: 12px 0 4px 0;
+          .textOverflow(1);
         }
         .content-right-item-desc {
           font-size: 22px;
-          font-weight: bold;
+          font-weight: 400;
           color: #ec5330;
-          line-height: 22px;
+          line-height: 30px;
+          .textOverflow(1);
         }
       }
     }

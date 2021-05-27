@@ -8,7 +8,13 @@
           v-md:p_IMClick
           :data-name="`商标交易聚合页_商标服务_${trademarkService[0].name}_在线咨询`"
           href="javascript:;"
-          @click="chat(trademarkService[0].url)"
+          @click="
+            chat(
+              trademarkService[0].url,
+              trademarkService[0].description,
+              trademarkService[0].execution
+            )
+          "
           ><img :src="trademarkService[0].img" alt=""
         /></a>
       </div>
@@ -18,7 +24,13 @@
           v-md:p_IMClick
           :data-name="`商标交易聚合页_商标服务_${trademarkService[1].name}_在线咨询`"
           href="javascript:;"
-          @click="chat(trademarkService[1].url)"
+          @click="
+            chat(
+              trademarkService[1].url,
+              trademarkService[1].description,
+              trademarkService[1].execution
+            )
+          "
           ><img :src="trademarkService[1].img" alt=""
         /></a>
         <a
@@ -26,7 +38,13 @@
           v-md:p_IMClick
           :data-name="`商标交易聚合页_商标服务_${trademarkService[2].name}_在线咨询`"
           href="javascript:;"
-          @click="chat(trademarkService[2].url)"
+          @click="
+            chat(
+              trademarkService[2].url,
+              trademarkService[2].description,
+              trademarkService[2].execution
+            )
+          "
           ><img :src="trademarkService[2].img" alt=""
         /></a>
       </div>
@@ -62,9 +80,9 @@ export default {
   },
 
   methods: {
-    chat(url) {
+    chat(url, description, execution) {
       if (url) {
-        this.$parent.jumpLink(url)
+        this.$parent.jumpLink(url, description, execution)
       }
     },
   },

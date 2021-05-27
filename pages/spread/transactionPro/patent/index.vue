@@ -390,6 +390,20 @@ export default {
     }
   },
   mounted() {
+    // @--神策埋点-浏览事件-只执行一次
+    window.spptMd.spptTrackRow('pageview', {
+      name: `推广专利交易聚合页浏览`,
+      track_code: 'SPTG000002',
+    })
+    // @--神策埋点-浏览事件-只执行一次
+    window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+      name: `推荐规划师浏览`,
+      track_code: 'SPTG000006',
+      recommend_number: '',
+      planner_number: this.pagePlanner.jobNum,
+      planner_name: this.pagePlanner.name,
+    })
+
     // this.POSITION_CITY({
     //   type: 'rest',
     // })
@@ -440,7 +454,26 @@ export default {
     choiceCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
-    jumpLink(url) {
+    jumpLink(url, description, execution) {
+      console.log(url, description, execution)
+      // app跳转
+      try {
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          console.log(lastObj, execution.split(':')[0])
+          this.$appFn.dggProperty(jsonObj, (res) => {
+            console.log(res, 7777)
+          })
+          return
+        }
+      } catch (error) {
+        console.log(error)
+      }
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
@@ -456,9 +489,13 @@ export default {
           return {
             sort: elem.sort,
             img: elem.navigationImageUrl,
-            text: elem.name,
+            text: elem.name || '',
             marketingImg: '',
             url: elem.url,
+            description: elem.description || '',
+            execution: elem.executionParameters || '',
+            // description: '地基基础',
+            // execution: 'appFilter:company_industry',
             md: {
               type: '',
               name: `专利交易聚合页_金刚区_${elem.name}`,
@@ -500,8 +537,10 @@ export default {
         this.choiceness = data.map((elem, index) => {
           return {
             img: elem.materialList[0].materialUrl,
-            name: elem.materialList[0].name,
+            // name: elem.materialList[0].name,
             url: elem.materialList[0].materialLink,
+            description: elem.materialList[0].materialDescription || '',
+            execution: elem.materialList[0].executeParam || '',
           }
         })
       }
@@ -512,20 +551,25 @@ export default {
         this.hotList = data.map((elem, index) => {
           return {
             img: elem.materialList[0].materialUrl,
-            name: elem.materialList[0].name,
+            // name: elem.materialList[0].name,
             url: elem.materialList[0].materialLink,
+            description: elem.materialList[0].materialDescription || '',
+            execution: elem.materialList[0].executeParam || '',
           }
         })
       }
     },
-    // 热门行业
+    // 专利分类
     maxMake(data) {
       if (data.length !== 0) {
         this.make.maxMake = {
           img: data[0].materialUrl,
-          name: data[0].name,
+          // name: data[0].name,
           url: data[0].materialLink,
+          description: data[0].materialDescription || '',
+          execution: data[0].executeParam || '',
         }
+        console.log(this.make.maxMake, 46768)
       }
     },
     minMake(data) {
@@ -533,8 +577,10 @@ export default {
         this.make.minMake = data.map((elem, index) => {
           return {
             img: elem.materialList[0].materialUrl,
-            name: elem.materialList[0].name,
+            // name: elem.materialList[0].name,
             url: elem.materialList[0].materialLink,
+            description: elem.materialList[0].materialDescription || '',
+            execution: elem.materialList[0].executeParam || '',
           }
         })
       }

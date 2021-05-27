@@ -320,6 +320,8 @@ export default {
           text: elem.name,
           marketingImg: '',
           url: elem.url,
+          description: elem.description,
+          execution: elem.executionParameters,
           md: {
             type: '',
             name: `专利交易聚合页_金刚区_${elem.name}`,
@@ -346,6 +348,8 @@ export default {
                 iosUrl: elem.materialList[0].iosLink,
                 wapUrl: elem.materialList[0].wapLink,
                 androidUrl: elem.materialList[0].androidLink,
+                description: elem.materialList[0].materialDescription || '',
+                execution: elem.materialList[0].executeParam || '',
                 md: {
                   type: '',
                   name: '',
@@ -370,6 +374,8 @@ export default {
                 iosUrl: elem.materialList[0].iosLink,
                 wapUrl: elem.materialList[0].wapLink,
                 androidUrl: elem.materialList[0].androidLink,
+                description: elem.materialList[0].materialDescription || '',
+                execution: elem.materialList[0].executeParam || '',
               }
               hot.push(obj)
             })
@@ -393,6 +399,8 @@ export default {
                 androidUrl: elem.materialList[0].androidLink,
                 imgWidth: 331,
                 imgHeight: 172,
+                description: elem.materialList[0].materialDescription || '',
+                execution: elem.materialList[0].executeParam || '',
               }
               pro.push(obj)
             })
@@ -416,6 +424,8 @@ export default {
                 androidUrl: elem.materialList[0].androidLink,
                 imgWidth: 215,
                 imgHeight: 205,
+                description: elem.materialList[0].materialDescription || '',
+                execution: elem.materialList[0].executeParam || '',
               }
               pro.push(obj)
             })
@@ -431,7 +441,23 @@ export default {
     choiceCity() {
       this.$router.push({ path: '/city/choiceCity' })
     },
-    jumpLink(url) {
+    jumpLink(url, description, execution) {
+      // app跳转 待改
+      try {
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url

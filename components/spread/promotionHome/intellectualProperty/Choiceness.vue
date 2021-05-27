@@ -2,15 +2,18 @@
   <div class="choiceness">
     <!-- 免费体验 -->
     <div class="choiceness-item">
-      <p class="title">{{ content.title || '免费体验' }}</p>
+      <p class="title">
+        {{ content.experience.imgVal[0].title || '免费体验' }}
+      </p>
       <div class="choiceness-content">
         <div
           v-for="(contents, proKey) of content.experience.imgVal"
           :key="proKey"
           class="content"
+          @click="onMore(contents.url)"
         >
           <div class="content-img">
-            <img :src="contents.img" alt="" /><i>限时免费</i>
+            <img :src="contents.img" alt="" /><i>{{ contents.label }}</i>
           </div>
 
           <div class="content-name">{{ contents.imgNmae }}</div>
@@ -20,8 +23,12 @@
     <!-- 薯片课程 -->
     <div class="choiceness-item">
       <p class="title">
-        {{ content.title || '薯片课程' }}
-        <span class="title-label" @click="onMore('')">
+        {{ content.curriculum.imgVal[0].title || '薯片课程' }}
+        <span
+          v-if="false"
+          class="title-label"
+          @click="onMore(content.curriculum.imgVal[0].url)"
+        >
           <span class="title-name">精选</span>
           <span class="title-icon">
             <my-icon
@@ -37,9 +44,10 @@
           v-for="(contents, contentKey) of content.curriculum.imgVal"
           :key="contentKey"
           class="content"
+          @click="onMore(contents.url)"
         >
-          <div class="content-img" @click="onMore('')">
-            <img :src="contents.img" alt="" /><i>代办包过</i>
+          <div class="content-img">
+            <img :src="contents.img" alt="" /><i>{{ contents.label }}</i>
           </div>
           <div class="content-name">{{ contents.imgNmae }}</div>
         </div>
@@ -61,32 +69,38 @@ export default {
       default: () => {
         return {
           experience: {
-            title: '免费体验',
             imgVal: [
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+                title: '免费体验',
                 imgNmae: '商标查询',
+                label: '限时免费',
+                url: '',
               },
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+                title: '',
                 imgNmae: '版权服务',
+                label: '限时免费',
+                url: '',
               },
             ],
           },
           curriculum: {
-            title: '薯片课程',
             imgVal: [
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/efrhylhffbs0000.png',
+                title: '薯片课程',
                 imgNmae: '商标案件如...',
+                label: '包办包过',
+                url: '',
               },
               {
-                img:
-                  'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+                img: 'https://cdn.shupian.cn/sp-pt/wap/images/8jn8qjulfvs0000.png',
+                title: '',
                 imgNmae: '高企认定政...',
+                label: '包办包过',
+                url: '',
               },
             ],
           },
@@ -96,18 +110,7 @@ export default {
   },
   methods: {
     onMore(url) {
-      if (url !== '') {
-        window.location.href = url
-      } else {
-        Toast('功能正在建设中，敬请期待')
-        // this.$root.$emit(
-        //   'openIMM',
-        //   this.listCount[index].id,
-        //   this.listCount[index].name,
-        //   this.listCount[index].jobNum,
-        //   this.listCount[index].imgSrc
-        // )
-      }
+      this.$parent.jumpLink(url)
     },
   },
 }
