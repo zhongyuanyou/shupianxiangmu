@@ -8,7 +8,7 @@
         <input
           v-model="value"
           class="input-value"
-          type="text"
+          type="number"
           :placeholder="valuePlaceholder"
           @input="blur"
         />
@@ -453,7 +453,7 @@ export default {
         display: block;
       }
       .title {
-        width: 160px;
+        width: 165px;
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
@@ -469,7 +469,7 @@ export default {
         color: #222222;
         display: block;
         border: none;
-        margin-left: 60px;
+        margin-left: 55px;
       }
       .input-value::-moz-placeholder {
         font-weight: 400;

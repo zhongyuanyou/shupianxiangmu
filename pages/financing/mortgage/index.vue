@@ -434,7 +434,7 @@ export default {
           display: block;
         }
         .title {
-          width: 130px;
+          width: 145px;
           height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Medium, PingFang SC;
@@ -450,7 +450,7 @@ export default {
           font-weight: 400;
           line-height: 45px;
           border: none;
-          margin-left: 58px;
+          margin-left: 43px;
           color: #222222;
         }
         > input {
@@ -461,7 +461,7 @@ export default {
           font-weight: 400;
           line-height: 45px;
           border: none;
-          margin-left: 58px;
+          margin-left: 43px;
           color: #222222;
         }
         > input:-ms-input-placeholder {
@@ -508,7 +508,7 @@ export default {
           font-weight: 400;
           color: #222222;
           line-height: 32px;
-          margin-left: 40px;
+          margin-left: auto;
         }
         .lines-input {
           width: 378px;
@@ -528,7 +528,7 @@ export default {
           font-weight: 400;
           color: #4974f5;
           line-height: 45px;
-          margin-left: 20px;
+          margin-left: auto;
         }
       }
     }

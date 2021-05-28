@@ -73,6 +73,7 @@ export default {
     }
   },
   methods: {
+    // 页面跳转
     goToPage(url) {
       this.$router.push(url)
     },
