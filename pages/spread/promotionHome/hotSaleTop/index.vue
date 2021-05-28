@@ -29,18 +29,20 @@
       </div>
       <!-- saleTop End -->
     </div>
-    <div class="container_items">
-      <div v-for="(item, index) in itemArray" :key="index" class="items">
-        <div
-          class="items_item"
-          @click="choose(index)"
-          :class="{ active: index === currentIndex }"
-        >
-          <img :src="item.img" alt="" class="items_item_img" />
+    <sp-sticky :offset-top="44">
+      <div class="container_items">
+        <div v-for="(item, index) in itemArray" :key="index" class="items">
+          <div
+            class="items_item"
+            @click="choose(index)"
+            :class="{ active: index === currentIndex }"
+          >
+            <img :src="item.img" alt="" class="items_item_img" />
+          </div>
+          <p class="items_item_text">{{ item.title }}</p>
         </div>
-        <p class="items_item_text">{{ item.title }}</p>
       </div>
-    </div>
+    </sp-sticky>
     <!-- 列表数据 start -->
     <div class="container_list">
       <sp-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -134,8 +136,8 @@ export default {
     },
     async getHotList() {
       const url =
-        'http://172.16.132.228:7001/service/nk/newChipSpread/v1/service_product_list.do'
-      // newSpreadApi.service_product_list
+        // 'http://172.16.132.228:7001/service/nk/newChipSpread/v1/service_product_list.do'
+        newSpreadApi.service_product_list
       const params = this.params
       const res = await this.$axios.get(url, { params })
       if (res.code === 200) {
@@ -277,6 +279,7 @@ export default {
   .container_items {
     .flexStart();
     padding: 40px 0 32px 32px;
+    background: #f5f5f5;
     .items {
       margin: 0 24px;
       &_item {

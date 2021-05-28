@@ -20,6 +20,7 @@
           name="公司名称"
           label="公司名称"
           placeholder="请输入公司名称"
+          maxlength="30"
         />
         <sp-field
           v-model="proNum"
@@ -36,6 +37,7 @@
           name="手机号"
           label="手机号"
           placeholder="请输入手机号"
+          maxlength="11"
         />
         <sp-field
           v-if="showVerifyCode"
@@ -171,6 +173,8 @@ export default {
       this.showVerifyCode = false
     }
     this.showVerifyCode = true
+
+    this.getPagePlanner('app-ghsdgye-02')
     const code = 'ad100065'
     this.getAd(code)
   },
@@ -189,44 +193,43 @@ export default {
     // },
     // 点击申请单的时候触发
     checkSmsCode() {
-      console.log('++++++++')
-      console.log('++++++++', !isLogin)
-      this.getPagePlanner('app-ghsdgye-02')
-      if (!isLogin) {
-        // const url = financingApi.check_smsCode
-        this.$axios
-          .get(financingApi.check_smsCode, {
-            params: {
-              phone: this.phoneNum,
-              smsCode: this.smsNum,
-            },
-          })
-          .then((res) => {
-            console.log('++++++++res', res)
-            if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const sessionParams = {
-                imUserId: this.pagePlanner.id,
-                imUserType: this.pagePlanner.type,
-                ext: {
-                  startUserType: 'cps-app',
-                  proNum: this.proNum,
-                },
-              }
-              const msgParams = {
-                sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-                msgType: 'im_tmplate', // 消息类型
-                extContent: this.$route.query, // 路由参数
-                title: this.firmName,
-                area: this.city.join(','),
-                productName: this.title,
-              }
-              this.sendTemplateMsgMixin({ sessionParams, msgParams })
-            } else {
-              Toast('验证码不正确！')
+      // console.log('++++++++')
+      // console.log('++++++++', !isLogin)
+      // const url = financingApi.check_smsCode
+      this.$axios
+        .get(financingApi.check_smsCode, {
+          params: {
+            phone: this.phoneNum,
+            smsCode: this.smsNum,
+          },
+        })
+        .then((res) => {
+          console.log('++++++++res', res)
+          if (res.code === 200 && res.data === true) {
+            this.$xToast.showLoading({ message: '正在联系规划师...' })
+            const sessionParams = {
+              imUserId: this.pagePlanner.id,
+              imUserType: this.pagePlanner.type,
+              ext: {
+                startUserType: 'cps-app',
+                proNum: this.proNum,
+              },
             }
-          })
-      }
+            const msgParams = {
+              sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+              msgType: 'im_tmplate', // 消息类型
+              extContent: this.$route.query, // 路由参数
+              title: this.firmName,
+              area: this.city
+                ? this.city.join(',')
+                : this.$store.state.city.defaultCity.name,
+              productName: this.title,
+            }
+            this.sendTemplateMsgMixin({ sessionParams, msgParams })
+          } else {
+            Toast('验证码不正确！')
+          }
+        })
     },
     onSubmit(values) {
       console.log('submit', values)
@@ -338,8 +341,8 @@ export default {
     // 获取banner
     getAd(code) {
       const url =
-        'http://172.16.132.228:7001/service/nk/financing/v1/get_advertising.do'
-      // financingApi.get_ad_data
+        // 'http://172.16.132.228:7001/service/nk/financing/v1/get_advertising.do'
+        financingApi.get_ad_data
       this.$axios
         .get(url, {
           params: {
@@ -402,8 +405,7 @@ export default {
     background: #91abf9 !important;
     color: #cfdafc !important;
   }
-  .container_header {
-  }
+
   .banner {
     width: 750px;
     height: 280px;
