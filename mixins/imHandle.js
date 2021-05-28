@@ -275,7 +275,6 @@ export default {
                     window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}&requireCode=${sessionParams.requireCode}&requireName=${sessionParams.requireName}`
                   }
                 }, 2000)
-                window.location.href = `${config.imBaseUrl}/chat?token=${this.token}&userId=${this.userId}&userType=${this.userType}&id=${res.data.groupId}`
               } else if (res.code === 5223) {
                 this.clearUserInfoAndJumpLoging()
               } else {
