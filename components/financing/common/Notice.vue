@@ -128,10 +128,12 @@ export default {
   border-radius: 24px;
   display: flex;
   align-items: center;
-  padding: 18px 32px 18px 20px;
+  padding: 0 32px 0 20px;
   .img-box {
     width: 32px;
     height: 32px;
+    margin-top: 4px;
+    display: flex;
     font-size: 0;
     > img {
       width: 100%;
@@ -141,6 +143,9 @@ export default {
   .swipe-box {
     width: 560px;
     height: 36px;
+    // line-height: 36px;
+    display: inline-block;
+    margin-top: 4px;
     margin: 0 32px 0 16px;
     .my-swipe .sp-swipe-item {
       height: 100%;
@@ -153,7 +158,8 @@ export default {
     }
     .advertising {
       width: 100%;
-      height: 100%;
+      height: 36px;
+      line-height: 36px;
       .textOverflow(1);
     }
   }

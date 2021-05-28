@@ -93,7 +93,7 @@ export default {
         font-size: 20px;
         font-weight: bold;
         color: #ec5330;
-
+        margin-top: -4px;
         .living-margin {
           margin-right: 4px;
         }
@@ -105,8 +105,8 @@ export default {
       font-weight: 400;
       color: #999999;
       line-height: 26px;
-      margin-top: 16px;
-      margin-bottom: 24px;
+      margin-top: 12px;
+      margin-bottom: 16px;
     }
 
     .item-img {

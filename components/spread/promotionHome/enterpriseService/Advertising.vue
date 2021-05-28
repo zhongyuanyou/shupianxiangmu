@@ -246,7 +246,7 @@ export default {
       // 标题更多
       .more {
         font-size: 22px;
-        font-weight: 500;
+        font-weight: bold;
         color: #4974f5;
         height: 100%;
         span {
@@ -283,7 +283,7 @@ export default {
           //   height: 30px;
           font-size: 30px;
           font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: 500;
+          font-weight: bold;
           color: #ffffff;
           line-height: 30px;
           text-shadow: 0px 2px 4px rgba(192, 47, 47, 0.5);
@@ -302,7 +302,7 @@ export default {
         height: 234px;
         background: #ffffff;
         border-radius: 8px;
-        border: 1px solid rgba(205, 205, 205, 0.5);
+        border: 1px solid #f4f4f4;
         padding: 10px;
         margin-left: 8px;
         background-size: cover;
@@ -313,7 +313,7 @@ export default {
           margin: 16px 0 10px 0;
           font-size: 22px;
           font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: 500;
+          font-weight: bold;
           color: #222222;
           line-height: 22px;
         }
@@ -342,13 +342,16 @@ export default {
         .price {
           font-size: 26px;
           font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: 500;
+          font-weight: bold;
           color: #ec5330;
           line-height: 26px;
           span {
             font-size: 22px;
           }
         }
+      }
+      .product:first-child {
+        border: 0px;
       }
     }
   }
@@ -381,7 +384,7 @@ export default {
           border: 1px solid #ec5330;
           margin-left: 8px;
           font-size: 20px;
-          font-weight: 500;
+          font-weight: bold;
           color: #ec5330;
           line-height: 32px;
           padding-right: 8px;
@@ -464,12 +467,12 @@ export default {
       width: 354px;
       height: 134px;
       background-color: #fff;
-      padding: 32px 31px 30px 20px;
+      padding: 33px 31px 30px 20px;
       .introduce-title {
         height: 32px;
         font-size: 28px;
         font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        font-weight: bold;
         color: #222222;
         line-height: 32px;
         margin-bottom: 14px;

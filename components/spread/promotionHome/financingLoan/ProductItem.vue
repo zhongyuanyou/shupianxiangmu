@@ -10,21 +10,17 @@
         <div class="item-labels">
           <span
             v-for="(label, index) in product.labels"
-            :key="index"
             v-show="index < 3"
+            :key="index"
             class="item-label"
             >{{ label }}</span
           >
         </div>
         <div class="item-price">
           <span class="item-price-num">
-            {{
-              product.price > 10000
-                ? (product.price / 10000).toFixed(1)
-                : product.price
-            }}
+            {{ price(product.price) }}
           </span>
-          <span v-if="product.price > 10000" class="item-price-unit">万</span>
+          <span v-if="product.price > 10000" class="item-price-unit">万元</span>
           <span v-else class="item-price-unit">元</span>
           <span class="item-price-note">最高可借</span>
         </div>
@@ -64,6 +60,13 @@ export default {
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
       window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+    },
+    price(price) {
+      if (price % 1) {
+        return price > 10000 ? (price / 10000).toFixed(1) : price
+      } else {
+        return parseInt(price > 10000 ? (price / 10000).toFixed(1) : price)
+      }
     },
   },
 }
@@ -128,7 +131,6 @@ export default {
         background: #f0f2f5;
         border-radius: 4px;
         font-size: 20px;
-        font-weight: bold;
         color: #5c7499;
         line-height: 20px;
         padding: 4px 6px;
@@ -151,6 +153,7 @@ export default {
       .item-price-unit {
         margin-left: 2px;
         font-size: 22px;
+        height: 22px;
         font-weight: bold;
         color: #ec5330;
         line-height: 22px;
