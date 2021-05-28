@@ -315,7 +315,33 @@ export default {
         })
     },
     onForm() {
-      if (!this.isLogin) {
+      if (this.isInApp) {
+        this.$appFn.dggGetUserInfo((res) => {
+          const { code, data } = res || {}
+          if (code !== 200) {
+            this.$appFn.dggLogin((loginRes) => {})
+          } else {
+            this.$appFn.dggOpenIM(
+              {
+                name: this.planner.name,
+                userId: this.planner.id,
+                userType: this.planner.type,
+              },
+              (res) => {
+                const { code } = res || {}
+                if (code !== 200)
+                  this.$xToast.show({
+                    message: `联系失败`,
+                    duration: 1000,
+                    forbidClick: true,
+                    icon: 'toast_ic_remind',
+                  })
+              }
+            )
+          }
+        })
+      }
+      if (!this.isLogin && !this.isInApp) {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         this.$axios
