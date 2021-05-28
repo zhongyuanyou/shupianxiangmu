@@ -181,11 +181,10 @@ export default {
     }
     .imitate-input {
       flex: 1;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: bold;
       font-family: PingFang SC;
       border: none;
-      font-size: 30px;
       color: #1a1a1a;
       color: #999999;
       white-space: nowrap;

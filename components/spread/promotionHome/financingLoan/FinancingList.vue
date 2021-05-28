@@ -221,7 +221,7 @@ export default {
     padding-left: 20px;
   }
   ::v-deep.sp-tab {
-    padding: 0 32px;
+    padding: 0 20px;
     flex: 0 0 auto;
     .sp-tab__text {
       font-size: 32px;

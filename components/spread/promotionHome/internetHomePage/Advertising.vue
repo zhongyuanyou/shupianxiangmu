@@ -212,12 +212,12 @@ export default {
         display: flex;
         align-items: center;
         .limited-time-title {
-          height: 32px;
+          height: 44px;
           font-size: 32px;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           color: #222222;
-          line-height: 32px;
+          line-height: 44px;
         }
         .countdown {
           display: flex;
@@ -244,16 +244,16 @@ export default {
       }
       .advertising-limited-time-describe {
         display: block;
-        height: 26px;
+        height: 36px;
         font-size: 26px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #999999;
-        line-height: 26px;
-        margin-top: 14px;
+        line-height: 36px;
+        margin-top: 4px;
+        margin-bottom: 12px;
       }
       .limited-time-product {
-        margin-top: 12px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -329,12 +329,13 @@ export default {
             border: 1px solid #ec5330;
             margin-left: 12px;
             font-size: 20px;
-            line-height: 20px;
             font-family: PingFangSC-Medium, PingFang SC;
             font-weight: bold;
             color: #ec5330;
+            height: 32px;
+            line-height: 32px;
             display: flex;
-            padding: 4px 8px;
+            padding: 0px 6px;
             margin-bottom: 6px;
             // 直播动态图标
             .living-icon {
@@ -344,6 +345,7 @@ export default {
               width: 16px;
               height: 16px;
               margin-right: 4px;
+              margin-top: 6px;
               .living-bar {
                 padding: 0 1px;
                 background-color: #ec5330;
@@ -453,7 +455,6 @@ export default {
           line-height: 32px;
         }
         .free-trial-label {
-          width: 100px;
           height: 32px;
           border-radius: 4px;
           border: 1px solid #ec5330;
@@ -461,10 +462,11 @@ export default {
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           color: #ec5330;
-          line-height: 30px;
+          padding: 0 6px;
+          line-height: 32px;
           text-align: center;
           margin-left: 12px;
-          margin-top: -2px;
+          margin-top: -6px;
         }
       }
       .advertising-free-trial-describe {
@@ -541,7 +543,6 @@ export default {
           line-height: 32px;
         }
         .course-label {
-          width: 100px;
           height: 32px;
           border-radius: 4px;
           border: 1px solid #4974f5;
@@ -549,10 +550,11 @@ export default {
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           color: #4974f5;
-          line-height: 30px;
+          line-height: 32px;
+          padding: 0 6px;
           text-align: center;
           margin-left: 12px;
-          margin-top: -2px;
+          margin-top: -6px;
         }
       }
       .advertising-course-describe {

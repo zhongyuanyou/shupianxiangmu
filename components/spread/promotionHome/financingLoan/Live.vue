@@ -85,14 +85,14 @@ export default {
 
       .item-title-label {
         display: flex;
-        padding: 6px 8px;
+        align-content: center;
+        height: 32px;
+        padding: 0px 6px;
         border-radius: 4px;
         border: 1px solid #ec5330;
-
         font-size: 20px;
         font-weight: bold;
         color: #ec5330;
-        line-height: 20px;
 
         .living-margin {
           margin-right: 4px;
@@ -126,6 +126,7 @@ export default {
       align-items: flex-end;
       width: 16px;
       height: 16px;
+      margin-top: 6px;
       .living-bar {
         padding: 0 1px;
         background-color: #ec5330;

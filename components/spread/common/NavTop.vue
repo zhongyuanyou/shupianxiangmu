@@ -193,7 +193,7 @@ export default {
         height: 100%;
         .title {
           font-size: 36px;
-          font-family: PingFang;
+          font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           padding-right: 21px;
           padding-left: 10px;

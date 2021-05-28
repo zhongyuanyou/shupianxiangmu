@@ -450,26 +450,22 @@ export default {
     flex-direction: column;
     align-items: center;
     > span:last-child {
-      // height: 22px;
+      display: flex;
+      align-items: center;
+      height: 33px;
       font-size: 22px;
+      padding: 0 12px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       color: #999999;
-      line-height: 22px;
+      border-radius: 16px;
+      line-height: 33px;
       margin-top: 10px;
     }
     > .span--active {
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
       height: 32px !important;
       background: #4974f5;
-      border-radius: 16px;
-      font-size: 22px;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
       color: #ffffff !important;
-      line-height: 33px;
     }
   }
 
