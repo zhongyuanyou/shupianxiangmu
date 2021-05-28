@@ -171,10 +171,10 @@ export default {
   background: #f5f5f5;
   height: 100%;
   ::v-deep.my-head {
-    width: @spread-page-width;
-    position: fixed;
-    left: 50%;
-    margin-left: calc(-@spread-page-width / 2);
+    width: @spread-page-width !important;
+    position: fixed !important;
+    left: 50% !important;
+    margin-left: calc(-@spread-page-width / 2) !important;
     box-shadow: none !important;
   }
   .bottom-show {
