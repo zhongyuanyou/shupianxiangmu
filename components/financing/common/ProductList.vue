@@ -25,7 +25,9 @@ export default {
     ProductItem,
     [List.name]: List,
   },
-  props: {},
+  props: {
+    classCode: { type: String, default: '' },
+  },
   data() {
     return {
       productList: [],
@@ -43,7 +45,7 @@ export default {
       this.$axios
         .get(newSpreadApi.service_product_list, {
           params: {
-            classCodes: 'FL20210425164558',
+            classCodes: this.classCode,
             start: this.start,
             limit: 15,
           },

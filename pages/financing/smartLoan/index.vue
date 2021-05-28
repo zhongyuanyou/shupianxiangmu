@@ -2,8 +2,13 @@
   <div class="smart-loan">
     <Head title="智能贷款"></Head>
     <!-- banner图展示 -->
-    <div class="banner">
-      <sp-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+    <div v-if="imgList.length" class="banner">
+      <sp-swipe
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="#4974F5"
+        :show-indicators="imgList.length > 1"
+      >
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
           ><img :src="item.img" alt=""
         /></sp-swipe-item>
@@ -128,22 +133,7 @@ export default {
     [Toast.name]: Toast,
   },
   mixins: [imHandle, isLogin],
-  props: {
-    imgList: {
-      type: Array,
-      default: () => {
-        return [
-          {
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2oggsns53y80000.png',
-            url: '', // 外链
-            iosUrl: '', // 内链接ios
-            adrUrl: '', // 内链安卓链接
-            wapUrl: '', // wap内链
-          },
-        ]
-      },
-    },
-  },
+
   data() {
     return {
       // 页面规划师
@@ -159,6 +149,7 @@ export default {
       columns: [],
       cityList: {},
       pickerShow: false,
+      imgList: [],
     }
   },
   computed: {
@@ -180,6 +171,7 @@ export default {
   mounted() {
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
+    this.getAd('ad100063')
   },
   methods: {
     getCity() {
@@ -193,6 +185,31 @@ export default {
               { values: Object.keys(this.cityList) },
               { values: this.cityList['北京市'] },
             ]
+          }
+        })
+    },
+    getAd(code) {
+      const url =
+        'http://127.0.0.1:7001/service/nk/financing/v1/get_advertising.do'
+      // financingApi.get_ad_data
+      this.$axios
+        .get(financingApi.get_ad_data, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.imgList.push(obj)
+            })
           }
         })
     },

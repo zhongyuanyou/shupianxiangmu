@@ -18,6 +18,7 @@ const financingApi = {
   knowledge_list: `${CHIPS_WAP_BASE_URL}/nk/question_article/v2/find_page.do`,
   productList: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/product_list.do`,
   get_city: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_city.do`,
+  get_ad_data: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_advertising.do`,
 }
 const spreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/list.do`,
