@@ -19,7 +19,7 @@
 <script>
 import { List } from '@chipspc/vant-dgg'
 import ProductItem from './ProductItem'
-
+import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
     ProductItem,
@@ -41,7 +41,7 @@ export default {
       const url =
         'http://127.0.0.1:7001/service/nk/newChipSpread/v1/service_product_list.do'
       this.$axios
-        .get(url, {
+        .get(newSpreadApi.service_product_list, {
           params: {
             classCodes: 'FL20210425164558',
             start: this.start,
