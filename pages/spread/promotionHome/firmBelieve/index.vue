@@ -1,7 +1,18 @@
 <template>
   <div class="container_body">
     <div class="container_header"><Header :title="title" /></div>
-    <div class="container_ads"></div>
+    <div v-if="imgList.length !== 0" class="banner">
+      <sp-swipe
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="#4974F5"
+        :show-indicators="imgList.length > 1"
+      >
+        <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
+          ><img :src="item.img" alt=""
+        /></sp-swipe-item>
+      </sp-swipe>
+    </div>
     <div class="container_form">
       <sp-form @submit="onSubmit">
         <sp-field
@@ -66,7 +77,7 @@
           v-for="(item, index) in list"
           :key="index"
           class="roll_item"
-          :class="{ active: index == currentIndex }"
+          :class="{ active: index === currentIndex }"
           @click="choose(item, index)"
         >
           {{ item + '个' }}
@@ -87,6 +98,8 @@ import {
   Popup,
   Toast,
   button,
+  Swipe,
+  SwipeItem,
 } from '@chipspc/vant-dgg'
 import Header from '@/components/common/head/header'
 import { financingApi, plannerApi } from '@/api/spread'
@@ -105,6 +118,8 @@ export default {
     [Popup.name]: Popup,
     [Toast.name]: Toast,
     [button.name]: button,
+    [Swipe.name]: Swipe,
+    [SwipeItem.name]: SwipeItem,
   },
   mixins: [isLogin, imHandle],
   data() {
@@ -121,6 +136,7 @@ export default {
       disabled: true,
       pagePlanner: {},
       smsNum: '',
+      imgList: [],
     }
   },
   computed: {
@@ -155,6 +171,8 @@ export default {
       this.showVerifyCode = false
     }
     this.showVerifyCode = true
+    const code = 'ad100065'
+    this.getAd(code)
   },
   methods: {
     // goIM() {
@@ -174,7 +192,7 @@ export default {
       console.log('++++++++')
       console.log('++++++++', !isLogin)
       this.getPagePlanner('app-ghsdgye-02')
-      if (isLogin) {
+      if (!isLogin) {
         // const url = financingApi.check_smsCode
         this.$axios
           .get(financingApi.check_smsCode, {
@@ -226,6 +244,7 @@ export default {
       this.currentIndex = index
       this.proNum = item
     },
+    // 获取验证码
     async getSmsCode() {
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
@@ -240,6 +259,7 @@ export default {
         console.log('res', res)
       }
     },
+    // 获取推荐规划师
     async getPagePlanner(scene) {
       const device = await this.$getFinger().then((res) => {
         return res
@@ -301,6 +321,7 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
+    // 表单验证
     onSms() {
       const _tel = this.phoneNum
       const _reg = /^1[3,4,5,6,7,8,9]\d{9}$/
@@ -313,6 +334,32 @@ export default {
       if (_reg.test(_tel)) {
         this.getSmsCode(_tel)
       }
+    },
+    // 获取banner
+    getAd(code) {
+      const url =
+        'http://172.16.132.228:7001/service/nk/financing/v1/get_advertising.do'
+      // financingApi.get_ad_data
+      this.$axios
+        .get(url, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.imgList.push(obj)
+            })
+          }
+        })
     },
   },
 }
@@ -356,6 +403,23 @@ export default {
     color: #cfdafc !important;
   }
   .container_header {
+  }
+  .banner {
+    width: 750px;
+    height: 280px;
+    background: #d8d8d8;
+    .my-swipe .sp-swipe-item {
+      font-size: 20px;
+      height: 280px;
+      text-align: center;
+      border-radius: 12px;
+      background: #dddddd;
+      > img {
+        width: 100%;
+        height: 100%;
+        //   object-fit: cover;
+      }
+    }
   }
   .container_ads {
     height: 320px;

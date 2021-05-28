@@ -32,7 +32,7 @@
               placeholder="请输入验证码"
             />
             <!-- :rules="[{ required: true, message: '请输入验证码' }]" -->
-            <sp-button size="small" type="primary" @click="getVerifyCode">{{
+            <sp-button size="small" type="primary" @click="onSms">{{
               countdown > 0 ? `${countdown}s` : '获取验证码'
             }}</sp-button>
           </div>
@@ -42,9 +42,9 @@
               block
               type="info"
               native-type="submit"
-              @click="openImPage"
               :disabled="isNull"
               :class="isNull ? 'disabled' : ''"
+              @click="checkSmsCode"
             >
               立即获取查询结果
             </sp-button>
@@ -109,6 +109,7 @@ import {
   Button,
   Popup,
   CountDown,
+  Toast,
 } from '@chipspc/vant-dgg'
 // import { copyrightRegisterApi } from '@/api'
 import { mapState } from 'vuex'
@@ -128,6 +129,7 @@ export default {
     [Button.name]: Button,
     [Popup.name]: Popup,
     [CountDown.name]: CountDown,
+    [Toast.name]: Toast,
   },
   mixins: [isLogin, imHandle],
   data() {
@@ -187,26 +189,27 @@ export default {
       arr: [
         {
           adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          text: '保护知识产品',
+          btn_content: '立即申请版权登记',
         },
         {
           adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          text: '转让/授权获利',
+          btn_content: '立即申请版权登记',
         },
         {
           adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          text: '获得权威证书 ',
+          btn_content: '立即申请版权登记',
         },
         {
           adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          text: '享受税收减免',
+          btn_content: '立即申请版权登记',
         },
       ],
       countdown: -1, // 发送验证码倒计时60秒
+      smsNum: '',
     }
   },
   computed: {
@@ -333,30 +336,48 @@ export default {
     onSubmit(values) {
       console.log('submit', values)
     },
-    onLoad() {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = []
-          this.refreshing = false
-        }
-
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        this.loading = false
-
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
-    },
-    onRefresh() {
-      // 清空列表数据
-      this.finished = false
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.onLoad()
+    // 点击获取查询结果的时候触发
+    checkSmsCode() {
+      console.log('++++++++')
+      console.log('++++++++', !isLogin)
+      // 这里去获取推荐
+      this.getPagePlanner('app-ghsdgye-02')
+      //
+      if (!isLogin) {
+        // const url = financingApi.check_smsCode
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phoneNum,
+              smsCode: this.smsNum,
+            },
+          })
+          .then((res) => {
+            console.log('++++++++res', res)
+            if (res.code === 200 && res.data === true) {
+              this.$xToast.showLoading({ message: '正在联系规划师...' })
+              const sessionParams = {
+                imUserId: this.pagePlanner.id,
+                imUserType: this.pagePlanner.type,
+                ext: {
+                  startUserType: 'cps-app',
+                  proNum: this.proNum,
+                },
+              }
+              const msgParams = {
+                sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+                msgType: 'im_tmplate', // 消息类型
+                extContent: this.$route.query, // 路由参数
+                title: this.firmName,
+                area: this.city.join(','),
+                productName: this.title,
+              }
+              this.sendTemplateMsgMixin({ sessionParams, msgParams })
+            } else {
+              Toast('验证码不正确！')
+            }
+          })
+      }
     },
     openPop() {
       this.isShow = true
@@ -369,24 +390,10 @@ export default {
     close() {
       this.isShow = false
     },
-    // 获取验证码
-    async getVerifyCode() {
-      // url =
-      //   'http://172.16.132.228:7001/service/nk/financing/v1/validation_smsCode.do'
-      const res = await this.$axios.get(financingApi.smsCode, {
-        params: {
-          phone: this.phoneNum,
-        },
-      })
-      if (res.code === 200) {
-        this.$xToast.show({
-          message: '获取验证码成功',
-        })
-        console.log('res', res)
-      }
-    },
     // 打开IM页面
     openImPage() {
+      if (!this.isInApp) {
+      }
       this.$xToast.showLoading({ message: '正在联系规划师...' })
       const sessionParams = {
         imUserId: this.pagePlanner.id,
@@ -411,6 +418,34 @@ export default {
         // routerId: '',
       }
       this.sendTemplateMsgMixin({ sessionParams, msgParams })
+    },
+    onSms() {
+      const _tel = this.phoneNum
+      const _reg = /^1[3,4,5,6,7,8,9]\d{9}$/
+      if (_tel === '') {
+        return Toast('请输入手机号码')
+      }
+      if (!_reg.test(_tel)) {
+        return Toast('请输入正确手机号码')
+      }
+      if (_reg.test(_tel)) {
+        this.getSmsCode(_tel)
+      }
+    },
+    // 获取验证码
+    async getSmsCode() {
+      const res = await this.$axios.get(financingApi.smsCode, {
+        params: {
+          phone: this.phoneNum,
+        },
+      })
+      if (res.code === 200) {
+        this.$xToast.show({
+          message: '获取验证码成功',
+        })
+        this.smsNum = res.data
+        console.log('res', res)
+      }
     },
   },
 }
@@ -642,7 +677,7 @@ input:-webkit-autofill {
         p {
           color: #222222;
           font: bold 28px @font-medium;
-          padding: 34px 88px 24px 88px;
+          padding: 34px 80px 24px 80px;
           text-align: center;
         }
         .btn {

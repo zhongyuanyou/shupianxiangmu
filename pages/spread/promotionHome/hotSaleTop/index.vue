@@ -31,35 +31,42 @@
     </div>
     <div class="container_items">
       <div v-for="(item, index) in itemArray" :key="index" class="items">
-        <div class="items_item">
+        <div
+          class="items_item"
+          @click="choose(index)"
+          :class="{ active: index === currentIndex }"
+        >
           <img :src="item.img" alt="" class="items_item_img" />
         </div>
         <p class="items_item_text">{{ item.title }}</p>
       </div>
     </div>
+    <!-- 列表数据 start -->
     <div class="container_list">
       <sp-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <sp-list
           v-model="loading"
           :finished="finished"
           finished-text="没有更多了"
-          @load="onLoad"
+          @load="getHotList"
         >
           <div v-for="(item, index) in list" :key="index" class="list_item">
             <div class="list_item_left">
-              <img src="" alt="" />
+              <img :src="item.img" alt="" />
             </div>
             <div class="list_item_right">
-              <div class="title">{{ item.title }}</div>
-              <div class="tags">
-                <span v-for="(itemItem, index) in item.tags" :key="index">{{
+              <div class="title" @click="goDetail(item.id)">
+                {{ item.title }}
+              </div>
+              <div class="tabs" @click="goDetail(item.id)">
+                <span v-for="(itemItem, i) in item.tabs" :key="i">{{
                   itemItem
                 }}</span>
               </div>
-              <div class="ads">{{ item.ads }}</div>
+              <div class="desc" @click="goDetail(item.id)">{{ item.desc }}</div>
               <div class="bottom">
                 <div class="price">{{ item.price }}<span>元</span></div>
-                <div class="sales_num">销量 {{ item.salesNum }}</div>
+                <div class="sales_num">销量 {{ item.saleNum }}</div>
               </div>
             </div>
           </div>
@@ -71,7 +78,8 @@
 <script>
 // import Header from '@/components/common/head/header'
 import { Sticky, PullRefresh, List } from '@chipspc/vant-dgg'
-
+import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'Index',
   components: {
@@ -80,6 +88,7 @@ export default {
     [PullRefresh.name]: PullRefresh,
     [List.name]: List,
   },
+
   data() {
     return {
       placeholder: '头部',
@@ -88,6 +97,7 @@ export default {
       loading: false,
       finished: false,
       refreshing: false,
+      currentIndex: 0,
       itemArray: [
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
@@ -95,91 +105,57 @@ export default {
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '商标注册',
+          title: '专利申请',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '商标注册',
+          title: '版权登记',
         },
         {
           img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '商标注册',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '商标注册',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '商标注册',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '商标注册',
+          title: '国际商标注册',
         },
       ],
-      list: [
-        {
-          title: '品牌设计商标logo设计品牌…',
-          tags: ['标签1', '标签2', '标签3', '标签4'],
-          ads: '我用双手成就你的梦想',
-          price: 1000,
-          salesNum: 1522,
-        },
-        {
-          title: '品牌设计商标logo设计品牌…',
-          tags: ['标签1', '标签2', '标签3', '标签4'],
-          ads: '我用双手成就你的梦想',
-          price: 1000,
-          salesNum: 1522,
-        },
-        {
-          title: '品牌设计商标logo设计品牌…',
-          tags: ['标签1', '标签2', '标签3', '标签4'],
-          ads: '我用双手成就你的梦想',
-          price: 1000,
-          salesNum: 1522,
-        },
-        {
-          title: '品牌设计商标logo设计品牌…',
-          tags: ['标签1', '标签2', '标签3', '标签4'],
-          ads: '我用双手成就你的梦想',
-          price: 1000,
-          salesNum: 1522,
-        },
-        {
-          title: '品牌设计商标logo设计品牌…',
-          tags: ['标签1', '标签2', '标签3', '标签4'],
-          ads: '我用双手成就你的梦想,+++++++++++++++++，你所你',
-          price: 1000,
-          salesNum: 1522,
-        },
-      ],
+      list: [],
+      params: {
+        classCodes: 'FL20210425164558',
+        start: 1,
+        limit: 15,
+        orderTypes: 'SALES_SORT',
+      },
     }
   },
+  mounted() {
+    this.init()
+  },
   methods: {
+    init() {
+      // this.getHotList()
+    },
+    async getHotList() {
+      const url =
+        'http://172.16.132.228:7001/service/nk/newChipSpread/v1/service_product_list.do'
+      // newSpreadApi.service_product_list
+      const params = this.params
+      const res = await this.$axios.get(url, { params })
+      if (res.code === 200) {
+        this.list = this.list.concat(res.data.records)
+        this.loading = false
+        this.params.start++
+        console.log('this.page', this.params.start)
+        if (this.params.start > Math.ceil(res.data.total / res.data.pageSize)) {
+          this.finished = true
+        }
+      } else {
+        this.loading = false
+        this.finished = true
+      }
+    },
     clickInputHandle() {
       console.log('click')
     },
     handleScroll(e) {
       this.showTitle = e.isFixed
-    },
-    onLoad() {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = []
-          this.refreshing = false
-        }
-
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        this.loading = false
-
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
     },
     onRefresh() {
       // 清空列表数据
@@ -189,6 +165,16 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true
       this.onLoad()
+    },
+    choose(index) {
+      this.currentIndex = index
+    },
+    goDetail(id) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
     },
   },
 }
@@ -226,6 +212,10 @@ export default {
 .header_bgc {
   background: #4974f5 !important;
 }
+.active {
+  background: url('https://cdn.shupian.cn/sp-pt/wap/ebl77wjvmqo0000.png') !important;
+  background-size: 100% 100% !important;
+}
 .container_body {
   background: #f5f5f5;
   width: 100%;
@@ -233,7 +223,7 @@ export default {
   .container {
     width: 100%;
     height: 400px;
-    background: url('https://cdn.shupian.cn/sp-pt/wap/bfpq7opciy80000.png')
+    background: url('https://cdn.shupian.cn/sp-pt/wap/bjaz4tc4ihs0000.png')
       no-repeat;
     background-size: 100%;
     &_header {
@@ -288,16 +278,16 @@ export default {
     .flexStart();
     padding: 40px 0 32px 32px;
     .items {
+      margin: 0 24px;
       &_item {
         text-align: center;
         height: 88px;
         width: 88px;
         border-radius: 50%;
-        .backGround('https://cdn.shupian.cn/sp-pt/wap/ebl77wjvmqo0000.png');
+        .backGround('https://cdn.shupian.cn/sp-pt/wap/ckef12zrbpk0000.png');
         .flexMixin();
         justify-content: center;
-        margin-left: 8px;
-        margin-right: 64px;
+        margin: 0 auto;
         > img {
           display: block;
           width: 40px;
@@ -312,6 +302,9 @@ export default {
         margin-top: 10px;
       }
     }
+    .items:nth-of-type(1) {
+      margin-left: 0;
+    }
   }
   .container_list {
     .list_item {
@@ -322,6 +315,7 @@ export default {
       padding: 24px;
       display: flex;
       margin-bottom: 20px;
+      overflow: hidden;
       .list_item_left {
         margin-right: 28px;
         > img {
@@ -340,21 +334,22 @@ export default {
           font: bold 32px/45px @font-medium;
           margin-bottom: 12px;
         }
-        .tags {
+        .tabs {
           height: 28px;
           .flexMixin();
           margin-bottom: 12px;
           > span {
             padding: 4px 6px;
             margin-right: 8px;
-            font: 400 20px/20px @font-regular;
+            font: 400 20px @font-regular;
             color: #5c7499;
-            line-height: 20px;
             background-color: #f0f2f5;
             border-radius: 4px;
+            .textoverflow(1);
+            max-width: 92px;
           }
         }
-        .ads {
+        .desc {
           .textoverflow(1);
           font: 400 22px/30px @font-regular;
           height: 30px;
@@ -365,6 +360,7 @@ export default {
           height: 50px;
           .flexMixin();
           justify-content: space-between;
+          width: 434px;
           .price {
             height: 50px;
             color: #ec5330;
