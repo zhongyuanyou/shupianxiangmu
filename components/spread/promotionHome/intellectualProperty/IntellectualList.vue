@@ -69,7 +69,7 @@
 <script>
 import { mapState } from 'vuex'
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
-import product from '@/components/spread/promotionHome/intellectualProperty/Product'
+import product from '@/components/spread/promotionHome/intellectualProperty/Product.vue'
 import { newSpreadApi } from '@/api/spread'
 export default {
   name: 'IntellectualList',
@@ -233,7 +233,6 @@ export default {
 <style lang="less" scoped>
 .intellectual-list {
   width: 100%;
-  margin-top: 27px;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
@@ -242,7 +241,7 @@ export default {
     padding-left: 20px;
   }
   ::v-deep.sp-tab {
-    padding: 0 32px;
+    padding: 0 20px;
     flex: 0 0 auto;
     .sp-tab__text {
       font-size: 32px;
@@ -331,7 +330,7 @@ export default {
         margin-bottom: 20px;
         img {
           width: 345px;
-          height: 518px;
+          height: 523px;
         }
       }
     }

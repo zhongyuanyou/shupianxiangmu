@@ -3,9 +3,9 @@
     <!-- 头部 -->
     <Head title="有抵押贷款"></Head>
     <!-- Banner -->
-    <Banner v-if="bannerList.length !== 0" img-list="bannerList"></Banner>
+    <Banner v-if="bannerList.length !== 0" :img-list="bannerList"></Banner>
     <!-- 产品列表 -->
-    <ProductList></ProductList>
+    <ProductList :class-code="classCode"></ProductList>
     <!--贷款工具-->
     <LoanTool :tool-msg="toolMsg"></LoanTool>
     <!-- 底部展示 -->
@@ -17,13 +17,13 @@
 
 <script>
 import { mapState } from 'vuex'
-import { plannerApi } from '@/api/spread'
+import { plannerApi, financingApi } from '@/api/spread'
 import Head from '@/components/financing/common/Header'
 import Banner from '@/components/financing/common/Banner'
 import ProductList from '@/components/financing/common/ProductList'
 import LoanTool from '@/components/financing/common/LoanTool'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
-
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   components: {
     Head,
@@ -50,6 +50,7 @@ export default {
         icon: 'https://cdn.shupian.cn/sp-pt/wap/images/fvjgqvalqvs0000.png',
       },
       bannerList: [],
+      classCode: '',
     }
   },
   computed: {
@@ -64,7 +65,41 @@ export default {
       this.getPagePlanner('app-ghsdgye-02')
     }
   },
+  mounted() {
+    this.getAd('ad100053')
+    DGG_SERVER_ENV === 'development' && (this.classCode = '')
+    DGG_SERVER_ENV === 'release' &&
+      (this.classCode = 'FL20210425164563,FL20210425164567')
+    DGG_SERVER_ENV === 'production' &&
+      (this.classCode = 'FL20210425164563,FL20210425164567')
+  },
   methods: {
+    // 获取banner
+    getAd(code) {
+      const url =
+        'http://127.0.0.1:7001/service/nk/financing/v1/get_advertising.do'
+      // financingApi.get_ad_data
+      this.$axios
+        .get(financingApi.get_ad_data, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.bannerList.push(obj)
+            })
+          }
+        })
+    },
     // 推介规划师
     async getPagePlanner(scene) {
       const device = await this.$getFinger().then((res) => {

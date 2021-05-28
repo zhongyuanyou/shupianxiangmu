@@ -207,7 +207,7 @@ export default {
       border-right-color: transparent;
     }
     .advertising-limited-time {
-      padding: 24px 18px 20px 20px;
+      padding: 20px 18px 24px 20px;
       .advertising-limited-time-title {
         display: flex;
         align-items: center;
@@ -309,7 +309,7 @@ export default {
       }
     }
     .advertising-live {
-      padding: 24px 18px 20px 20px;
+      padding: 20px 18px 24px 20px;
       .advertising-live-title {
         .live-title-box {
           display: flex;
@@ -457,11 +457,11 @@ export default {
         .free-trial-label {
           height: 32px;
           border-radius: 4px;
-          border: 1px solid #ec5330;
+          border: 1px solid #4974f5;
           font-size: 20px;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
-          color: #ec5330;
+          color: #4974f5;
           padding: 0 6px;
           line-height: 32px;
           text-align: center;
@@ -477,7 +477,7 @@ export default {
         font-weight: 400;
         color: #999999;
         line-height: 26px;
-        margin-top: 14px;
+        margin-top: 12px;
       }
       .free-trial-product {
         margin-top: 12px;
@@ -565,7 +565,7 @@ export default {
         font-weight: 400;
         color: #999999;
         line-height: 26px;
-        margin-top: 14px;
+        margin-top: 12px;
       }
       .course-product {
         margin-top: 12px;

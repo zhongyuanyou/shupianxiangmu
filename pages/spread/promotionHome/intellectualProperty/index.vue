@@ -46,7 +46,7 @@ import NavTop from '@/components/spread/common/NavTop'
 import Nav from '@/components/spread/common/Nav'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
-import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList'
+import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'IntellectualProperty',

@@ -27,7 +27,7 @@
           v-model="loading"
           :finished="finished"
           :error.sync="error"
-          finished-text="没有更多了"
+          finished-text=""
           error-text=""
           @load="onLoad"
         >
@@ -212,7 +212,7 @@ export default {
 <style lang="less" scoped>
 .finacing-list {
   width: 100%;
-  margin-top: 27px;
+  margin-top: 16px;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }

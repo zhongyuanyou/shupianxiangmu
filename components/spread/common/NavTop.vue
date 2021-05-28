@@ -184,7 +184,7 @@ export default {
     display: block;
     .search-content {
       width: @spread-page-width;
-      padding: 20px 20px 26px 28px;
+      padding: 20px 20px 28px 28px;
       display: flex;
       align-items: center;
       .serch-left {

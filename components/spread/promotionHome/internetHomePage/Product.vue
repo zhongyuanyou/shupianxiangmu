@@ -47,12 +47,15 @@
     <div class="price-btn-box">
       <div class="content">
         <div class="price-box">
-          <span class="price">{{ product.price }}</span>
-          <span> 元起</span>
+          <span class="price">{{ price(product.price) }}</span>
+          <span v-if="product.price > 10000" class="item-price-unit">
+            万元起</span
+          >
+          <span v-else class="item-price-unit"> 元起</span>
         </div>
-        <span class="sales">月销量{{ product.sales }}</span>
+        <span class="sales">月销量 {{ product.sales }}</span>
       </div>
-      <a class="btn" @click="onMore(product.id)">立即购买</a>
+      <a class="btn" @click="onMore(product.id)">在线咨询</a>
     </div>
   </div>
 </template>
@@ -76,6 +79,13 @@ export default {
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
       window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+    },
+    price(price) {
+      if (price % 1) {
+        return price > 10000 ? (price / 10000).toFixed(1) : price
+      } else {
+        return parseInt(price > 10000 ? (price / 10000).toFixed(1) : price)
+      }
     },
   },
 }
@@ -110,7 +120,7 @@ export default {
     .title-tag {
       display: inline-block;
       width: 52px;
-      height: 32px;
+      height: 30px;
       background: #ec5330;
       border-radius: 4px;
       font-size: 20px;
@@ -122,7 +132,7 @@ export default {
     }
     .product-title {
       display: block;
-      font-size: 32px;
+      font-size: 30px;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #222222;
@@ -203,7 +213,7 @@ export default {
           line-height: 36px;
           padding-right: 4px;
         }
-        > span:last-child {
+        > .item-price-unit {
           display: block;
           font-size: 22px;
           font-family: PingFangSC-Medium, PingFang SC;

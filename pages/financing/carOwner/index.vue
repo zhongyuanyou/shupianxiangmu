@@ -3,7 +3,12 @@
     <Head title="车主贷"></Head>
     <!-- banner图展示 -->
     <div v-if="imgList.length !== 0" class="banner">
-      <sp-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+      <sp-swipe
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="#4974F5"
+        :show-indicators="imgList.length > 1"
+      >
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
           ><img :src="item.img" alt=""
         /></sp-swipe-item>
@@ -172,8 +177,35 @@ export default {
     }
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
+    this.getAd('ad100061')
   },
   methods: {
+    // 获取banner
+    getAd(code) {
+      const url =
+        'http://127.0.0.1:7001/service/nk/financing/v1/get_advertising.do'
+      // financingApi.get_ad_data
+      this.$axios
+        .get(financingApi.get_ad_data, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.imgList.push(obj)
+            })
+          }
+        })
+    },
     // 推介规划师
     async getPagePlanner(scene) {
       const device = await this.$getFinger().then((res) => {
@@ -469,7 +501,7 @@ export default {
           display: block;
         }
         .title {
-          width: 130px;
+          width: 135px;
           height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Medium, PingFang SC;
@@ -485,7 +517,7 @@ export default {
           font-weight: 400;
           line-height: 45px;
           border: none;
-          margin-left: 58px;
+          margin-left: 53px;
           color: #222222;
         }
         > input:-ms-input-placeholder {
@@ -533,13 +565,13 @@ export default {
           font-weight: 400;
           color: #222222;
           line-height: 32px;
-          margin-left: 40px;
+          margin-left: auto;
         }
         .lines-input {
           width: 378px;
         }
         .sms-input {
-          width: 274px;
+          width: 265px;
         }
         .line {
           width: 1px;
@@ -553,7 +585,7 @@ export default {
           font-weight: 400;
           color: #4974f5;
           line-height: 45px;
-          margin-left: 20px;
+          margin-left: auto;
         }
       }
     }
