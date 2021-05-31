@@ -282,9 +282,9 @@ export default {
         } else {
           this.$appFn.dggOpenIM(
             {
-              name: this.planner.name,
-              userId: this.planner.id,
-              userType: this.planner.type,
+              name: this.pagePlanner.name,
+              userId: this.pagePlanner.id,
+              userType: this.pagePlanner.type,
             },
             (res) => {
               const { code } = res || {}
