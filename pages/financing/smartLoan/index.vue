@@ -425,11 +425,11 @@ export default {
   }
   .banner {
     width: 750px;
-    height: 300px;
+    height: 280px;
     background: #d8d8d8;
     .my-swipe .sp-swipe-item {
       font-size: 20px;
-      height: 300px;
+      height: 280px;
       text-align: center;
       border-radius: 12px;
       background: #dddddd;
