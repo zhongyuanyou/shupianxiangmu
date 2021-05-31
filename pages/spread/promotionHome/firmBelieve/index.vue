@@ -459,6 +459,9 @@ export default {
     height: 320px;
     background: #d8d8d8;
   }
+  .sp-button--primary {
+    // width: ;
+  }
   .container_form {
     .sp-cell {
       height: 1.2rem;

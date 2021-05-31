@@ -35,11 +35,11 @@
           <div
             class="items_item"
             :class="{ active: index === currentIndex }"
-            @click="choose(index)"
+            @click="choose(index, item)"
           >
             <img :src="item.img" alt="" class="items_item_img" />
           </div>
-          <p class="items_item_text">{{ item.title }}</p>
+          <p class="items_item_text">{{ item.ext2 }}</p>
         </div>
       </div>
     </sp-sticky>
@@ -105,32 +105,16 @@ export default {
       finished: false,
       refreshing: false,
       currentIndex: 0,
-      itemArray: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '商标注册',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '专利申请',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '版权登记',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
-          title: '国际商标注册',
-        },
-      ],
+      itemArray: [],
       list: [],
       params: {
-        classCodes: 'FL20210425164558',
+        classCodes: '',
         start: 1,
         limit: 15,
         orderTypes: 'SALES_SORT',
       },
       pagePlanner: {},
+      code: '',
     }
   },
   computed: {
@@ -146,9 +130,10 @@ export default {
   methods: {
     init() {
       this.getPagePlanner('app-ghsdgye-02')
-      // this.getHotList()
+      // 查询广告位分类列表数据
       if (this.$route.query.code) {
-        this.params.classCodes = this.$route.query.code
+        this.code = this.$route.query.code
+        this.findList()
       }
       if (this.isInApp) {
         this.$appFn.dggGetUserInfo((res) => {
@@ -175,6 +160,22 @@ export default {
             )
           }
         })
+      }
+    },
+    async findList() {
+      const url = newSpreadApi.list
+      const params = {
+        locationCodes: '',
+        navCodes: '',
+        code: this.code,
+      }
+      const res = await this.$axios.get(url, { params })
+      if (res.code === 200) {
+        res.data.classList.forEach((item) => {
+          this.itemArray.push(item)
+        })
+      } else {
+        this.$xToast.show(res.message)
       }
     },
     // 获取推荐规划师
@@ -240,7 +241,10 @@ export default {
       }
     },
     // 获取热榜列表数据
-    async getHotList() {
+    async getHotList(code) {
+      if (code) {
+        this.params.classCodes = code
+      }
       const url = newSpreadApi.service_product_list
       const params = this.params
       const res = await this.$axios.get(url, { params })
@@ -257,9 +261,6 @@ export default {
         this.finished = true
       }
     },
-    clickInputHandle() {
-      console.log('click')
-    },
     handleScroll(e) {
       this.showTitle = e.isFixed
     },
@@ -271,9 +272,12 @@ export default {
       this.loading = true
       this.onLoad()
     },
-    choose(index) {
+    choose(index, item) {
+      this.start = 1
       this.currentIndex = index
+      this.getHotList(item.ext1)
     },
+    // 跳详情
     goDetail(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
