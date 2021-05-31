@@ -22,6 +22,7 @@
             v-model="phoneNum"
             name="电话"
             label="电话"
+            maxlength="11"
             placeholder="留下手机号，接受查询结果"
           />
           <div v-if="showVerifyCode" class="verify">
@@ -30,10 +31,11 @@
               name="验证码"
               label="验证码"
               placeholder="请输入验证码"
+              maxlength="6"
             />
             <!-- :rules="[{ required: true, message: '请输入验证码' }]" -->
-            <sp-button size="small" type="primary" @click="getVerifyCode">{{
-              countdown > 0 ? `${countdown}s` : '获取验证码'
+            <sp-button size="small" type="primary" @click="onSms">{{
+              test
             }}</sp-button>
           </div>
 
@@ -42,9 +44,9 @@
               block
               type="info"
               native-type="submit"
-              :class="isNull ? 'disabled' : ''"
               :disabled="isNull"
-              @click="openImPage"
+              :class="isNull ? 'disabled' : ''"
+              @click="checkSmsCode"
             >
               立即获取查询结果
             </sp-button>
@@ -108,11 +110,11 @@ import {
   Field,
   Button,
   Popup,
-  CountDown,
+  Toast,
 } from '@chipspc/vant-dgg'
 // import { copyrightRegisterApi } from '@/api'
 import { mapState } from 'vuex'
-import { financingApi, plannerApi } from '@/api/spread'
+import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
 import isLogin from '@/mixins/isLogin'
 import imHandle from '@/mixins/imHandle'
 
@@ -127,9 +129,38 @@ export default {
     [Field.name]: Field,
     [Button.name]: Button,
     [Popup.name]: Popup,
-    [CountDown.name]: CountDown,
+    [Toast.name]: Toast,
   },
   mixins: [isLogin, imHandle],
+  async asyncData({ $axios }) {
+    const locationCodes = ''
+    const navCodes = ''
+    const code = 'CRISPS-C-ZSCQ'
+    try {
+      const res = await $axios.get(newSpreadApi.list, {
+        params: {
+          locationCodes,
+          navCodes,
+          code,
+        },
+      })
+      if (res.code === 200) {
+        console.log('请求成功', res)
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      return {
+        // resultData: dataRes.data,
+      }
+    } catch (error) {
+      console.log('请求错误')
+      return {
+        // resultData: dataRes.data,
+      }
+    }
+  },
   data() {
     return {
       text: '企业品牌维权利器 保护个人原创作品',
@@ -187,26 +218,28 @@ export default {
       arr: [
         {
           adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          text: '保护知识产品',
+          btn_content: '立即申请版权登记',
         },
         {
-          adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/fhvtfij86cg0000.png',
+          text: '转让/授权获利',
+          btn_content: '立即申请版权登记',
         },
         {
-          adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/euyeca8td080000.png',
+          text: '获得权威证书 ',
+          btn_content: '立即申请版权登记',
         },
         {
-          adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/bqsbc7kue3k0000.png',
-          text: '你好',
-          btn_content: '超出',
+          adsImg: 'https://cdn.shupian.cn/sp-pt/wap/images/539x9pigd9s0000.png',
+          text: '享受税收减免',
+          btn_content: '立即申请版权登记',
         },
       ],
-      countdown: -1, // 发送验证码倒计时60秒
+      smsNum: '',
+      test: '获取验证码',
+      time: '',
     }
   },
   computed: {
@@ -241,25 +274,43 @@ export default {
     if (this.currentCity.city) {
       this.city = this.currentCity
     }
+    if (this.isInApp) {
+      this.$appFn.dggGetUserInfo((res) => {
+        const { code, data } = res || {}
+        if (code !== 200) {
+          this.$appFn.dggLogin((loginRes) => {})
+        } else {
+          this.$appFn.dggOpenIM(
+            {
+              name: this.pagePlanner.name,
+              userId: this.pagePlanner.id,
+              userType: this.pagePlanner.type,
+            },
+            (res) => {
+              const { code } = res || {}
+              if (code !== 200)
+                this.$xToast.show({
+                  message: `联系失败`,
+                  duration: 1000,
+                  forbidClick: true,
+                  icon: 'toast_ic_remind',
+                })
+            }
+          )
+        }
+      })
+    } else {
+      if (JSON.stringify(this.planner) === '{}') return
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+      }
+      this.uPIM(planner)
+    }
     this.getPagePlanner('app-ghsdgye-02')
   },
   methods: {
-    // 验证码倒计时
-    countDown() {
-      const vm = this
-      this.countdown = 59
-      clearInterval(vm.countdownTimer)
-      vm.countdownTimer = null
-      this.countdownTimer = setInterval(function () {
-        if (vm.countdown === 0) {
-          vm.countdown = -1
-          clearInterval(vm.countdownTimer)
-          vm.countdownTimer = null
-        } else {
-          vm.countdown > 0 && vm.countdown--
-        }
-      }, 1000)
-    },
     goIM() {
       console.log(this.pagePlanner.id)
       const planner = {
@@ -333,30 +384,42 @@ export default {
     onSubmit(values) {
       console.log('submit', values)
     },
-    onLoad() {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = []
-          this.refreshing = false
-        }
+    // 点击获取查询结果的时候触发
+    checkSmsCode() {
+      this.$axios
+        .get(financingApi.check_smsCode, {
+          params: {
+            phone: this.phoneNum,
+            smsCode: this.smsNum,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200 && res.data === true) {
+            this.$xToast.showLoading({ message: '正在联系规划师...' })
 
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-        this.loading = false
-
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
-    },
-    onRefresh() {
-      // 清空列表数据
-      this.finished = false
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.onLoad()
+            const sessionParams = {
+              imUserId: this.pagePlanner.id,
+              imUserType: this.pagePlanner.type,
+              ext: {
+                startUserType: 'cps-app',
+                haveProduct: this.haveProduct,
+              },
+            }
+            const msgParams = {
+              sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+              msgType: 'im_tmplate', // 消息类型
+              extContent: this.$route.query, // 路由参数
+              title: '版权登记',
+              area: this.city
+                ? this.city.join(',')
+                : this.$store.state.city.defaultCity.name,
+              productName: '版权登记',
+            }
+            this.sendTemplateMsgMixin({ sessionParams, msgParams })
+          } else {
+            Toast('验证码不正确！')
+          }
+        })
     },
     openPop() {
       this.isShow = true
@@ -369,10 +432,25 @@ export default {
     close() {
       this.isShow = false
     },
+
+    onSms() {
+      const _tel = this.phoneNum
+      const _reg = /^1[3,4,5,6,7,8,9]\d{9}$/
+      if (_tel === '') {
+        return Toast('请输入手机号码')
+      }
+
+      if (!_reg.test(_tel)) {
+        return Toast('请输入正确手机号码')
+      }
+      if (_reg.test(_tel)) {
+        this.getSmsCode(_tel)
+      }
+    },
     // 获取验证码
-    async getVerifyCode() {
-      // url =
-      //   'http://172.16.132.228:7001/service/nk/financing/v1/validation_smsCode.do'
+    async getSmsCode() {
+      this.countDown()
+      // 请求
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
           phone: this.phoneNum,
@@ -382,35 +460,24 @@ export default {
         this.$xToast.show({
           message: '获取验证码成功',
         })
+        this.smsNum = res.data
         console.log('res', res)
       }
     },
-    // 打开IM页面
-    openImPage() {
-      this.$xToast.showLoading({ message: '正在联系规划师...' })
-      const sessionParams = {
-        imUserId: this.pagePlanner.id,
-        imUserType: this.pagePlanner.type,
-        ext: {
-          intentionType: '',
-          intentionCity: '',
-          recommendId: '',
-          recommendAttrJson: {},
-          startUserType: 'cps-app',
-        },
-      }
-      const msgParams = {
-        sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-        msgType: 'im_tmplate', // 消息类型
-        extContent: this.haveProduct, // 路由参数
-        forwardAbstract: '',
-        title: '版权登记',
-        // area: this.city.join(','),
-        // productName: '车主贷',
-        // intention: this.lines + '万元',
-        // routerId: '',
-      }
-      this.sendTemplateMsgMixin({ sessionParams, msgParams })
+    countDown() {
+      console.log('++到这里了')
+      let i = 59
+      clearInterval(this.time)
+      this.test = i + 's'
+      this.time = setInterval(() => {
+        if (i > 1) {
+          i--
+          this.test = i + 's'
+        } else {
+          this.test = '获取验证码'
+          clearInterval(this.time)
+        }
+      }, 1000)
     },
   },
 }
@@ -642,7 +709,7 @@ input:-webkit-autofill {
         p {
           color: #222222;
           font: bold 28px @font-medium;
-          padding: 34px 88px 24px 88px;
+          padding: 34px 80px 24px 80px;
           text-align: center;
         }
         .btn {

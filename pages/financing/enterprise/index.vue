@@ -5,7 +5,7 @@
     <!-- Banner -->
     <Banner v-if="bannerList.length !== 0" :img-list="bannerList"></Banner>
     <!-- 产品列表 -->
-    <ProductList></ProductList>
+    <ProductList :class-code="classCode"></ProductList>
     <!--贷款工具-->
     <LoanTool :tool-msg="toolMsg"></LoanTool>
     <!-- 底部展示 -->
@@ -22,8 +22,8 @@ import Banner from '@/components/financing/common/Banner'
 import ProductList from '@/components/financing/common/ProductList'
 import LoanTool from '@/components/financing/common/LoanTool'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
-import { plannerApi } from '@/api/spread'
-
+import { plannerApi, financingApi } from '@/api/spread'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   components: {
     Head,
@@ -50,6 +50,7 @@ export default {
         path: '/financing/creditEvaluation',
       },
       bannerList: [],
+      classCode: '',
     }
   },
   computed: {
@@ -64,7 +65,41 @@ export default {
       this.getPagePlanner('app-ghsdgye-02')
     }
   },
+  mounted() {
+    DGG_SERVER_ENV === 'development' && (this.classCode = '')
+    DGG_SERVER_ENV === 'release' &&
+      (this.classCode = 'FL20210425164563,FL20210425164559')
+    DGG_SERVER_ENV === 'production' &&
+      (this.classCode = 'FL20210425164563,FL20210425164559')
+    this.getAd('ad100058')
+  },
   methods: {
+    // 获取banner
+    getAd(code) {
+      const url =
+        'http://127.0.0.1:7001/service/nk/financing/v1/get_advertising.do'
+      // financingApi.get_ad_data
+      this.$axios
+        .get(financingApi.get_ad_data, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.bannerList.push(obj)
+            })
+          }
+        })
+    },
     // 推介规划师
     async getPagePlanner(scene) {
       const device = await this.$getFinger().then((res) => {
@@ -136,10 +171,10 @@ export default {
   background: #f5f5f5;
   height: 100%;
   ::v-deep.my-head {
-    width: @spread-page-width;
-    position: fixed;
-    left: 50%;
-    margin-left: calc(-@spread-page-width / 2);
+    width: @spread-page-width !important;
+    position: fixed !important;
+    left: 50% !important;
+    margin-left: calc(-@spread-page-width / 2) !important;
     box-shadow: none !important;
   }
   .bottom-show {

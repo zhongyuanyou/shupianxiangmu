@@ -1,7 +1,18 @@
 <template>
   <div class="container_body">
     <div class="container_header"><Header :title="title" /></div>
-    <div class="container_ads"></div>
+    <div v-if="imgList.length !== 0" class="banner">
+      <sp-swipe
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="#4974F5"
+        :show-indicators="imgList.length > 1"
+      >
+        <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
+          ><img :src="item.img" alt=""
+        /></sp-swipe-item>
+      </sp-swipe>
+    </div>
     <div class="container_form">
       <sp-form @submit="onSubmit">
         <sp-field
@@ -9,6 +20,7 @@
           name="公司名称"
           label="公司名称"
           placeholder="请输入公司名称"
+          maxlength="30"
         />
         <sp-field
           v-model="proNum"
@@ -25,6 +37,7 @@
           name="手机号"
           label="手机号"
           placeholder="请输入手机号"
+          maxlength="11"
         />
         <sp-field
           v-if="showVerifyCode"
@@ -32,11 +45,12 @@
           name="验证码"
           label="验证码"
           placeholder="输入短信校验码"
+          maxlength="6"
         >
           <template #button>
-            <sp-button size="small" type="primary" @click="onSms"
-              >获取验证码</sp-button
-            >
+            <sp-button size="small" type="primary" @click="onSms">{{
+              test
+            }}</sp-button>
           </template>
         </sp-field>
       </sp-form>
@@ -66,7 +80,7 @@
           v-for="(item, index) in list"
           :key="index"
           class="roll_item"
-          :class="{ active: index == currentIndex }"
+          :class="{ active: index === currentIndex }"
           @click="choose(item, index)"
         >
           {{ item + '个' }}
@@ -87,6 +101,8 @@ import {
   Popup,
   Toast,
   button,
+  Swipe,
+  SwipeItem,
 } from '@chipspc/vant-dgg'
 import Header from '@/components/common/head/header'
 import { financingApi, plannerApi } from '@/api/spread'
@@ -105,6 +121,8 @@ export default {
     [Popup.name]: Popup,
     [Toast.name]: Toast,
     [button.name]: button,
+    [Swipe.name]: Swipe,
+    [SwipeItem.name]: SwipeItem,
   },
   mixins: [isLogin, imHandle],
   data() {
@@ -121,6 +139,9 @@ export default {
       disabled: true,
       pagePlanner: {},
       smsNum: '',
+      imgList: [],
+      time: '',
+      test: '获取验证码',
     }
   },
   computed: {
@@ -150,71 +171,94 @@ export default {
     },
   },
   mounted() {
+    if (this.isInApp) {
+      this.$appFn.dggGetUserInfo((res) => {
+        const { code, data } = res || {}
+        if (code !== 200) {
+          this.$appFn.dggLogin((loginRes) => {})
+        } else {
+          this.$appFn.dggOpenIM(
+            {
+              name: this.pagePlanner.name,
+              userId: this.pagePlanner.id,
+              userType: this.pagePlanner.type,
+            },
+            (res) => {
+              const { code } = res || {}
+              if (code !== 200)
+                this.$xToast.show({
+                  message: `联系失败`,
+                  duration: 1000,
+                  forbidClick: true,
+                  icon: 'toast_ic_remind',
+                })
+            }
+          )
+        }
+      })
+    } else {
+      if (JSON.stringify(this.planner) === '{}') return
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+      }
+      this.uPIM(planner)
+    }
     if (this.isLogin) {
       this.phoneNum = this.userPhone
       this.showVerifyCode = false
     }
     this.showVerifyCode = true
+
+    this.getPagePlanner('app-ghsdgye-02')
+    const code = 'ad100065'
+    this.getAd(code)
   },
   methods: {
-    // goIM() {
-    //   // 验证验证码
-    //   // this.checkSmsCode()
-    //   console.log(this.pagePlanner.id)
-    //   const planner = {
-    //     mchUserId: this.pagePlanner.id,
-    //     userName: this.pagePlanner.name,
-    //     type: this.pagePlanner.type,
-    //   }
-    //   console.log('planner', planner)
-    //   // this.uPIM(planner)
-    // },
     // 点击申请单的时候触发
     checkSmsCode() {
-      console.log('++++++++')
-      console.log('++++++++', !isLogin)
-      this.getPagePlanner('app-ghsdgye-02')
-      if (isLogin) {
-        // const url = financingApi.check_smsCode
-        this.$axios
-          .get(financingApi.check_smsCode, {
-            params: {
-              phone: this.phoneNum,
-              smsCode: this.smsNum,
-            },
-          })
-          .then((res) => {
-            console.log('++++++++res', res)
-            if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const sessionParams = {
-                imUserId: this.pagePlanner.id,
-                imUserType: this.pagePlanner.type,
-                ext: {
-                  startUserType: 'cps-app',
-                  proNum: this.proNum,
-                },
-              }
-              const msgParams = {
-                sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-                msgType: 'im_tmplate', // 消息类型
-                extContent: this.$route.query, // 路由参数
-                title: this.firmName,
-                area: this.city.join(','),
-                productName: this.title,
-              }
-              this.sendTemplateMsgMixin({ sessionParams, msgParams })
-            } else {
-              Toast('验证码不正确！')
+      this.$axios
+        .get(financingApi.check_smsCode, {
+          params: {
+            phone: this.phoneNum,
+            smsCode: this.smsNum,
+          },
+        })
+        .then((res) => {
+          console.log('++++++++res', res)
+          if (res.code === 200 && res.data === true) {
+            this.$xToast.showLoading({ message: '正在联系规划师...' })
+            const sessionParams = {
+              imUserId: this.pagePlanner.id,
+              imUserType: this.pagePlanner.type,
+              ext: {
+                startUserType: 'cps-app',
+                proNum: this.proNum,
+              },
             }
-          })
-      }
+            const msgParams = {
+              sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+              msgType: 'im_tmplate', // 消息类型
+              extContent: this.$route.query, // 路由参数
+              title: this.firmName,
+              area: this.city
+                ? this.city.join(',')
+                : this.$store.state.city.defaultCity.name,
+              productName: this.title,
+            }
+            this.sendTemplateMsgMixin({ sessionParams, msgParams })
+          } else {
+            Toast('验证码不正确！')
+          }
+        })
     },
     onSubmit(values) {
       console.log('submit', values)
     },
     showPopup() {
       this.isShow = true
+      this.proNum = this.currentIndex + 1
     },
     cancel() {
       this.isShow = false
@@ -226,7 +270,9 @@ export default {
       this.currentIndex = index
       this.proNum = item
     },
+    // 获取验证码
     async getSmsCode() {
+      this.countDown()
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
           phone: this.phoneNum,
@@ -240,6 +286,23 @@ export default {
         console.log('res', res)
       }
     },
+    // 倒计时
+    countDown() {
+      console.log('++到这里了')
+      let i = 59
+      clearInterval(this.time)
+      this.test = i + 's'
+      this.time = setInterval(() => {
+        if (i > 1) {
+          i--
+          this.test = i + 's'
+        } else {
+          this.test = '获取验证码'
+          clearInterval(this.time)
+        }
+      }, 1000)
+    },
+    // 获取推荐规划师
     async getPagePlanner(scene) {
       const device = await this.$getFinger().then((res) => {
         return res
@@ -301,6 +364,7 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
+    // 表单验证
     onSms() {
       const _tel = this.phoneNum
       const _reg = /^1[3,4,5,6,7,8,9]\d{9}$/
@@ -313,6 +377,32 @@ export default {
       if (_reg.test(_tel)) {
         this.getSmsCode(_tel)
       }
+    },
+    // 获取banner
+    getAd(code) {
+      const url =
+        // 'http://172.16.132.228:7001/service/nk/financing/v1/get_advertising.do'
+        financingApi.get_ad_data
+      this.$axios
+        .get(url, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.imgList.push(obj)
+            })
+          }
+        })
     },
   },
 }
@@ -355,7 +445,23 @@ export default {
     background: #91abf9 !important;
     color: #cfdafc !important;
   }
-  .container_header {
+
+  .banner {
+    width: 750px;
+    height: 280px;
+    background: #d8d8d8;
+    .my-swipe .sp-swipe-item {
+      font-size: 20px;
+      height: 280px;
+      text-align: center;
+      border-radius: 12px;
+      background: #dddddd;
+      > img {
+        width: 100%;
+        height: 100%;
+        //   object-fit: cover;
+      }
+    }
   }
   .container_ads {
     height: 320px;

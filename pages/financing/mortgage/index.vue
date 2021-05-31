@@ -3,7 +3,12 @@
     <Head title="房贷"></Head>
     <!-- banner图展示 -->
     <div v-if="imgList.length !== 0" class="banner">
-      <sp-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+      <sp-swipe
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="#4974F5"
+        :show-indicators="imgList.length > 1"
+      >
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
           ><img :src="item.img" alt=""
         /></sp-swipe-item>
@@ -164,8 +169,34 @@ export default {
   mounted() {
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
+    this.getAd('ad100062')
   },
   methods: {
+    getAd(code) {
+      const url =
+        'http://127.0.0.1:7001/service/nk/financing/v1/get_advertising.do'
+      // financingApi.get_ad_data
+      this.$axios
+        .get(financingApi.get_ad_data, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.imgList.push(obj)
+            })
+          }
+        })
+    },
     getCity() {
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
       this.$axios
@@ -281,7 +312,33 @@ export default {
         })
     },
     onForm() {
-      if (!isLogin) {
+      if (this.isInApp) {
+        this.$appFn.dggGetUserInfo((res) => {
+          const { code, data } = res || {}
+          if (code !== 200) {
+            this.$appFn.dggLogin((loginRes) => {})
+          } else {
+            this.$appFn.dggOpenIM(
+              {
+                name: this.planner.name,
+                userId: this.planner.id,
+                userType: this.planner.type,
+              },
+              (res) => {
+                const { code } = res || {}
+                if (code !== 200)
+                  this.$xToast.show({
+                    message: `联系失败`,
+                    duration: 1000,
+                    forbidClick: true,
+                    icon: 'toast_ic_remind',
+                  })
+              }
+            )
+          }
+        })
+      }
+      if (!this.isLogin && !this.isInApp) {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         // financingApi.check_smsCode
