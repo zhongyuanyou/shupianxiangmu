@@ -1,7 +1,7 @@
 <template>
   <div class="page-content">
     <!-- S 头部Header -->
-    <div class="header-bg">
+    <div class="header-bg" :class="isInApp ? 'header-inapp-bg' : ''">
       <Header
         title="企业助贷"
         :disabled="true"
@@ -594,13 +594,21 @@ export default {
   height: auto;
   background: #f5f5f5;
   margin: 0 auto;
+  .header-inapp-bg {
+    width: 100%;
+    background-color: #4974f5;
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 480px;
+    background-position: 0 48px;
+  }
   .header-bg {
     width: 100%;
     height: 420px;
-    background: url('https://cdn.shupian.cn/sp-pt/wap/images/bmjxoxb7fq80000.png')
-      no-repeat;
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-repeat: no-repeat;
     background-size: 100% 100%;
-
     .header-content {
       margin-left: 38px;
       margin-top: 50px;
