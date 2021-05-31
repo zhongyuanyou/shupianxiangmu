@@ -145,7 +145,7 @@ export default {
     height: 36px;
     // line-height: 36px;
     display: inline-block;
-    margin-top: 4px;
+    padding-top: 3px;
     margin: 0 32px 0 16px;
     .my-swipe .sp-swipe-item {
       height: 100%;
