@@ -52,7 +52,7 @@
             <div class="list_item_right">
               <div class="title">{{ item.title }}</div>
               <div class="tags">
-                <span v-for="(itemItem, index) in item.tags" :key="index">{{
+                <span v-for="(itemItem, itemKey) in item.tags" :key="itemKey">{{
                   itemItem
                 }}</span>
               </div>

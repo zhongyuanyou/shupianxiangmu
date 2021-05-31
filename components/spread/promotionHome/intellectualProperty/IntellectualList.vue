@@ -45,7 +45,11 @@
               <div
                 v-show="active === 0"
                 class="hot-product"
-                @click="jumpLink('https://www.baidu.com/')"
+                @click="
+                  jumpLink(
+                    '/spread/promotionHome/hotSaleTop?code=CRISPS-C-ZSCQ'
+                  )
+                "
               >
                 <img
                   src="https://cdn.shupian.cn/sp-pt/wap/images/5a270klvc280000.png"

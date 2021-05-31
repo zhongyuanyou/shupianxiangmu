@@ -58,7 +58,13 @@
                     v-show="item.currentPrice !== '' && item.currentPrice"
                     class="region-price"
                   >
-                    {{ item.currentPrice }}<span>元</span>
+                    {{ price(item.currentPrice) }}
+                    <span
+                      v-if="item.currentPrice > 10000"
+                      class="item-price-unit"
+                      >万元</span
+                    >
+                    <span v-else class="item-price-unit">元</span>
                     <!--              <span-->
                     <!--                v-show="item.originalPrice !== '' && item.originalPrice"-->
                     <!--                class="original-price"-->
@@ -149,6 +155,13 @@ export default {
     }
   },
   methods: {
+    price(price) {
+      if (price % 1) {
+        return price > 10000 ? (price / 10000).toFixed(1) : price
+      } else {
+        return parseInt(price > 10000 ? (price / 10000).toFixed(1) : price)
+      }
+    },
     onClick() {
       // console.log(this.active)
       // this.$emit('change', this.titleName[name])
@@ -299,6 +312,9 @@ export default {
                 text-overflow: ellipsis;
                 white-space: nowrap;
               }
+              span:nth-child(n + 4) {
+                display: none;
+              }
             }
             .region-explain {
               margin-top: 20px;
@@ -318,7 +334,7 @@ export default {
             font-weight: bold;
             color: #ec5330;
             padding-top: 28px;
-            > span {
+            .item-price-unit {
               height: 20px;
               font-size: 22px;
               font-weight: bold;

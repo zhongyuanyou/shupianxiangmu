@@ -42,9 +42,9 @@
               block
               type="info"
               native-type="submit"
-              @click="openImPage"
-              :disabled="isNull"
               :class="isNull ? 'disabled' : ''"
+              :disabled="isNull"
+              @click="openImPage"
             >
               立即获取查询结果
             </sp-button>
