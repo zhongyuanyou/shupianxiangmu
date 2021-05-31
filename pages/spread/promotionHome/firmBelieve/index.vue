@@ -163,10 +163,13 @@ export default {
       if (this.phoneNum === '') {
         return true
       }
-      // 验证码
-      if (this.verifyCode === '') {
+      if (!isLogin && this.verifyCode === '') {
         return true
       }
+      // if (this.verifyCode === '') {
+      //   // 验证码
+      //   return true
+      // }
       return false
     },
   },
@@ -201,49 +204,73 @@ export default {
     if (this.isLogin) {
       this.phoneNum = this.userPhone
       this.showVerifyCode = false
+    } else {
+      this.showVerifyCode = true
     }
-    this.showVerifyCode = true
-
     const code = 'ad100065'
     this.getAd(code)
   },
   methods: {
     // 点击申请单的时候触发
+
     checkSmsCode() {
-      this.$axios
-        .get(financingApi.check_smsCode, {
-          params: {
-            phone: this.phoneNum,
-            smsCode: this.smsNum,
+      if (!isLogin) {
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phoneNum,
+              smsCode: this.smsNum,
+            },
+          })
+          .then((res) => {
+            console.log('++++++++res', res)
+            if (res.code === 200 && res.data === true) {
+              this.$xToast.showLoading({ message: '正在联系规划师...' })
+              const sessionParams = {
+                imUserId: this.pagePlanner.id,
+                imUserType: this.pagePlanner.type,
+                ext: {
+                  startUserType: 'cps-app',
+                  proNum: this.proNum,
+                },
+              }
+              const msgParams = {
+                sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+                msgType: 'im_tmplate', // 消息类型
+                extContent: this.$route.query, // 路由参数
+                title: this.firmName,
+                area: this.city
+                  ? this.city.join(',')
+                  : this.$store.state.city.defaultCity.name,
+                productName: this.title,
+              }
+              this.sendTemplateMsgMixin({ sessionParams, msgParams })
+            } else {
+              Toast('验证码不正确！')
+            }
+          })
+      } else {
+        this.$xToast.showLoading({ message: '正在联系规划师...' })
+        const sessionParams = {
+          imUserId: this.pagePlanner.id,
+          imUserType: this.pagePlanner.type,
+          ext: {
+            startUserType: 'cps-app',
+            proNum: this.proNum,
           },
-        })
-        .then((res) => {
-          console.log('++++++++res', res)
-          if (res.code === 200 && res.data === true) {
-            this.$xToast.showLoading({ message: '正在联系规划师...' })
-            const sessionParams = {
-              imUserId: this.pagePlanner.id,
-              imUserType: this.pagePlanner.type,
-              ext: {
-                startUserType: 'cps-app',
-                proNum: this.proNum,
-              },
-            }
-            const msgParams = {
-              sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-              msgType: 'im_tmplate', // 消息类型
-              extContent: this.$route.query, // 路由参数
-              title: this.firmName,
-              area: this.city
-                ? this.city.join(',')
-                : this.$store.state.city.defaultCity.name,
-              productName: this.title,
-            }
-            this.sendTemplateMsgMixin({ sessionParams, msgParams })
-          } else {
-            Toast('验证码不正确！')
-          }
-        })
+        }
+        const msgParams = {
+          sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+          msgType: 'im_tmplate', // 消息类型
+          extContent: this.$route.query, // 路由参数
+          title: this.firmName,
+          area: this.city
+            ? this.city.join(',')
+            : this.$store.state.city.defaultCity.name,
+          productName: this.title,
+        }
+        this.sendTemplateMsgMixin({ sessionParams, msgParams })
+      }
     },
     onSubmit(values) {
       console.log('submit', values)
@@ -460,7 +487,7 @@ export default {
     background: #d8d8d8;
   }
   .sp-button--primary {
-    // width: ;
+    width: 160px;
   }
   .container_form {
     .sp-cell {
