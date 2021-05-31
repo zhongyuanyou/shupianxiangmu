@@ -37,9 +37,9 @@
             :class="{ active: index === currentIndex }"
             @click="choose(index, item)"
           >
-            <img :src="item.img" alt="" class="items_item_img" />
+            <img :src="img" alt="" class="items_item_img" />
           </div>
-          <p class="items_item_text">{{ item.ext2 }}</p>
+          <p class="items_item_text">{{ item.name }}</p>
         </div>
       </div>
     </sp-sticky>
@@ -115,6 +115,7 @@ export default {
       },
       pagePlanner: {},
       code: '',
+      img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
     }
   },
   computed: {
@@ -126,6 +127,7 @@ export default {
   },
   mounted() {
     this.init()
+    this.getHotList()
   },
   methods: {
     init() {
@@ -245,6 +247,7 @@ export default {
       if (code) {
         this.params.classCodes = code
       }
+
       const url = newSpreadApi.service_product_list
       const params = this.params
       const res = await this.$axios.get(url, { params })
@@ -414,6 +417,7 @@ export default {
     }
     .items:nth-of-type(1) {
       margin-left: 0;
+      text-align: center;
     }
   }
   .container_list {
