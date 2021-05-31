@@ -1,7 +1,7 @@
 <template>
   <div class="page-content">
     <!-- S 头部Header -->
-    <div class="header-bg">
+    <div class="header-bg" :class="isInApp ? 'header-inapp-bg' : ''">
       <Header
         title="企业助贷"
         :disabled="true"
@@ -69,8 +69,8 @@ import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
 import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
 import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
 import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
-import Notice from '@/components/financing/common/Notice'
-import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList'
+import Notice from '@/components/financing/common/Notice.vue'
+import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList.vue'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import imHandle from '@/mixins/imHandle'
@@ -498,6 +498,7 @@ export default {
     productClassData(data) {
       if (data.length === 0) return
       // const classArr = []
+      console.log(data, 1111)
       data.forEach((item, index) => {
         this.titleName.push({
           type: item.ext1,
@@ -593,13 +594,21 @@ export default {
   height: auto;
   background: #f5f5f5;
   margin: 0 auto;
+  .header-inapp-bg {
+    width: 100%;
+    background-color: #4974f5;
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 480px;
+    background-position: 0 48px;
+  }
   .header-bg {
     width: 100%;
     height: 420px;
-    background: url('https://cdn.shupian.cn/sp-pt/wap/images/bmjxoxb7fq80000.png')
-      no-repeat;
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-repeat: no-repeat;
     background-size: 100% 100%;
-
     .header-content {
       margin-left: 38px;
       margin-top: 50px;
@@ -632,7 +641,7 @@ export default {
   }
   .activities {
     margin-top: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
   }
   .bottom-notes {
     margin-top: 40px;

@@ -42,12 +42,11 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-
 import NavTop from '@/components/spread/common/NavTop'
-import Nav from '@/components/spread/common/Nav'
+import Nav from '@/components/spread/common/Nav.vue'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
-import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList'
+import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'IntellectualProperty',
@@ -445,6 +444,8 @@ export default {
             size: 'small',
             label: '',
             imageUrl: elem.navigationImageUrl,
+            description: elem.description || '',
+            execution: elem.executionParameters || '',
           }
         })
         // this.rollNav.reverse()
@@ -582,12 +583,32 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url, name) {
-      if (name === '全部服务') {
-        this.$router.push('/financing/category')
-        return
+    jumpLink(url, description, execution) {
+      // if (name === '全部服务') {
+      //   this.$router.push('/financing/category')
+      //   return
+      // }
+      // app跳转
+      try {
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          console.log(lastObj, execution.split(':')[0])
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
       }
       if (url) {
+        if (url.indexOf('/spread/') > -1) {
+          this.$router.push(url)
+          return
+        }
         if (url.indexOf('http') > -1) {
           window.location.href = url
           return

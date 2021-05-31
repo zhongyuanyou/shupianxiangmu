@@ -455,7 +455,6 @@ export default {
       this.$router.push({ path: '/city/choiceCity' })
     },
     jumpLink(url, description, execution) {
-      console.log(url, description, execution)
       // app跳转
       try {
         if (this.isInApp && execution.split(':')[0] === 'appFilter') {
@@ -466,9 +465,7 @@ export default {
           }":"${description}"}}`
           const jsonObj = JSON.parse(lastObj)
           console.log(lastObj, execution.split(':')[0])
-          this.$appFn.dggProperty(jsonObj, (res) => {
-            console.log(res, 7777)
-          })
+          this.$appFn.dggProperty(jsonObj, (res) => {})
           return
         }
       } catch (error) {

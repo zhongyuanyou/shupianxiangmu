@@ -1,6 +1,11 @@
 <template>
   <div class="banner">
-    <sp-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+    <sp-swipe
+      class="my-swipe"
+      :autoplay="3000"
+      indicator-color="#4974F5"
+      :show-indicators="imgList.length > 1"
+    >
       <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
         ><img :src="item.img" alt=""
       /></sp-swipe-item>

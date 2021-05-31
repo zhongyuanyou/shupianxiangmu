@@ -184,7 +184,7 @@ export default {
     display: block;
     .search-content {
       width: @spread-page-width;
-      padding: 20px 20px 26px 28px;
+      padding: 20px 20px 28px 28px;
       display: flex;
       align-items: center;
       .serch-left {
@@ -193,7 +193,7 @@ export default {
         height: 100%;
         .title {
           font-size: 36px;
-          font-family: PingFang;
+          font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           padding-right: 21px;
           padding-left: 10px;

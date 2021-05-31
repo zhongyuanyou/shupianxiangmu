@@ -52,7 +52,13 @@
                     v-show="item.currentPrice !== '' && item.currentPrice"
                     class="region-price"
                   >
-                    {{ item.currentPrice }}<span>元</span>
+                    {{ price(item.currentPrice) }}
+                    <span
+                      v-if="item.currentPrice > 10000"
+                      class="item-price-unit"
+                      >万元</span
+                    >
+                    <span v-else class="item-price-unit">元</span>
                     <!--              <span-->
                     <!--                v-show="item.originalPrice !== '' && item.originalPrice"-->
                     <!--                class="original-price"-->
@@ -143,6 +149,14 @@ export default {
     }
   },
   methods: {
+    // 处理价格
+    price(price) {
+      if (price % 1) {
+        return price > 10000 ? (price / 10000).toFixed(1) : price
+      } else {
+        return parseInt(price > 10000 ? (price / 10000).toFixed(1) : price)
+      }
+    },
     onClick() {
       console.log(this.titleName, 789456)
       // console.log(this.active)
@@ -256,6 +270,7 @@ export default {
           img {
             width: 220px;
             height: 220px;
+            border-radius: 12px;
           }
         }
         .region {
@@ -306,7 +321,7 @@ export default {
             font-weight: bold;
             color: #ec5330;
             padding-top: 28px;
-            > span {
+            > .item-price-unit {
               height: 20px;
               font-size: 22px;
               font-weight: bold;

@@ -251,12 +251,39 @@ export default {
     },
     // 立即办理
     handleBtn() {
-      const planner = {
-        mchUserId: this.pagePlanner.id,
-        userName: this.pagePlanner.name,
-        type: this.pagePlanner.type,
+      if (this.isInApp) {
+        this.$appFn.dggGetUserInfo((res) => {
+          const { code, data } = res || {}
+          if (code !== 200) {
+            this.$appFn.dggLogin((loginRes) => {})
+          } else {
+            this.$appFn.dggOpenIM(
+              {
+                name: this.planner.name,
+                userId: this.planner.id,
+                userType: this.planner.type,
+              },
+              (res) => {
+                const { code } = res || {}
+                if (code !== 200)
+                  this.$xToast.show({
+                    message: `联系失败`,
+                    duration: 1000,
+                    forbidClick: true,
+                    icon: 'toast_ic_remind',
+                  })
+              }
+            )
+          }
+        })
+      } else {
+        const planner = {
+          mchUserId: this.pagePlanner.id,
+          userName: this.pagePlanner.name,
+          type: this.pagePlanner.type,
+        }
+        this.uPIM(planner)
       }
-      this.uPIM(planner)
     },
     // 去小数后两位
     toFixedFun(num, length) {
@@ -449,7 +476,7 @@ export default {
         display: block;
       }
       .title {
-        width: 160px;
+        width: 165px;
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;

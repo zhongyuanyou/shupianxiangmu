@@ -2,7 +2,7 @@
   <div class="credit-evaluation">
     <sp-sticky>
       <div class="heaa-box">
-        <Head title="额度评估">
+        <Head title="额度评估" :style="{ paddingTop: isInApp ? 0 : '' }">
           <template #left>
             <my-icon
               class="back-icon"
@@ -273,21 +273,24 @@ export default {
     },
   },
   mounted() {
+    console.log(this.isInApp)
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
   },
   methods: {
     getCity() {
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
-      this.$axios.get(url, { params: { code: 2147483647 } }).then((res) => {
-        if (res.code === 200) {
-          this.cityList = res.data.city
-          this.columns = [
-            { values: Object.keys(this.cityList) },
-            { values: this.cityList['北京市'] },
-          ]
-        }
-      })
+      this.$axios
+        .get(financingApi.get_city, { params: { code: 2147483647 } })
+        .then((res) => {
+          if (res.code === 200) {
+            this.cityList = res.data.city
+            this.columns = [
+              { values: Object.keys(this.cityList) },
+              { values: this.cityList['北京市'] },
+            ]
+          }
+        })
     },
     onChange(picker, value) {
       picker.setColumnValues(1, this.cityList[value[0]])
@@ -353,7 +356,7 @@ export default {
           'http://127.0.0.1:7001/service/nk/financing/v1/get_smsCode.do'
         // financingApi.smsCode
         this.$axios
-          .get(url, {
+          .get(financingApi.smsCode, {
             params: {
               phone: this.phone,
             },
@@ -386,7 +389,7 @@ export default {
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         // financing.check_smsCode
         this.$axios
-          .get(url, {
+          .get(financingApi.check_smsCode, {
             params: {
               phone: this.phone,
               smsCode: this.sms,
@@ -402,7 +405,7 @@ export default {
               }
               this.uPIM(planner)
             } else {
-              Toast('验证码不真确！')
+              Toast('验证码不正确！')
             }
           })
       } else {
@@ -473,20 +476,14 @@ export default {
   background: #f5f5f5;
   padding-bottom: 40px;
   height: 100%;
-  //   border: 1px solid;
   .heaa-box {
     width: 100%;
     background: #4974f5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    // position: fixed;
-    // top: 0;
     ::v-deep.my-head {
-      //   width: 750px !important;
-      //   position: fixed !important;
-      //   left: 50% !important;
-      //   margin-left: -375px !important;
+      padding-top: 0 !important ;
       position: relative;
       background: transparent;
       .title {
@@ -547,7 +544,7 @@ export default {
         display: block;
       }
       .chooseTitle {
-        width: 308px;
+        width: 315px;
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
@@ -556,7 +553,7 @@ export default {
         line-height: 45px;
       }
       .title {
-        width: 130px;
+        width: 135px;
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
@@ -572,7 +569,7 @@ export default {
         font-weight: 400;
         line-height: 45px;
         border: none;
-        margin-left: 58px;
+        margin-left: 53px;
         color: #222222;
       }
       > input:-ms-input-placeholder {
@@ -622,11 +619,11 @@ export default {
         font-weight: 700;
         color: #222222;
         line-height: 45px;
-        width: 192px;
+        width: 200px;
       }
       .personal-input {
         display: block;
-        margin-left: 60px;
+        margin-left: auto;
         width: 346px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
@@ -801,7 +798,7 @@ export default {
         font-weight: 400;
         color: #4974f5;
         line-height: 45px;
-        margin-left: 20px;
+        margin-left: auto;
       }
     }
   }

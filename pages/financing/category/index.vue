@@ -91,7 +91,7 @@ import { mapState } from 'vuex'
 import Better from 'better-scroll'
 import { Swipe, SwipeItem, Image } from '@chipspc/vant-dgg'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import { financingApi } from '@/api'
+import { financingApi } from '@/api/spread'
 import LoadingCenter from '@/components/common/loading/LoadingCenter'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import 'swiper/swiper-bundle.css'
@@ -162,7 +162,7 @@ export default {
           this.scrollY = Math.abs(res.y) + 100
           for (let i = 0; i < this.arr.length; i++) {
             if (this.scrollY > this.arr[i] && this.scrollY < this.arr[i + 1]) {
-              this.TabNavList = i - 1 // 左右联动取值
+              this.TabNavList = i // 左右联动取值
               // document.getElementById(this.TabNavList).scrollIntoView()
               this.left.scrollToElement(
                 this.$refs.l_list,
@@ -207,7 +207,7 @@ export default {
           'http://127.0.0.1:7001/service/nk/financing/v1/product_list.do'
         // financingApi.productList
         await this.$axios
-          .get(url, {
+          .get(financingApi.productList, {
             params: { code: 'CRISPS-C-RZDKALL', adCode: 'ad100052' },
           })
           .then((res) => {

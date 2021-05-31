@@ -82,7 +82,7 @@ export default {
     .item-desc {
       width: 170px;
       font-size: 22px;
-      font-weight: bold;
+      font-weight: 400;
       color: #999999;
       line-height: 26px;
       overflow: hidden;
