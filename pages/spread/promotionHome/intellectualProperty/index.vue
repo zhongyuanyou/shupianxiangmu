@@ -399,7 +399,6 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
@@ -590,6 +589,34 @@ export default {
       // }
       // app跳转
       try {
+        // 更多路由
+        if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const androidRouter = {
+            path: '/common/android/SingleWeb',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+          return
+        }
+        // 产品列表路由
         if (this.isInApp && execution.split(':')[0] === 'appFilter') {
           const code =
             url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
