@@ -34,8 +34,8 @@
         <div v-for="(item, index) in itemArray" :key="index" class="items">
           <div
             class="items_item"
-            @click="choose(index)"
             :class="{ active: index === currentIndex }"
+            @click="choose(index)"
           >
             <img :src="item.img" alt="" class="items_item_img" />
           </div>
@@ -79,11 +79,16 @@
 </template>
 <script>
 // import Header from '@/components/common/head/header'
+
+import { mapState } from 'vuex'
 import { Sticky, PullRefresh, List } from '@chipspc/vant-dgg'
+import imHandle from '@/mixins/imHandle'
 import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
+
 export default {
   name: 'Index',
+  mixins: [imHandle],
   components: {
     // Header,
     [Sticky.name]: Sticky,
@@ -125,54 +130,118 @@ export default {
         limit: 15,
         orderTypes: 'SALES_SORT',
       },
+      pagePlanner: {},
     }
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   mounted() {
-    if (this.isInApp) {
-      this.$appFn.dggGetUserInfo((res) => {
-        const { code, data } = res || {}
-        if (code !== 200) {
-          this.$appFn.dggLogin((loginRes) => {})
-        } else {
-          this.$appFn.dggOpenIM(
-            {
-              name: this.pagePlanner.name,
-              userId: this.pagePlanner.id,
-              userType: this.pagePlanner.type,
-            },
-            (res) => {
-              const { code } = res || {}
-              if (code !== 200)
-                this.$xToast.show({
-                  message: `联系失败`,
-                  duration: 1000,
-                  forbidClick: true,
-                  icon: 'toast_ic_remind',
-                })
-            }
-          )
-        }
-      })
-    } else {
-      if (JSON.stringify(this.planner) === '{}') return
-      const planner = {
-        mchUserId: this.planner.id,
-        userName: this.planner.name,
-        type: this.planner.type,
-      }
-      this.uPIM(planner)
-    }
     this.init()
   },
   methods: {
     init() {
+      this.getPagePlanner('app-ghsdgye-02')
       // this.getHotList()
+      if (this.$route.query.code) {
+        this.params.classCodes = this.$route.query.code
+      }
+      if (this.isInApp) {
+        this.$appFn.dggGetUserInfo((res) => {
+          const { code, data } = res || {}
+          if (code !== 200) {
+            this.$appFn.dggLogin((loginRes) => {})
+          } else {
+            this.$appFn.dggOpenIM(
+              {
+                name: this.pagePlanner.name,
+                userId: this.pagePlanner.id,
+                userType: this.pagePlanner.type,
+              },
+              (res) => {
+                const { code } = res || {}
+                if (code !== 200)
+                  this.$xToast.show({
+                    message: `联系失败`,
+                    duration: 1000,
+                    forbidClick: true,
+                    icon: 'toast_ic_remind',
+                  })
+              }
+            )
+          }
+        })
+      }
     },
-
+    // 获取推荐规划师
+    async getPagePlanner(scene) {
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+      let areaCode = '510100' // 站点code
+      // 站点code
+      if (this.isInApp) {
+        this.$appFn.dggCityCode((res) => {
+          areaCode = res.data.adCode
+        })
+      } else {
+        areaCode = this.currentCity.code
+      }
+      try {
+        this.$axios
+          .post(
+            plannerApi.plannerReferrals,
+            {
+              login_name: '',
+              deviceId: device, // 设备标识
+              area: areaCode || '510100', // 站点code
+              user_id: '',
+              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
+              sceneId: scene, // 场景id
+              level_2_ID: '', // 二级code
+              platform: 'app',
+              productId: '', //
+              thirdTypeCodes: '', // 三级code
+              firstTypeCode: 'FL20210425164307', // 一级code
+            },
+            {
+              headers: {
+                sysCode: 'cloud-recomd-api',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res) => {
+            if (res.code === 200 && res.data.length > 0) {
+              this.pagePlanner = {
+                id: res.data[0].mchUserId,
+                name: res.data[0].userName,
+                type: res.data[0].type,
+                jobNum: res.data[0].userCenterNo,
+                telephone: res.data[0].phone,
+                imgSrc: res.data[0].imgaes,
+              }
+              console.log('this.pagePlanner', this.pagePlanner)
+            } else {
+              this.$xToast.show({
+                message: `已提交，我们会尽快联系您`,
+                duration: 3000,
+                forbidClick: true,
+                icon: 'toast_ic_remind',
+              })
+            }
+          })
+      } catch (error) {
+        console.log('plannerApi.plannerReferrals error：', error.message)
+      }
+    },
+    // 获取热榜列表数据
     async getHotList() {
-      const url =
-        // 'http://172.16.132.228:7001/service/nk/newChipSpread/v1/service_product_list.do'
-        newSpreadApi.service_product_list
+      const url = newSpreadApi.service_product_list
       const params = this.params
       const res = await this.$axios.get(url, { params })
       if (res.code === 200) {
@@ -198,7 +267,6 @@ export default {
       // 清空列表数据
       this.finished = false
       // 重新加载数据
-
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true
       this.onLoad()

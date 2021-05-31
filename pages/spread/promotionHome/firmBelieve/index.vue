@@ -171,6 +171,7 @@ export default {
     },
   },
   mounted() {
+    this.getPagePlanner('app-ghsdgye-02')
     if (this.isInApp) {
       this.$appFn.dggGetUserInfo((res) => {
         const { code, data } = res || {}
@@ -196,14 +197,6 @@ export default {
           )
         }
       })
-    } else {
-      if (JSON.stringify(this.planner) === '{}') return
-      const planner = {
-        mchUserId: this.planner.id,
-        userName: this.planner.name,
-        type: this.planner.type,
-      }
-      this.uPIM(planner)
     }
     if (this.isLogin) {
       this.phoneNum = this.userPhone
@@ -211,7 +204,6 @@ export default {
     }
     this.showVerifyCode = true
 
-    this.getPagePlanner('app-ghsdgye-02')
     const code = 'ad100065'
     this.getAd(code)
   },
