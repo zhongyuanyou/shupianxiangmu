@@ -1,7 +1,7 @@
 <template>
   <div class="category">
     <!--S 头部-->
-    <div class="category_header">
+    <div class="category_header" :style="{ paddingTop: isInApp ? '64px' : '' }">
       <div v-if="!isApplets" class="icon" @click="back">
         <my-icon name="nav_ic_back" size="0.40rem" color="#1a1a1a" />
       </div>
@@ -12,7 +12,7 @@
     </div>
     <!--E 头部-->
     <!--S 内容区-->
-    <div class="category_con">
+    <div class="category_con" :style="{ paddingTop: isInApp ? '96px' : '' }">
       <!--S 侧边栏区域-->
       <aside ref="l_list" class="category_con_lf">
         <ul>
@@ -141,6 +141,7 @@ export default {
     ...mapState({
       currentCity: (state) => state.city.currentCity,
       isApplets: (state) => state.app.isApplets,
+      isInApp: (state) => state.app.isInApp,
     }),
   },
   mounted() {

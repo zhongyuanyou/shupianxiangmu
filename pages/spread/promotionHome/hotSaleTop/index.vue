@@ -1,11 +1,16 @@
 <template>
   <div class="container_body">
-    <div class="container" :class="showTitle === true ? 'header_bgc' : ''">
+    <div
+      class="container"
+      :class="showTitle === true ? 'header_bgc' : ''"
+      :style="isInApp ? 'height:220px' : ''"
+    >
       <!-- Header Start -->
       <sp-sticky @scroll="handleScroll">
         <div
           class="container_header"
           :class="showTitle === true ? 'header_bgc' : ''"
+          :style="isInApp ? 'padding-top:20px;height:64px' : ''"
         >
           <my-icon
             name="nav_ic_back"
@@ -21,15 +26,17 @@
       <!-- Header End -->
       <!-- saleTop Start -->
       <div class="hotSaleTop">
-        <div class="hotSaleTop_title">本月热销榜</div>
-        <div class="hotSaleTop_span">
+        <div class="hotSaleTop_title" :style="isInApp ? 'top:92px' : ''">
+          本月热销榜
+        </div>
+        <div class="hotSaleTop_span" :style="isInApp ? 'top:141px' : ''">
           <div class="hotSaleTop_span_top">TOP</div>
           <div class="hotSaleTop_span_text">每日更新</div>
         </div>
       </div>
       <!-- saleTop End -->
     </div>
-    <sp-sticky :offset-top="44">
+    <sp-sticky :offset-top="isInApp ? 64 : 44">
       <div class="container_items">
         <div v-for="(item, index) in itemArray" :key="index" class="items">
           <div
@@ -276,9 +283,10 @@ export default {
       this.onLoad()
     },
     choose(index, item) {
-      this.start = 1
-      this.currentIndex = index
+      this.params.start = 1
+      this.list = []
       this.getHotList(item.ext1)
+      this.currentIndex = index
     },
     // 跳详情
     goDetail(id) {
@@ -421,6 +429,7 @@ export default {
     }
   }
   .container_list {
+    background: #f5f5f5;
     .list_item {
       height: 248px;
       background: #ffffff;

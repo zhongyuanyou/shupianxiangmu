@@ -127,7 +127,7 @@ export default {
       valuePlaceholder: '请输入车价总额',
       pickerShow: false,
       columns: ['1年', '2年', '3年', '4年', '5年'],
-      timeValue: 12,
+      timeValue: 1,
       type: '',
       firstValue: '',
       firstPlaceholde: '请输入首付比率',
@@ -289,7 +289,10 @@ export default {
     // 开始计算
     calculate() {
       if (this.actived === 0) {
+        this.standardNum.sum = 0
+        this.nplist = []
         this.standard = true
+        this.constant = false
         const reset = this.principalAndInterest({
           P:
             Number(this.value) -
@@ -311,6 +314,7 @@ export default {
         ).toFixed(2)
       } else {
         this.constant = true
+        this.standard = false
         // 等额本金
         this.principal({
           P:
@@ -423,21 +427,21 @@ export default {
     // 贷款期限弹出层确认按钮
     onConfirm(value, index) {
       this.yaer = value
-      value === '1年' && (this.timeValue = 12)
-      value === '2年' && (this.timeValue = 24)
-      value === '3年' && (this.timeValue = 36)
-      value === '4年' && (this.timeValue = 48)
-      value === '5年' && (this.timeValue = 60)
+      value === '1年' && (this.timeValue = 1)
+      value === '2年' && (this.timeValue = 2)
+      value === '3年' && (this.timeValue = 3)
+      value === '4年' && (this.timeValue = 4)
+      value === '5年' && (this.timeValue = 5)
       this.pickerShow = false
     },
     // 贷款期限切换方法
     onChange(picker, value, index) {
       this.yaer = value
-      value === '1年' && (this.timeValue = 12)
-      value === '2年' && (this.timeValue = 24)
-      value === '3年' && (this.timeValue = 36)
-      value === '4年' && (this.timeValue = 48)
-      value === '5年' && (this.timeValue = 60)
+      value === '1年' && (this.timeValue = 1)
+      value === '2年' && (this.timeValue = 2)
+      value === '3年' && (this.timeValue = 3)
+      value === '4年' && (this.timeValue = 4)
+      value === '5年' && (this.timeValue = 5)
       this.pickerShow = false
     },
     // 贷款期限弹出层取消按钮
@@ -446,6 +450,9 @@ export default {
     },
     chosee(idx) {
       this.actived = idx
+      if (!this.isShow) {
+        this.calculate()
+      }
     },
   },
 }

@@ -351,6 +351,8 @@ export default {
     // 开始计算
     calculate() {
       if (this.actived === 0) {
+        this.standardNum.sum = 0
+        this.constant = false
         this.standard = true
         const reset = this.principalAndInterest({
           P:
@@ -373,6 +375,7 @@ export default {
         ).toFixed(2)
       } else {
         this.constant = true
+        this.standard = false
         // 等额本金
         this.principal({
           P:
@@ -442,6 +445,9 @@ export default {
     },
     chosee(idx) {
       this.actived = idx
+      if (!this.isShow) {
+        this.calculate()
+      }
     },
   },
 }
