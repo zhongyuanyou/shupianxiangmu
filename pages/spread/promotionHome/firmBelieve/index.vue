@@ -45,11 +45,12 @@
           name="验证码"
           label="验证码"
           placeholder="输入短信校验码"
+          maxlength="6"
         >
           <template #button>
-            <sp-button size="small" type="primary" @click="onSms"
-              >获取验证码</sp-button
-            >
+            <sp-button size="small" type="primary" @click="onSms">{{
+              test
+            }}</sp-button>
           </template>
         </sp-field>
       </sp-form>
@@ -139,6 +140,8 @@ export default {
       pagePlanner: {},
       smsNum: '',
       imgList: [],
+      time: '',
+      test: '获取验证码',
     }
   },
   computed: {
@@ -168,6 +171,40 @@ export default {
     },
   },
   mounted() {
+    if (this.isInApp) {
+      this.$appFn.dggGetUserInfo((res) => {
+        const { code, data } = res || {}
+        if (code !== 200) {
+          this.$appFn.dggLogin((loginRes) => {})
+        } else {
+          this.$appFn.dggOpenIM(
+            {
+              name: this.planner.name,
+              userId: this.planner.id,
+              userType: this.planner.type,
+            },
+            (res) => {
+              const { code } = res || {}
+              if (code !== 200)
+                this.$xToast.show({
+                  message: `联系失败`,
+                  duration: 1000,
+                  forbidClick: true,
+                  icon: 'toast_ic_remind',
+                })
+            }
+          )
+        }
+      })
+    } else {
+      if (JSON.stringify(this.planner) === '{}') return
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+      }
+      this.uPIM(planner)
+    }
     if (this.isLogin) {
       this.phoneNum = this.userPhone
       this.showVerifyCode = false
@@ -179,23 +216,8 @@ export default {
     this.getAd(code)
   },
   methods: {
-    // goIM() {
-    //   // 验证验证码
-    //   // this.checkSmsCode()
-    //   console.log(this.pagePlanner.id)
-    //   const planner = {
-    //     mchUserId: this.pagePlanner.id,
-    //     userName: this.pagePlanner.name,
-    //     type: this.pagePlanner.type,
-    //   }
-    //   console.log('planner', planner)
-    //   // this.uPIM(planner)
-    // },
     // 点击申请单的时候触发
     checkSmsCode() {
-      // console.log('++++++++')
-      // console.log('++++++++', !isLogin)
-      // const url = financingApi.check_smsCode
       this.$axios
         .get(financingApi.check_smsCode, {
           params: {
@@ -236,6 +258,7 @@ export default {
     },
     showPopup() {
       this.isShow = true
+      this.proNum = this.currentIndex + 1
     },
     cancel() {
       this.isShow = false
@@ -249,6 +272,7 @@ export default {
     },
     // 获取验证码
     async getSmsCode() {
+      this.countDown()
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
           phone: this.phoneNum,
@@ -261,6 +285,22 @@ export default {
         this.smsNum = res.data
         console.log('res', res)
       }
+    },
+    // 倒计时
+    countDown() {
+      console.log('++到这里了')
+      let i = 59
+      clearInterval(this.time)
+      this.test = i + 's'
+      this.time = setInterval(() => {
+        if (i > 1) {
+          i--
+          this.test = i + 's'
+        } else {
+          this.test = '获取验证码'
+          clearInterval(this.time)
+        }
+      }, 1000)
     },
     // 获取推荐规划师
     async getPagePlanner(scene) {

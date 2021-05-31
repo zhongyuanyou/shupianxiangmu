@@ -31,10 +31,11 @@
               name="验证码"
               label="验证码"
               placeholder="请输入验证码"
+              maxlength="6"
             />
             <!-- :rules="[{ required: true, message: '请输入验证码' }]" -->
             <sp-button size="small" type="primary" @click="onSms">{{
-              countdown > 0 ? `${countdown}s` : '获取验证码'
+              test
             }}</sp-button>
           </div>
 
@@ -109,12 +110,11 @@ import {
   Field,
   Button,
   Popup,
-  CountDown,
   Toast,
 } from '@chipspc/vant-dgg'
 // import { copyrightRegisterApi } from '@/api'
 import { mapState } from 'vuex'
-import { financingApi, plannerApi } from '@/api/spread'
+import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
 import isLogin from '@/mixins/isLogin'
 import imHandle from '@/mixins/imHandle'
 
@@ -129,10 +129,38 @@ export default {
     [Field.name]: Field,
     [Button.name]: Button,
     [Popup.name]: Popup,
-    [CountDown.name]: CountDown,
     [Toast.name]: Toast,
   },
   mixins: [isLogin, imHandle],
+  async asyncData({ $axios }) {
+    const locationCodes = ''
+    const navCodes = ''
+    const code = 'CRISPS-C-ZSCQ'
+    try {
+      const res = await $axios.get(newSpreadApi.list, {
+        params: {
+          locationCodes,
+          navCodes,
+          code,
+        },
+      })
+      if (res.code === 200) {
+        console.log('请求成功', res)
+        return {
+          resultData: res.data,
+        }
+      }
+      console.log('请求失败')
+      return {
+        // resultData: dataRes.data,
+      }
+    } catch (error) {
+      console.log('请求错误')
+      return {
+        // resultData: dataRes.data,
+      }
+    }
+  },
   data() {
     return {
       text: '企业品牌维权利器 保护个人原创作品',
@@ -209,10 +237,9 @@ export default {
           btn_content: '立即申请版权登记',
         },
       ],
-      countdown: -1, // 发送验证码倒计时60秒
-      // 验证码定时器
-      countdownTimer: null,
       smsNum: '',
+      test: '获取验证码',
+      time: '',
     }
   },
   computed: {
@@ -247,25 +274,43 @@ export default {
     if (this.currentCity.city) {
       this.city = this.currentCity
     }
+    if (this.isInApp) {
+      this.$appFn.dggGetUserInfo((res) => {
+        const { code, data } = res || {}
+        if (code !== 200) {
+          this.$appFn.dggLogin((loginRes) => {})
+        } else {
+          this.$appFn.dggOpenIM(
+            {
+              name: this.planner.name,
+              userId: this.planner.id,
+              userType: this.planner.type,
+            },
+            (res) => {
+              const { code } = res || {}
+              if (code !== 200)
+                this.$xToast.show({
+                  message: `联系失败`,
+                  duration: 1000,
+                  forbidClick: true,
+                  icon: 'toast_ic_remind',
+                })
+            }
+          )
+        }
+      })
+    } else {
+      if (JSON.stringify(this.planner) === '{}') return
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+      }
+      this.uPIM(planner)
+    }
     this.getPagePlanner('app-ghsdgye-02')
   },
   methods: {
-    // 验证码倒计时
-    countDown() {
-      const vm = this
-      this.countdown = 59
-      clearInterval(vm.countdownTimer)
-      vm.countdownTimer = null
-      this.countdownTimer = setInterval(function () {
-        if (vm.countdown === 0) {
-          vm.countdown = -1
-          clearInterval(vm.countdownTimer)
-          vm.countdownTimer = null
-        } else {
-          vm.countdown > 0 && vm.countdown--
-        }
-      }, 1000)
-    },
     goIM() {
       console.log(this.pagePlanner.id)
       const planner = {
@@ -351,9 +396,6 @@ export default {
         .then((res) => {
           if (res.code === 200 && res.data === true) {
             this.$xToast.showLoading({ message: '正在联系规划师...' })
-            this.countdown = -1
-            clearInterval(this.countdownTimer)
-            this.countdownTimer = null
 
             const sessionParams = {
               imUserId: this.pagePlanner.id,
@@ -397,9 +439,7 @@ export default {
       if (_tel === '') {
         return Toast('请输入手机号码')
       }
-      if (this.countdown > -1) {
-        Toast('验证码已发送')
-      }
+
       if (!_reg.test(_tel)) {
         return Toast('请输入正确手机号码')
       }
@@ -409,6 +449,8 @@ export default {
     },
     // 获取验证码
     async getSmsCode() {
+      this.countDown()
+      // 请求
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
           phone: this.phoneNum,
@@ -421,6 +463,21 @@ export default {
         this.smsNum = res.data
         console.log('res', res)
       }
+    },
+    countDown() {
+      console.log('++到这里了')
+      let i = 59
+      clearInterval(this.time)
+      this.test = i + 's'
+      this.time = setInterval(() => {
+        if (i > 1) {
+          i--
+          this.test = i + 's'
+        } else {
+          this.test = '获取验证码'
+          clearInterval(this.time)
+        }
+      }, 1000)
     },
   },
 }

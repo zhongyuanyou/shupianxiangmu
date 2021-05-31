@@ -128,12 +128,47 @@ export default {
     }
   },
   mounted() {
+    if (this.isInApp) {
+      this.$appFn.dggGetUserInfo((res) => {
+        const { code, data } = res || {}
+        if (code !== 200) {
+          this.$appFn.dggLogin((loginRes) => {})
+        } else {
+          this.$appFn.dggOpenIM(
+            {
+              name: this.planner.name,
+              userId: this.planner.id,
+              userType: this.planner.type,
+            },
+            (res) => {
+              const { code } = res || {}
+              if (code !== 200)
+                this.$xToast.show({
+                  message: `联系失败`,
+                  duration: 1000,
+                  forbidClick: true,
+                  icon: 'toast_ic_remind',
+                })
+            }
+          )
+        }
+      })
+    } else {
+      if (JSON.stringify(this.planner) === '{}') return
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+      }
+      this.uPIM(planner)
+    }
     this.init()
   },
   methods: {
     init() {
       // this.getHotList()
     },
+
     async getHotList() {
       const url =
         // 'http://172.16.132.228:7001/service/nk/newChipSpread/v1/service_product_list.do'
