@@ -162,7 +162,7 @@ export default {
           this.scrollY = Math.abs(res.y) + 100
           for (let i = 0; i < this.arr.length; i++) {
             if (this.scrollY > this.arr[i] && this.scrollY < this.arr[i + 1]) {
-              this.TabNavList = i - 1 // 左右联动取值
+              this.TabNavList = i // 左右联动取值
               // document.getElementById(this.TabNavList).scrollIntoView()
               this.left.scrollToElement(
                 this.$refs.l_list,

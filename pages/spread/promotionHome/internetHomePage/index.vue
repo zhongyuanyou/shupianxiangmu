@@ -375,7 +375,7 @@ export default {
         console.log(error)
       }
       if (url) {
-        if (url.indexOf('/spread/promotionHome/') > -1) {
+        if (url.indexOf('/spread/') > -1) {
           this.$router.push(url)
           return
         }
