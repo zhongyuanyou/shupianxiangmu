@@ -274,6 +274,7 @@ export default {
     if (this.currentCity.city) {
       this.city = this.currentCity
     }
+    this.getPagePlanner('app-ghsdgye-02')
     if (this.isInApp) {
       this.$appFn.dggGetUserInfo((res) => {
         const { code, data } = res || {}
@@ -299,16 +300,7 @@ export default {
           )
         }
       })
-    } else {
-      if (JSON.stringify(this.planner) === '{}') return
-      const planner = {
-        mchUserId: this.planner.id,
-        userName: this.planner.name,
-        type: this.planner.type,
-      }
-      this.uPIM(planner)
     }
-    this.getPagePlanner('app-ghsdgye-02')
   },
   methods: {
     goIM() {

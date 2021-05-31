@@ -17,7 +17,6 @@ export default {
   mounted() {
     this.strcookie = document.cookie
     if (this.isInApp) {
-      this.isLogin = true
       this.getUserInfo()
     }
     if (this.strcookie.indexOf('userPhone') !== -1) {
@@ -38,7 +37,10 @@ export default {
     },
     getUserInfo() {
       this.$appFn.dggGetUserInfo((res) => {
-        this.userPhone = res.data.nickName
+        if (res.code === 200) {
+          this.isLogin = true
+          this.userPhone = res.data.nickName
+        }
       })
     },
   },
