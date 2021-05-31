@@ -36,7 +36,6 @@ import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.
 import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import { internetData } from '@/assets/spread/promotionHome/internetHomePage.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 
 export default {
@@ -194,6 +193,8 @@ export default {
             size: 'small',
             label: '',
             imageUrl: item.navigationImageUrl,
+            description: item.description || '',
+            execution: item.executionParameters || '',
           }
           navList.push(obj)
         })
@@ -352,12 +353,32 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url, name) {
-      if (name === '全部服务') {
-        this.$router.push('/financing/category')
-        return
+    jumpLink(url, description, execution) {
+      // if (name === '全部服务') {
+      //   this.$router.push('/financing/category')
+      //   return
+      // }
+      // app跳转
+      try {
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          console.log(lastObj, execution.split(':')[0])
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
       }
       if (url) {
+        if (url.indexOf('/spread/promotionHome/') > -1) {
+          this.$router.push(url)
+          return
+        }
         if (url.indexOf('http') > -1) {
           window.location.href = url
           return
