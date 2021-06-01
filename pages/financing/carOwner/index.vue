@@ -106,6 +106,7 @@
       <sp-picker
         show-toolbar
         title="所在城市"
+        :value-key="四川省"
         :columns="columns"
         @confirm="onConfirm"
         @cancel="onCancel"
@@ -166,17 +167,23 @@ export default {
 
     ...mapState({
       isInApp: (state) => state.app.isInApp,
-      currentCity: (state) => state.city.currentCity,
+      currentCitys: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
   },
   created() {},
   mounted() {
-    if (this.currentCity.city) {
-      this.city = this.currentCity
+    if (this.currentCitys) {
+      this.city = this.currentCitys.city
     }
-    this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
+    this.columns = [
+      { values: Object.keys(this.cityList) },
+      { values: this.cityList['四川省'] },
+    ]
+    this.isLogin && alert(this.currentCity)
+    this.getPagePlanner('app-ghsdgye-02')
+
     this.getAd('ad100061')
   },
   methods: {
@@ -265,7 +272,7 @@ export default {
     },
     linesReg(e) {
       e.target.value = e.target.value.match(/^(\d{0,3})/g)[0] || null
-      this.lines = e.target.value
+      this.lines = e.target.value > 101 ? 100 : e.target.value
     },
     phoneReg(e) {
       e.target.value = e.target.value.match(/^(\d{0,11})/g)[0] || null
@@ -316,7 +323,7 @@ export default {
             Toast('验证码发送成功,请注意查收！')
             this.smsRes = res.data
           } else {
-            Toast(res.data)
+            Toast('获取验证码频繁，请稍后再试！')
           }
         })
     },
@@ -325,8 +332,30 @@ export default {
         this.$appFn.dggGetUserInfo((res) => {
           const { code, data } = res || {}
           if (code !== 200) {
-            this.$appFn.dggLogin((loginRes) => {})
-          } else {
+            Toast('请先登录再申请！')
+            this.$appFn.dggLogin((loginRes) => {
+              if (loginRes.code === 200) {
+                this.$appFn.dggOpenIM(
+                  {
+                    name: this.planner.name,
+                    userId: this.planner.id,
+                    userType: this.planner.type,
+                  },
+                  (res) => {
+                    const { code } = res || {}
+                    if (code !== 200)
+                      this.$xToast.show({
+                        message: `联系失败`,
+                        duration: 1000,
+                        forbidClick: true,
+                        icon: 'toast_ic_remind',
+                      })
+                  }
+                )
+              } else {
+              }
+            })
+          } else if (code === 200) {
             this.$appFn.dggOpenIM(
               {
                 name: this.planner.name,
@@ -360,7 +389,7 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
+              //   this.$xToast.showLoading({ message: '正在联系规划师...' })
               const sessionParams = {
                 imUserId: this.pagePlanner.id,
                 imUserType: this.pagePlanner.type,
@@ -526,6 +555,7 @@ export default {
         > span {
           display: block;
         }
+
         .title {
           width: 135px;
           height: 45px;
@@ -537,14 +567,14 @@ export default {
         }
         > input {
           width: 238px;
-          height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
-          line-height: 45px;
           border: none;
           margin-left: 53px;
           color: #222222;
+          display: block;
+          line-height: 50px;
         }
         > input:-ms-input-placeholder {
           color: #999999;
@@ -610,7 +640,7 @@ export default {
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #4974f5;
-          line-height: 45px;
+          //   line-height: 45px;
           margin-left: auto;
         }
       }
