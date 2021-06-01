@@ -97,17 +97,14 @@ export default {
     position: relative;
     width: 100%;
     .item-title {
-      height: 34px;
+      // height: 34px;
       font-size: 32px;
       font-weight: bold;
       color: #222222;
       line-height: 34px;
       margin-bottom: 10px;
       width: 418px;
-      // 超出省略号
-      overflow: hidden;
-      text-overflow: ellipsis;
-      //white-space: nowrap;
+      .textOverflow(2);
     }
     .item-desc {
       font-size: 22px;
