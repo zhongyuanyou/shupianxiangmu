@@ -14,7 +14,7 @@
         </div>
         <div class="price-box">
           <span class="price">{{ item.price }}</span>
-          <span class="unit">万</span>
+          <span class="unit">元</span>
           <span class="high">最高可借</span>
         </div>
       </div>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
@@ -42,13 +43,42 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+    }),
+  },
+
   methods: {
     junmpUrl(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      }
     },
   },
 }

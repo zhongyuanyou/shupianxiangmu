@@ -106,7 +106,6 @@
       <sp-picker
         show-toolbar
         title="所在城市"
-        :value-key="四川省"
         :columns="columns"
         @confirm="onConfirm"
         @cancel="onCancel"
@@ -177,11 +176,6 @@ export default {
       this.city = this.currentCitys.city
     }
     this.getCity()
-    this.columns = [
-      { values: Object.keys(this.cityList) },
-      { values: this.cityList['四川省'] },
-    ]
-    this.isLogin && alert(this.currentCity)
     this.getPagePlanner('app-ghsdgye-02')
 
     this.getAd('ad100061')
@@ -328,53 +322,29 @@ export default {
         })
     },
     onForm() {
-      if (this.isInApp) {
-        this.$appFn.dggGetUserInfo((res) => {
-          const { code, data } = res || {}
-          if (code !== 200) {
-            Toast('请先登录再申请！')
-            this.$appFn.dggLogin((loginRes) => {
-              if (loginRes.code === 200) {
-                this.$appFn.dggOpenIM(
-                  {
-                    name: this.planner.name,
-                    userId: this.planner.id,
-                    userType: this.planner.type,
-                  },
-                  (res) => {
-                    const { code } = res || {}
-                    if (code !== 200)
-                      this.$xToast.show({
-                        message: `联系失败`,
-                        duration: 1000,
-                        forbidClick: true,
-                        icon: 'toast_ic_remind',
-                      })
-                  }
-                )
-              } else {
-              }
-            })
-          } else if (code === 200) {
-            this.$appFn.dggOpenIM(
-              {
-                name: this.planner.name,
-                userId: this.planner.id,
-                userType: this.planner.type,
-              },
-              (res) => {
-                const { code } = res || {}
-                if (code !== 200)
-                  this.$xToast.show({
-                    message: `联系失败`,
-                    duration: 1000,
-                    forbidClick: true,
-                    icon: 'toast_ic_remind',
-                  })
-              }
-            )
-          }
-        })
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+      }
+      if (this.isInApp && this.userPhone === '') {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              this.uPIM(planner)
+            }
+          })
+      } else {
+        this.uPIM(planner)
       }
       if (!this.isLogin && !this.isInApp) {
         const url =
@@ -412,36 +382,12 @@ export default {
                 intention: this.lines + '万元',
                 routerId: '',
               }
-              this.sendTemplateMsgMixin({ sessionParams, msgParams })
+              alert(1111)
+              this.uPIM(planner, sessionParams, msgParams)
             } else {
               Toast('验证码不真确！')
             }
           })
-      } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
-        const sessionParams = {
-          imUserId: this.pagePlanner.id,
-          imUserType: this.pagePlanner.type,
-          ext: {
-            intentionType: '',
-            intentionCity: '',
-            recommendId: '',
-            recommendAttrJson: {},
-            startUserType: 'cps-app',
-          },
-        }
-        const msgParams = {
-          sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-          msgType: 'im_tmplate', // 消息类型
-          extContent: this.$route.query, // 路由参数
-          forwardAbstract: '',
-          title: this.name + this.sexList[this.actived],
-          area: this.city.join(','),
-          productName: '车主贷',
-          intention: this.lines + '万元',
-          routerId: '',
-        }
-        this.sendTemplateMsgMixin({ sessionParams, msgParams })
       }
     },
     choose(idx) {

@@ -315,32 +315,6 @@ export default {
         })
     },
     onForm() {
-      if (this.isInApp) {
-        this.$appFn.dggGetUserInfo((res) => {
-          const { code, data } = res || {}
-          if (code !== 200) {
-            this.$appFn.dggLogin((loginRes) => {})
-          } else {
-            this.$appFn.dggOpenIM(
-              {
-                name: this.planner.name,
-                userId: this.planner.id,
-                userType: this.planner.type,
-              },
-              (res) => {
-                const { code } = res || {}
-                if (code !== 200)
-                  this.$xToast.show({
-                    message: `联系失败`,
-                    duration: 1000,
-                    forbidClick: true,
-                    icon: 'toast_ic_remind',
-                  })
-              }
-            )
-          }
-        })
-      }
       if (!this.isLogin && !this.isInApp) {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
@@ -353,7 +327,6 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
               const planner = {
                 mchUserId: this.pagePlanner.id,
                 userName: this.pagePlanner.name,
@@ -365,7 +338,6 @@ export default {
             }
           })
       } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
         const planner = {
           mchUserId: this.pagePlanner.id,
           userName: this.pagePlanner.name,
@@ -399,7 +371,7 @@ export default {
     },
     linesReg(e) {
       e.target.value = e.target.value.match(/^(\d{0,3})/g)[0] || null
-      this.lines = e.target.value
+      this.lines = e.target.value > 101 ? 100 : e.target.value
     },
     // 输入校验 E
     // 贷款期限弹出层取消按钮

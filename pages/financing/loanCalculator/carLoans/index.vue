@@ -239,6 +239,7 @@ export default {
     },
     // 重新计算
     recalculateBtn() {
+      this.standardNum.sum = 0
       this.btnShow = true
       this.standard = false
       this.constant = false
@@ -252,39 +253,12 @@ export default {
     },
     // 立即办理
     handleBtn() {
-      if (this.isInApp) {
-        this.$appFn.dggGetUserInfo((res) => {
-          const { code, data } = res || {}
-          if (code !== 200) {
-            this.$appFn.dggLogin((loginRes) => {})
-          } else {
-            this.$appFn.dggOpenIM(
-              {
-                name: this.planner.name,
-                userId: this.planner.id,
-                userType: this.planner.type,
-              },
-              (res) => {
-                const { code } = res || {}
-                if (code !== 200)
-                  this.$xToast.show({
-                    message: `联系失败`,
-                    duration: 1000,
-                    forbidClick: true,
-                    icon: 'toast_ic_remind',
-                  })
-              }
-            )
-          }
-        })
-      } else {
-        const planner = {
-          mchUserId: this.pagePlanner.id,
-          userName: this.pagePlanner.name,
-          type: this.pagePlanner.type,
-        }
-        this.uPIM(planner)
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
       }
+      this.uPIM(planner)
     },
     // 开始计算
     calculate() {
