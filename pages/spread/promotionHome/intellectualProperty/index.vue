@@ -42,7 +42,7 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import NavTop from '@/components/spread/common/NavTop'
+import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
@@ -401,7 +401,7 @@ export default {
     clickInputHandle(e) {
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },
@@ -592,7 +592,7 @@ export default {
         // 更多路由
         if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
           const iOSRouter = {
-            path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
             parameter: {
               routerPath: execution.split(':')[1] || 'cpsc/classify/page',
             },
