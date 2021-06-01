@@ -117,7 +117,7 @@ import safeAreaInsets from 'safe-area-insets'
 import { Swipe, swipeItem, Skeleton, Loading } from '@chipspc/vant-dgg'
 import TabCurve from '~/components/spread/transactionPro/common/TabCurve.vue'
 import adJumpHandle from '~/mixins/adJumpHandle'
-import GoodItem from '~/components/spread/transactionPro/common/ProductItem'
+import GoodItem from '~/components/spread/transactionPro/common/ProductItem.vue'
 import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
 
 export default {

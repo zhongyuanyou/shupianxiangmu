@@ -73,6 +73,7 @@ import Notice from '@/components/financing/common/Notice.vue'
 import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList.vue'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import openappChips from '~/mixins/openappChips'
 import imHandle from '@/mixins/imHandle'
 import isLogin from '@/mixins/isLogin'
 export default {
@@ -91,7 +92,7 @@ export default {
     BottomNotes,
     BtnPlanner,
   },
-  mixins: [imHandle, isLogin],
+  mixins: [imHandle, isLogin, openappChips],
   async asyncData({ $axios }) {
     try {
       const res = await $axios.get(`${newSpreadApi.list}`, {
@@ -575,14 +576,18 @@ export default {
       }
       this.$refs.plannerIM.onlineConsult()
     },
-    jumpLink2(url) {
-      if (url) {
-        if (url.indexOf('http') > -1) {
-          window.location.href = url
-          return
-        }
+    jumpLink2(url, title) {
+      if (title === '咨询直播') {
+        this.openApp()
+        // return
       }
-      this.$refs.plannerIM.onlineConsult()
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //     return
+      //   }
+      // }
+      // this.$refs.plannerIM.onlineConsult()
     },
   },
 }

@@ -384,7 +384,13 @@ export default {
       }, 1000)
     },
     onForm() {
-      if (!this.isLogin) {
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+      }
+
+      if (this.isInApp && this.userPhone === '') {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         // financing.check_smsCode
@@ -397,24 +403,12 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const planner = {
-                mchUserId: this.pagePlanner.id,
-                userName: this.pagePlanner.name,
-                type: this.pagePlanner.type,
-              }
               this.uPIM(planner)
             } else {
               Toast('验证码不正确！')
             }
           })
       } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
-        const planner = {
-          mchUserId: this.pagePlanner.id,
-          userName: this.pagePlanner.name,
-          type: this.pagePlanner.type,
-        }
         this.uPIM(planner)
       }
     },

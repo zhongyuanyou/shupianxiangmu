@@ -23,31 +23,58 @@ export default {
       clearUserInfo: 'user/CLEAR_USER',
     }),
     // 发起聊天
-    uPIM(planner) {
+    uPIM(planner, sessionParams, msgParams) {
       const { mchUserId, userName, type } = planner
       // 如果当前页面在app中，则调用原生IM的方法
       if (this.isInApp) {
         try {
           // 需要判断登陆没有，没有登录就是调用登录
-          this.getUserInfo()
-          this.$appFn.dggOpenIM(
-            {
-              name: userName,
-              userId: mchUserId,
-              userType: type || 'MERCHANT_B',
-            },
-            (res) => {
-              const { code } = res || {}
+          this.$appFn.dggGetUserInfo((res) => {
+            const { code, data } = res || {}
+            if (code !== 200) {
+              this.$appFn.dggLogin((loginRes) => {
+                if (loginRes.code === 200) {
+                  this.$appFn.dggOpenIM(
+                    {
+                      name: userName,
+                      userId: mchUserId,
+                      userType: type || 'MERCHANT_B',
+                    },
+                    (res) => {
+                      const { code } = res || {}
 
-              if (code !== 200)
-                this.$xToast.show({
-                  message: `联系失败`,
-                  duration: 1000,
-                  forbidClick: true,
-                  icon: 'toast_ic_remind',
-                })
+                      if (code !== 200)
+                        this.$xToast.show({
+                          message: `联系失败`,
+                          duration: 1000,
+                          forbidClick: true,
+                          icon: 'toast_ic_remind',
+                        })
+                    }
+                  )
+                }
+              })
+            } else {
+              this.$appFn.dggOpenIM(
+                {
+                  name: userName,
+                  userId: mchUserId,
+                  userType: type || 'MERCHANT_B',
+                },
+                (res) => {
+                  const { code } = res || {}
+
+                  if (code !== 200)
+                    this.$xToast.show({
+                      message: `联系失败`,
+                      duration: 1000,
+                      forbidClick: true,
+                      icon: 'toast_ic_remind',
+                    })
+                }
+              )
             }
-          )
+          })
         } catch (error) {
           console.error('uPIM error:', error)
         }
@@ -62,6 +89,9 @@ export default {
           imUserType,
           operUserType,
         })
+        if (sessionParams && sessionParams) {
+          this.sendTemplateMsgMixin({ sessionParams, msgParams })
+        }
       }
     },
 
@@ -197,7 +227,6 @@ export default {
     },
     sendTemplateMsgMixin({ sessionParams, msgParams }) {
       const userInfo = this.$store.state.user.userInfo
-      console.log(123)
       // this.judgeLoginMixin(true).then((userInfo) => {
       if (userInfo) {
         let params = {
@@ -257,7 +286,6 @@ export default {
             )
             // 发送模板消息
             this.imExample.sendTemplateMsg(tepMsgParams, (resData) => {
-              console.log(resData, 321)
               if (resData.code === 200) {
                 // 延时1s进入IM,避免模板消息未发生完成就已进入IM
                 this.$xToast.showLoading({ message: '正在联系规划师...' })
@@ -270,7 +298,6 @@ export default {
                   const token = this.token ? this.token : myInfo.token
                   const userId = this.userId ? this.userId : myInfo.userId
                   const userType = this.userType || 'VISITOR'
-                  console.log()
                   if (this.isApplets) {
                     window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}&requireCode=${sessionParams.requireCode}&requireName=${sessionParams.requireName}&isApplets=true`
                   } else {

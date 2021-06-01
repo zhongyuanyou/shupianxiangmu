@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'Product',
@@ -74,13 +75,42 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   methods: {
     onMore(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      }
     },
     price(price) {
       if (price % 1) {
