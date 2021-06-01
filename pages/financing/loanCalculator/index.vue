@@ -92,7 +92,8 @@ export default {
       margin-top: 20px;
     }
     .btn {
-      width: 152px;
+      display: block;
+      width: 160px;
       height: 56px;
       background: #4974f5;
       border-radius: 8px;
@@ -100,7 +101,7 @@ export default {
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 700;
       color: #ffffff;
-      line-height: 56px;
+      line-height: 52px;
       margin-top: 40px;
     }
   }

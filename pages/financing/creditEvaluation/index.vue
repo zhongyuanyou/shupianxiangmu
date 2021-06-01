@@ -554,7 +554,6 @@ export default {
       }
       .title {
         width: 135px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -563,14 +562,14 @@ export default {
       }
       > input {
         width: 238px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 53px;
         color: #222222;
+        display: block;
       }
       > input:-ms-input-placeholder {
         color: #999999;
@@ -629,7 +628,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         text-align: right;
       }
@@ -644,7 +643,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         text-align: right;
       }
@@ -717,7 +716,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         text-align: right;
         border: none;
         margin-left: 60px;
@@ -748,11 +747,10 @@ export default {
       align-items: center;
       .user-phone-input {
         width: 482px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 58px;
         color: #222222;
@@ -762,7 +760,6 @@ export default {
       }
       .phone-title {
         width: 130px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -771,14 +768,14 @@ export default {
       }
       > input {
         width: 238px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 58px;
         color: #222222;
+        display: block;
       }
       > input:-ms-input-placeholder {
         color: #999999;
@@ -797,7 +794,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #4974f5;
-        line-height: 45px;
+        line-height: 50px;
         margin-left: auto;
       }
     }

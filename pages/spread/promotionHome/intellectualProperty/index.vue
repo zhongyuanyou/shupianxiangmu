@@ -42,7 +42,7 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import NavTop from '@/components/spread/common/NavTop'
+import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
@@ -399,10 +399,9 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },
@@ -590,6 +589,34 @@ export default {
       // }
       // app跳转
       try {
+        // 更多路由
+        if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const androidRouter = {
+            path: '/common/android/SingleWeb',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+          return
+        }
+        // 产品列表路由
         if (this.isInApp && execution.split(':')[0] === 'appFilter') {
           const code =
             url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'

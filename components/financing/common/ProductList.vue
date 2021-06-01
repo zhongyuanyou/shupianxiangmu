@@ -3,7 +3,7 @@
     <sp-list
       v-model="loading"
       :finished="finished"
-      :offset="200"
+      :offset="0"
       finished-text="没有更多了"
       @load="onLoad"
     >

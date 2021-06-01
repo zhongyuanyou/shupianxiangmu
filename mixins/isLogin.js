@@ -6,6 +6,7 @@ export default {
       strcookie: '',
       userPhone: '',
       isLogin: false,
+      currentCity: '',
     }
   },
   computed: {
@@ -36,10 +37,15 @@ export default {
       }
     },
     getUserInfo() {
+      this.$appFn.dggCityCode((res) => {
+        if (res.code === 200) {
+          this.currentCity = res.data.cityName
+        }
+      })
       this.$appFn.dggGetUserInfo((res) => {
         if (res.code === 200) {
           this.isLogin = true
-          this.userPhone = res.data.nickName
+          this.userPhone = res.data.fullName
         }
       })
     },

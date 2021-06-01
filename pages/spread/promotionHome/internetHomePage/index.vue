@@ -154,7 +154,7 @@ export default {
       console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },
@@ -360,6 +360,34 @@ export default {
       // }
       // app跳转
       try {
+        // 更多路由
+        if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const androidRouter = {
+            path: '/common/android/SingleWeb',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+          return
+        }
+        // 分类列表
         if (this.isInApp && execution.split(':')[0] === 'appFilter') {
           const code =
             url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'

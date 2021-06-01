@@ -492,7 +492,6 @@ export default {
         }
         .title {
           width: 145px;
-          height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 700;
@@ -501,7 +500,6 @@ export default {
         }
         .user-phone-input {
           width: 482px;
-          height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
@@ -512,11 +510,10 @@ export default {
         }
         > input {
           width: 238px;
-          height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
-          line-height: 45px;
+          line-height: 50px;
           border: none;
           margin-left: 43px;
           color: #222222;
