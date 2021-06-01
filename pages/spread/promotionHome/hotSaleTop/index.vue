@@ -95,14 +95,13 @@ const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 
 export default {
   name: 'Index',
-  mixins: [imHandle],
   components: {
     // Header,
     [Sticky.name]: Sticky,
     [PullRefresh.name]: PullRefresh,
     [List.name]: List,
   },
-
+  mixins: [imHandle],
   data() {
     return {
       placeholder: '头部',
@@ -290,11 +289,34 @@ export default {
     },
     // 跳详情
     goDetail(id) {
-      let base = ''
-      DGG_SERVER_ENV === 'development' && (base = 'd')
-      DGG_SERVER_ENV === 'release' && (base = 't')
-      DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        let base = ''
+        DGG_SERVER_ENV === 'development' && (base = 'd')
+        DGG_SERVER_ENV === 'release' && (base = 't')
+        DGG_SERVER_ENV === 'production' && (base = '')
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      }
     },
   },
 }

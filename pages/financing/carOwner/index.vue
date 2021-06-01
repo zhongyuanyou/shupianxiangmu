@@ -166,17 +166,18 @@ export default {
 
     ...mapState({
       isInApp: (state) => state.app.isInApp,
-      currentCity: (state) => state.city.currentCity,
+      currentCitys: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
   },
   created() {},
   mounted() {
-    if (this.currentCity.city) {
-      this.city = this.currentCity
+    if (this.currentCitys) {
+      this.city = this.currentCitys.city
     }
-    this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
+    this.getPagePlanner('app-ghsdgye-02')
+
     this.getAd('ad100061')
   },
   methods: {
@@ -265,7 +266,7 @@ export default {
     },
     linesReg(e) {
       e.target.value = e.target.value.match(/^(\d{0,3})/g)[0] || null
-      this.lines = e.target.value
+      this.lines = e.target.value > 101 ? 100 : e.target.value
     },
     phoneReg(e) {
       e.target.value = e.target.value.match(/^(\d{0,11})/g)[0] || null
@@ -316,36 +317,34 @@ export default {
             Toast('验证码发送成功,请注意查收！')
             this.smsRes = res.data
           } else {
-            Toast(res.data)
+            Toast('获取验证码频繁，请稍后再试！')
           }
         })
     },
     onForm() {
-      if (this.isInApp) {
-        this.$appFn.dggGetUserInfo((res) => {
-          const { code, data } = res || {}
-          if (code !== 200) {
-            this.$appFn.dggLogin((loginRes) => {})
-          } else {
-            this.$appFn.dggOpenIM(
-              {
-                name: this.planner.name,
-                userId: this.planner.id,
-                userType: this.planner.type,
-              },
-              (res) => {
-                const { code } = res || {}
-                if (code !== 200)
-                  this.$xToast.show({
-                    message: `联系失败`,
-                    duration: 1000,
-                    forbidClick: true,
-                    icon: 'toast_ic_remind',
-                  })
-              }
-            )
-          }
-        })
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+      }
+      if (this.isInApp && this.userPhone === '') {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              this.uPIM(planner)
+            }
+          })
+      } else {
+        this.uPIM(planner)
       }
       if (!this.isLogin && !this.isInApp) {
         const url =
@@ -360,7 +359,7 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
+              //   this.$xToast.showLoading({ message: '正在联系规划师...' })
               const sessionParams = {
                 imUserId: this.pagePlanner.id,
                 imUserType: this.pagePlanner.type,
@@ -383,36 +382,12 @@ export default {
                 intention: this.lines + '万元',
                 routerId: '',
               }
-              this.sendTemplateMsgMixin({ sessionParams, msgParams })
+              alert(1111)
+              this.uPIM(planner, sessionParams, msgParams)
             } else {
               Toast('验证码不真确！')
             }
           })
-      } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
-        const sessionParams = {
-          imUserId: this.pagePlanner.id,
-          imUserType: this.pagePlanner.type,
-          ext: {
-            intentionType: '',
-            intentionCity: '',
-            recommendId: '',
-            recommendAttrJson: {},
-            startUserType: 'cps-app',
-          },
-        }
-        const msgParams = {
-          sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-          msgType: 'im_tmplate', // 消息类型
-          extContent: this.$route.query, // 路由参数
-          forwardAbstract: '',
-          title: this.name + this.sexList[this.actived],
-          area: this.city.join(','),
-          productName: '车主贷',
-          intention: this.lines + '万元',
-          routerId: '',
-        }
-        this.sendTemplateMsgMixin({ sessionParams, msgParams })
       }
     },
     choose(idx) {
@@ -526,6 +501,7 @@ export default {
         > span {
           display: block;
         }
+
         .title {
           width: 135px;
           height: 45px;
@@ -537,14 +513,14 @@ export default {
         }
         > input {
           width: 238px;
-          height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
-          line-height: 45px;
           border: none;
           margin-left: 53px;
           color: #222222;
+          display: block;
+          line-height: 50px;
         }
         > input:-ms-input-placeholder {
           color: #999999;
@@ -610,7 +586,7 @@ export default {
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #4974f5;
-          line-height: 45px;
+          //   line-height: 45px;
           margin-left: auto;
         }
       }

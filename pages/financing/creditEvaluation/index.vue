@@ -384,7 +384,13 @@ export default {
       }, 1000)
     },
     onForm() {
-      if (!this.isLogin) {
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+      }
+
+      if (this.isInApp && this.userPhone === '') {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         // financing.check_smsCode
@@ -397,24 +403,12 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const planner = {
-                mchUserId: this.pagePlanner.id,
-                userName: this.pagePlanner.name,
-                type: this.pagePlanner.type,
-              }
               this.uPIM(planner)
             } else {
               Toast('验证码不正确！')
             }
           })
       } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
-        const planner = {
-          mchUserId: this.pagePlanner.id,
-          userName: this.pagePlanner.name,
-          type: this.pagePlanner.type,
-        }
         this.uPIM(planner)
       }
     },
@@ -554,7 +548,6 @@ export default {
       }
       .title {
         width: 135px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -563,14 +556,14 @@ export default {
       }
       > input {
         width: 238px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 53px;
         color: #222222;
+        display: block;
       }
       > input:-ms-input-placeholder {
         color: #999999;
@@ -629,7 +622,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         text-align: right;
       }
@@ -644,7 +637,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         text-align: right;
       }
@@ -717,7 +710,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         text-align: right;
         border: none;
         margin-left: 60px;
@@ -748,11 +741,10 @@ export default {
       align-items: center;
       .user-phone-input {
         width: 482px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 58px;
         color: #222222;
@@ -762,7 +754,6 @@ export default {
       }
       .phone-title {
         width: 130px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -771,14 +762,14 @@ export default {
       }
       > input {
         width: 238px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 58px;
         color: #222222;
+        display: block;
       }
       > input:-ms-input-placeholder {
         color: #999999;
@@ -797,7 +788,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #4974f5;
-        line-height: 45px;
+        line-height: 50px;
         margin-left: auto;
       }
     }
