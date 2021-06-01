@@ -776,7 +776,6 @@ export default {
         margin-left: 58px;
         color: #222222;
         display: block;
-        border: 1px solid red;
       }
       > input:-ms-input-placeholder {
         color: #999999;
