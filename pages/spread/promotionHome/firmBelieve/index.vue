@@ -1,6 +1,8 @@
 <template>
   <div class="container_body">
-    <div class="container_header"><Header :title="title" /></div>
+    <div class="container_header">
+      <Header :title="title" />
+    </div>
     <div v-if="imgList.length !== 0" class="banner">
       <sp-swipe
         class="my-swipe"
@@ -212,7 +214,6 @@ export default {
   },
   methods: {
     // 点击申请单的时候触发
-
     checkSmsCode() {
       if (!isLogin) {
         this.$axios
