@@ -323,11 +323,6 @@ export default {
         })
     },
     onForm() {
-      const planner = {
-        mchUserId: this.pagePlanner.id,
-        userName: this.pagePlanner.name,
-        type: this.pagePlanner.type,
-      }
       const sessionParams = {
         imUserId: this.pagePlanner.id,
         imUserType: this.pagePlanner.type,
@@ -349,6 +344,14 @@ export default {
         productName: '车主贷',
         intention: this.lines + '万元',
         routerId: '',
+      }
+      const msgParamsMsg = JSON.stringify(msgParams)
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+        msgParam: msgParams,
+        templateIds: '60a46c4e344fb6000633c37a',
       }
       if (this.isInApp && this.userPhone === '') {
         const url =

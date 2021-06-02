@@ -323,6 +323,8 @@ export default {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
       }
       if (this.isInApp && this.userPhone === '') {
         const url =

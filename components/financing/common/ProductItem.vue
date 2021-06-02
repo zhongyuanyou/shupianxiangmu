@@ -65,7 +65,6 @@ export default {
         }
         const androidRouters = {
           path: '/flutter/main',
-          isLogin: 0,
           parameter: {
             routerPath: 'cpsc/goods/details/service',
             parameter: { productId: id },

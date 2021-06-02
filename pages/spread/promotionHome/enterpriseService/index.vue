@@ -67,10 +67,9 @@ export default {
           code: centerCode,
         },
       })
-      console.log(res)
+      console.log(res.message)
       if (res.code === 200) {
         console.log('请求成功')
-        console.log(res.data)
         return {
           resultData: res.data,
         }

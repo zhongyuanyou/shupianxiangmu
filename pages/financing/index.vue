@@ -16,7 +16,11 @@
     <!-- E 头部Header -->
 
     <!-- S 金刚区 -->
-    <Nav :roll-nav="rollNav" class="nav"></Nav>
+    <Nav
+      :roll-nav="rollNav"
+      class="nav"
+      :class="isInApp ? 'nav_top' : ''"
+    ></Nav>
     <!-- E 金刚区 -->
 
     <!-- S 工具 -->
@@ -76,6 +80,7 @@ import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import openappChips from '~/mixins/openappChips'
 import imHandle from '@/mixins/imHandle'
 import isLogin from '@/mixins/isLogin'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'Index',
   components: {
@@ -577,17 +582,75 @@ export default {
       this.$refs.plannerIM.onlineConsult()
     },
     jumpLink2(url, title) {
-      if (title === '咨询直播') {
-        this.openApp()
-        // return
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      if (url === 'app直播') {
+        if (!this.isInApp) {
+          this.openApp()
+        } else {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSTabBarViewController///push/animation',
+            parameter: {
+              selectedIndex: '3',
+            },
+          }
+          const androidRouter = {
+            path: '/main/android/main',
+            parameter: {
+              selectedIndex: 3,
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+        }
+        return
       }
-      // if (url) {
-      //   if (url.indexOf('http') > -1) {
-      //     window.location.href = url
-      //     return
-      //   }
-      // }
-      // this.$refs.plannerIM.onlineConsult()
+      if (title === '点我咨询' && this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            urlstr: url,
+            isHideNav: 1,
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            urlstr: url,
+            isHideNav: 1,
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
+      if (url) {
+        if (url.indexOf('http') > -1) {
+          window.location.href = url
+          return
+        }
+      }
+      this.$refs.plannerIM.onlineConsult()
     },
   },
 }
@@ -605,19 +668,18 @@ export default {
     background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    height: 480px;
+    height: 500px;
     background-position: 0 48px;
   }
   .header-bg {
     width: 100%;
-    height: 420px;
+    height: 500px;
     background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     .header-content {
       margin-left: 38px;
       margin-top: 50px;
-
       .header-title {
         font-size: 48px;
         font-weight: 600;
@@ -635,7 +697,10 @@ export default {
     }
   }
   .nav {
-    margin-top: -70px;
+    margin-top: -112px;
+  }
+  .nav_top {
+    margin-top: -76px;
   }
   .tools {
     margin-top: 18px;

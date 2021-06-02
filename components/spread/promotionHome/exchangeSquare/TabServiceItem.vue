@@ -190,14 +190,14 @@ export default {
         const iOSRouters = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
-            routerPath: 'cpsc/goods/details/service',
+            routerPath: 'cpsc/goods/details/trade',
             parameter: { productId: id },
           },
         }
         const androidRouters = {
           path: '/flutter/main',
           parameter: {
-            routerPath: 'cpsc/goods/details/service',
+            routerPath: 'cpsc/goods/details/trade',
             parameter: { productId: id, code: this.classCode },
           },
         }
