@@ -316,11 +316,6 @@ export default {
         })
     },
     onForm() {
-      const planner = {
-        mchUserId: this.pagePlanner.id,
-        userName: this.pagePlanner.name,
-        type: this.pagePlanner.type,
-      }
       const sessionParams = {
         imUserId: this.pagePlanner.id,
         imUserType: this.pagePlanner.type,
@@ -339,9 +334,16 @@ export default {
         forwardAbstract: '',
         title: this.name + this.sexList[this.actived],
         area: typeof this.city !== 'string' ? this.city.join(',') : this.city,
-        productName: '房贷贷',
+        productName: '房贷',
         intention: this.lines + '万元',
         routerId: '',
+      }
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+        msgParam: msgParams,
+        templateIds: '60a46c4e344fb6000633c37a',
       }
       if (this.isInApp && this.userPhone === '') {
         const url =

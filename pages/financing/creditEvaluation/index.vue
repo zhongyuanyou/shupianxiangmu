@@ -392,6 +392,8 @@ export default {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
       }
 
       if (this.isInApp && this.userPhone === '') {
@@ -579,7 +581,7 @@ export default {
         line-height: 45px;
       }
       .title {
-        width: 135px;
+        width: 200px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -631,10 +633,11 @@ export default {
         width: 18px;
         height: 32px;
         // background: #cccccc;
-        margin-left: 47px;
+        margin-left: auto;
       }
       .city-input {
-        width: 418px;
+        width: 374px;
+        text-align: right;
       }
     }
     .personal {

@@ -257,6 +257,8 @@ export default {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
       }
       this.uPIM(planner)
     },
