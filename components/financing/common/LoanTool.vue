@@ -69,7 +69,7 @@ export default {
         height: 40px;
         font-size: 28px;
         font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        font-weight: 700;
         color: #222222;
         line-height: 40px;
         display: block;
@@ -82,6 +82,7 @@ export default {
         color: #999999;
         line-height: 32px;
         margin-top: 6px;
+        display: block;
       }
     }
     .img-box {

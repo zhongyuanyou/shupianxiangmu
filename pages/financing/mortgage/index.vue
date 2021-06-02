@@ -167,6 +167,10 @@ export default {
     },
   },
   mounted() {
+    this.$appFn.dggCityCode((res) => {
+      this.city = res.data.cityName
+    })
+    this.city = this.postionCity
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
     this.getAd('ad100062')
@@ -312,10 +316,34 @@ export default {
         })
     },
     onForm() {
+      const sessionParams = {
+        imUserId: this.pagePlanner.id,
+        imUserType: this.pagePlanner.type,
+        ext: {
+          intentionType: '',
+          intentionCity: '',
+          recommendId: '',
+          recommendAttrJson: {},
+          startUserType: 'cps-app',
+        },
+      }
+      const msgParams = {
+        sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+        msgType: 'im_tmplate', // 消息类型
+        extContent: this.$route.query, // 路由参数
+        forwardAbstract: '',
+        title: this.name + this.sexList[this.actived],
+        area: typeof this.city !== 'string' ? this.city.join(',') : this.city,
+        productName: '房贷',
+        intention: this.lines + '万元',
+        routerId: '',
+      }
       const planner = {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        msgParam: msgParams,
+        templateIds: '60a46c4e344fb6000633c37a',
       }
       if (this.isInApp && this.userPhone === '') {
         const url =
@@ -331,12 +359,16 @@ export default {
           .then((res) => {
             if (res.code === 200 && res.data === true) {
               this.uPIM(planner)
+            } else if (res.code !== 200 && this.smsRes === this.sms) {
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
             }
           })
-      } else {
+      } else if (this.userPhone !== '' && this.isInApp) {
         this.uPIM(planner)
       }
-      if (!this.isLogin && !this.isInApp) {
+      if (this.userPhone === '' && !this.isInApp) {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         // financingApi.check_smsCode
@@ -350,33 +382,13 @@ export default {
           .then((res) => {
             if (res.code === 200 && res.data === true) {
               //   this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const sessionParams = {
-                imUserId: this.pagePlanner.id,
-                imUserType: this.pagePlanner.type,
-                ext: {
-                  intentionType: '',
-                  intentionCity: '',
-                  recommendId: '',
-                  recommendAttrJson: {},
-                  startUserType: 'cps-app',
-                },
-              }
-              const msgParams = {
-                sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-                msgType: 'im_tmplate', // 消息类型
-                extContent: this.$route.query, // 路由参数
-                forwardAbstract: '',
-                title: this.name + this.sexList[this.actived],
-                area: this.city.join(','),
-                productName: '车主贷',
-                intention: this.lines + '万元',
-                routerId: '',
-              }
               this.uPIM(planner, sessionParams, msgParams)
             } else {
-              Toast('验证码不真确！')
+              Toast('验证码不正确！')
             }
           })
+      } else if (this.userPhone !== '' && !this.isInApp) {
+        this.uPIM(planner, sessionParams, msgParams)
       }
     },
     choose(idx) {
