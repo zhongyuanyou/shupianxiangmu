@@ -7,10 +7,16 @@
         }"
         class="nav-top"
       >
-        <Search
-          :style="{
+        <!-- :style="{
             'padding-top': safeTop + 20 + 'px',
             'padding-bottom': 28 + 'px',
+          }" -->
+        <Search
+          :style="{
+            paddingTop: safeTop + 6 + 'px',
+            paddingBottom: 6 + 'px',
+            height: 57 + safeTop + 'px',
+            boxSizing: 'border-box',
           }"
           :opacity="opacity"
           :icon-left="0.25"
@@ -162,7 +168,7 @@ export default {
     getTopMargin() {
       if (process && process.client) {
         let safeTop = safeAreaInsets.top
-        if (this.isInApp) safeTop = this.appInfo.statusBarHeight + 10
+        if (this.isInApp) safeTop = this.appInfo.statusBarHeight
         this.safeTop = safeTop
         console.log(this.safeTop)
       }
@@ -184,7 +190,8 @@ export default {
     display: block;
     .search-content {
       width: @spread-page-width;
-      padding: 20px 20px 28px 28px;
+      // padding: 20px 20px 28px 28px;
+      // height: 112px;
       display: flex;
       align-items: center;
       .serch-left {

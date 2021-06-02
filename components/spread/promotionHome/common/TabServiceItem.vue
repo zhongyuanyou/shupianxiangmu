@@ -290,12 +290,13 @@ export default {
         min-height: 276px;
         padding: 28px 20px;
         background: #ffffff;
-        border-radius: 24px;
+        border-radius: 14px;
         margin: 0 20px 20px 0;
         .imge {
           width: 220px;
           height: 220px;
           // background: #b2b2b2;
+          border-radius: 14px;
           border-radius: 12px;
           margin-right: 32px;
           img {
