@@ -46,12 +46,14 @@
           readonly
           @focus="timeBlur"
         />
-        <my-icon
-          class="list-icon"
-          name="list_ic_next"
-          size="0.32rem"
-          color="#CCCCCC"
-        ></my-icon>
+        <div class="icon-box" @click="timeBlur">
+          <my-icon
+            class="list-icon"
+            name="list_ic_next"
+            size="0.32rem"
+            color="#CCCCCC"
+          ></my-icon>
+        </div>
       </div>
       <!-- 还款方式 -->
       <div class="car-value">
@@ -96,7 +98,6 @@
         :default-index="0"
         @confirm="onConfirm"
         @cancel="onCancel"
-        @change="onChange"
       />
     </sp-popup>
   </div>
@@ -460,7 +461,7 @@ export default {
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        font-weight: 700;
         color: #222222;
         line-height: 45px;
       }
@@ -474,10 +475,14 @@ export default {
         border: none;
         margin-left: 60px;
       }
-      .input-value::-moz-placeholder {
+      > input::placeholder {
         font-weight: 400;
         font-size: 32px;
         color: #999999;
+      }
+      .icon-box {
+        font-size: 0;
+        margin-left: auto;
       }
       .unit {
         font-size: 32px;

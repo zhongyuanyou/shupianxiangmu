@@ -22,7 +22,7 @@
             :key="index"
             class="category_con_lf_item"
             :style="{
-              backgroundColor: TabNavList == index ? '#fff' : '#f8f8f8',
+              backgroundColor: TabNavList == index ? '#f5f5f5' : '#fff',
             }"
             @click="handleClick(index)"
           >
@@ -338,7 +338,7 @@ export default {
     &_lf {
       display: block;
       width: 200px;
-      background: #f8f8f8;
+      background: #fff;
       overflow: hidden;
       position: relative;
       overflow-y: scroll;
@@ -374,10 +374,10 @@ export default {
     &_rt {
       display: block;
       overflow: hidden;
-      background: #fff;
+      background: #f5f5f5;
       position: relative;
       width: calc(100vw - 200px);
-      padding: 0 32px;
+      padding: 0 20px;
       overflow-y: scroll;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
@@ -412,8 +412,11 @@ export default {
           height: 164px;
         }
       }
+
       .proList {
-        padding-top: 48px;
+        background: #fff;
+        padding: 26px 0 32px 20px;
+        margin-top: 20px;
         .title {
           font-size: 30px;
           font-family: PingFang SC;
@@ -427,8 +430,7 @@ export default {
           flex-direction: row;
           flex-wrap: wrap;
           &_child {
-            background: #ffffff;
-            border: 1px solid #cdcdcd;
+            background: #efeff4;
             border-radius: 4px;
             line-height: 60px;
             margin: 32px 32px 0 0;

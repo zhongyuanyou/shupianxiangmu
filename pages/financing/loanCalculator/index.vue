@@ -101,7 +101,7 @@ export default {
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 700;
       color: #ffffff;
-      line-height: 52px;
+      line-height: 56px;
       margin-top: 40px;
     }
   }

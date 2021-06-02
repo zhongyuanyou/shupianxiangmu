@@ -159,6 +159,7 @@
       <div v-show="isShow" class="mask"></div>
     </div>
     <span class="btn-msg">薯片助贷服务，让更多人生活更美好！</span>
+    <div v-if="isInApp" class="position"></div>
     <sp-popup v-model="pickerShow" position="bottom" :close-on-popstate="true">
       <sp-picker
         show-toolbar
@@ -273,7 +274,10 @@ export default {
     },
   },
   mounted() {
-    console.log(this.isInApp)
+    this.$appFn.dggCityCode((res) => {
+      this.city = res.data.cityName
+    })
+    this.city = this.postionCity
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
   },
@@ -404,11 +408,35 @@ export default {
           .then((res) => {
             if (res.code === 200 && res.data === true) {
               this.uPIM(planner)
+            } else if (res.code !== 200 && this.smsRes === this.sms) {
+              this.uPIM(planner)
             } else {
               Toast('验证码不正确！')
             }
           })
-      } else {
+      } else if (this.userPhone !== '' && this.isInApp) {
+        this.uPIM(planner)
+      }
+      if (this.userPhone === '' && !this.isInApp) {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              //   this.$xToast.showLoading({ message: '正在联系规划师...' })
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
+            }
+          })
+      } else if (this.userPhone !== '' && !this.isInApp) {
         this.uPIM(planner)
       }
     },
@@ -469,7 +497,11 @@ export default {
   margin: 0 auto;
   background: #f5f5f5;
   padding-bottom: 40px;
-  height: 100%;
+  min-height: 100vh;
+  .position {
+    width: 100%;
+    height: 54px;
+  }
   .heaa-box {
     width: 100%;
     background: #4974f5;

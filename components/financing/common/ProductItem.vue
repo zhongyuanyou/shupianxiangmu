@@ -65,6 +65,7 @@ export default {
         }
         const androidRouters = {
           path: '/flutter/main',
+          isLogin: 0,
           parameter: {
             routerPath: 'cpsc/goods/details/service',
             parameter: { productId: id },
@@ -91,7 +92,7 @@ export default {
   background: #ffffff;
   padding: 0 40px;
   .content {
-    height: 100%;
+    // height: 100%;
     border-bottom: 1px solid #f4f4f4;
     padding: 32px 0;
     display: flex;
@@ -156,7 +157,7 @@ export default {
       .price-box {
         font-size: 0;
         position: absolute;
-        bottom: -15px;
+        bottom: -16px;
         align-items: center;
         .price {
           font-size: 36px;
