@@ -69,6 +69,7 @@ import { mapState, mapMutations } from 'vuex'
 import { userinfoApi, consult } from '@/api'
 import LoadingCenter from '@/components/common/loading/LoadingCenter'
 import Header from '@/components/common/head/header'
+const BASE = require('~/config/index.js')
 export default {
   layout: 'keepAlive',
   name: 'Second',
@@ -116,6 +117,9 @@ export default {
       )
       this.formData = Object.assign(this.formData, sessionStorageFormData)
     }
+    console.log('this.currentCity', this.currentCity.code)
+    this.city = this.$cookies.get('currentCity') || 'VISITOR'
+    console.log('this.city', this.city)
   },
   destroyed() {
     // 缓存表单填写的数据
@@ -127,6 +131,10 @@ export default {
     }
   },
   methods: {
+    getCookie(name) {
+      const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)', 'g')
+      return document.cookie.match(reg)
+    },
     // 选中
     select() {
       this.formData.content['是否允许电话联系'] =
@@ -162,7 +170,7 @@ export default {
       return new Promise((resolve) => {
         // 获取用户信息
         this.$axios
-          .get(userinfoApi.info, {
+          .get(userinfoApi.info_decrypt, {
             params: { id: userId },
           })
           .then((res) => {
@@ -175,48 +183,119 @@ export default {
           })
       })
     },
-    // 提交表单
     async consultForm() {
-      if (this.loading) {
-        return
-      }
       this.loading = true
-      const { mainAccountFull, fullName } = await this.getUserInfo(this.userId)
-      this.formData.name = fullName
-      this.formData.tel = mainAccountFull
-      const newFormData = JSON.parse(JSON.stringify(this.formData))
-      newFormData.content = JSON.stringify(newFormData.content)
-      // 提交表单
-      consult
-        .consultAdd(newFormData)
+      const userInfo = await this.getUserInfo(
+        this.userId || '767579755195165966'
+      )
+      this.formData.name = userInfo.fullName
+      this.formData.tel = userInfo.mainAccount
+      const params = {
+        bizAreaCode: this.city.code,
+        bizAreaName: this.city.name,
+        comment: this.formData.content.备注,
+        customerAttribute: JSON.stringify(this.formData.content),
+        customerName: this.formData.name,
+        customerPhone: this.formData.tel,
+        customerSex: userInfo.sex,
+        sourceSyscode: 'sp', // 来源系统
+        sourceUrl: location.href,
+        firstSourceChannel: 'gszc', // 一级来源渠道
+        // ext1: 'string',
+        // ext2: 'string',
+        // ext3: 'string',
+        // ext4: 'string',
+        // extJson: 'string',
+        // intentionLevel: 0,
+        // keyword: 'string',
+        // productTypeCode: 'string',
+        // requireCode: 'string',
+        // requireName: 'string',
+        // requireParentCode: 'string',
+        // requireParentName: 'string',
+        // secondSourceChannel: 'string',
+      }
+      this.$axios
+        .post(BASE.formApi + '/yk/v1/business/add_allot_resource.do', params)
         .then((res) => {
           this.loading = false
-          this.$xToast.success('提交成功，请注意接听电话')
-          sessionStorage.removeItem('formData')
-          this.formData = {
-            type: 'gszc',
-            tel: '', // 电话
-            name: '', // 姓名
-            web: 'sp', // 归属（原网站类型）
-            place: 'all',
-            url: '',
-            content: {
-              备注: '',
-              是否允许电话联系: '是',
-            },
+          if (res.code === 200) {
+            this.$xToast.success('提交成功，请注意接听电话')
+            sessionStorage.removeItem('formData')
+            this.formData = {
+              type: 'gszc',
+              tel: '', // 电话
+              name: '', // 姓名
+              web: 'sp', // 归属（原网站类型）
+              place: 'all',
+              url: '',
+              content: {
+                备注: '',
+                是否允许电话联系: '是',
+              },
+            }
+            this.$router.go(-2)
+          } else {
+            this.$xToast.show({
+              message: res.message || '提交失败，请稍后再试！',
+              duration: 1000,
+              icon: 'toast_ic_error',
+              forbidClick: true,
+            })
           }
-          this.$router.go(-2)
         })
-        .catch((res) => {
+        .catch((error) => {
           this.loading = false
           this.$xToast.show({
-            message: res.message,
+            message: error.message || '提交失败，请稍后再试！',
             duration: 1000,
             icon: 'toast_ic_error',
             forbidClick: true,
           })
         })
     },
+    // 提交表单
+    // async consultForm() {
+    //   if (this.loading) {
+    //     return
+    //   }
+    //   this.loading = true
+    //   const { mainAccountFull, fullName } = await this.getUserInfo(this.userId)
+    //   this.formData.name = fullName
+    //   this.formData.tel = mainAccountFull
+    //   const newFormData = JSON.parse(JSON.stringify(this.formData))
+    //   newFormData.content = JSON.stringify(newFormData.content)
+    //   // 提交表单
+    //   consult
+    //     .consultAdd(newFormData)
+    //     .then((res) => {
+    //       this.loading = false
+    //       this.$xToast.success('提交成功，请注意接听电话')
+    //       sessionStorage.removeItem('formData')
+    //       this.formData = {
+    //         type: 'gszc',
+    //         tel: '', // 电话
+    //         name: '', // 姓名
+    //         web: 'sp', // 归属（原网站类型）
+    //         place: 'all',
+    //         url: '',
+    //         content: {
+    //           备注: '',
+    //           是否允许电话联系: '是',
+    //         },
+    //       }
+    //       this.$router.go(-2)
+    //     })
+    //     .catch((res) => {
+    //       this.loading = false
+    //       this.$xToast.show({
+    //         message: res.message,
+    //         duration: 1000,
+    //         icon: 'toast_ic_error',
+    //         forbidClick: true,
+    //       })
+    //     })
+    // },
     // 输入框文字发生改变
     changeFont(val) {
       const font = document.getElementsByClassName('sp-field__word-num')[0]
