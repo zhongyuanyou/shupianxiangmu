@@ -78,11 +78,8 @@ export default function ({ $axios, redirect, app, store }) {
           if (process && process.client) {
             xToast.error('登录失效，请重新登录')
             const timer = setTimeout(() => {
-              redirect('/my')
               clearTimeout(timer)
             }, 1500)
-          } else {
-            redirect('/my')
           }
         }
       } else {

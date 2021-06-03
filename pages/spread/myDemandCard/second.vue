@@ -66,7 +66,7 @@
 <script>
 import { Field, Toast, TopNavBar, Icon } from '@chipspc/vant-dgg'
 import { mapState, mapMutations } from 'vuex'
-import { userinfoApi, consult } from '@/api'
+import { userinfoApi, consult, formApi } from '@/api'
 import LoadingCenter from '@/components/common/loading/LoadingCenter'
 import Header from '@/components/common/head/header'
 const BASE = require('~/config/index.js')
@@ -171,23 +171,28 @@ export default {
         // 获取用户信息
         this.$axios
           .get(userinfoApi.info_decrypt, {
-            params: { id: userId },
+            params: {
+              id: userId || this.$cookies.get('userId', { path: '/' }),
+            },
           })
           .then((res) => {
-            if (res.code === 200) {
+            if (res && res.code === 200) {
               resolve(res.data)
             } else {
               this.loading = false
-              this.$xToast.error('获取当前登陆用户的信息失败')
+              this.$xToast.error('查询用户信息失败！')
             }
+          })
+          .catch((error) => {
+            console.log('error', error)
+            this.$xToast.error('查询用户信息失败！')
           })
       })
     },
     async consultForm() {
       this.loading = true
-      const userInfo = await this.getUserInfo(
-        this.userId || '767579755195165966'
-      )
+      const userInfo = await this.getUserInfo(this.userId)
+      if (!userInfo) return
       const params = {
         bizAreaCode: this.city.code,
         bizAreaName: this.city.name,
@@ -195,7 +200,7 @@ export default {
         customerAttribute: JSON.stringify(this.formData.content),
         customerName: userInfo.fullName,
         customerPhone: userInfo.mainAccount,
-        customerSex: userInfo.sex,
+        customerSex: userInfo.sex || 1,
         sourceUrl: location.href,
         sourceSyscode: 'crisps-app', // 来源系统
         firstSourceChannel: 'crisps-app-one-home-page', // 一级来源渠道
@@ -227,7 +232,7 @@ export default {
         // "sourceUrl": "string"
       }
       this.$axios
-        .post(BASE.formApi + '/yk/v1/business/add_allot_resource.do', params)
+        .post(BASE.formApi + formApi, params)
         .then((res) => {
           this.loading = false
           if (res.code === 200) {
