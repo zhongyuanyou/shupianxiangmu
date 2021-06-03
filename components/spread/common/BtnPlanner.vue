@@ -69,38 +69,16 @@ export default {
   mounted() {},
   methods: {
     onlineConsult() {
+      const planner = {
+        mchUserId: this.planner.id,
+        userName: this.planner.name,
+        type: this.planner.type,
+        msgParam: {},
+        templateIds: '',
+      }
       if (this.isInApp) {
-        this.$appFn.dggGetUserInfo((res) => {
-          const { code, data } = res || {}
-          if (code !== 200) {
-            this.$appFn.dggLogin((loginRes) => {})
-          } else {
-            this.$appFn.dggOpenIM(
-              {
-                name: this.planner.name,
-                userId: this.planner.id,
-                userType: this.planner.type,
-              },
-              (res) => {
-                const { code } = res || {}
-                if (code !== 200)
-                  this.$xToast.show({
-                    message: `联系失败`,
-                    duration: 1000,
-                    forbidClick: true,
-                    icon: 'toast_ic_remind',
-                  })
-              }
-            )
-          }
-        })
+        this.uPIM(planner)
       } else {
-        if (JSON.stringify(this.planner) === '{}') return
-        const planner = {
-          mchUserId: this.planner.id,
-          userName: this.planner.name,
-          type: this.planner.type,
-        }
         this.uPIM(planner)
       }
     },
