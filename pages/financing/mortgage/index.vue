@@ -530,6 +530,7 @@ export default {
             background: #f2f5ff;
             border-radius: 8px;
             border: 1px solid #4974f5;
+            color: #4974f5;
           }
         }
         .icon-box {

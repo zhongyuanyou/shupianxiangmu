@@ -86,7 +86,7 @@ export default {
       .item-title-label {
         display: flex;
         align-content: center;
-        height: 32px;
+        // height: 32px;
         padding: 0px 6px;
         border-radius: 4px;
         border: 1px solid #ec5330;

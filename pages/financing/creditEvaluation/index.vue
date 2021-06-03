@@ -33,7 +33,7 @@
           class="city-input"
           @focus="chooseShow"
         />
-        <div class="icon-box">
+        <div class="icon-box" @click="chooseShow">
           <my-icon
             class="back-icon"
             name="list_ic_next"
