@@ -154,7 +154,6 @@ export default {
       background: #ec5330;
       border-radius: 4px;
       font-size: 20px;
-      font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #ffffff;
       text-align: center;
@@ -163,7 +162,6 @@ export default {
     .product-title {
       display: block;
       font-size: 30px;
-      font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #222222;
       line-height: 40px;
@@ -182,7 +180,6 @@ export default {
       background: #ec5330;
       border-radius: 4px;
       font-size: 20px;
-      font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #ffffff;
       line-height: 36px;
@@ -190,7 +187,6 @@ export default {
     .score {
       display: block;
       font-size: 22px;
-      font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #fdb032;
     }
@@ -211,7 +207,6 @@ export default {
         background: #f0f2f5;
         border-radius: 4px;
         font-size: 20px;
-        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: bold;
         color: #5c7499;
         // line-height: 20px;
@@ -237,7 +232,6 @@ export default {
         .price {
           display: block;
           font-size: 36px;
-          font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           color: #ec5330;
           line-height: 36px;
@@ -246,7 +240,6 @@ export default {
         > .item-price-unit {
           display: block;
           font-size: 22px;
-          font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           color: #ec5330;
           line-height: 36px;
@@ -257,7 +250,6 @@ export default {
       .sales {
         display: block;
         font-size: 20px;
-        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #999999;
         line-height: 28px;
@@ -269,7 +261,6 @@ export default {
       border-radius: 8px;
       border: 1px solid #4974f5;
       font-size: 24px;
-      font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       color: #4974f5;
       line-height: 48px;
