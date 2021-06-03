@@ -3,20 +3,32 @@
     <div
       class="container"
       :class="showTitle === true ? 'header_bgc' : ''"
-      :style="isInApp ? 'height:220px' : ''"
+      :style="isInApp ? 'height:200px' : ''"
     >
       <!-- Header Start -->
       <sp-sticky @scroll="handleScroll">
+        <!-- <Header
+          :title="scrollTop > 160 ? title : ''"
+          :class="scrollTop > 160 ? 'head_active' : ''"
+        /> -->
         <div
           class="container_header"
           :class="showTitle === true ? 'header_bgc' : ''"
-          :style="isInApp ? 'padding-top:20px;height:64px' : ''"
+          :style="
+            isInApp && appType === 'Android'
+              ? 'padding-top:20px;height:64px'
+              : isInApp && appType === 'IOS'
+              ? 'height:90px'
+              : ''
+          "
         >
+          <!--  :style="isInApp ? 'padding-top:20px;height:64px' : ''" -->
           <my-icon
             name="nav_ic_back"
             size="0.4rem"
             color="#FFFFFF"
             class="container_header_icon"
+            @click.native="goBack"
           ></my-icon>
           <div v-show="showTitle" class="container_header_title">
             {{ title }}
@@ -26,18 +38,30 @@
       <!-- Header End -->
       <!-- saleTop Start -->
       <div class="hotSaleTop">
-        <div class="hotSaleTop_title" :style="isInApp ? 'top:92px' : ''">
+        <div class="hotSaleTop_title" :style="isInApp ? 'top:96.5px' : ''">
           本月热销榜
         </div>
-        <div class="hotSaleTop_span" :style="isInApp ? 'top:141px' : ''">
+        <div class="hotSaleTop_span" :style="isInApp ? 'top:151px' : ''">
           <div class="hotSaleTop_span_top">TOP</div>
           <div class="hotSaleTop_span_text">每日更新</div>
         </div>
       </div>
       <!-- saleTop End -->
     </div>
-    <sp-sticky :offset-top="isInApp ? 64 : 44">
-      <div class="container_items">
+    <sp-sticky
+      v-if="itemArray.length > 1"
+      :offset-top="
+        isInApp && appType === 'Android'
+          ? 64
+          : isInApp && appType === 'IOS'
+          ? 90
+          : 42
+      "
+    >
+      <div
+        class="container_items"
+        :class="scrollTop > 160 ? 'scroll_active' : ''"
+      >
         <div v-for="(item, index) in itemArray" :key="index" class="items">
           <div
             class="items_item"
@@ -46,12 +70,22 @@
           >
             <img :src="img" alt="" class="items_item_img" />
           </div>
-          <p class="items_item_text">{{ item.name }}</p>
+          <p
+            class="items_item_text"
+            :class="{ pactive: index === currentIndex }"
+          >
+            {{ item.name }}
+          </p>
         </div>
       </div>
     </sp-sticky>
     <!-- 列表数据 start -->
-    <div class="container_list">
+    <div
+      class="container_list"
+      :style="
+        appType === 'IOS' ? 'height: calc(100vh - 100px);overflow-y: auto;' : ''
+      "
+    >
       <sp-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <sp-list
           v-model="loading"
@@ -61,6 +95,15 @@
         >
           <div v-for="(item, index) in list" :key="index" class="list_item">
             <div class="list_item_left">
+              <img
+                :src="index < 3 ? tags[index] : tags[3]"
+                alt=""
+                class="tag"
+                :class="index > 2 ? 'tag_more_three' : ''"
+              />
+              <div :class="index > 2 ? 'div_more_three' : ''">
+                {{ index + 1 }}
+              </div>
               <img :src="item.img" alt="" />
             </div>
             <div class="list_item_right">
@@ -68,7 +111,7 @@
                 {{ item.title }}
               </div>
               <div class="tabs" @click="goDetail(item.id)">
-                <span v-for="(itemItem, i) in item.tabs" :key="i">{{
+                <span v-for="(itemItem, i) in item.tabs.slice(0, 3)" :key="i">{{
                   itemItem
                 }}</span>
               </div>
@@ -85,11 +128,10 @@
   </div>
 </template>
 <script>
-// import Header from '@/components/common/head/header'
-
 import { mapState } from 'vuex'
 import { Sticky, PullRefresh, List } from '@chipspc/vant-dgg'
 import imHandle from '@/mixins/imHandle'
+// import Header from '@/components/common/head/header'
 import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 
@@ -122,6 +164,14 @@ export default {
       pagePlanner: {},
       code: '',
       img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
+      tags: [
+        'https://cdn.shupian.cn/sp-pt/wap/6949cidnx8c0000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/7a7qefqoqkw0000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/64j9lhn7x4w0000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/7i5iyj5xqnk0000.png',
+      ],
+      scrollTop: 0,
+      appType: '',
     }
   },
   computed: {
@@ -134,6 +184,7 @@ export default {
   mounted() {
     this.init()
     this.getHotList()
+    this.appType = this.isAndroidOrIOS()
   },
   methods: {
     init() {
@@ -248,12 +299,33 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
+
+    handleScroll(e) {
+      this.showTitle = e.isFixed
+      this.scrollTop = e.scrollTop
+      // this.scrollTop > 160 ? (this.title = '本月热销榜') : (this.title = '')
+    },
+    onRefresh() {
+      // 清空列表数据
+      this.list = []
+      this.finished = false
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true
+      this.params.start = 1
+      this.getHotList()
+    },
+    choose(index, item) {
+      this.params.start = 1
+      this.list = []
+      this.getHotList(item.ext1)
+      this.currentIndex = index
+    },
     // 获取热榜列表数据
     async getHotList(code) {
       if (code) {
         this.params.classCodes = code
       }
-
       const url = newSpreadApi.service_product_list
       const params = this.params
       const res = await this.$axios.get(url, { params })
@@ -261,7 +333,6 @@ export default {
         this.list = this.list.concat(res.data.records)
         this.loading = false
         this.params.start++
-        console.log('this.page', this.params.start)
         if (this.params.start > Math.ceil(res.data.total / res.data.pageSize)) {
           this.finished = true
         }
@@ -270,28 +341,12 @@ export default {
         this.finished = true
       }
     },
-    handleScroll(e) {
-      this.showTitle = e.isFixed
-    },
-    onRefresh() {
-      // 清空列表数据
-      this.finished = false
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.onLoad()
-    },
-    choose(index, item) {
-      this.params.start = 1
-      this.list = []
-      this.getHotList(item.ext1)
-      this.currentIndex = index
-    },
     // 跳详情
     goDetail(id) {
       if (this.isInApp) {
         const iOSRouters = {
-          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          // path:
+          //   'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
             parameter: { productId: id },
@@ -317,6 +372,42 @@ export default {
         DGG_SERVER_ENV === 'production' && (base = '')
         window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
       }
+    },
+    // 返回 上一级
+    goBack() {
+      // 返回上一页
+      if (this.isInApp) {
+        this.$appFn.dggWebGoBack((res) => {})
+        return
+      }
+      if (window.history.length <= 1) {
+        this.$router.replace('/spread')
+        return false
+      } else {
+        this.$router.back()
+      }
+    },
+
+    // 监听页面滚动时间
+    scrollHandle() {},
+
+    // @--判断页面所在设备的系统
+    isAndroidOrIOS() {
+      const ua = navigator.userAgent
+      const isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1
+      const isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+
+      if (isAndroid) {
+        this.userAgent = 'Android'
+        console.log('安卓系统')
+        return 'Android'
+      }
+      if (isiOS) {
+        this.userAgent = 'IOS'
+        console.log('IOS系统')
+        return 'IOS'
+      }
+      console.log(ua)
     },
   },
 }
@@ -358,6 +449,21 @@ export default {
   background: url('https://cdn.shupian.cn/sp-pt/wap/ebl77wjvmqo0000.png') !important;
   background-size: 100% 100% !important;
 }
+.my-head {
+  box-shadow: none !important;
+  background: transparent !important;
+  .title {
+    color: #ffffff !important;
+  }
+  .slot-left {
+    .back-icon {
+      color: #ffffff !important;
+    }
+  }
+}
+.head_active {
+  background-color: #4974f5;
+}
 .container_body {
   background: #f5f5f5;
   width: 100%;
@@ -367,13 +473,15 @@ export default {
     height: 400px;
     background: url('https://cdn.shupian.cn/sp-pt/wap/bjaz4tc4ihs0000.png')
       no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
     &_header {
       height: 88px;
       width: 100%;
       .flexMixin();
       justify-content: center;
       position: relative;
+      padding-top: constant(safe-area-inset-top);
+      padding-top: env(safe-area-inset-top);
       &_icon {
         margin-left: @marginLeft+12px;
         position: absolute;
@@ -389,14 +497,14 @@ export default {
         height: 87px;
         font: bold 62px/87px @font-medium;
         position: absolute;
-        top: 143px;
+        top: 153px;
         margin-left: @marginLeft+20px;
         color: #ffffff;
       }
       &_span {
         .flexMixin();
         position: absolute;
-        top: 242px;
+        top: 262px;
         margin-left: @marginLeft+20px;
         &_top {
           color: #ffffff;
@@ -415,6 +523,9 @@ export default {
         }
       }
     }
+  }
+  .scroll_active {
+    padding: 24px 0 20px 20px !important;
   }
   .container_items {
     .flexStart();
@@ -439,10 +550,14 @@ export default {
       }
       > p {
         height: 37px;
-        color: #222222;
+        color: #555555;
         line-height: 37px;
-        font: bold 26px/37px @font-medium;
+        font: 400 26px/37px @font-medium;
         margin-top: 10px;
+      }
+      .pactive {
+        font: bold 26px/37px @font-medium;
+        color: #222222;
       }
     }
     .items:nth-of-type(1) {
@@ -461,9 +576,50 @@ export default {
       display: flex;
       margin-bottom: 20px;
       overflow: hidden;
+
       .list_item_left {
         margin-right: 28px;
-        > img {
+        position: relative;
+        .tag {
+          width: 48px;
+          height: 70px;
+          position: absolute;
+          top: -24px;
+          left: 0;
+        }
+        .tag_more_three {
+          position: absolute;
+          top: -24px;
+          left: 0;
+          height: 49px;
+          width: 49px;
+        }
+        > div {
+          color: #ffffff;
+          font: 400 18px @font-regular;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 48px;
+          text-align: center;
+        }
+        .div_more_three {
+          height: 48px;
+          line-height: 48px;
+          color: #222222;
+          top: -24px;
+        }
+        // div:nth-of-type(n > 3) {
+        //   color: #ffffff;
+        //   font: 400 18px @font-regular;
+        //   position: absolute;
+        //   left: 0;
+        //   top: -24px;
+        //   width: 48px;
+        //   height: 49px;
+        //   text-align: center;
+        // }
+        > img:nth-of-type(2) {
           width: 200px;
           height: 200px;
           background: #d8d8d8;
@@ -491,7 +647,6 @@ export default {
             background-color: #f0f2f5;
             border-radius: 4px;
             .textoverflow(1);
-            max-width: 92px;
           }
         }
         .desc {

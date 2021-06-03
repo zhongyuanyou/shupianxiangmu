@@ -128,6 +128,8 @@ export default {
         } catch (error) {
           console.error('uPIM error:', error)
         }
+      } else if (sessionParams && msgParams) {
+        this.sendTemplateMsgMixin({ sessionParams, msgParams })
       } else {
         const imUserType = type || 'MERCHANT_B' // 用户类型: ORDINARY_B 启大顺 ;MERCHANT_S 启大包
         const operUserType =
@@ -139,9 +141,6 @@ export default {
           imUserType,
           operUserType,
         })
-        if (sessionParams && sessionParams) {
-          this.sendTemplateMsgMixin({ sessionParams, msgParams })
-        }
       }
     },
 
