@@ -188,32 +188,43 @@ export default {
       const userInfo = await this.getUserInfo(
         this.userId || '767579755195165966'
       )
-      this.formData.name = userInfo.fullName
-      this.formData.tel = userInfo.mainAccount
       const params = {
         bizAreaCode: this.city.code,
         bizAreaName: this.city.name,
         comment: this.formData.content.备注,
         customerAttribute: JSON.stringify(this.formData.content),
-        customerName: this.formData.name,
-        customerPhone: this.formData.tel,
+        customerName: userInfo.fullName,
+        customerPhone: userInfo.mainAccount,
         customerSex: userInfo.sex,
-        sourceSyscode: 'sp', // 来源系统
         sourceUrl: location.href,
-        firstSourceChannel: 'gszc', // 一级来源渠道
-        // ext1: 'string',
-        // ext2: 'string',
-        // ext3: 'string',
-        // ext4: 'string',
-        // extJson: 'string',
-        // intentionLevel: 0,
-        // keyword: 'string',
-        // productTypeCode: 'string',
-        // requireCode: 'string',
-        // requireName: 'string',
-        // requireParentCode: 'string',
-        // requireParentName: 'string',
-        // secondSourceChannel: 'string',
+        sourceSyscode: 'crisps-app', // 来源系统
+        firstSourceChannel: 'crisps-app-one-home-page', // 一级来源渠道
+        secondSourceChannel: 'crisps-app-two-look-service', // 二级来源渠道
+        requireCode: 'gszc', // 需求编码
+        requireName: '公司资产', // 需求名称
+        // "bizAreaCode": "string",
+        // "bizAreaName": "string",
+        // "comment": "string",
+        // "customerAttribute": "string",
+        // "customerName": "string",
+        // "customerPhone": "string",
+        // "customerSex": "string",
+        // "ext1": "string",
+        // "ext2": "string",
+        // "ext3": "string",
+        // "ext4": "string",
+        // "extJson": "string",
+        // "firstSourceChannel": "string",
+        // "intentionLevel": 0,
+        // "keyword": "string",
+        // "productTypeCode": "string",
+        // "requireCode": "string",
+        // "requireName": "string",
+        // "requireParentCode": "string",
+        // "requireParentName": "string",
+        // "secondSourceChannel": "string",
+        // "sourceSyscode": "string",
+        // "sourceUrl": "string"
       }
       this.$axios
         .post(BASE.formApi + '/yk/v1/business/add_allot_resource.do', params)
