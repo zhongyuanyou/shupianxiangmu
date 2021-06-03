@@ -378,6 +378,36 @@ export default {
     },
     // 点击获取查询结果的时候触发
     checkSmsCode() {
+      // 封装参数 第一个参数
+      const sessionParams = {
+        imUserId: this.pagePlanner.id,
+        imUserType: this.pagePlanner.type,
+        ext: {
+          startUserType: 'cps-app',
+          proNum: this.proNum,
+        },
+      }
+      // 封装参数 第二个参数
+      const msgParams = {
+        sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+        msgType: 'im_tmplate', // 消息类型
+        extContent: this.$route.query, // 路由参数
+        title: this.firmName,
+        area: this.city
+          ? this.city.join(',')
+          : this.$store.state.city.defaultCity.name,
+        productName: this.title,
+      }
+      // 规划师信息上传
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+        msgParam: msgParams,
+        templateIds: '60a46c4e344fb6000633c37a',
+      }
+
+      // 进行参数验证
       this.$axios
         .get(financingApi.check_smsCode, {
           params: {
@@ -387,27 +417,22 @@ export default {
         })
         .then((res) => {
           if (res.code === 200 && res.data === true) {
-            this.$xToast.showLoading({ message: '正在联系规划师...' })
-
-            const sessionParams = {
-              imUserId: this.pagePlanner.id,
-              imUserType: this.pagePlanner.type,
-              ext: {
-                startUserType: 'cps-app',
-                haveProduct: this.haveProduct,
-              },
+            // 不在APP当中
+            if (!this.isInApp) {
+              this.uPIM(planner, sessionParams, msgParams)
+            } else {
+              this.uPIM(planner)
             }
-            const msgParams = {
-              sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-              msgType: 'im_tmplate', // 消息类型
-              extContent: this.$route.query, // 路由参数
-              title: '版权登记',
-              area: this.city
-                ? this.city.join(',')
-                : this.$store.state.city.defaultCity.name,
-              productName: '版权登记',
-            }
-            this.sendTemplateMsgMixin({ sessionParams, msgParams })
+            // 在APP中
+            // if (this.isInApp && this.phoneNum === '') {
+            //   if (res.code === 200 && res.data === true) {
+            //     this.uPIM(planner)
+            //   } else if (res.code !== 200 && this.smsNum === this.sms) {
+            //     this.uPIM(planner)
+            //   }
+            // } else if (this.phoneNum !== '' && this.isInApp) {
+            //   this.uPIM(planner)
+            // }
           } else {
             Toast('验证码不正确！')
           }

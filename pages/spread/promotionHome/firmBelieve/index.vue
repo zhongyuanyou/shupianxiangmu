@@ -1,7 +1,7 @@
 <template>
   <div class="container_body">
     <div class="container_header">
-      <Header :title="title" />
+      <Header :title="title" @click="goBack" />
     </div>
     <div v-if="imgList.length !== 0" class="banner">
       <sp-swipe
@@ -213,65 +213,67 @@ export default {
     this.getAd(code)
   },
   methods: {
-    // 点击申请单的时候触发
+    // 点击申请按钮的时候触发
     checkSmsCode() {
-      if (!isLogin) {
-        this.$axios
-          .get(financingApi.check_smsCode, {
-            params: {
-              phone: this.phoneNum,
-              smsCode: this.smsNum,
-            },
-          })
-          .then((res) => {
-            console.log('++++++++res', res)
-            if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const sessionParams = {
-                imUserId: this.pagePlanner.id,
-                imUserType: this.pagePlanner.type,
-                ext: {
-                  startUserType: 'cps-app',
-                  proNum: this.proNum,
-                },
-              }
-              const msgParams = {
-                sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-                msgType: 'im_tmplate', // 消息类型
-                extContent: this.$route.query, // 路由参数
-                title: this.firmName,
-                area: this.city
-                  ? this.city.join(',')
-                  : this.$store.state.city.defaultCity.name,
-                productName: this.title,
-              }
-              this.sendTemplateMsgMixin({ sessionParams, msgParams })
-            } else {
-              Toast('验证码不正确！')
-            }
-          })
-      } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
-        const sessionParams = {
-          imUserId: this.pagePlanner.id,
-          imUserType: this.pagePlanner.type,
-          ext: {
-            startUserType: 'cps-app',
-            proNum: this.proNum,
-          },
-        }
-        const msgParams = {
-          sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-          msgType: 'im_tmplate', // 消息类型
-          extContent: this.$route.query, // 路由参数
-          title: this.firmName,
-          area: this.city
-            ? this.city.join(',')
-            : this.$store.state.city.defaultCity.name,
-          productName: this.title,
-        }
-        this.sendTemplateMsgMixin({ sessionParams, msgParams })
+      // 封装参数 第一个参数
+      const sessionParams = {
+        imUserId: this.pagePlanner.id,
+        imUserType: this.pagePlanner.type,
+        ext: {
+          startUserType: 'cps-app',
+          proNum: this.proNum,
+        },
       }
+      // 封装参数 第二个参数
+      const msgParams = {
+        sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+        msgType: 'im_tmplate', // 消息类型
+        extContent: this.$route.query, // 路由参数
+        title: this.firmName,
+        area: this.city
+          ? this.city.join(',')
+          : this.$store.state.city.defaultCity.name,
+        productName: this.title,
+      }
+      // 规划师信息上传
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+        msgParam: msgParams,
+        templateIds: '60a46c4e344fb6000633c37a',
+      }
+
+      // 进行参数验证
+      this.$axios
+        .get(financingApi.check_smsCode, {
+          params: {
+            phone: this.phoneNum,
+            smsCode: this.smsNum,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200 && res.data === true) {
+            // 不在APP当中
+            if (!this.isInApp) {
+              this.uPIM(planner, sessionParams, msgParams)
+            } else {
+              this.uPIM(planner)
+            }
+            // 在APP中
+            // if (this.isInApp && this.phoneNum === '') {
+            //   if (res.code === 200 && res.data === true) {
+            //     this.uPIM(planner)
+            //   } else if (res.code !== 200 && this.smsNum === this.sms) {
+            //     this.uPIM(planner)
+            //   }
+            // } else if (this.phoneNum !== '' && this.isInApp) {
+            //   this.uPIM(planner)
+            // }
+          } else {
+            Toast('验证码不正确！')
+          }
+        })
     },
     onSubmit(values) {
       console.log('submit', values)
@@ -400,9 +402,7 @@ export default {
     },
     // 获取banner
     getAd(code) {
-      const url =
-        // 'http://172.16.132.228:7001/service/nk/financing/v1/get_advertising.do'
-        financingApi.get_ad_data
+      const url = financingApi.get_ad_data
       this.$axios
         .get(url, {
           params: {
@@ -423,6 +423,19 @@ export default {
             })
           }
         })
+    },
+    // 返回上一页
+    goBack() {
+      if (this.isInApp) {
+        this.$appFn.dggWebGoBack((res) => {})
+        return
+      }
+      if (window.history.length <= 1) {
+        this.$router.replace('/spread')
+        return false
+      } else {
+        this.$router.back()
+      }
     },
   },
 }
