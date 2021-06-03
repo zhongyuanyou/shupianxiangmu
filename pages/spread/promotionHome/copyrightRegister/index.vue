@@ -5,6 +5,7 @@
         <div class="form_title">
           <img :src="imgLeft" alt="" />
           <p>我的版权能否登记</p>
+          <img :src="bottom_one" alt="" class="image_bottome" />
           <img :src="imgRight" alt="" />
         </div>
         <div class="form_text">{{ text }}</div>
@@ -19,24 +20,33 @@
             @click="openPop"
           />
           <sp-field
+            v-if="!userPhone"
             v-model="phoneNum"
-            name="电话"
-            label="电话"
+            name="手机号"
+            label="手机号"
+            placeholder="请输入手机号"
             maxlength="11"
-            placeholder="留下手机号，接受查询结果"
           />
-          <div v-if="showVerifyCode" class="verify">
+          <sp-field
+            v-else
+            v-model="userPhone"
+            name="手机号"
+            label="手机号"
+            placeholder="请输入手机号"
+            maxlength="11"
+            readonly
+          />
+          <div class="code">
             <sp-field
+              v-show="!userPhone"
               v-model="verifyCode"
               name="验证码"
               label="验证码"
-              placeholder="请输入验证码"
+              placeholder="输入短信校验码"
               maxlength="6"
-            />
-            <!-- :rules="[{ required: true, message: '请输入验证码' }]" -->
-            <sp-button size="small" type="primary" @click="onSms">{{
-              test
-            }}</sp-button>
+            >
+            </sp-field>
+            <button @click="onSms">{{ test }}</button>
           </div>
 
           <div style="margin: 20px 10px">
@@ -58,6 +68,7 @@
       <div class="form_title">
         <img :src="imgLeft" alt="" />
         <p>哪些作品可以登记版权</p>
+        <img :src="bottom_one" alt="" class="image_bottome" />
         <img :src="imgRight" alt="" />
       </div>
       <div class="ads_box">
@@ -71,6 +82,7 @@
       <div class="form_title">
         <img :src="imgLeft" alt="" />
         <p>企业版权登记重要性</p>
+        <img :src="bottom_one" alt="" class="image_bottome" />
         <img :src="imgRight" alt="" />
       </div>
       <div class="ads_box">
@@ -163,6 +175,7 @@ export default {
   },
   data() {
     return {
+      bottom_one: 'https://cdn.shupian.cn/sp-pt/wap/7f6ga771ooc0000.png',
       text: '企业品牌维权利器 保护个人原创作品',
       imgRight: 'https://cdn.shupian.cn/sp-pt/wap/images/byszrqecapk0000.png',
       imgLeft: 'https://cdn.shupian.cn/sp-pt/wap/images/9pg9y8vb8ik0000.png',
@@ -245,7 +258,7 @@ export default {
   computed: {
     ...mapState({
       isInApp: (state) => state.app.isInApp,
-      currentCity: (state) => state.city.currentCity,
+      currentCitys: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
     isNull() {
@@ -265,50 +278,43 @@ export default {
     },
   },
   mounted() {
-    if (this.isLogin) {
-      this.phoneNum = this.userPhone
-      this.showVerifyCode = false
-    } else {
-      this.showVerifyCode = true
-    }
-    if (this.currentCity.city) {
-      this.city = this.currentCity
+    if (this.currentCitys.city) {
+      this.city = this.currentCitys
     }
     this.getPagePlanner('app-ghsdgye-02')
-    if (this.isInApp) {
-      this.$appFn.dggGetUserInfo((res) => {
-        const { code, data } = res || {}
-        if (code !== 200) {
-          this.$appFn.dggLogin((loginRes) => {})
-        } else {
-          this.$appFn.dggOpenIM(
-            {
-              name: this.pagePlanner.name,
-              userId: this.pagePlanner.id,
-              userType: this.pagePlanner.type,
-            },
-            (res) => {
-              const { code } = res || {}
-              if (code !== 200)
-                this.$xToast.show({
-                  message: `联系失败`,
-                  duration: 1000,
-                  forbidClick: true,
-                  icon: 'toast_ic_remind',
-                })
-            }
-          )
-        }
-      })
-    }
   },
   methods: {
     goIM() {
       console.log(this.pagePlanner.id)
+      const sessionParams = {
+        imUserId: this.pagePlanner.id,
+        imUserType: this.pagePlanner.type,
+        ext: {
+          intentionType: '',
+          intentionCity: '',
+          recommendId: '',
+          recommendAttrJson: {},
+          startUserType: 'cps-app',
+        },
+      }
+      const msgParams = {
+        sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+        msgType: 'im_tmplate', // 消息类型
+        extContent: this.$route.query, // 路由参数
+        forwardAbstract: '【咨询信息】',
+        title: this.name + this.sexList[this.actived],
+        area: typeof this.city !== 'string' ? this.city.join(',') : this.city,
+        productName: '车主贷',
+        intention: this.lines + '万元',
+        routerId: '',
+      }
+      const msgParamsMsg = JSON.stringify(msgParams)
       const planner = {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        msgParam: msgParams,
+        templateIds: '',
       }
       console.log('planner', planner)
       this.uPIM(planner)
@@ -324,7 +330,7 @@ export default {
           areaCode = res.data.adCode
         })
       } else {
-        areaCode = this.currentCity.code
+        areaCode = this.currentCitys.code
       }
       try {
         this.$axios
@@ -406,7 +412,6 @@ export default {
         msgParam: msgParams,
         templateIds: '60a46c4e344fb6000633c37a',
       }
-
       // 进行参数验证
       this.$axios
         .get(financingApi.check_smsCode, {
@@ -541,6 +546,29 @@ export default {
   height: 80px;
   background: #f8f8f8;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.sp-cell::after {
+  border-bottom: none;
+}
+.sp-field__right-icon {
+  padding: 0 !important ;
+}
+.code {
+  .flexMixin();
+  .sp-cell {
+    .flexMixin();
+    width: 450px;
+  }
+  button {
+    width: 200px;
+    height: 80px;
+    background: #4974f5;
+    border-radius: 8px;
+    color: #ffffff;
+    font: 400 28px @font-regular;
+  }
 }
 .disabled {
   background: #91abf9 !important;
@@ -556,9 +584,11 @@ export default {
     border-radius: 8px;
     font: 400 28px/28px @font-regular;
     color: #ffffff;
+    border: none;
   }
   .sp-cell {
     width: 450px;
+    margin-top: 0;
   }
 }
 .sp-button {
@@ -568,6 +598,7 @@ export default {
   border-radius: 8px;
   font: bold 32px @font-medium;
   color: #ffffff;
+  border: none;
 }
 
 .sp-cell__title {
@@ -593,6 +624,8 @@ input:-webkit-autofill {
   background: #ffffff;
   width: 100%;
   height: 100%;
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
   .container {
     width: 100%;
     height: 1012px;
@@ -611,6 +644,7 @@ input:-webkit-autofill {
       left: 20px;
       margin: 0 auto;
       .form_title {
+        position: relative;
         .flexMixin();
         height: 40px;
         font: bold 36px/34px @font-medium;
@@ -620,6 +654,12 @@ input:-webkit-autofill {
         img {
           width: 38px;
           height: 27px;
+        }
+        .image_bottome {
+          width: 267px;
+          height: 42px;
+          position: absolute;
+          top: 11px;
         }
         p {
           margin: 0 16px;
@@ -636,6 +676,7 @@ input:-webkit-autofill {
   }
   .container_middle {
     .form_title {
+      position: relative;
       .flexMixin();
       height: 40px;
       font: bold 36px/34px @font-medium;
@@ -645,6 +686,12 @@ input:-webkit-autofill {
       img {
         width: 38px;
         height: 27px;
+      }
+      .image_bottome {
+        width: 267px;
+        height: 42px;
+        position: absolute;
+        top: 11px;
       }
       p {
         margin: 0 16px;
@@ -685,6 +732,7 @@ input:-webkit-autofill {
     }
   }
   .container_bottom {
+    position: relative;
     .form_title {
       .flexMixin();
       height: 40px;
@@ -695,6 +743,12 @@ input:-webkit-autofill {
       img {
         width: 38px;
         height: 27px;
+      }
+      .image_bottome {
+        width: 267px;
+        height: 42px;
+        position: absolute;
+        top: 11px;
       }
       p {
         margin: 0 16px;
@@ -723,6 +777,7 @@ input:-webkit-autofill {
           display: block;
           width: 100%;
         }
+
         p {
           color: #222222;
           font: bold 28px @font-medium;
@@ -745,6 +800,8 @@ input:-webkit-autofill {
   }
   .sp-popup {
     background-color: #f5f5f5;
+    bottom: constant(safe-area-inset-bottom);
+    bottom: env(safe-area-inset-bottom);
   }
   .choose {
     .flexMixin();

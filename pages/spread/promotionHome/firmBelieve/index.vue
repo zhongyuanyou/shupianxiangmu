@@ -1,7 +1,25 @@
 <template>
   <div class="container_body">
-    <div class="container_header">
-      <Header :title="title" @click="goBack" />
+    <div
+      class="container_header"
+      :style="
+        isInApp && appType === 'Android'
+          ? 'padding-top:20px;height:64px'
+          : isInApp && appType === 'IOS'
+          ? 'height:90px'
+          : ''
+      "
+    >
+      <my-icon
+        name="nav_ic_back"
+        size="0.4rem"
+        color="#1A1A1A"
+        class="container_header_icon"
+        @click.native="goBack"
+      ></my-icon>
+      <div class="container_header_title">
+        {{ title }}
+      </div>
     </div>
     <div v-if="imgList.length !== 0" class="banner">
       <sp-swipe
@@ -35,6 +53,7 @@
         />
         <!-- :rules="[{ required: true, message: '请填写密码' }]" -->
         <sp-field
+          v-if="!userPhone"
           v-model="phoneNum"
           name="手机号"
           label="手机号"
@@ -42,7 +61,16 @@
           maxlength="11"
         />
         <sp-field
-          v-if="showVerifyCode"
+          v-else
+          v-model="userPhone"
+          name="手机号"
+          label="手机号"
+          placeholder="请输入手机号"
+          maxlength="11"
+          readonly
+        />
+        <sp-field
+          v-show="!userPhone"
           v-model="verifyCode"
           name="验证码"
           label="验证码"
@@ -106,14 +134,14 @@ import {
   Swipe,
   SwipeItem,
 } from '@chipspc/vant-dgg'
-import Header from '@/components/common/head/header'
+// import Header from '@/components/common/head/header'
 import { financingApi, plannerApi } from '@/api/spread'
-import isLogin from '@/mixins/isLogin'
 import imHandle from '@/mixins/imHandle'
+import isLogin from '@/mixins/isLogin'
 export default {
   name: 'Index',
   components: {
-    Header,
+    // Header,
     [Sticky.name]: Sticky,
     [PullRefresh.name]: PullRefresh,
     [List.name]: List,
@@ -126,7 +154,7 @@ export default {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
   },
-  mixins: [isLogin, imHandle],
+  mixins: [imHandle, isLogin],
   data() {
     return {
       title: '高企认定',
@@ -137,19 +165,19 @@ export default {
       isShow: false,
       list: ['1', '2', '3', '4', '5'],
       currentIndex: 2,
-      showVerifyCode: false,
       disabled: true,
       pagePlanner: {},
       smsNum: '',
       imgList: [],
       time: '',
       test: '获取验证码',
+      appType: '',
     }
   },
   computed: {
     ...mapState({
       isInApp: (state) => state.app.isInApp,
-      currentCity: (state) => state.city.currentCity,
+      currentCitys: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
     isNull() {
@@ -177,40 +205,9 @@ export default {
   },
   mounted() {
     this.getPagePlanner('app-ghsdgye-02')
-    if (this.isInApp) {
-      this.$appFn.dggGetUserInfo((res) => {
-        const { code, data } = res || {}
-        if (code !== 200) {
-          this.$appFn.dggLogin((loginRes) => {})
-        } else {
-          this.$appFn.dggOpenIM(
-            {
-              name: this.pagePlanner.name,
-              userId: this.pagePlanner.id,
-              userType: this.pagePlanner.type,
-            },
-            (res) => {
-              const { code } = res || {}
-              if (code !== 200)
-                this.$xToast.show({
-                  message: `联系失败`,
-                  duration: 1000,
-                  forbidClick: true,
-                  icon: 'toast_ic_remind',
-                })
-            }
-          )
-        }
-      })
-    }
-    if (this.isLogin) {
-      this.phoneNum = this.userPhone
-      this.showVerifyCode = false
-    } else {
-      this.showVerifyCode = true
-    }
     const code = 'ad100065'
     this.getAd(code)
+    this.appType = this.isAndroidOrIOS()
   },
   methods: {
     // 点击申请按钮的时候触发
@@ -336,7 +333,7 @@ export default {
           areaCode = res.data.adCode
         })
       } else {
-        areaCode = this.currentCity.code
+        areaCode = this.currentCitys.code
       }
       try {
         this.$axios
@@ -437,6 +434,23 @@ export default {
         this.$router.back()
       }
     },
+    // @--判断页面所在设备的系统
+    isAndroidOrIOS() {
+      const ua = navigator.userAgent
+      const isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1
+      const isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+      if (isAndroid) {
+        this.userAgent = 'Android'
+        console.log('安卓系统')
+        return 'Android'
+      }
+      if (isiOS) {
+        this.userAgent = 'IOS'
+        console.log('IOS系统')
+        return 'IOS'
+      }
+      console.log(ua)
+    },
   },
 }
 </script>
@@ -473,7 +487,34 @@ export default {
 .sp-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
+
 .container_body {
+  @supports (bottom: constant(safe-area-inset-bottom)) or
+    (bottom: env(safe-area-inset-bottom)) {
+    .sp-popup {
+      //你的容器选择器名称
+      bottom: constant(safe-area-inset-bottom);
+      bottom: env(safe-area-inset-bottom);
+    }
+  }
+  .container_header {
+    height: 88px;
+    width: 100%;
+    .flexMixin();
+    justify-content: center;
+    position: relative;
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+    .container_header_icon {
+      margin-left: @marginLeft+12px;
+      position: absolute;
+      left: 0;
+    }
+    .container_header_title {
+      color: #1a1a1a;
+      font: bold 36px/36px @font-medium;
+    }
+  }
   .disabled {
     background: #91abf9 !important;
     color: #cfdafc !important;

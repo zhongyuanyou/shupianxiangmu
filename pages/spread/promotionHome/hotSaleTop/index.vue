@@ -165,7 +165,7 @@ export default {
       code: '',
       img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
       tags: [
-        'https://cdn.shupian.cn/sp-pt/wap/6949cidnx8c0000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/8ayrce9irt80000.png',
         'https://cdn.shupian.cn/sp-pt/wap/7a7qefqoqkw0000.png',
         'https://cdn.shupian.cn/sp-pt/wap/64j9lhn7x4w0000.png',
         'https://cdn.shupian.cn/sp-pt/wap/7i5iyj5xqnk0000.png',
