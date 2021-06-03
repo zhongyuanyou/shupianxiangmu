@@ -17,6 +17,7 @@
 
     <!-- S 金刚区 -->
     <Nav
+      v-show="rollNav.length > 0"
       :roll-nav="rollNav"
       class="nav"
       :class="isInApp ? 'nav_top' : ''"
@@ -76,7 +77,7 @@ import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
 import Notice from '@/components/financing/common/Notice.vue'
 import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList.vue'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
 import openappChips from '~/mixins/openappChips'
 import imHandle from '@/mixins/imHandle'
 import isLogin from '@/mixins/isLogin'
@@ -134,98 +135,7 @@ export default {
     return {
       placeholder: '请输入关键字',
       // 默认数据
-      rollNav: [
-        {
-          code: 1,
-          name: '企业贷',
-          url: '/financing/enterprise',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/fs3c25ztbk80000.png',
-        },
-        {
-          code: 2,
-          name: '有抵押贷',
-          url: '/financing/mortgageList',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/4wwtf6yr0m80000.png',
-        },
-        {
-          code: 3,
-          name: '无抵押贷',
-          url: '/financing/unsecured',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/8v4ibhewj300000.png',
-        },
-        {
-          code: 4,
-          name: '我有车',
-          url: '/financing/carOwner',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/2wzb1t4y4640000.png',
-        },
-        {
-          code: 5,
-          name: '我有房',
-          url: '/financing/mortgage',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/2vhkegwaogk0000.png',
-        },
-        {
-          code: 6,
-          name: '大额借款',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/204jg9dseeo000.png',
-        },
-        {
-          code: 7,
-          name: '快速借钱',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/1ic9r4qxwdsw000.png',
-        },
-        {
-          code: 8,
-          name: '信用贷款',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6a280h75tbk0000.png',
-        },
-        {
-          code: 9,
-          name: '免费咨询',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/dl1corse37s0000.png',
-        },
-        {
-          code: 10,
-          name: '全部',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/5mym0kibchg000.png',
-        },
-      ],
+      rollNav: [],
       activityList: [
         {
           title: '签到有礼',
