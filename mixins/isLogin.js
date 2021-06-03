@@ -6,7 +6,8 @@ export default {
       strcookie: '',
       userPhone: '',
       isLogin: false,
-      currentCity: '',
+      postionCity: '',
+      cityMsg: {},
     }
   },
   computed: {
@@ -14,7 +15,10 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
-  created() {},
+  created() {
+    this.cityMsg = JSON.parse(this.$cookies.get('currentCity', { path: '/' }))
+    this.postionCity = this.cityMsg.name
+  },
   mounted() {
     this.strcookie = document.cookie
     if (this.isInApp) {
@@ -22,7 +26,7 @@ export default {
     }
     if (this.strcookie.indexOf('userPhone') !== -1) {
       this.isLogin = true
-      this.getCookie('userPhone')
+      this.userPhone = this.getCookie('userPhone')
     }
   },
   methods: {
@@ -31,7 +35,7 @@ export default {
       let arr = ''
       const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
       if ((arr = document.cookie.match(reg))) {
-        this.userPhone = unescape(arr[2])
+        return unescape(arr[2])
       } else {
         return null
       }
