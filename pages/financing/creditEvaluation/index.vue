@@ -581,7 +581,7 @@ export default {
         line-height: 45px;
       }
       .title {
-        width: 200px;
+        width: 160px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -636,7 +636,7 @@ export default {
         margin-left: auto;
       }
       .city-input {
-        width: 374px;
+        width: 370px;
         text-align: right;
       }
     }
