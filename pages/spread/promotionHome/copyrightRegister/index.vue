@@ -1,6 +1,18 @@
 <template>
   <div class="container_body">
     <div class="container">
+      <sp-sticky @scroll="handleScroll">
+        <div class="container_header">
+          <my-icon
+            name="nav_ic_back"
+            size="0.4rem"
+            color="#ffffff"
+            class="container_header_icon"
+            @click.native="goBack"
+          ></my-icon>
+          <div class="container_header_title">版权登记</div>
+        </div>
+      </sp-sticky>
       <div class="container_form">
         <div class="form_title">
           <img :src="imgLeft" alt="" />
@@ -119,6 +131,7 @@ import {
   Popup,
   Toast,
 } from '@chipspc/vant-dgg'
+
 // import { copyrightRegisterApi } from '@/api'
 import { mapState } from 'vuex'
 import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
@@ -287,6 +300,19 @@ export default {
     this.getPagePlanner('app-ghsdgye-02')
   },
   methods: {
+    // 返回上一页
+    goBack() {
+      if (this.isInApp) {
+        this.$appFn.dggWebGoBack((res) => {})
+        return
+      }
+      if (window.history.length <= 1) {
+        this.$router.replace('/spread')
+        return false
+      } else {
+        this.$router.back()
+      }
+    },
     goIM() {
       console.log(this.pagePlanner.id)
       const sessionParams = {
@@ -640,6 +666,25 @@ input:-webkit-autofill {
   bottom: constant(safe-area-inset-bottom);
   bottom: env(safe-area-inset-bottom);
   .container {
+    .container_header {
+      background-color: #555dec;
+      height: 88px;
+      width: 100%;
+      .flexMixin();
+      justify-content: center;
+      position: relative;
+      padding-top: constant(safe-area-inset-top);
+      padding-top: env(safe-area-inset-top);
+      .container_header_icon {
+        margin-left: @marginLeft+12px;
+        position: absolute;
+        left: 0;
+      }
+      .container_header_title {
+        color: #fff;
+        font: bold 36px/36px @font-medium;
+      }
+    }
     width: 100%;
     height: 1012px;
     background: url('https://cdn.shupian.cn/sp-pt/wap/9pj2y0rwmfw0000.png')
@@ -746,6 +791,7 @@ input:-webkit-autofill {
   }
   .container_bottom {
     position: relative;
+    padding-bottom: 40px;
     .form_title {
       .flexMixin();
       height: 40px;
