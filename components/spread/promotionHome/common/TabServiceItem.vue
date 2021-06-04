@@ -290,12 +290,13 @@ export default {
         min-height: 276px;
         padding: 28px 20px;
         background: #ffffff;
-        border-radius: 24px;
+        border-radius: 14px;
         margin: 0 20px 20px 0;
         .imge {
           width: 220px;
           height: 220px;
           // background: #b2b2b2;
+          border-radius: 14px;
           border-radius: 12px;
           margin-right: 32px;
           img {
@@ -308,7 +309,6 @@ export default {
             min-height: 150px;
             .region-title {
               font-size: 32px;
-              font-family: PingFang;
               font-weight: bold;
               color: #222222;
               line-height: 40px;
@@ -343,7 +343,6 @@ export default {
               margin-top: 20px;
               height: 22px;
               font-size: 22px;
-              font-family: PingFangSC-Regular, PingFang SC;
               font-weight: 400;
               color: #222;
               line-height: 22px;
@@ -366,7 +365,6 @@ export default {
             }
             .original-price {
               font-size: 22px;
-              font-family: PingFangSC-Regular, PingFang SC;
               font-weight: 400;
               color: #999999;
               line-height: 22px;
@@ -415,7 +413,6 @@ export default {
     line-height: 32px;
     .sp-tab__text {
       font-size: 32px;
-      font-family: PingFangSC-Regular, PingFang SC;
       color: #222222;
     }
   }
@@ -434,7 +431,6 @@ export default {
   }
   ::v-deep.sp-tab__text {
     font-size: 32px;
-    font-family: PingFangSC-Regular, PingFang SC;
     color: #999999;
     z-index: 2;
   }

@@ -53,7 +53,7 @@
               name="list_ic_next"
               size="0.32rem"
               color="#CCCCCC"
-              @click.native="onLeftClick"
+              @click.native="chooseShow"
             ></my-icon>
           </div>
         </div>
@@ -169,6 +169,10 @@ export default {
     },
   },
   mounted() {
+    this.$appFn.dggCityCode((res) => {
+      this.city = res.data.cityName
+    })
+    this.city = this.postionCity
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
     this.getAd('ad100063')
@@ -315,9 +319,17 @@ export default {
         })
     },
     onForm() {
-      if (!this.isLogin && !this.isInApp) {
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
+      }
+      if (this.isInApp && this.userPhone === '') {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
         this.$axios
           .get(financingApi.check_smsCode, {
             params: {
@@ -327,22 +339,36 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              const planner = {
-                mchUserId: this.pagePlanner.id,
-                userName: this.pagePlanner.name,
-                type: this.pagePlanner.type,
-              }
+              this.uPIM(planner)
+            } else if (res.code !== 200 && this.smsRes === this.sms) {
               this.uPIM(planner)
             } else {
-              Toast('验证码不真确！')
+              Toast('验证码不正确！')
             }
           })
-      } else {
-        const planner = {
-          mchUserId: this.pagePlanner.id,
-          userName: this.pagePlanner.name,
-          type: this.pagePlanner.type,
-        }
+      } else if (this.userPhone !== '' && this.isInApp) {
+        this.uPIM(planner)
+      }
+      if (this.userPhone === '' && !this.isInApp) {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              //   this.$xToast.showLoading({ message: '正在联系规划师...' })
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
+            }
+          })
+      } else if (this.userPhone !== '' && !this.isInApp) {
         this.uPIM(planner)
       }
     },
@@ -487,6 +513,7 @@ export default {
           .active {
             background: #f2f5ff;
             border-radius: 8px;
+            color: #4974f5;
             border: 1px solid #4974f5;
           }
         }

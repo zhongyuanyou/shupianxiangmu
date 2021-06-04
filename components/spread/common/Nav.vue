@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-content">
+  <div v-show="rollNav.length > 0" class="nav-content">
     <div
       ref="refScroll"
       :class="rollNavHandle.length > 10 ? 'up-and-down' : 'left-and-right'"

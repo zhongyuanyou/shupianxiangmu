@@ -24,7 +24,13 @@ export default {
     }),
     // 发起聊天
     uPIM(planner, sessionParams, msgParams) {
-      const { mchUserId, userName, type } = planner
+      const { mchUserId, userName, type, msgParam, templateIds } = planner
+      const tepMsgParams = {
+        title: msgParam.title, // 客户名称
+        area: msgParam.area, // 客户地址
+        intention: msgParam.intention, // 客户意向
+        productName: msgParam.productName, // 产品名称
+      }
       // 如果当前页面在app中，则调用原生IM的方法
       if (this.isInApp) {
         try {
@@ -34,26 +40,70 @@ export default {
             if (code !== 200) {
               this.$appFn.dggLogin((loginRes) => {
                 if (loginRes.code === 200) {
-                  this.$appFn.dggOpenIM(
-                    {
-                      name: userName,
-                      userId: mchUserId,
-                      userType: type || 'MERCHANT_B',
-                    },
-                    (res) => {
-                      const { code } = res || {}
+                  if (templateIds !== '') {
+                    this.$appFn.dggOpenIM(
+                      {
+                        templateId: templateIds,
+                        extContent: tepMsgParams,
+                        name: userName,
+                        userId: mchUserId,
+                        userType: type || 'MERCHANT_B',
+                      },
+                      (res) => {
+                        const { code } = res || {}
 
-                      if (code !== 200)
-                        this.$xToast.show({
-                          message: `联系失败`,
-                          duration: 1000,
-                          forbidClick: true,
-                          icon: 'toast_ic_remind',
-                        })
-                    }
-                  )
+                        if (code !== 200)
+                          this.$xToast.show({
+                            message: `联系失败`,
+                            duration: 1000,
+                            forbidClick: true,
+                            icon: 'toast_ic_remind',
+                          })
+                      }
+                    )
+                  } else {
+                    this.$appFn.dggOpenIM(
+                      {
+                        name: userName,
+                        userId: mchUserId,
+                        userType: type || 'MERCHANT_B',
+                      },
+                      (res) => {
+                        const { code } = res || {}
+
+                        if (code !== 200)
+                          this.$xToast.show({
+                            message: `联系失败`,
+                            duration: 1000,
+                            forbidClick: true,
+                            icon: 'toast_ic_remind',
+                          })
+                      }
+                    )
+                  }
                 }
               })
+            } else if (templateIds !== '') {
+              this.$appFn.dggOpenIM(
+                {
+                  templateId: templateIds,
+                  extContent: tepMsgParams,
+                  name: userName,
+                  userId: mchUserId,
+                  userType: type || 'MERCHANT_B',
+                },
+                (res) => {
+                  const { code } = res || {}
+
+                  if (code !== 200)
+                    this.$xToast.show({
+                      message: `联系失败`,
+                      duration: 1000,
+                      forbidClick: true,
+                      icon: 'toast_ic_remind',
+                    })
+                }
+              )
             } else {
               this.$appFn.dggOpenIM(
                 {
@@ -78,6 +128,8 @@ export default {
         } catch (error) {
           console.error('uPIM error:', error)
         }
+      } else if (sessionParams && msgParams) {
+        this.sendTemplateMsgMixin({ sessionParams, msgParams })
       } else {
         const imUserType = type || 'MERCHANT_B' // 用户类型: ORDINARY_B 启大顺 ;MERCHANT_S 启大包
         const operUserType =
@@ -89,9 +141,6 @@ export default {
           imUserType,
           operUserType,
         })
-        if (sessionParams && sessionParams) {
-          this.sendTemplateMsgMixin({ sessionParams, msgParams })
-        }
       }
     },
 

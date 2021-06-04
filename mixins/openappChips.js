@@ -47,6 +47,7 @@ export default {
       // this.$toast.loading()
       if (obj.isWeixin) {
         // this.$toast.hide()
+
         // 如果是微信打开的页面，则跳应pp助手
         window.location.href =
           'https://a.app.qq.com/o/simple.jsp?pkgname=net.dgg.fitax'
@@ -55,12 +56,11 @@ export default {
         const _flag =
           !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ||
           !!navigator.userAgent.match(/UCBrowser/g)
-        if (this.thisType === 'openapp' && !_flag) {
+        if (this.thisType === 'openapp') {
           // 打开app
           if (isAndroid) {
-            window.open(
-              'dggcustomerapp://{"androidRoute":"/dgg/android/MainActivity","androidParams":{},"iosRoute":"DGGCustomer:DGGCustomer/MainActivity///push/animation/","iosParams":{},"isLogin":"0"}'
-            )
+            window.location =
+              'cpsccustomer://{"path":"/main/android/main","parameter":{"selectedIndex":3}}'
           } else {
             window.location =
               'cpsccustomer://{"path":"CPSCustomer:CPSCustomer/CPSTabBarViewController///push/animation","parameter":{"selectedIndex":"3"}}'
