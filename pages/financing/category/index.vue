@@ -241,7 +241,7 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      if (this.isInApp && title !== '大家都在用') {
+      if (this.isInApp) {
         const iOSRouters = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
@@ -274,30 +274,6 @@ export default {
             ? `https://${base}m.shupian.cn/detail?productId=${id}`
             : `https://${base}m.shupian.cn/search/searchgoods`
       }
-      //   if (title === '大家都在用' && this.isInApp) {
-      //     const iOSRouters = {
-      //       path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
-      //       parameter: {
-      //         routerPath: 'cpsc/goods/service/list',
-      //         parameter: { productId: id },
-      //       },
-      //     }
-      //     const androidRouters = {
-      //       path: '/flutter/main',
-      //       parameter: {
-      //         routerPath: 'cpsc/goods/service/list',
-      //         parameter: { productId: id },
-      //       },
-      //     }
-      //     const iOSRouterStr = JSON.stringify(iOSRouters)
-      //     const androidRouterStr = JSON.stringify(androidRouters)
-      //     this.$appFn.dggJumpRoute({
-      //       iOSRouter: iOSRouterStr,
-      //       androidRouter: androidRouterStr,
-      //     })
-      //   } else if (title === '大家都在用' && !this.isInApp) {
-      //     window.location.href = url
-      //   }
     },
     back() {
       this.$router.back()
