@@ -5,6 +5,7 @@
         <div class="form_title">
           <img :src="imgLeft" alt="" />
           <p>我的版权能否登记</p>
+          <img :src="bottom_one" alt="" class="image_bottome" />
           <img :src="imgRight" alt="" />
         </div>
         <div class="form_text">{{ text }}</div>
@@ -19,24 +20,33 @@
             @click="openPop"
           />
           <sp-field
+            v-if="!userPhone"
             v-model="phoneNum"
-            name="电话"
-            label="电话"
+            name="手机号"
+            label="手机号"
+            placeholder="请输入手机号"
             maxlength="11"
-            placeholder="留下手机号，接受查询结果"
           />
-          <div v-if="showVerifyCode" class="verify">
+          <sp-field
+            v-else
+            v-model="userPhone"
+            name="手机号"
+            label="手机号"
+            placeholder="请输入手机号"
+            maxlength="11"
+            readonly
+          />
+          <div class="code">
             <sp-field
+              v-show="!userPhone"
               v-model="verifyCode"
               name="验证码"
               label="验证码"
-              placeholder="请输入验证码"
-              maxlength="6"
-            />
-            <!-- :rules="[{ required: true, message: '请输入验证码' }]" -->
-            <sp-button size="small" type="primary" @click="onSms">{{
-              test
-            }}</sp-button>
+              placeholder="输入短信校验码"
+              maxlength="4"
+            >
+            </sp-field>
+            <button v-show="!userPhone" @click="onSms">{{ test }}</button>
           </div>
 
           <div style="margin: 20px 10px">
@@ -58,6 +68,7 @@
       <div class="form_title">
         <img :src="imgLeft" alt="" />
         <p>哪些作品可以登记版权</p>
+        <img :src="bottom_one" alt="" class="image_bottome" />
         <img :src="imgRight" alt="" />
       </div>
       <div class="ads_box">
@@ -71,6 +82,7 @@
       <div class="form_title">
         <img :src="imgLeft" alt="" />
         <p>企业版权登记重要性</p>
+        <img :src="bottom_one" alt="" class="image_bottome" />
         <img :src="imgRight" alt="" />
       </div>
       <div class="ads_box">
@@ -81,12 +93,7 @@
         </div>
       </div>
     </div>
-    <sp-popup
-      v-model="isShow"
-      round
-      position="bottom"
-      :style="{ height: '180px' }"
-    >
+    <sp-popup v-model="isShow" round position="bottom">
       <div
         v-for="(item, index) in btns"
         :key="index"
@@ -115,9 +122,8 @@ import {
 // import { copyrightRegisterApi } from '@/api'
 import { mapState } from 'vuex'
 import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
-import isLogin from '@/mixins/isLogin'
 import imHandle from '@/mixins/imHandle'
-
+import isLogin from '@/mixins/isLogin'
 export default {
   name: 'Index',
   components: {
@@ -131,7 +137,7 @@ export default {
     [Popup.name]: Popup,
     [Toast.name]: Toast,
   },
-  mixins: [isLogin, imHandle],
+  mixins: [imHandle, isLogin],
   async asyncData({ $axios }) {
     const locationCodes = ''
     const navCodes = ''
@@ -163,6 +169,7 @@ export default {
   },
   data() {
     return {
+      bottom_one: 'https://cdn.shupian.cn/sp-pt/wap/7f6ga771ooc0000.png',
       text: '企业品牌维权利器 保护个人原创作品',
       imgRight: 'https://cdn.shupian.cn/sp-pt/wap/images/byszrqecapk0000.png',
       imgLeft: 'https://cdn.shupian.cn/sp-pt/wap/images/9pg9y8vb8ik0000.png',
@@ -245,70 +252,72 @@ export default {
   computed: {
     ...mapState({
       isInApp: (state) => state.app.isInApp,
-      currentCity: (state) => state.city.currentCity,
+      currentCitys: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
     isNull() {
+      // console.log('++', typeof this.userPhone)
+      // console.log('++this.verifyCode', this.verifyCode)
       // 是否有产品
       if (this.haveProduct === '') {
         return true
       }
       // 电话号码
-      if (this.phoneNum === '') {
-        return true
+      if (this.userPhone === '') {
+        if (this.phoneNum === '') {
+          return true
+        }
+      } else if (this.userPhone !== '') {
+        if (this.userPhone === '') {
+          return true
+        }
       }
       // 验证码
-      if (this.verifyCode === '') {
+      if (this.verifyCode === '' && !this.userPhone) {
+        console.log('++++')
         return true
       }
       return false
     },
   },
   mounted() {
-    if (this.isLogin) {
-      this.phoneNum = this.userPhone
-      this.showVerifyCode = false
-    } else {
-      this.showVerifyCode = true
-    }
-    if (this.currentCity.city) {
-      this.city = this.currentCity
+    if (this.currentCitys.city) {
+      this.city = this.currentCitys
     }
     this.getPagePlanner('app-ghsdgye-02')
-    if (this.isInApp) {
-      this.$appFn.dggGetUserInfo((res) => {
-        const { code, data } = res || {}
-        if (code !== 200) {
-          this.$appFn.dggLogin((loginRes) => {})
-        } else {
-          this.$appFn.dggOpenIM(
-            {
-              name: this.pagePlanner.name,
-              userId: this.pagePlanner.id,
-              userType: this.pagePlanner.type,
-            },
-            (res) => {
-              const { code } = res || {}
-              if (code !== 200)
-                this.$xToast.show({
-                  message: `联系失败`,
-                  duration: 1000,
-                  forbidClick: true,
-                  icon: 'toast_ic_remind',
-                })
-            }
-          )
-        }
-      })
-    }
   },
   methods: {
     goIM() {
       console.log(this.pagePlanner.id)
+      const sessionParams = {
+        imUserId: this.pagePlanner.id,
+        imUserType: this.pagePlanner.type,
+        ext: {
+          intentionType: '',
+          intentionCity: '',
+          recommendId: '',
+          recommendAttrJson: {},
+          startUserType: 'cps-app',
+        },
+      }
+      const msgParams = {
+        // sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+        // msgType: 'im_tmplate', // 消息类型
+        // extContent: this.$route.query, // 路由参数
+        // forwardAbstract: '【咨询信息】',
+        // title: '版权登记',
+        // area: this.currentCitys,
+        // productName: '车主贷',
+        // // intention: this.lines + '万元',
+        // routerId: '',
+      }
+      const msgParamsMsg = JSON.stringify(msgParams)
       const planner = {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        msgParam: {},
+        templateIds: '',
       }
       console.log('planner', planner)
       this.uPIM(planner)
@@ -324,7 +333,7 @@ export default {
           areaCode = res.data.adCode
         })
       } else {
-        areaCode = this.currentCity.code
+        areaCode = this.currentCitys.code
       }
       try {
         this.$axios
@@ -392,11 +401,12 @@ export default {
         sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
         msgType: 'im_tmplate', // 消息类型
         extContent: this.$route.query, // 路由参数
-        title: this.firmName,
+        title: '产权登记',
         area: this.city
           ? this.city.join(',')
           : this.$store.state.city.defaultCity.name,
-        productName: this.title,
+        productName: '产权登记',
+        intention: this.haveProduct,
       }
       // 规划师信息上传
       const planner = {
@@ -406,37 +416,42 @@ export default {
         msgParam: msgParams,
         templateIds: '60a46c4e344fb6000633c37a',
       }
-
-      // 进行参数验证
-      this.$axios
-        .get(financingApi.check_smsCode, {
-          params: {
-            phone: this.phoneNum,
-            smsCode: this.smsNum,
-          },
-        })
-        .then((res) => {
-          if (res.code === 200 && res.data === true) {
-            // 不在APP当中
-            if (!this.isInApp) {
-              this.uPIM(planner, sessionParams, msgParams)
-            } else {
+      // 进行参数验证 如果登陆了 直接去跳IM  如果没登录进行验证再登录
+      if (this.userPhone) {
+        this.uPIM(planner)
+      } else {
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phoneNum,
+              smsCode: this.smsNum,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              // 不在APP当中
+              if (!this.isInApp) {
+                this.uPIM(planner, sessionParams, msgParams)
+              } else {
+                this.uPIM(planner)
+              }
+              // 在APP中
+              // if (this.isInApp && this.phoneNum === '') {
+              //   if (res.code === 200 && res.data === true) {
+              //     this.uPIM(planner)
+              //   } else if (res.code !== 200 && this.smsNum === this.sms) {
+              //     this.uPIM(planner)
+              //   }
+              // } else if (this.phoneNum !== '' && this.isInApp) {
+              //   this.uPIM(planner)
+              // }
+            } else if (this.smsNum === this.verifyCode) {
               this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
             }
-            // 在APP中
-            // if (this.isInApp && this.phoneNum === '') {
-            //   if (res.code === 200 && res.data === true) {
-            //     this.uPIM(planner)
-            //   } else if (res.code !== 200 && this.smsNum === this.sms) {
-            //     this.uPIM(planner)
-            //   }
-            // } else if (this.phoneNum !== '' && this.isInApp) {
-            //   this.uPIM(planner)
-            // }
-          } else {
-            Toast('验证码不正确！')
-          }
-        })
+          })
+      }
     },
     openPop() {
       this.isShow = true
@@ -466,7 +481,6 @@ export default {
     },
     // 获取验证码
     async getSmsCode() {
-      this.countDown()
       // 请求
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
@@ -478,7 +492,11 @@ export default {
           message: '获取验证码成功',
         })
         this.smsNum = res.data
-        console.log('res', res)
+        this.countDown()
+      } else {
+        this.$xToast.show({
+          message: res.data.error,
+        })
       }
     },
     countDown() {
@@ -541,6 +559,29 @@ export default {
   height: 80px;
   background: #f8f8f8;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.sp-cell::after {
+  border-bottom: none;
+}
+.sp-field__right-icon {
+  padding: 0 !important ;
+}
+.code {
+  .flexMixin();
+  .sp-cell {
+    .flexMixin();
+    width: 450px;
+  }
+  button {
+    width: 200px;
+    height: 80px;
+    background: #4974f5;
+    border-radius: 8px;
+    color: #ffffff;
+    font: 400 28px @font-regular;
+  }
 }
 .disabled {
   background: #91abf9 !important;
@@ -556,9 +597,11 @@ export default {
     border-radius: 8px;
     font: 400 28px/28px @font-regular;
     color: #ffffff;
+    border: none;
   }
   .sp-cell {
     width: 450px;
+    margin-top: 0;
   }
 }
 .sp-button {
@@ -568,6 +611,7 @@ export default {
   border-radius: 8px;
   font: bold 32px @font-medium;
   color: #ffffff;
+  border: none;
 }
 
 .sp-cell__title {
@@ -593,6 +637,8 @@ input:-webkit-autofill {
   background: #ffffff;
   width: 100%;
   height: 100%;
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
   .container {
     width: 100%;
     height: 1012px;
@@ -611,6 +657,7 @@ input:-webkit-autofill {
       left: 20px;
       margin: 0 auto;
       .form_title {
+        position: relative;
         .flexMixin();
         height: 40px;
         font: bold 36px/34px @font-medium;
@@ -620,6 +667,12 @@ input:-webkit-autofill {
         img {
           width: 38px;
           height: 27px;
+        }
+        .image_bottome {
+          width: 267px;
+          height: 42px;
+          position: absolute;
+          top: 11px;
         }
         p {
           margin: 0 16px;
@@ -636,6 +689,7 @@ input:-webkit-autofill {
   }
   .container_middle {
     .form_title {
+      position: relative;
       .flexMixin();
       height: 40px;
       font: bold 36px/34px @font-medium;
@@ -645,6 +699,12 @@ input:-webkit-autofill {
       img {
         width: 38px;
         height: 27px;
+      }
+      .image_bottome {
+        width: 267px;
+        height: 42px;
+        position: absolute;
+        top: 11px;
       }
       p {
         margin: 0 16px;
@@ -685,6 +745,7 @@ input:-webkit-autofill {
     }
   }
   .container_bottom {
+    position: relative;
     .form_title {
       .flexMixin();
       height: 40px;
@@ -695,6 +756,12 @@ input:-webkit-autofill {
       img {
         width: 38px;
         height: 27px;
+      }
+      .image_bottome {
+        width: 267px;
+        height: 42px;
+        position: absolute;
+        top: 11px;
       }
       p {
         margin: 0 16px;
@@ -723,6 +790,7 @@ input:-webkit-autofill {
           display: block;
           width: 100%;
         }
+
         p {
           color: #222222;
           font: bold 28px @font-medium;
@@ -745,6 +813,8 @@ input:-webkit-autofill {
   }
   .sp-popup {
     background-color: #f5f5f5;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
   }
   .choose {
     .flexMixin();

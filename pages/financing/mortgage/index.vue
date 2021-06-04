@@ -331,7 +331,7 @@ export default {
         sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
         msgType: 'im_tmplate', // 消息类型
         extContent: this.$route.query, // 路由参数
-        forwardAbstract: '',
+        forwardAbstract: '【咨询信息】',
         title: this.name + this.sexList[this.actived],
         area: typeof this.city !== 'string' ? this.city.join(',') : this.city,
         productName: '房贷',

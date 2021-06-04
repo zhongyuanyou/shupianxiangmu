@@ -417,6 +417,7 @@ export default {
         background: #fff;
         padding: 26px 0 32px 20px;
         margin-top: 20px;
+        border-radius: 8px;
         .title {
           font-size: 30px;
           font-family: PingFang SC;
