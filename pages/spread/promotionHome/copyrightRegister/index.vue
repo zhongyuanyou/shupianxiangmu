@@ -667,6 +667,8 @@ input:-webkit-autofill {
   bottom: env(safe-area-inset-bottom);
   .container {
     .container_header {
+      padding-top: constant(safe-area-inset-top);
+      padding-top: env(safe-area-inset-top);
       background-color: #555dec;
       height: 88px;
       width: 100%;
