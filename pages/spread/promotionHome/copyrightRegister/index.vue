@@ -2,7 +2,17 @@
   <div class="container_body">
     <div class="container">
       <sp-sticky @scroll="handleScroll">
-        <div class="container_header">
+        <div
+          class="container_header"
+          :class="scrollTop > 88 ? 'header_bgc' : ''"
+          :style="
+            isInApp && appType === 'Android'
+              ? 'padding-top:20px;height:64px'
+              : isInApp && appType === 'IOS'
+              ? 'height:70px'
+              : ''
+          "
+        >
           <my-icon
             name="nav_ic_back"
             size="0.4rem"
@@ -10,7 +20,9 @@
             class="container_header_icon"
             @click.native="goBack"
           ></my-icon>
-          <div class="container_header_title">版权登记</div>
+          <div v-show="scrollTop > 88" class="container_header_title">
+            版权登记
+          </div>
         </div>
       </sp-sticky>
       <div class="container_form">
@@ -260,6 +272,8 @@ export default {
       smsNum: '',
       test: '获取验证码',
       time: '',
+      appType: '',
+      scrollTop: 0,
     }
   },
   computed: {
@@ -298,6 +312,7 @@ export default {
       this.city = this.currentCitys
     }
     this.getPagePlanner('app-ghsdgye-02')
+    this.appType = this.isAndroidOrIOS()
   },
   methods: {
     // 返回上一页
@@ -407,6 +422,7 @@ export default {
     },
     handleScroll(e) {
       // this.showTitle = e.isFixed
+      this.scrollTop = e.scrollTop
     },
     onSubmit(values) {
       console.log('submit', values)
@@ -540,6 +556,24 @@ export default {
         }
       }, 1000)
     },
+    // @--判断页面所在设备的系统
+    isAndroidOrIOS() {
+      const ua = navigator.userAgent
+      const isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1
+      const isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+
+      if (isAndroid) {
+        this.userAgent = 'Android'
+        console.log('安卓系统')
+        return 'Android'
+      }
+      if (isiOS) {
+        this.userAgent = 'IOS'
+        console.log('IOS系统')
+        return 'IOS'
+      }
+      console.log(ua)
+    },
   },
 }
 </script>
@@ -575,6 +609,7 @@ export default {
 }
 .header_bgc {
   background: #4974f5 !important;
+  height: 180px !important;
 }
 .sp-cell {
   width: 670px;
@@ -669,7 +704,6 @@ input:-webkit-autofill {
     .container_header {
       padding-top: constant(safe-area-inset-top);
       padding-top: env(safe-area-inset-top);
-      background-color: #555dec;
       height: 88px;
       width: 100%;
       .flexMixin();

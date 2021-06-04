@@ -21,17 +21,19 @@
         {{ title }}
       </div>
     </div>
-    <div v-if="imgList.length !== 0" class="banner">
-      <sp-swipe
+    <!-- <div v-if="imgList.length !== 0" class="banner"> -->
+    <div class="banner">
+      <img :src="imgUrl" alt="" />
+      <!-- <sp-swipe
         class="my-swipe"
         :autoplay="3000"
         indicator-color="#4974F5"
         :show-indicators="imgList.length > 1"
       >
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
-          ><img :src="item.img" alt=""
+          ><img :src="imgUrl" alt=""
         /></sp-swipe-item>
-      </sp-swipe>
+      </sp-swipe> -->
     </div>
     <div class="container_form">
       <sp-form @submit="onSubmit">
@@ -168,6 +170,7 @@ export default {
       time: '',
       test: '获取验证码',
       appType: '',
+      imgUrl: 'https://cdn.shupian.cn/sp-pt/wap/dzfwvdb61pc0000.png',
     }
   },
   computed: {
@@ -530,18 +533,22 @@ export default {
     width: 750px;
     height: 280px;
     background: #d8d8d8;
-    .my-swipe .sp-swipe-item {
-      font-size: 20px;
-      height: 280px;
-      text-align: center;
-      border-radius: 12px;
-      background: #dddddd;
-      > img {
-        width: 100%;
-        height: 100%;
-        //   object-fit: cover;
-      }
+    img {
+      height: 100%;
+      height: 100%;
     }
+    // .my-swipe .sp-swipe-item {
+    //   font-size: 20px;
+    //   height: 280px;
+    //   text-align: center;
+    //   border-radius: 12px;
+    //   background: #dddddd;
+    //   > img {
+    //     width: 100%;
+    //     height: 100%;
+    //     //   object-fit: cover;
+    //   }
+    // }
   }
   .container_ads {
     height: 320px;
