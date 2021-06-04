@@ -462,7 +462,7 @@ export default {
       }
       .pactive {
         font: bold 26px/37px @font-medium;
-        color: #222222;
+        color: #4974f5;
       }
     }
     .items:nth-of-type(1) {
