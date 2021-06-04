@@ -213,13 +213,13 @@ export default {
     },
     onRefresh() {
       // 清空列表数据
-      this.list = []
-      this.finished = false
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true
-      this.params.start = 1
-      this.getHotList()
+      // this.list = []
+      // this.finished = false
+      // // 重新加载数据
+      // // 将 loading 设置为 true，表示处于加载状态
+      // this.loading = true
+      // this.params.start = 1
+      // this.getHotList()
     },
     choose(index, item) {
       this.params.start = 1
