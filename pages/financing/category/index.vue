@@ -61,15 +61,28 @@
             <div class="title">{{ item.title }}</div>
             <div
               :class="['item_con', { hidden_child: item.name == '为您推荐' }]"
+              :style="{
+                justifyContent:
+                  item.title === '大家都在用' ? ' space-around' : '',
+              }"
             >
               <div
                 v-for="(cItem, cIndex) in item.product"
                 v-show="isApplets ? cItem.name != '资质交易' : true"
                 :key="cIndex"
-                class="item_con_child"
-                @click="handleItem(cItem.id)"
+                :class="
+                  item.title === '大家都在用' ? 'icon-box' : 'item_con_child'
+                "
+                @click="handleItem(cItem.id, item.title, item.url)"
               >
-                {{ cItem.title }}
+                <div v-if="item.title === '大家都在用'">
+                  <div class="icon-img">
+                    <img :src="cItem.icon" alt="" />
+                  </div>
+                  <div class="icon-title">{{ cItem.title }}</div>
+                </div>
+
+                <div v-else>{{ cItem.title }}</div>
               </div>
             </div>
           </div>
@@ -223,7 +236,7 @@ export default {
         this.loading = false
       }
     },
-    handleItem(id) {
+    handleItem(id, title, url) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
@@ -232,14 +245,20 @@ export default {
         const iOSRouters = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
-            routerPath: 'cpsc/goods/details/service',
+            routerPath:
+              title !== '大家都在用'
+                ? 'cpsc/goods/details/service'
+                : 'cpsc/goods/service/list',
             parameter: { productId: id },
           },
         }
         const androidRouters = {
           path: '/flutter/main',
           parameter: {
-            routerPath: 'cpsc/goods/details/service',
+            routerPath:
+              title !== '大家都在用'
+                ? 'cpsc/goods/details/service'
+                : 'cpsc/goods/service/list',
             parameter: { productId: id },
           },
         }
@@ -250,14 +269,21 @@ export default {
           androidRouter: androidRouterStr,
         })
       } else {
-        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+        window.location.href =
+          title !== '大家都在用'
+            ? `https://${base}m.shupian.cn/detail?productId=${id}`
+            : `https://${base}m.shupian.cn/search/searchgoods`
       }
     },
     back() {
       this.$router.back()
     },
     goSearch() {
-      window.location.href = 'https://dm.shupian.cn/search'
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/search`
     },
     handleClickSlide(index) {
       this.adJumpHandleMixin(this.recommendData[index].materialList[0])
@@ -337,7 +363,7 @@ export default {
     display: flex;
     &_lf {
       display: block;
-      width: 200px;
+      width: 180px;
       background: #fff;
       overflow: hidden;
       position: relative;
@@ -348,11 +374,9 @@ export default {
         display: none;
       }
       &_item {
-        width: 200px;
         height: 124px;
         font-size: 26px;
         font-family: PingFang SC;
-        padding: 0 20px;
         font-weight: 400;
         color: #555555;
         text-align: center;
@@ -378,9 +402,11 @@ export default {
       position: relative;
       width: calc(100vw - 200px);
       padding: 0 20px;
+      padding-top: 20px;
       overflow-y: scroll;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
+      width: 100%;
       .bot {
         width: 100%;
         height: 120px;
@@ -443,6 +469,33 @@ export default {
             height: 60px;
             max-width: 100%;
             .textOverflow(1);
+          }
+          .icon-box {
+            display: flex;
+            align-items: center;
+            width: 150px;
+
+            margin-top: 40px;
+            .icon-img {
+              width: 88px;
+              height: 88px;
+              border-radius: 36px;
+              font-size: 0;
+              margin: 0 auto;
+              > img {
+                width: 100%;
+                height: 100%;
+                border-radius: 40px;
+              }
+            }
+            .icon-title {
+              width: 150px;
+              text-align: center;
+              margin-top: 20px;
+              font-size: 24px;
+              line-height: 24px;
+              overflow: hidden;
+            }
           }
         }
         .hidden_child {
