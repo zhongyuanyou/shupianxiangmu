@@ -125,7 +125,7 @@ export default {
       // 页面规划师
       pagePlanner: {},
       value: '',
-      valuePlaceholder: '请输入车价总额',
+      valuePlaceholder: '请输入房价总额',
       pickerShow: false,
       columns: ['5年', '10年', '20年', '30年'],
       yaer: '5年',
