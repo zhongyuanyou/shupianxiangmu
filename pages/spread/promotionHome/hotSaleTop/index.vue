@@ -80,12 +80,7 @@
       </div>
     </sp-sticky>
     <!-- 列表数据 start -->
-    <div
-      class="container_list"
-      :style="
-        appType === 'IOS' ? 'height: calc(100vh - 100px);overflow-y: auto;' : ''
-      "
-    >
+    <div class="container_list">
       <sp-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <sp-list
           v-model="loading"
