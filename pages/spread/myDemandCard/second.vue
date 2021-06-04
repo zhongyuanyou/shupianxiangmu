@@ -117,9 +117,7 @@ export default {
       )
       this.formData = Object.assign(this.formData, sessionStorageFormData)
     }
-    console.log('this.currentCity', this.currentCity.code)
     this.city = this.$cookies.get('currentCity') || 'VISITOR'
-    console.log('this.city', this.city)
   },
   destroyed() {
     // 缓存表单填写的数据
@@ -200,13 +198,13 @@ export default {
         customerAttribute: JSON.stringify(this.formData.content),
         customerName: userInfo.fullName,
         customerPhone: userInfo.mainAccount,
-        customerSex: userInfo.sex || 1,
+        customerSex: userInfo.sex || 2,
         sourceUrl: location.href,
         sourceSyscode: 'crisps-app', // 来源系统
         firstSourceChannel: 'crisps-app-one-home-page', // 一级来源渠道
         secondSourceChannel: 'crisps-app-two-look-service', // 二级来源渠道
-        requireCode: 'gszc', // 需求编码
-        requireName: '公司资产', // 需求名称
+        requireCode: 'FL20210425163709', // 需求编码
+        requireName: '工商变更', // 需求名称
         // "bizAreaCode": "string",
         // "bizAreaName": "string",
         // "comment": "string",
