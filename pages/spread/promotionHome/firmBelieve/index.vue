@@ -75,7 +75,7 @@
           name="验证码"
           label="验证码"
           placeholder="输入短信校验码"
-          maxlength="6"
+          maxlength="4"
         >
           <template #button>
             <sp-button size="small" type="primary" @click="onSms">{{
@@ -94,17 +94,13 @@
         立即申请
       </button>
     </div>
-    <sp-popup
-      v-model="isShow"
-      round
-      position="bottom"
-      :style="{ height: '408px' }"
-    >
+    <sp-popup v-model="isShow" round position="bottom">
       <div class="pop_top">
         <div class="cancel" @click="cancel">取消</div>
         <div class="title">知产数量</div>
         <div class="confirm" @click="confirm">确认</div>
       </div>
+
       <div class="roll_box">
         <div
           v-for="(item, index) in list"
@@ -161,13 +157,13 @@ export default {
       firmName: '',
       proNum: '',
       phoneNum: '',
-      verifyCode: '',
+      verifyCode: '', // 输入验证码
       isShow: false,
       list: ['1', '2', '3', '4', '5'],
       currentIndex: 2,
       disabled: true,
       pagePlanner: {},
-      smsNum: '',
+      smsNum: '', // 存的验证码
       imgList: [],
       time: '',
       test: '获取验证码',
@@ -190,16 +186,19 @@ export default {
         return true
       }
       // 电话号码
-      if (this.phoneNum === '') {
+      if (this.userPhone === '') {
+        if (this.phoneNum === '') {
+          return true
+        }
+      } else if (this.userPhone !== '') {
+        if (this.userPhone === '') {
+          return true
+        }
+      }
+      if (this.userPhone === '' && this.verifyCode === '') {
         return true
       }
-      if (!isLogin && this.verifyCode === '') {
-        return true
-      }
-      // if (this.verifyCode === '') {
-      //   // 验证码
-      //   return true
-      // }
+
       return false
     },
   },
@@ -226,11 +225,12 @@ export default {
         sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
         msgType: 'im_tmplate', // 消息类型
         extContent: this.$route.query, // 路由参数
-        title: this.firmName,
+        title: this.title,
         area: this.city
           ? this.city.join(',')
           : this.$store.state.city.defaultCity.name,
         productName: this.title,
+        intention: this.proNum + '个',
       }
       // 规划师信息上传
       const planner = {
@@ -241,36 +241,42 @@ export default {
         templateIds: '60a46c4e344fb6000633c37a',
       }
 
-      // 进行参数验证
-      this.$axios
-        .get(financingApi.check_smsCode, {
-          params: {
-            phone: this.phoneNum,
-            smsCode: this.smsNum,
-          },
-        })
-        .then((res) => {
-          if (res.code === 200 && res.data === true) {
-            // 不在APP当中
-            if (!this.isInApp) {
-              this.uPIM(planner, sessionParams, msgParams)
-            } else {
+      if (this.userPhone) {
+        this.uPIM(planner)
+      } else {
+        // 进行参数验证
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phoneNum,
+              smsCode: this.smsNum,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              // 不在APP当中
+              if (!this.isInApp) {
+                this.uPIM(planner, sessionParams, msgParams)
+              } else {
+                this.uPIM(planner)
+              }
+              // 在APP中
+              // if (this.isInApp && this.phoneNum === '') {
+              //   if (res.code === 200 && res.data === true) {
+              //     this.uPIM(planner)
+              //   } else if (res.code !== 200 && this.smsNum === this.sms) {
+              //     this.uPIM(planner)
+              //   }
+              // } else if (this.phoneNum !== '' && this.isInApp) {
+              //   this.uPIM(planner)
+              // }
+            } else if (this.smsNum === this.verifyCode) {
               this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
             }
-            // 在APP中
-            // if (this.isInApp && this.phoneNum === '') {
-            //   if (res.code === 200 && res.data === true) {
-            //     this.uPIM(planner)
-            //   } else if (res.code !== 200 && this.smsNum === this.sms) {
-            //     this.uPIM(planner)
-            //   }
-            // } else if (this.phoneNum !== '' && this.isInApp) {
-            //   this.uPIM(planner)
-            // }
-          } else {
-            Toast('验证码不正确！')
-          }
-        })
+          })
+      }
     },
     onSubmit(values) {
       console.log('submit', values)
@@ -291,7 +297,6 @@ export default {
     },
     // 获取验证码
     async getSmsCode() {
-      this.countDown()
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
           phone: this.phoneNum,
@@ -302,7 +307,11 @@ export default {
           message: '获取验证码成功',
         })
         this.smsNum = res.data
-        console.log('res', res)
+        this.countDown()
+      } else {
+        this.$xToast.show({
+          message: res.data.error,
+        })
       }
     },
     // 倒计时
@@ -370,13 +379,6 @@ export default {
                 imgSrc: res.data[0].imgaes,
               }
               console.log('this.pagePlanner', this.pagePlanner)
-            } else {
-              this.$xToast.show({
-                message: `已提交，我们会尽快联系您`,
-                duration: 3000,
-                forbidClick: true,
-                icon: 'toast_ic_remind',
-              })
             }
           })
       } catch (error) {
@@ -489,14 +491,18 @@ export default {
 }
 
 .container_body {
-  @supports (bottom: constant(safe-area-inset-bottom)) or
-    (bottom: env(safe-area-inset-bottom)) {
-    .sp-popup {
-      //你的容器选择器名称
-      bottom: constant(safe-area-inset-bottom);
-      bottom: env(safe-area-inset-bottom);
-    }
+  ::v-deep.sp-popup {
+    //你的容器选择器名称
+    background: #ffffff;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
   }
+  .sp-button--small {
+    background: #ffffff;
+    border: none;
+    color: #4974f5;
+  }
+
   .container_header {
     height: 88px;
     width: 100%;

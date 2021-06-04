@@ -43,10 +43,10 @@
               name="验证码"
               label="验证码"
               placeholder="输入短信校验码"
-              maxlength="6"
+              maxlength="4"
             >
             </sp-field>
-            <button @click="onSms">{{ test }}</button>
+            <button v-show="!userPhone" @click="onSms">{{ test }}</button>
           </div>
 
           <div style="margin: 20px 10px">
@@ -93,12 +93,7 @@
         </div>
       </div>
     </div>
-    <sp-popup
-      v-model="isShow"
-      round
-      position="bottom"
-      :style="{ height: '180px' }"
-    >
+    <sp-popup v-model="isShow" round position="bottom">
       <div
         v-for="(item, index) in btns"
         :key="index"
@@ -127,9 +122,8 @@ import {
 // import { copyrightRegisterApi } from '@/api'
 import { mapState } from 'vuex'
 import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
-import isLogin from '@/mixins/isLogin'
 import imHandle from '@/mixins/imHandle'
-
+import isLogin from '@/mixins/isLogin'
 export default {
   name: 'Index',
   components: {
@@ -143,7 +137,7 @@ export default {
     [Popup.name]: Popup,
     [Toast.name]: Toast,
   },
-  mixins: [isLogin, imHandle],
+  mixins: [imHandle, isLogin],
   async asyncData({ $axios }) {
     const locationCodes = ''
     const navCodes = ''
@@ -262,16 +256,25 @@ export default {
       appInfo: (state) => state.app.appInfo, // app信息
     }),
     isNull() {
+      // console.log('++', typeof this.userPhone)
+      // console.log('++this.verifyCode', this.verifyCode)
       // 是否有产品
       if (this.haveProduct === '') {
         return true
       }
       // 电话号码
-      if (this.phoneNum === '') {
-        return true
+      if (this.userPhone === '') {
+        if (this.phoneNum === '') {
+          return true
+        }
+      } else if (this.userPhone !== '') {
+        if (this.userPhone === '') {
+          return true
+        }
       }
       // 验证码
-      if (this.verifyCode === '') {
+      if (this.verifyCode === '' && !this.userPhone) {
+        console.log('++++')
         return true
       }
       return false
@@ -298,22 +301,22 @@ export default {
         },
       }
       const msgParams = {
-        sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
-        msgType: 'im_tmplate', // 消息类型
-        extContent: this.$route.query, // 路由参数
-        forwardAbstract: '【咨询信息】',
-        title: this.name + this.sexList[this.actived],
-        area: typeof this.city !== 'string' ? this.city.join(',') : this.city,
-        productName: '车主贷',
-        intention: this.lines + '万元',
-        routerId: '',
+        // sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
+        // msgType: 'im_tmplate', // 消息类型
+        // extContent: this.$route.query, // 路由参数
+        // forwardAbstract: '【咨询信息】',
+        // title: '版权登记',
+        // area: this.currentCitys,
+        // productName: '车主贷',
+        // // intention: this.lines + '万元',
+        // routerId: '',
       }
       const msgParamsMsg = JSON.stringify(msgParams)
       const planner = {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
-        msgParam: msgParams,
+        msgParam: {},
         templateIds: '',
       }
       console.log('planner', planner)
@@ -398,11 +401,12 @@ export default {
         sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
         msgType: 'im_tmplate', // 消息类型
         extContent: this.$route.query, // 路由参数
-        title: this.firmName,
+        title: '产权登记',
         area: this.city
           ? this.city.join(',')
           : this.$store.state.city.defaultCity.name,
-        productName: this.title,
+        productName: '产权登记',
+        intention: this.haveProduct,
       }
       // 规划师信息上传
       const planner = {
@@ -412,36 +416,42 @@ export default {
         msgParam: msgParams,
         templateIds: '60a46c4e344fb6000633c37a',
       }
-      // 进行参数验证
-      this.$axios
-        .get(financingApi.check_smsCode, {
-          params: {
-            phone: this.phoneNum,
-            smsCode: this.smsNum,
-          },
-        })
-        .then((res) => {
-          if (res.code === 200 && res.data === true) {
-            // 不在APP当中
-            if (!this.isInApp) {
-              this.uPIM(planner, sessionParams, msgParams)
-            } else {
+      // 进行参数验证 如果登陆了 直接去跳IM  如果没登录进行验证再登录
+      if (this.userPhone) {
+        this.uPIM(planner)
+      } else {
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phoneNum,
+              smsCode: this.smsNum,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              // 不在APP当中
+              if (!this.isInApp) {
+                this.uPIM(planner, sessionParams, msgParams)
+              } else {
+                this.uPIM(planner)
+              }
+              // 在APP中
+              // if (this.isInApp && this.phoneNum === '') {
+              //   if (res.code === 200 && res.data === true) {
+              //     this.uPIM(planner)
+              //   } else if (res.code !== 200 && this.smsNum === this.sms) {
+              //     this.uPIM(planner)
+              //   }
+              // } else if (this.phoneNum !== '' && this.isInApp) {
+              //   this.uPIM(planner)
+              // }
+            } else if (this.smsNum === this.verifyCode) {
               this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
             }
-            // 在APP中
-            // if (this.isInApp && this.phoneNum === '') {
-            //   if (res.code === 200 && res.data === true) {
-            //     this.uPIM(planner)
-            //   } else if (res.code !== 200 && this.smsNum === this.sms) {
-            //     this.uPIM(planner)
-            //   }
-            // } else if (this.phoneNum !== '' && this.isInApp) {
-            //   this.uPIM(planner)
-            // }
-          } else {
-            Toast('验证码不正确！')
-          }
-        })
+          })
+      }
     },
     openPop() {
       this.isShow = true
@@ -471,7 +481,6 @@ export default {
     },
     // 获取验证码
     async getSmsCode() {
-      this.countDown()
       // 请求
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
@@ -483,7 +492,11 @@ export default {
           message: '获取验证码成功',
         })
         this.smsNum = res.data
-        console.log('res', res)
+        this.countDown()
+      } else {
+        this.$xToast.show({
+          message: res.data.error,
+        })
       }
     },
     countDown() {
@@ -800,8 +813,8 @@ input:-webkit-autofill {
   }
   .sp-popup {
     background-color: #f5f5f5;
-    bottom: constant(safe-area-inset-bottom);
-    bottom: env(safe-area-inset-bottom);
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
   }
   .choose {
     .flexMixin();

@@ -52,7 +52,6 @@ export default {
                       },
                       (res) => {
                         const { code } = res || {}
-
                         if (code !== 200)
                           this.$xToast.show({
                             message: `联系失败`,
@@ -71,7 +70,6 @@ export default {
                       },
                       (res) => {
                         const { code } = res || {}
-
                         if (code !== 200)
                           this.$xToast.show({
                             message: `联系失败`,
