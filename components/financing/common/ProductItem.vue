@@ -2,7 +2,14 @@
   <div class="product-item">
     <div class="content" @click="junmpUrl(item.id)">
       <div class="img-box">
-        <img :src="item.img" alt="" />
+        <img
+          :src="
+            item.img
+              ? item.img
+              : 'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840093887568320858%3Apic%3ACOMDIC_TERMINAL_APP_1621478677000_LOGO.png'
+          "
+          alt=""
+        />
       </div>
       <div class="content-right">
         <span class="title">{{ item.title }}</span>
@@ -87,7 +94,6 @@ export default {
 <style lang="less" scoped>
 .product-item {
   width: 100%;
-  height: 284px;
   background: #ffffff;
   padding: 0 40px;
   .content {

@@ -30,6 +30,7 @@ export default {
         area: msgParam.area, // 客户地址
         intention: msgParam.intention, // 客户意向
         productName: msgParam.productName, // 产品名称
+        forwardAbstract: msgParam.forwardAbstract, // 摘要信息，可与显示内容保持一致
       }
       // 如果当前页面在app中，则调用原生IM的方法
       if (this.isInApp) {
@@ -51,7 +52,6 @@ export default {
                       },
                       (res) => {
                         const { code } = res || {}
-
                         if (code !== 200)
                           this.$xToast.show({
                             message: `联系失败`,
@@ -70,7 +70,6 @@ export default {
                       },
                       (res) => {
                         const { code } = res || {}
-
                         if (code !== 200)
                           this.$xToast.show({
                             message: `联系失败`,

@@ -1,7 +1,25 @@
 <template>
   <div class="container_body">
-    <div class="container_header">
-      <Header :title="title" @click="goBack" />
+    <div
+      class="container_header"
+      :style="
+        isInApp && appType === 'Android'
+          ? 'padding-top:20px;height:64px'
+          : isInApp && appType === 'IOS'
+          ? 'height:90px'
+          : ''
+      "
+    >
+      <my-icon
+        name="nav_ic_back"
+        size="0.4rem"
+        color="#1A1A1A"
+        class="container_header_icon"
+        @click.native="goBack"
+      ></my-icon>
+      <div class="container_header_title">
+        {{ title }}
+      </div>
     </div>
     <div v-if="imgList.length !== 0" class="banner">
       <sp-swipe
@@ -35,6 +53,7 @@
         />
         <!-- :rules="[{ required: true, message: '请填写密码' }]" -->
         <sp-field
+          v-if="!userPhone"
           v-model="phoneNum"
           name="手机号"
           label="手机号"
@@ -42,12 +61,21 @@
           maxlength="11"
         />
         <sp-field
-          v-if="showVerifyCode"
+          v-else
+          v-model="userPhone"
+          name="手机号"
+          label="手机号"
+          placeholder="请输入手机号"
+          maxlength="11"
+          readonly
+        />
+        <sp-field
+          v-show="!userPhone"
           v-model="verifyCode"
           name="验证码"
           label="验证码"
           placeholder="输入短信校验码"
-          maxlength="6"
+          maxlength="4"
         >
           <template #button>
             <sp-button size="small" type="primary" @click="onSms">{{
@@ -66,17 +94,13 @@
         立即申请
       </button>
     </div>
-    <sp-popup
-      v-model="isShow"
-      round
-      position="bottom"
-      :style="{ height: '408px' }"
-    >
+    <sp-popup v-model="isShow" round position="bottom">
       <div class="pop_top">
         <div class="cancel" @click="cancel">取消</div>
         <div class="title">知产数量</div>
         <div class="confirm" @click="confirm">确认</div>
       </div>
+
       <div class="roll_box">
         <div
           v-for="(item, index) in list"
@@ -106,14 +130,14 @@ import {
   Swipe,
   SwipeItem,
 } from '@chipspc/vant-dgg'
-import Header from '@/components/common/head/header'
+// import Header from '@/components/common/head/header'
 import { financingApi, plannerApi } from '@/api/spread'
-import isLogin from '@/mixins/isLogin'
 import imHandle from '@/mixins/imHandle'
+import isLogin from '@/mixins/isLogin'
 export default {
   name: 'Index',
   components: {
-    Header,
+    // Header,
     [Sticky.name]: Sticky,
     [PullRefresh.name]: PullRefresh,
     [List.name]: List,
@@ -126,30 +150,30 @@ export default {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
   },
-  mixins: [isLogin, imHandle],
+  mixins: [imHandle, isLogin],
   data() {
     return {
       title: '高企认定',
       firmName: '',
       proNum: '',
       phoneNum: '',
-      verifyCode: '',
+      verifyCode: '', // 输入验证码
       isShow: false,
       list: ['1', '2', '3', '4', '5'],
       currentIndex: 2,
-      showVerifyCode: false,
       disabled: true,
       pagePlanner: {},
-      smsNum: '',
+      smsNum: '', // 存的验证码
       imgList: [],
       time: '',
       test: '获取验证码',
+      appType: '',
     }
   },
   computed: {
     ...mapState({
       isInApp: (state) => state.app.isInApp,
-      currentCity: (state) => state.city.currentCity,
+      currentCitys: (state) => state.city.currentCity,
       appInfo: (state) => state.app.appInfo, // app信息
     }),
     isNull() {
@@ -162,55 +186,27 @@ export default {
         return true
       }
       // 电话号码
-      if (this.phoneNum === '') {
+      if (this.userPhone === '') {
+        if (this.phoneNum === '') {
+          return true
+        }
+      } else if (this.userPhone !== '') {
+        if (this.userPhone === '') {
+          return true
+        }
+      }
+      if (this.userPhone === '' && this.verifyCode === '') {
         return true
       }
-      if (!isLogin && this.verifyCode === '') {
-        return true
-      }
-      // if (this.verifyCode === '') {
-      //   // 验证码
-      //   return true
-      // }
+
       return false
     },
   },
   mounted() {
     this.getPagePlanner('app-ghsdgye-02')
-    if (this.isInApp) {
-      this.$appFn.dggGetUserInfo((res) => {
-        const { code, data } = res || {}
-        if (code !== 200) {
-          this.$appFn.dggLogin((loginRes) => {})
-        } else {
-          this.$appFn.dggOpenIM(
-            {
-              name: this.pagePlanner.name,
-              userId: this.pagePlanner.id,
-              userType: this.pagePlanner.type,
-            },
-            (res) => {
-              const { code } = res || {}
-              if (code !== 200)
-                this.$xToast.show({
-                  message: `联系失败`,
-                  duration: 1000,
-                  forbidClick: true,
-                  icon: 'toast_ic_remind',
-                })
-            }
-          )
-        }
-      })
-    }
-    if (this.isLogin) {
-      this.phoneNum = this.userPhone
-      this.showVerifyCode = false
-    } else {
-      this.showVerifyCode = true
-    }
     const code = 'ad100065'
     this.getAd(code)
+    this.appType = this.isAndroidOrIOS()
   },
   methods: {
     // 点击申请按钮的时候触发
@@ -229,11 +225,12 @@ export default {
         sendType: 2, // 发送模板消息类型 0：商品详情带图片的模板消息 1：商品详情不带图片的模板消息
         msgType: 'im_tmplate', // 消息类型
         extContent: this.$route.query, // 路由参数
-        title: this.firmName,
+        title: this.title,
         area: this.city
           ? this.city.join(',')
           : this.$store.state.city.defaultCity.name,
         productName: this.title,
+        intention: this.proNum + '个',
       }
       // 规划师信息上传
       const planner = {
@@ -244,36 +241,42 @@ export default {
         templateIds: '60a46c4e344fb6000633c37a',
       }
 
-      // 进行参数验证
-      this.$axios
-        .get(financingApi.check_smsCode, {
-          params: {
-            phone: this.phoneNum,
-            smsCode: this.smsNum,
-          },
-        })
-        .then((res) => {
-          if (res.code === 200 && res.data === true) {
-            // 不在APP当中
-            if (!this.isInApp) {
-              this.uPIM(planner, sessionParams, msgParams)
-            } else {
+      if (this.userPhone) {
+        this.uPIM(planner)
+      } else {
+        // 进行参数验证
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phoneNum,
+              smsCode: this.smsNum,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              // 不在APP当中
+              if (!this.isInApp) {
+                this.uPIM(planner, sessionParams, msgParams)
+              } else {
+                this.uPIM(planner)
+              }
+              // 在APP中
+              // if (this.isInApp && this.phoneNum === '') {
+              //   if (res.code === 200 && res.data === true) {
+              //     this.uPIM(planner)
+              //   } else if (res.code !== 200 && this.smsNum === this.sms) {
+              //     this.uPIM(planner)
+              //   }
+              // } else if (this.phoneNum !== '' && this.isInApp) {
+              //   this.uPIM(planner)
+              // }
+            } else if (this.smsNum === this.verifyCode) {
               this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
             }
-            // 在APP中
-            // if (this.isInApp && this.phoneNum === '') {
-            //   if (res.code === 200 && res.data === true) {
-            //     this.uPIM(planner)
-            //   } else if (res.code !== 200 && this.smsNum === this.sms) {
-            //     this.uPIM(planner)
-            //   }
-            // } else if (this.phoneNum !== '' && this.isInApp) {
-            //   this.uPIM(planner)
-            // }
-          } else {
-            Toast('验证码不正确！')
-          }
-        })
+          })
+      }
     },
     onSubmit(values) {
       console.log('submit', values)
@@ -294,7 +297,6 @@ export default {
     },
     // 获取验证码
     async getSmsCode() {
-      this.countDown()
       const res = await this.$axios.get(financingApi.smsCode, {
         params: {
           phone: this.phoneNum,
@@ -305,7 +307,11 @@ export default {
           message: '获取验证码成功',
         })
         this.smsNum = res.data
-        console.log('res', res)
+        this.countDown()
+      } else {
+        this.$xToast.show({
+          message: res.data.error,
+        })
       }
     },
     // 倒计时
@@ -336,7 +342,7 @@ export default {
           areaCode = res.data.adCode
         })
       } else {
-        areaCode = this.currentCity.code
+        areaCode = this.currentCitys.code
       }
       try {
         this.$axios
@@ -373,13 +379,6 @@ export default {
                 imgSrc: res.data[0].imgaes,
               }
               console.log('this.pagePlanner', this.pagePlanner)
-            } else {
-              this.$xToast.show({
-                message: `已提交，我们会尽快联系您`,
-                duration: 3000,
-                forbidClick: true,
-                icon: 'toast_ic_remind',
-              })
             }
           })
       } catch (error) {
@@ -437,6 +436,23 @@ export default {
         this.$router.back()
       }
     },
+    // @--判断页面所在设备的系统
+    isAndroidOrIOS() {
+      const ua = navigator.userAgent
+      const isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1
+      const isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+      if (isAndroid) {
+        this.userAgent = 'Android'
+        console.log('安卓系统')
+        return 'Android'
+      }
+      if (isiOS) {
+        this.userAgent = 'IOS'
+        console.log('IOS系统')
+        return 'IOS'
+      }
+      console.log(ua)
+    },
   },
 }
 </script>
@@ -473,7 +489,38 @@ export default {
 .sp-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
+
 .container_body {
+  ::v-deep.sp-popup {
+    //你的容器选择器名称
+    background: #ffffff;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .sp-button--small {
+    background: #ffffff;
+    border: none;
+    color: #4974f5;
+  }
+
+  .container_header {
+    height: 88px;
+    width: 100%;
+    .flexMixin();
+    justify-content: center;
+    position: relative;
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+    .container_header_icon {
+      margin-left: @marginLeft+12px;
+      position: absolute;
+      left: 0;
+    }
+    .container_header_title {
+      color: #1a1a1a;
+      font: bold 36px/36px @font-medium;
+    }
+  }
   .disabled {
     background: #91abf9 !important;
     color: #cfdafc !important;

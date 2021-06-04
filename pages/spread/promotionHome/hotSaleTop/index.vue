@@ -165,7 +165,7 @@ export default {
       code: '',
       img: 'https://cdn.shupian.cn/sp-pt/wap/3ai2w67z6f00000.png',
       tags: [
-        'https://cdn.shupian.cn/sp-pt/wap/6949cidnx8c0000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/8ayrce9irt80000.png',
         'https://cdn.shupian.cn/sp-pt/wap/7a7qefqoqkw0000.png',
         'https://cdn.shupian.cn/sp-pt/wap/64j9lhn7x4w0000.png',
         'https://cdn.shupian.cn/sp-pt/wap/7i5iyj5xqnk0000.png',
@@ -188,39 +188,13 @@ export default {
   },
   methods: {
     init() {
-      this.getPagePlanner('app-ghsdgye-02')
       // 查询广告位分类列表数据
       if (this.$route.query.code) {
         this.code = this.$route.query.code
         this.findList()
       }
-      if (this.isInApp) {
-        this.$appFn.dggGetUserInfo((res) => {
-          const { code, data } = res || {}
-          if (code !== 200) {
-            this.$appFn.dggLogin((loginRes) => {})
-          } else {
-            this.$appFn.dggOpenIM(
-              {
-                name: this.pagePlanner.name,
-                userId: this.pagePlanner.id,
-                userType: this.pagePlanner.type,
-              },
-              (res) => {
-                const { code } = res || {}
-                if (code !== 200)
-                  this.$xToast.show({
-                    message: `联系失败`,
-                    duration: 1000,
-                    forbidClick: true,
-                    icon: 'toast_ic_remind',
-                  })
-              }
-            )
-          }
-        })
-      }
     },
+    // 获取列表
     async findList() {
       const url = newSpreadApi.list
       const params = {
@@ -237,69 +211,6 @@ export default {
         this.$xToast.show(res.message)
       }
     },
-    // 获取推荐规划师
-    async getPagePlanner(scene) {
-      const device = await this.$getFinger().then((res) => {
-        return res
-      })
-      let areaCode = '510100' // 站点code
-      // 站点code
-      if (this.isInApp) {
-        this.$appFn.dggCityCode((res) => {
-          areaCode = res.data.adCode
-        })
-      } else {
-        areaCode = this.currentCity.code
-      }
-      try {
-        this.$axios
-          .post(
-            plannerApi.plannerReferrals,
-            {
-              login_name: '',
-              deviceId: device, // 设备标识
-              area: areaCode || '510100', // 站点code
-              user_id: '',
-              productType: 'PRO_CLASS_TYPE_SERVICE', // 产品类型
-              sceneId: scene, // 场景id
-              level_2_ID: '', // 二级code
-              platform: 'app',
-              productId: '', //
-              thirdTypeCodes: '', // 三级code
-              firstTypeCode: 'FL20210425164307', // 一级code
-            },
-            {
-              headers: {
-                sysCode: 'cloud-recomd-api',
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          .then((res) => {
-            if (res.code === 200 && res.data.length > 0) {
-              this.pagePlanner = {
-                id: res.data[0].mchUserId,
-                name: res.data[0].userName,
-                type: res.data[0].type,
-                jobNum: res.data[0].userCenterNo,
-                telephone: res.data[0].phone,
-                imgSrc: res.data[0].imgaes,
-              }
-              console.log('this.pagePlanner', this.pagePlanner)
-            } else {
-              this.$xToast.show({
-                message: `已提交，我们会尽快联系您`,
-                duration: 3000,
-                forbidClick: true,
-                icon: 'toast_ic_remind',
-              })
-            }
-          })
-      } catch (error) {
-        console.log('plannerApi.plannerReferrals error：', error.message)
-      }
-    },
-
     handleScroll(e) {
       this.showTitle = e.isFixed
       this.scrollTop = e.scrollTop

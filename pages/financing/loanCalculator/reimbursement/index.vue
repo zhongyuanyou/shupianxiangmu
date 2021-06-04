@@ -85,7 +85,9 @@ export default {
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 700;
           color: #222222;
+          line-height: 80px;
           > th {
+            font-weight: 700;
             width: 142px;
             height: 80px;
             background: #f2f5ff;

@@ -49,7 +49,10 @@ export default {
       this.$appFn.dggGetUserInfo((res) => {
         if (res.code === 200) {
           this.isLogin = true
-          this.userPhone = res.data.fullName
+          this.userPhone = res.data.mainAccount.replace(
+            /(\d{3})\d*(\d{2})/,
+            '$1******$2'
+          )
         }
       })
     },
