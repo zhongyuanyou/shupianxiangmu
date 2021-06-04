@@ -55,7 +55,7 @@
                 "
               >
                 <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/images/5a270klvc280000.png"
+                  src="https://cdn.shupian.cn/sp-pt/wap/images/9le2yzoxk1s000.png"
                   alt=""
                 />
               </div>

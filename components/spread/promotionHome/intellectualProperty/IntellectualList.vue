@@ -52,7 +52,7 @@
                 "
               >
                 <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/images/5a270klvc280000.png"
+                  src="https://cdn.shupian.cn/sp-pt/wap/images/552pl08fpz00000.png"
                   alt=""
                 />
               </div>
