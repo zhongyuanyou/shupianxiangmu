@@ -81,44 +81,42 @@
     </sp-sticky>
     <!-- 列表数据 start -->
     <div class="container_list">
-      <sp-pull-refresh v-model="refreshing" @refresh="onRefresh">
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="getHotList"
-        >
-          <div v-for="(item, index) in list" :key="index" class="list_item">
-            <div class="list_item_left">
-              <img
-                :src="index < 3 ? tags[index] : tags[3]"
-                alt=""
-                class="tag"
-                :class="index > 2 ? 'tag_more_three' : ''"
-              />
-              <div :class="index > 2 ? 'div_more_three' : ''">
-                {{ index + 1 }}
-              </div>
-              <img :src="item.img" alt="" />
+      <sp-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="getHotList"
+      >
+        <div v-for="(item, index) in list" :key="index" class="list_item">
+          <div class="list_item_left">
+            <img
+              :src="index < 3 ? tags[index] : tags[3]"
+              alt=""
+              class="tag"
+              :class="index > 2 ? 'tag_more_three' : ''"
+            />
+            <div :class="index > 2 ? 'div_more_three' : ''">
+              {{ index + 1 }}
             </div>
-            <div class="list_item_right">
-              <div class="title" @click="goDetail(item.id)">
-                {{ item.title }}
-              </div>
-              <div class="tabs" @click="goDetail(item.id)">
-                <span v-for="(itemItem, i) in item.tabs.slice(0, 3)" :key="i">{{
-                  itemItem
-                }}</span>
-              </div>
-              <div class="desc" @click="goDetail(item.id)">{{ item.desc }}</div>
-              <div class="bottom">
-                <div class="price">{{ item.price }}<span>元</span></div>
-                <div class="sales_num">销量 {{ item.saleNum }}</div>
-              </div>
+            <img :src="item.img" alt="" />
+          </div>
+          <div class="list_item_right">
+            <div class="title" @click="goDetail(item.id)">
+              {{ item.title }}
+            </div>
+            <div class="tabs" @click="goDetail(item.id)">
+              <span v-for="(itemItem, i) in item.tabs.slice(0, 3)" :key="i">{{
+                itemItem
+              }}</span>
+            </div>
+            <div class="desc" @click="goDetail(item.id)">{{ item.desc }}</div>
+            <div class="bottom">
+              <div class="price">{{ item.price }}<span>元</span></div>
+              <div class="sales_num">销量 {{ item.saleNum }}</div>
             </div>
           </div>
-        </sp-list>
-      </sp-pull-refresh>
+        </div>
+      </sp-list>
     </div>
   </div>
 </template>
@@ -209,6 +207,7 @@ export default {
     handleScroll(e) {
       this.showTitle = e.isFixed
       this.scrollTop = e.scrollTop
+      console.log(this.scrollTop)
       // this.scrollTop > 160 ? (this.title = '本月热销榜') : (this.title = '')
     },
     onRefresh() {
@@ -463,7 +462,7 @@ export default {
       }
       .pactive {
         font: bold 26px/37px @font-medium;
-        color: #222222;
+        color: #4974f5;
       }
     }
     .items:nth-of-type(1) {

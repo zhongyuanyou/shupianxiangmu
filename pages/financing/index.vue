@@ -414,7 +414,6 @@ export default {
     productClassData(data) {
       if (data.length === 0) return
       // const classArr = []
-      console.log(data, 1111)
       data.forEach((item, index) => {
         this.titleName.push({
           type: item.ext1,
@@ -589,7 +588,7 @@ export default {
     background-size: 100% 100%;
     .header-content {
       margin-left: 38px;
-      margin-top: 50px;
+      margin-top: 90px;
       .header-title {
         font-size: 48px;
         font-weight: 600;

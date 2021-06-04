@@ -147,7 +147,7 @@ export default {
   align-items: center;
   width: 100%;
   height: 128px;
-  padding: 16px 40px;
+  padding: 16px 20px;
   box-sizing: border-box;
   font-size: 24px;
   position: relative;
