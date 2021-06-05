@@ -250,8 +250,7 @@ export default {
     goDetail(id) {
       if (this.isInApp) {
         const iOSRouters = {
-          // path:
-          //   'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
             parameter: { productId: id },
