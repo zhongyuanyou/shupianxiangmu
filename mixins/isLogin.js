@@ -16,8 +16,12 @@ export default {
     }),
   },
   created() {
-    this.cityMsg = JSON.parse(this.$cookies.get('currentCity', { path: '/' }))
-    this.postionCity = this.cityMsg.name
+    this.cityMsg = JSON.parse(
+      this.$cookies.get('currentCity', { path: '/' }) !== '{}'
+        ? this.$cookies.get('currentCity', { path: '/' })
+        : this.$cookies.get('currentCity', { path: '.shupian' })
+    )
+    this.postionCity = this.cityMsg.name || '成都'
   },
   mounted() {
     this.strcookie = document.cookie
