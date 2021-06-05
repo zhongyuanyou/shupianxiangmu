@@ -42,12 +42,11 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-
-import NavTop from '@/components/spread/common/NavTop'
-import Nav from '@/components/spread/common/Nav'
+import NavTop from '@/components/spread/common/NavTop.vue'
+import Nav from '@/components/spread/common/Nav.vue'
 import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
 import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
-import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList'
+import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'IntellectualProperty',
@@ -94,98 +93,7 @@ export default {
       placeholder: '请输入关键字',
       marginTop: 0,
       // 金刚区
-      rollNav: [
-        {
-          code: 1,
-          name: '商标注册',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/5cr9u33ml600000.png',
-        },
-        {
-          code: 2,
-          name: '专利申请',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/11ilq5lopx0w000.png',
-        },
-        {
-          code: 3,
-          name: '模板建站',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/dwy0w0z6k1c0000.png',
-        },
-        {
-          code: 4,
-          name: '国际商标注册',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/ersf9xyup880000.png',
-        },
-        {
-          code: 5,
-          name: '商标维权',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/4n2bre5pb760000.png',
-        },
-        {
-          code: 6,
-          name: '商标变更',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/d17z33159zk0000.png',
-        },
-        {
-          code: 7,
-          name: '版权设计',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/eva77z0w6xs0000.png',
-        },
-        {
-          code: 8,
-          name: '高企认定',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/etof55jpw6o0000.png',
-        },
-        {
-          code: 9,
-          name: '项目审报',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/e76lj960syo0000.png',
-        },
-        {
-          code: 10,
-          name: '全部服务',
-          url: 'https://www.baidu.com/',
-          size: 'small',
-          label: '',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/fhngcdfde0o0000.png',
-        },
-      ],
+      rollNav: [],
       // 新人专属
       proTitle: [
         {
@@ -400,10 +308,9 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },
@@ -445,6 +352,8 @@ export default {
             size: 'small',
             label: '',
             imageUrl: elem.navigationImageUrl,
+            description: elem.description || '',
+            execution: elem.executionParameters || '',
           }
         })
         // this.rollNav.reverse()
@@ -582,12 +491,60 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url, name) {
-      if (name === '全部服务') {
-        this.$router.push('/financing/category')
-        return
+    jumpLink(url, description, execution) {
+      // if (name === '全部服务') {
+      //   this.$router.push('/financing/category')
+      //   return
+      // }
+      // app跳转
+      try {
+        // 更多路由
+        if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const androidRouter = {
+            path: '/common/android/SingleWeb',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+          return
+        }
+        // 产品列表路由
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          console.log(lastObj, execution.split(':')[0])
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
       }
       if (url) {
+        if (url.indexOf('/spread/') > -1) {
+          this.$router.push(url)
+          return
+        }
         if (url.indexOf('http') > -1) {
           window.location.href = url
           return

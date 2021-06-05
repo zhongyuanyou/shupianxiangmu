@@ -6,6 +6,8 @@ export default {
       strcookie: '',
       userPhone: '',
       isLogin: false,
+      postionCity: '',
+      cityMsg: {},
     }
   },
   computed: {
@@ -13,14 +15,19 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
-  created() {},
+  created() {
+    this.cityMsg = JSON.parse(this.$cookies.get('currentCity', { path: '/' }))
+    this.postionCity = this.cityMsg.name
+  },
   mounted() {
     this.strcookie = document.cookie
+    if (this.isInApp) {
+      this.getUserInfo()
+    }
     if (this.strcookie.indexOf('userPhone') !== -1) {
       this.isLogin = true
-      this.getCookie('userPhone')
+      this.userPhone = this.getCookie('userPhone')
     }
-    this.getUserInfo()
   },
   methods: {
     getCookie(name) {
@@ -28,14 +35,25 @@ export default {
       let arr = ''
       const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
       if ((arr = document.cookie.match(reg))) {
-        this.userPhone = unescape(arr[2])
+        return unescape(arr[2])
       } else {
         return null
       }
     },
     getUserInfo() {
+      this.$appFn.dggCityCode((res) => {
+        if (res.code === 200) {
+          this.currentCity = res.data.cityName
+        }
+      })
       this.$appFn.dggGetUserInfo((res) => {
-        console.log(res, 222)
+        if (res.code === 200) {
+          this.isLogin = true
+          this.userPhone = res.data.mainAccount.replace(
+            /(\d{3})\d*(\d{2})/,
+            '$1******$2'
+          )
+        }
       })
     },
   },

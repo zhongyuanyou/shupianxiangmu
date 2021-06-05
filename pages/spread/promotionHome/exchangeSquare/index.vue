@@ -39,7 +39,7 @@ import Nav from '@/components/spread/common/Nav.vue'
 import Activity from '@/components/spread/promotionHome/exchangeSquare/Activity.vue'
 import Banner from '@/components/spread/promotionHome/exchangeSquare/BannerSwipe.vue'
 import GiftBag from '@/components/spread/promotionHome/exchangeSquare/GiftBag.vue'
-import TabServiceItem from '@/components/spread/promotionHome/exchangeSquare/TabServiceItem'
+import TabServiceItem from '@/components/spread/promotionHome/exchangeSquare/TabServiceItem.vue'
 import { squareData } from '@/assets/spread/promotionHome/exchangeSquare.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import { newSpreadApi, plannerApi } from '~/api/spread'
@@ -235,7 +235,7 @@ export default {
     clickInputHandle(e) {
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },

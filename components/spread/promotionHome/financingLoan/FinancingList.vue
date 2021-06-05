@@ -27,7 +27,7 @@
           v-model="loading"
           :finished="finished"
           :error.sync="error"
-          finished-text="没有更多了"
+          finished-text=""
           error-text=""
           @load="onLoad"
         >
@@ -103,6 +103,7 @@ export default {
       list: [],
       error: false,
       max: 2,
+      pageNumber: 1,
     }
   },
   computed: {
@@ -152,13 +153,10 @@ export default {
       if (this.finished && !this.loading) return
       this.loading = true
       const type = this.titleName[this.active].type
-      const obj = {
-        start: this.pageNumber,
-        limit: '4',
-        classCodes: type,
-        naem: this.titleName[this.active].name,
-      }
       // 2、调用接口
+      const url =
+        'http://127.0.0.1:7001/service/nk/newChipSpread/v1/service_product_list.do'
+      //   newSpreadApi.service_product_list
       this.$axios
         .get(newSpreadApi.service_product_list, {
           params: {
@@ -214,7 +212,7 @@ export default {
 <style lang="less" scoped>
 .finacing-list {
   width: 100%;
-  margin-top: 27px;
+  margin-top: 16px;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
@@ -223,7 +221,8 @@ export default {
     padding-left: 20px;
   }
   ::v-deep.sp-tab {
-    padding: 0 32px;
+    padding: 0 20px;
+    flex: 0 0 auto;
     .sp-tab__text {
       font-size: 32px;
       font-family: PingFangSC-Regular, PingFang SC;

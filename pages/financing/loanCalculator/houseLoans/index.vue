@@ -46,12 +46,14 @@
           readonly
           @focus="timeBlur"
         />
-        <my-icon
-          class="list-icon"
-          name="list_ic_next"
-          size="0.32rem"
-          color="#CCCCCC"
-        ></my-icon>
+        <div class="icon-box" @click="timeBlur">
+          <my-icon
+            class="list-icon"
+            name="list_ic_next"
+            size="0.32rem"
+            color="#CCCCCC"
+          ></my-icon>
+        </div>
       </div>
       <!-- 还款方式 -->
       <div class="car-value">
@@ -96,7 +98,6 @@
         :default-index="0"
         @confirm="onConfirm"
         @cancel="onCancel"
-        @change="onChange"
       />
     </sp-popup>
   </div>
@@ -124,7 +125,7 @@ export default {
       // 页面规划师
       pagePlanner: {},
       value: '',
-      valuePlaceholder: '请输入车价总额',
+      valuePlaceholder: '请输入房价总额',
       pickerShow: false,
       columns: ['5年', '10年', '20年', '30年'],
       yaer: '5年',
@@ -238,6 +239,7 @@ export default {
     },
     // 重新计算
     recalculateBtn() {
+      this.standardNum.sum = 0
       this.btnShow = true
       this.standard = false
       this.constant = false
@@ -255,6 +257,8 @@ export default {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
       }
       this.uPIM(planner)
     },
@@ -324,6 +328,8 @@ export default {
     // 开始计算
     calculate() {
       if (this.actived === 0) {
+        this.standardNum.sum = 0
+        this.constant = false
         this.standard = true
         const reset = this.principalAndInterest({
           P:
@@ -346,6 +352,7 @@ export default {
         ).toFixed(2)
       } else {
         this.constant = true
+        this.standard = false
         // 等额本金
         this.principal({
           P:
@@ -415,6 +422,9 @@ export default {
     },
     chosee(idx) {
       this.actived = idx
+      if (!this.isShow) {
+        this.calculate()
+      }
     },
   },
 }
@@ -449,11 +459,11 @@ export default {
         display: block;
       }
       .title {
-        width: 160px;
+        width: 165px;
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        font-weight: 700;
         color: #222222;
         line-height: 45px;
       }
@@ -467,10 +477,14 @@ export default {
         border: none;
         margin-left: 60px;
       }
-      .input-value::-moz-placeholder {
+      > input::placeholder {
         font-weight: 400;
         font-size: 32px;
         color: #999999;
+      }
+      .icon-box {
+        font-size: 0;
+        margin-left: auto;
       }
       .unit {
         font-size: 32px;

@@ -11,4 +11,5 @@ module.exports = {
   SYS_CODE: 'spc-wap',
   // 网关签名密钥
   SECRET: 'c8a4d4389b5d20f6b020ebfebb8bd428',
+  formApi: 'https://spmicrouag.shupian.cn/crisps-resource-house', // 资源表单地址 新 -企大顺
 }

@@ -3,7 +3,7 @@
     <Head title="每月还款"></Head>
     <div class="line"></div>
     <div class="table-box">
-      <div class="thead">
+      <div class="thead" :style="{ top: isInApp ? '94px' : '' }">
         <table>
           <tr>
             <th>期数</th>
@@ -13,7 +13,7 @@
           </tr>
         </table>
       </div>
-      <div class="tbody">
+      <div class="tbody" :style="{ top: isInApp ? '134px' : '' }">
         <table>
           <tr v-for="(item, idx) in numList" :key="idx">
             <td>{{ item.number }}</td>
@@ -28,11 +28,17 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Head from '@/components/financing/common/Header'
 
 export default {
   components: {
     Head,
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+    }),
   },
   data() {
     return {
@@ -79,7 +85,9 @@ export default {
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 700;
           color: #222222;
+          line-height: 80px;
           > th {
+            font-weight: 700;
             width: 142px;
             height: 80px;
             background: #f2f5ff;

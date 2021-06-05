@@ -2,7 +2,7 @@
   <div class="credit-evaluation">
     <sp-sticky>
       <div class="heaa-box">
-        <Head title="额度评估">
+        <Head title="额度评估" :style="{ paddingTop: isInApp ? 0 : '' }">
           <template #left>
             <my-icon
               class="back-icon"
@@ -33,7 +33,7 @@
           class="city-input"
           @focus="chooseShow"
         />
-        <div class="icon-box">
+        <div class="icon-box" @click="chooseShow">
           <my-icon
             class="back-icon"
             name="list_ic_next"
@@ -159,6 +159,7 @@
       <div v-show="isShow" class="mask"></div>
     </div>
     <span class="btn-msg">薯片助贷服务，让更多人生活更美好！</span>
+    <div v-if="isInApp" class="position"></div>
     <sp-popup v-model="pickerShow" position="bottom" :close-on-popstate="true">
       <sp-picker
         show-toolbar
@@ -273,21 +274,27 @@ export default {
     },
   },
   mounted() {
+    this.$appFn.dggCityCode((res) => {
+      this.city = res.data.cityName
+    })
+    this.city = this.postionCity
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
   },
   methods: {
     getCity() {
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
-      this.$axios.get(url, { params: { code: 2147483647 } }).then((res) => {
-        if (res.code === 200) {
-          this.cityList = res.data.city
-          this.columns = [
-            { values: Object.keys(this.cityList) },
-            { values: this.cityList['北京市'] },
-          ]
-        }
-      })
+      this.$axios
+        .get(financingApi.get_city, { params: { code: 2147483647 } })
+        .then((res) => {
+          if (res.code === 200) {
+            this.cityList = res.data.city
+            this.columns = [
+              { values: Object.keys(this.cityList) },
+              { values: this.cityList['北京市'] },
+            ]
+          }
+        })
     },
     onChange(picker, value) {
       picker.setColumnValues(1, this.cityList[value[0]])
@@ -353,7 +360,7 @@ export default {
           'http://127.0.0.1:7001/service/nk/financing/v1/get_smsCode.do'
         // financingApi.smsCode
         this.$axios
-          .get(url, {
+          .get(financingApi.smsCode, {
             params: {
               phone: this.phone,
             },
@@ -381,12 +388,20 @@ export default {
       }, 1000)
     },
     onForm() {
-      if (!this.isLogin) {
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
+      }
+
+      if (this.isInApp && this.userPhone === '') {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
         // financing.check_smsCode
         this.$axios
-          .get(url, {
+          .get(financingApi.check_smsCode, {
             params: {
               phone: this.phone,
               smsCode: this.sms,
@@ -394,24 +409,36 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const planner = {
-                mchUserId: this.pagePlanner.id,
-                userName: this.pagePlanner.name,
-                type: this.pagePlanner.type,
-              }
+              this.uPIM(planner)
+            } else if (res.code !== 200 && this.smsRes === this.sms) {
               this.uPIM(planner)
             } else {
-              Toast('验证码不真确！')
+              Toast('验证码不正确！')
             }
           })
-      } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
-        const planner = {
-          mchUserId: this.pagePlanner.id,
-          userName: this.pagePlanner.name,
-          type: this.pagePlanner.type,
-        }
+      } else if (this.userPhone !== '' && this.isInApp) {
+        this.uPIM(planner)
+      }
+      if (this.userPhone === '' && !this.isInApp) {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              //   this.$xToast.showLoading({ message: '正在联系规划师...' })
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
+            }
+          })
+      } else if (this.userPhone !== '' && !this.isInApp) {
         this.uPIM(planner)
       }
     },
@@ -472,21 +499,19 @@ export default {
   margin: 0 auto;
   background: #f5f5f5;
   padding-bottom: 40px;
-  height: 100%;
-  //   border: 1px solid;
+  min-height: 100vh;
+  .position {
+    width: 100%;
+    height: 54px;
+  }
   .heaa-box {
     width: 100%;
     background: #4974f5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    // position: fixed;
-    // top: 0;
     ::v-deep.my-head {
-      //   width: 750px !important;
-      //   position: fixed !important;
-      //   left: 50% !important;
-      //   margin-left: -375px !important;
+      padding-top: 0 !important ;
       position: relative;
       background: transparent;
       .title {
@@ -547,7 +572,7 @@ export default {
         display: block;
       }
       .chooseTitle {
-        width: 308px;
+        width: 315px;
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
@@ -556,8 +581,7 @@ export default {
         line-height: 45px;
       }
       .title {
-        width: 130px;
-        height: 45px;
+        width: 160px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -566,14 +590,14 @@ export default {
       }
       > input {
         width: 238px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
-        margin-left: 58px;
+        margin-left: 53px;
         color: #222222;
+        display: block;
       }
       > input:-ms-input-placeholder {
         color: #999999;
@@ -609,10 +633,11 @@ export default {
         width: 18px;
         height: 32px;
         // background: #cccccc;
-        margin-left: 47px;
+        margin-left: auto;
       }
       .city-input {
-        width: 418px;
+        width: 370px;
+        text-align: right;
       }
     }
     .personal {
@@ -622,17 +647,17 @@ export default {
         font-weight: 700;
         color: #222222;
         line-height: 45px;
-        width: 192px;
+        width: 200px;
       }
       .personal-input {
         display: block;
-        margin-left: 60px;
+        margin-left: auto;
         width: 346px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         text-align: right;
       }
@@ -647,7 +672,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         text-align: right;
       }
@@ -720,7 +745,7 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #222222;
-        line-height: 45px;
+        line-height: 50px;
         text-align: right;
         border: none;
         margin-left: 60px;
@@ -751,11 +776,10 @@ export default {
       align-items: center;
       .user-phone-input {
         width: 482px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 58px;
         color: #222222;
@@ -765,7 +789,6 @@ export default {
       }
       .phone-title {
         width: 130px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 700;
@@ -774,14 +797,14 @@ export default {
       }
       > input {
         width: 238px;
-        height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
-        line-height: 45px;
+        line-height: 50px;
         border: none;
         margin-left: 58px;
         color: #222222;
+        display: block;
       }
       > input:-ms-input-placeholder {
         color: #999999;
@@ -800,8 +823,8 @@ export default {
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #4974f5;
-        line-height: 45px;
-        margin-left: 20px;
+        line-height: 50px;
+        margin-left: auto;
       }
     }
   }

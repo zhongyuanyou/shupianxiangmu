@@ -1,7 +1,14 @@
 <template>
   <div class="category">
     <!--S 头部-->
-    <div class="category_header">
+    <div
+      class="category_header"
+      :style="{
+        height: isInApp ? '110px' : '',
+        paddingTop: isInApp ? '64px' : '',
+        paddingBottom: isInApp ? '32px' : '',
+      }"
+    >
       <div v-if="!isApplets" class="icon" @click="back">
         <my-icon name="nav_ic_back" size="0.40rem" color="#1a1a1a" />
       </div>
@@ -12,7 +19,7 @@
     </div>
     <!--E 头部-->
     <!--S 内容区-->
-    <div class="category_con">
+    <div class="category_con" :style="{ paddingTop: isInApp ? '105px' : '' }">
       <!--S 侧边栏区域-->
       <aside ref="l_list" class="category_con_lf">
         <ul>
@@ -22,12 +29,16 @@
             :key="index"
             class="category_con_lf_item"
             :style="{
-              backgroundColor: TabNavList == index ? '#fff' : '#f8f8f8',
+              backgroundColor: TabNavList == index ? '#f5f5f5' : '#fff',
             }"
             @click="handleClick(index)"
           >
+            <i v-if="index === TabNavList - 1" class="circular"></i>
+            <i v-if="index === TabNavList - 1" class="circular1"></i>
             <div v-show="TabNavList == index" class="line"></div>
-            {{ item.title }}
+            <span>{{ item.title }}</span>
+            <i v-if="index === TabNavList + 1" class="radio"></i>
+            <i v-if="index === TabNavList + 1" class="radio1"></i>
           </li>
           <li class="category_con_lf_item"></li>
         </ul>
@@ -61,15 +72,28 @@
             <div class="title">{{ item.title }}</div>
             <div
               :class="['item_con', { hidden_child: item.name == '为您推荐' }]"
+              :style="{
+                justifyContent:
+                  item.title === '大家都在用' ? ' space-around' : '',
+              }"
             >
               <div
                 v-for="(cItem, cIndex) in item.product"
                 v-show="isApplets ? cItem.name != '资质交易' : true"
                 :key="cIndex"
-                class="item_con_child"
-                @click="handleItem(cItem.id)"
+                :class="
+                  item.title === '大家都在用' ? 'icon-box' : 'item_con_child'
+                "
+                @click="handleItem(cItem.id, item.title, item.url)"
               >
-                {{ cItem.title }}
+                <div v-if="item.title === '大家都在用'">
+                  <div class="icon-img">
+                    <img :src="cItem.icon" alt="" />
+                  </div>
+                  <div class="icon-title">{{ cItem.title }}</div>
+                </div>
+
+                <div v-else>{{ cItem.title }}</div>
               </div>
             </div>
           </div>
@@ -91,7 +115,7 @@ import { mapState } from 'vuex'
 import Better from 'better-scroll'
 import { Swipe, SwipeItem, Image } from '@chipspc/vant-dgg'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import { financingApi } from '@/api'
+import { financingApi } from '@/api/spread'
 import LoadingCenter from '@/components/common/loading/LoadingCenter'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import 'swiper/swiper-bundle.css'
@@ -135,15 +159,20 @@ export default {
         touchAngle: 30, // 允许触发拖动的角度值。默认45度，即使触摸方向不是完全水平也能拖动slide。
         threshold: 12,
       },
+      code: '',
+      locationCode: '',
     }
   },
   computed: {
     ...mapState({
       currentCity: (state) => state.city.currentCity,
       isApplets: (state) => state.app.isApplets,
+      isInApp: (state) => state.app.isInApp,
     }),
   },
   mounted() {
+    this.code = this.$route.query.code
+    this.locationCode = this.$route.query.locationCode
     this.getCategoryList()
   },
   methods: {
@@ -162,7 +191,7 @@ export default {
           this.scrollY = Math.abs(res.y) + 100
           for (let i = 0; i < this.arr.length; i++) {
             if (this.scrollY > this.arr[i] && this.scrollY < this.arr[i + 1]) {
-              this.TabNavList = i - 1 // 左右联动取值
+              this.TabNavList = i // 左右联动取值
               // document.getElementById(this.TabNavList).scrollIntoView()
               this.left.scrollToElement(
                 this.$refs.l_list,
@@ -207,8 +236,8 @@ export default {
           'http://127.0.0.1:7001/service/nk/financing/v1/product_list.do'
         // financingApi.productList
         await this.$axios
-          .get(url, {
-            params: { code: 'CRISPS-C-RZDKALL', adCode: 'ad100052' },
+          .get(financingApi.productList, {
+            params: { code: this.locationCode, adCode: this.code },
           })
           .then((res) => {
             this.categoryList = res.data.records
@@ -222,18 +251,75 @@ export default {
         this.loading = false
       }
     },
-    handleItem(id) {
+    handleItem(id, title, url) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath:
+              title !== '大家都在用'
+                ? 'cpsc/goods/details/service'
+                : 'cpsc/goods/service/list',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath:
+              title !== '大家都在用'
+                ? 'cpsc/goods/details/service'
+                : 'cpsc/goods/service/list',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        window.location.href =
+          title !== '大家都在用'
+            ? `https://${base}m.shupian.cn/detail?productId=${id}`
+            : `https://${base}m.shupian.cn/search/searchgoods`
+      }
     },
     back() {
       this.$router.back()
     },
     goSearch() {
-      window.location.href = 'https://dm.shupian.cn/search'
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/search/page',
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        let base = ''
+        DGG_SERVER_ENV === 'development' && (base = 'd')
+        DGG_SERVER_ENV === 'release' && (base = 't')
+        DGG_SERVER_ENV === 'production' && (base = '')
+        window.location.href = `https://${base}m.shupian.cn/search`
+      }
     },
     handleClickSlide(index) {
       this.adJumpHandleMixin(this.recommendData[index].materialList[0])
@@ -313,8 +399,8 @@ export default {
     display: flex;
     &_lf {
       display: block;
-      width: 200px;
-      background: #f8f8f8;
+      width: 180px;
+      background: #fff;
       overflow: hidden;
       position: relative;
       overflow-y: scroll;
@@ -324,17 +410,62 @@ export default {
         display: none;
       }
       &_item {
-        width: 200px;
         height: 124px;
         font-size: 26px;
         font-family: PingFang SC;
-        padding: 0 20px;
         font-weight: 400;
-        color: #555555;
+        background: #fff;
         text-align: center;
         line-height: 124px;
         position: relative;
         .textOverflow(1);
+        > .radio {
+          background: #f5f5f5;
+          width: 143px;
+          height: 124px;
+          position: absolute;
+          display: block;
+          z-index: 1;
+          top: 0;
+          left: 0;
+        }
+        > .radio1 {
+          border-top-right-radius: 20px;
+          background: #fff;
+          width: 143px;
+          height: 124px;
+          position: absolute;
+          display: block;
+          z-index: 2;
+          top: 0;
+          left: 0;
+        }
+        > .circular {
+          background: #f5f5f5;
+          width: 143px;
+          height: 124px;
+          position: absolute;
+          display: block;
+          z-index: 1;
+          top: 0;
+          left: 0;
+        }
+        > .circular1 {
+          border-bottom-right-radius: 20px;
+
+          background: #fff;
+          width: 143px;
+          height: 124px;
+          position: absolute;
+          display: block;
+          z-index: 2;
+          top: 0;
+          left: 0;
+        }
+        > span {
+          position: relative;
+          z-index: 5;
+        }
       }
       .line {
         width: 6px;
@@ -350,13 +481,15 @@ export default {
     &_rt {
       display: block;
       overflow: hidden;
-      background: #fff;
+      background: #f5f5f5;
       position: relative;
       width: calc(100vw - 200px);
-      padding: 0 32px;
+      padding: 0 20px;
+      padding-top: 20px;
       overflow-y: scroll;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
+      width: 100%;
       .bot {
         width: 100%;
         height: 120px;
@@ -388,8 +521,12 @@ export default {
           height: 164px;
         }
       }
+
       .proList {
-        padding-top: 48px;
+        background: #fff;
+        padding: 26px 0 32px 20px;
+        margin-top: 20px;
+        border-radius: 8px;
         .title {
           font-size: 30px;
           font-family: PingFang SC;
@@ -403,8 +540,7 @@ export default {
           flex-direction: row;
           flex-wrap: wrap;
           &_child {
-            background: #ffffff;
-            border: 1px solid #cdcdcd;
+            background: #efeff4;
             border-radius: 4px;
             line-height: 60px;
             margin: 32px 32px 0 0;
@@ -416,6 +552,33 @@ export default {
             height: 60px;
             max-width: 100%;
             .textOverflow(1);
+          }
+          .icon-box {
+            display: flex;
+            align-items: center;
+            width: 150px;
+
+            margin-top: 40px;
+            .icon-img {
+              width: 88px;
+              height: 88px;
+              border-radius: 36px;
+              font-size: 0;
+              margin: 0 auto;
+              > img {
+                width: 100%;
+                height: 100%;
+                border-radius: 40px;
+              }
+            }
+            .icon-title {
+              width: 150px;
+              text-align: center;
+              margin-top: 20px;
+              font-size: 24px;
+              line-height: 24px;
+              overflow: hidden;
+            }
           }
         }
         .hidden_child {

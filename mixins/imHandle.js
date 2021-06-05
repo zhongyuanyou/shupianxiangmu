@@ -23,34 +23,112 @@ export default {
       clearUserInfo: 'user/CLEAR_USER',
     }),
     // 发起聊天
-    uPIM(planner) {
-      const { mchUserId, userName, type } = planner
+    uPIM(planner, sessionParams, msgParams) {
+      const { mchUserId, userName, type, msgParam, templateIds } = planner
+      const tepMsgParams = {
+        title: msgParam.title, // 客户名称
+        area: msgParam.area, // 客户地址
+        intention: msgParam.intention, // 客户意向
+        productName: msgParam.productName, // 产品名称
+        forwardAbstract: msgParam.forwardAbstract, // 摘要信息，可与显示内容保持一致
+      }
       // 如果当前页面在app中，则调用原生IM的方法
       if (this.isInApp) {
         try {
           // 需要判断登陆没有，没有登录就是调用登录
-          this.getUserInfo()
-          this.$appFn.dggOpenIM(
-            {
-              name: userName,
-              userId: mchUserId,
-              userType: type || 'MERCHANT_B',
-            },
-            (res) => {
-              const { code } = res || {}
+          this.$appFn.dggGetUserInfo((res) => {
+            const { code, data } = res || {}
+            if (code !== 200) {
+              this.$appFn.dggLogin((loginRes) => {
+                if (loginRes.code === 200) {
+                  if (templateIds !== '') {
+                    this.$appFn.dggOpenIM(
+                      {
+                        templateId: templateIds,
+                        extContent: tepMsgParams,
+                        name: userName,
+                        userId: mchUserId,
+                        userType: type || 'MERCHANT_B',
+                      },
+                      (res) => {
+                        const { code } = res || {}
+                        if (code !== 200)
+                          this.$xToast.show({
+                            message: `联系失败`,
+                            duration: 1000,
+                            forbidClick: true,
+                            icon: 'toast_ic_remind',
+                          })
+                      }
+                    )
+                  } else {
+                    this.$appFn.dggOpenIM(
+                      {
+                        name: userName,
+                        userId: mchUserId,
+                        userType: type || 'MERCHANT_B',
+                      },
+                      (res) => {
+                        const { code } = res || {}
+                        if (code !== 200)
+                          this.$xToast.show({
+                            message: `联系失败`,
+                            duration: 1000,
+                            forbidClick: true,
+                            icon: 'toast_ic_remind',
+                          })
+                      }
+                    )
+                  }
+                }
+              })
+            } else if (templateIds !== '') {
+              this.$appFn.dggOpenIM(
+                {
+                  templateId: templateIds,
+                  extContent: tepMsgParams,
+                  name: userName,
+                  userId: mchUserId,
+                  userType: type || 'MERCHANT_B',
+                },
+                (res) => {
+                  const { code } = res || {}
 
-              if (code !== 200)
-                this.$xToast.show({
-                  message: `联系失败`,
-                  duration: 1000,
-                  forbidClick: true,
-                  icon: 'toast_ic_remind',
-                })
+                  if (code !== 200)
+                    this.$xToast.show({
+                      message: `联系失败`,
+                      duration: 1000,
+                      forbidClick: true,
+                      icon: 'toast_ic_remind',
+                    })
+                }
+              )
+            } else {
+              this.$appFn.dggOpenIM(
+                {
+                  name: userName,
+                  userId: mchUserId,
+                  userType: type || 'MERCHANT_B',
+                },
+                (res) => {
+                  const { code } = res || {}
+
+                  if (code !== 200)
+                    this.$xToast.show({
+                      message: `联系失败`,
+                      duration: 1000,
+                      forbidClick: true,
+                      icon: 'toast_ic_remind',
+                    })
+                }
+              )
             }
-          )
+          })
         } catch (error) {
           console.error('uPIM error:', error)
         }
+      } else if (sessionParams && msgParams) {
+        this.sendTemplateMsgMixin({ sessionParams, msgParams })
       } else {
         const imUserType = type || 'MERCHANT_B' // 用户类型: ORDINARY_B 启大顺 ;MERCHANT_S 启大包
         const operUserType =
@@ -134,7 +212,6 @@ export default {
         }
         params = Object.assign(params, data)
         this.imExample.createSession(params, (res) => {
-          console.log(res, 5555)
           if (res.code === 200) {
             const myInfo = localStorage.getItem('myInfo')
               ? JSON.parse(localStorage.getItem('myInfo'))
@@ -257,7 +334,6 @@ export default {
             )
             // 发送模板消息
             this.imExample.sendTemplateMsg(tepMsgParams, (resData) => {
-              console.log(resData)
               if (resData.code === 200) {
                 // 延时1s进入IM,避免模板消息未发生完成就已进入IM
                 this.$xToast.showLoading({ message: '正在联系规划师...' })
@@ -267,8 +343,8 @@ export default {
                   const myInfo = localStorage.getItem('myInfo')
                     ? JSON.parse(localStorage.getItem('myInfo'))
                     : {}
-                  const token = this.userType ? this.token : myInfo.token
-                  const userId = this.userType ? this.userId : myInfo.token
+                  const token = this.token ? this.token : myInfo.token
+                  const userId = this.userId ? this.userId : myInfo.userId
                   const userType = this.userType || 'VISITOR'
                   if (this.isApplets) {
                     window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}&requireCode=${sessionParams.requireCode}&requireName=${sessionParams.requireName}&isApplets=true`
@@ -276,7 +352,7 @@ export default {
                     window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}&requireCode=${sessionParams.requireCode}&requireName=${sessionParams.requireName}`
                   }
                 }, 2000)
-                window.location.href = `${config.imBaseUrl}/chat?token=${this.token}&userId=${this.userId}&userType=${this.userType}&id=${res.data.groupId}`
+                // window.location.href = `${config.imBaseUrl}/chat?token=${this.token}&userId=${this.userId}&userType=${this.userType}&id=${res.data.groupId}`
               } else if (res.code === 5223) {
                 this.clearUserInfoAndJumpLoging()
               } else {

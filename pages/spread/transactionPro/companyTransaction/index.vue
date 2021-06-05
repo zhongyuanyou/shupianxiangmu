@@ -312,6 +312,7 @@ export default {
   },
   methods: {
     getNav(nav) {
+      console.log(nav, 46)
       const navs = []
       nav.forEach((elem) => {
         const obj = {

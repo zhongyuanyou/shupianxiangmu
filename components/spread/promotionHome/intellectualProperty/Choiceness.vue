@@ -120,7 +120,7 @@ export default {
 .choiceness {
   display: flex;
   justify-content: space-between;
-  margin: 20px 20px 0px 20px;
+  margin: 20px 20px 4px 20px;
   .choiceness-item {
     width: 354px;
     height: 293px;
@@ -146,6 +146,7 @@ export default {
           height: 151px;
           background: #f4f4f4;
           border-radius: 12px;
+          margin-right: 13px;
           position: relative;
           img {
             // width: 104px;
@@ -185,7 +186,6 @@ export default {
           font-weight: bold;
           color: #222222;
           line-height: 30px;
-          text-align: center;
           margin: 16px 4px 0 4px;
         }
       }

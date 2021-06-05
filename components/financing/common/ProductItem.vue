@@ -2,7 +2,14 @@
   <div class="product-item">
     <div class="content" @click="junmpUrl(item.id)">
       <div class="img-box">
-        <img :src="item.img" alt="" />
+        <img
+          :src="
+            item.img
+              ? item.img
+              : 'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840093887568320858%3Apic%3ACOMDIC_TERMINAL_APP_1621478677000_LOGO.png'
+          "
+          alt=""
+        />
       </div>
       <div class="content-right">
         <span class="title">{{ item.title }}</span>
@@ -14,7 +21,7 @@
         </div>
         <div class="price-box">
           <span class="price">{{ item.price }}</span>
-          <span class="unit">万</span>
+          <span class="unit">元</span>
           <span class="high">最高可借</span>
         </div>
       </div>
@@ -23,6 +30,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
@@ -42,13 +50,42 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+    }),
+  },
+
   methods: {
     junmpUrl(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      }
     },
   },
 }
@@ -57,11 +94,10 @@ export default {
 <style lang="less" scoped>
 .product-item {
   width: 100%;
-  height: 284px;
   background: #ffffff;
   padding: 0 40px;
   .content {
-    height: 100%;
+    // height: 100%;
     border-bottom: 1px solid #f4f4f4;
     padding: 32px 0;
     display: flex;
@@ -126,7 +162,7 @@ export default {
       .price-box {
         font-size: 0;
         position: absolute;
-        bottom: -15px;
+        bottom: -16px;
         align-items: center;
         .price {
           font-size: 36px;

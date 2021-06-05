@@ -58,7 +58,13 @@
                     v-show="item.currentPrice !== '' && item.currentPrice"
                     class="region-price"
                   >
-                    {{ item.currentPrice }}<span>元</span>
+                    {{ price(item.currentPrice) }}
+                    <span
+                      v-if="item.currentPrice > 10000"
+                      class="item-price-unit"
+                      >万元</span
+                    >
+                    <span v-else class="item-price-unit">元</span>
                     <!--              <span-->
                     <!--                v-show="item.originalPrice !== '' && item.originalPrice"-->
                     <!--                class="original-price"-->
@@ -149,6 +155,13 @@ export default {
     }
   },
   methods: {
+    price(price) {
+      if (price % 1) {
+        return price > 10000 ? (price / 10000).toFixed(1) : price
+      } else {
+        return parseInt(price > 10000 ? (price / 10000).toFixed(1) : price)
+      }
+    },
     onClick() {
       // console.log(this.active)
       // this.$emit('change', this.titleName[name])
@@ -176,7 +189,30 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      }
     },
     // 请求数据
     selectTab(item) {
@@ -254,12 +290,13 @@ export default {
         min-height: 276px;
         padding: 28px 20px;
         background: #ffffff;
-        border-radius: 24px;
+        border-radius: 14px;
         margin: 0 20px 20px 0;
         .imge {
           width: 220px;
           height: 220px;
           // background: #b2b2b2;
+          border-radius: 14px;
           border-radius: 12px;
           margin-right: 32px;
           img {
@@ -272,7 +309,6 @@ export default {
             min-height: 150px;
             .region-title {
               font-size: 32px;
-              font-family: PingFang;
               font-weight: bold;
               color: #222222;
               line-height: 40px;
@@ -299,12 +335,14 @@ export default {
                 text-overflow: ellipsis;
                 white-space: nowrap;
               }
+              span:nth-child(n + 4) {
+                display: none;
+              }
             }
             .region-explain {
               margin-top: 20px;
               height: 22px;
               font-size: 22px;
-              font-family: PingFangSC-Regular, PingFang SC;
               font-weight: 400;
               color: #222;
               line-height: 22px;
@@ -318,7 +356,7 @@ export default {
             font-weight: bold;
             color: #ec5330;
             padding-top: 28px;
-            > span {
+            .item-price-unit {
               height: 20px;
               font-size: 22px;
               font-weight: bold;
@@ -327,7 +365,6 @@ export default {
             }
             .original-price {
               font-size: 22px;
-              font-family: PingFangSC-Regular, PingFang SC;
               font-weight: 400;
               color: #999999;
               line-height: 22px;
@@ -376,7 +413,6 @@ export default {
     line-height: 32px;
     .sp-tab__text {
       font-size: 32px;
-      font-family: PingFangSC-Regular, PingFang SC;
       color: #222222;
     }
   }
@@ -395,7 +431,6 @@ export default {
   }
   ::v-deep.sp-tab__text {
     font-size: 32px;
-    font-family: PingFangSC-Regular, PingFang SC;
     color: #999999;
     z-index: 2;
   }

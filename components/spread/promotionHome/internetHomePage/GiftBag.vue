@@ -216,8 +216,9 @@ export default {
         justify-content: space-between;
         align-items: center;
         > li {
-          width: 167px;
+          width: 150px;
           height: 100%;
+          margin-left: 8px;
           background-size: cover;
           position: relative;
           .head-img {
@@ -272,6 +273,11 @@ export default {
           //   left: 12px;
           //   top: 96px;
           // }
+        }
+        > li:first-child {
+          width: 180px;
+          margin-left: 0px;
+          border-radius: 12px 0 0 12px;
         }
       }
     }
