@@ -8,7 +8,7 @@
         <input
           v-model="value"
           class="input-value"
-          type="text"
+          type="number"
           :placeholder="valuePlaceholder"
           @input="blur"
         />
@@ -46,12 +46,14 @@
           readonly
           @focus="timeBlur"
         />
-        <my-icon
-          class="list-icon"
-          name="list_ic_next"
-          size="0.32rem"
-          color="#CCCCCC"
-        ></my-icon>
+        <div class="icon-box" @click="timeBlur">
+          <my-icon
+            class="list-icon"
+            name="list_ic_next"
+            size="0.32rem"
+            color="#CCCCCC"
+          ></my-icon>
+        </div>
       </div>
       <!-- 还款方式 -->
       <div class="car-value">
@@ -96,7 +98,6 @@
         :default-index="0"
         @confirm="onConfirm"
         @cancel="onCancel"
-        @change="onChange"
       />
     </sp-popup>
   </div>
@@ -127,7 +128,7 @@ export default {
       valuePlaceholder: '请输入车价总额',
       pickerShow: false,
       columns: ['1年', '2年', '3年', '4年', '5年'],
-      timeValue: 12,
+      timeValue: 1,
       type: '',
       firstValue: '',
       firstPlaceholde: '请输入首付比率',
@@ -239,6 +240,7 @@ export default {
     },
     // 重新计算
     recalculateBtn() {
+      this.standardNum.sum = 0
       this.btnShow = true
       this.standard = false
       this.constant = false
@@ -256,13 +258,18 @@ export default {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
         type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
       }
       this.uPIM(planner)
     },
     // 开始计算
     calculate() {
       if (this.actived === 0) {
+        this.standardNum.sum = 0
+        this.nplist = []
         this.standard = true
+        this.constant = false
         const reset = this.principalAndInterest({
           P:
             Number(this.value) -
@@ -284,6 +291,7 @@ export default {
         ).toFixed(2)
       } else {
         this.constant = true
+        this.standard = false
         // 等额本金
         this.principal({
           P:
@@ -396,21 +404,21 @@ export default {
     // 贷款期限弹出层确认按钮
     onConfirm(value, index) {
       this.yaer = value
-      value === '1年' && (this.timeValue = 12)
-      value === '2年' && (this.timeValue = 24)
-      value === '3年' && (this.timeValue = 36)
-      value === '4年' && (this.timeValue = 48)
-      value === '5年' && (this.timeValue = 60)
+      value === '1年' && (this.timeValue = 1)
+      value === '2年' && (this.timeValue = 2)
+      value === '3年' && (this.timeValue = 3)
+      value === '4年' && (this.timeValue = 4)
+      value === '5年' && (this.timeValue = 5)
       this.pickerShow = false
     },
     // 贷款期限切换方法
     onChange(picker, value, index) {
       this.yaer = value
-      value === '1年' && (this.timeValue = 12)
-      value === '2年' && (this.timeValue = 24)
-      value === '3年' && (this.timeValue = 36)
-      value === '4年' && (this.timeValue = 48)
-      value === '5年' && (this.timeValue = 60)
+      value === '1年' && (this.timeValue = 1)
+      value === '2年' && (this.timeValue = 2)
+      value === '3年' && (this.timeValue = 3)
+      value === '4年' && (this.timeValue = 4)
+      value === '5年' && (this.timeValue = 5)
       this.pickerShow = false
     },
     // 贷款期限弹出层取消按钮
@@ -419,6 +427,9 @@ export default {
     },
     chosee(idx) {
       this.actived = idx
+      if (!this.isShow) {
+        this.calculate()
+      }
     },
   },
 }
@@ -453,11 +464,11 @@ export default {
         display: block;
       }
       .title {
-        width: 160px;
+        width: 165px;
         height: 45px;
         font-size: 32px;
         font-family: PingFangSC-Medium, PingFang SC;
-        font-weight: 500;
+        font-weight: 700;
         color: #222222;
         line-height: 45px;
       }
@@ -469,12 +480,16 @@ export default {
         color: #222222;
         display: block;
         border: none;
-        margin-left: 60px;
+        margin-left: 55px;
       }
-      .input-value::-moz-placeholder {
+      > input::placeholder {
         font-weight: 400;
         font-size: 32px;
         color: #999999;
+      }
+      .icon-box {
+        font-size: 0;
+        margin-left: auto;
       }
       .unit {
         font-size: 32px;

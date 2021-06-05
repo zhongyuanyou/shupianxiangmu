@@ -191,7 +191,7 @@ export default {
           //   background: #ffffff;
           border-radius: 12px;
           padding: 8px 8px 16px 8px;
-          border: 1px solid rgba(205, 205, 205, 0.5);
+          border: 1px solid #f4f4f4;
           position: relative;
           background-repeat: no-repeat;
           background-position: 0px 0px;

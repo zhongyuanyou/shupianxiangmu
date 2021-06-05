@@ -92,7 +92,8 @@ export default {
       margin-top: 20px;
     }
     .btn {
-      width: 152px;
+      display: block;
+      width: 160px;
       height: 56px;
       background: #4974f5;
       border-radius: 8px;

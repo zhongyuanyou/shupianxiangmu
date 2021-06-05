@@ -54,25 +54,37 @@ export default {
   data() {
     return {
       swipeList: [],
+      base: '',
+      clasCode: '',
     }
   },
   mounted() {
     this.getKnowledgeCode()
+    switch (DGG_SERVER_ENV) {
+      case 'development':
+        this.base = 'd'
+        this.clasCode = ''
+        break
+      case 'release':
+        this.base = 't'
+        this.clasCode = 'bdsp100216'
+        break
+      case 'production':
+        this.base = ''
+        this.clasCode = 'bdsp100102'
+        break
+    }
   },
   methods: {
     // 跳转必懂详情
     jump(item) {
-      let base = ''
-      DGG_SERVER_ENV === 'development' && (base = 'd')
-      DGG_SERVER_ENV === 'release' && (base = 't')
-      DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/known/detail/article?id=${item}`
+      window.location.href = `https://${this.base}m.shupian.cn/known/detail/article?id=${item}`
     },
     // 获取必懂分类id
     getKnowledgeCode() {
       this.$axios.get(financingApi.knowledge_code).then((res) => {
         res.data.forEach((item) => {
-          if (item.name === '融资') {
+          if (item.code === this.clasCode) {
             const code = item.id
             this.$axios
               .post(
@@ -116,10 +128,12 @@ export default {
   border-radius: 24px;
   display: flex;
   align-items: center;
-  padding: 18px 32px 18px 20px;
+  padding: 0 32px 0 20px;
   .img-box {
     width: 32px;
     height: 32px;
+    margin-top: 4px;
+    display: flex;
     font-size: 0;
     > img {
       width: 100%;
@@ -129,6 +143,9 @@ export default {
   .swipe-box {
     width: 560px;
     height: 36px;
+    // line-height: 36px;
+    display: inline-block;
+    padding-top: 3px;
     margin: 0 32px 0 16px;
     .my-swipe .sp-swipe-item {
       height: 100%;
@@ -141,7 +158,8 @@ export default {
     }
     .advertising {
       width: 100%;
-      height: 100%;
+      height: 36px;
+      line-height: 36px;
       .textOverflow(1);
     }
   }

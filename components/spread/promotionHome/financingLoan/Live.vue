@@ -5,7 +5,7 @@
         v-for="(item, index) in list"
         :key="index"
         class="item"
-        @click="() => $parent.jumpLink2(item.url)"
+        @click="() => $parent.jumpLink2(item.url, item.title)"
       >
         <div class="item-title">
           <span class="item-title-text">{{ item.title }}</span>
@@ -79,21 +79,21 @@ export default {
         font-size: 32px;
         font-weight: bold;
         color: #222222;
-        line-height: 32px;
+        line-height: 34px;
         margin-right: 8px;
       }
 
       .item-title-label {
         display: flex;
-        padding: 6px 8px;
+        align-content: center;
+        // height: 32px;
+        padding: 0px 6px;
         border-radius: 4px;
         border: 1px solid #ec5330;
-
         font-size: 20px;
         font-weight: bold;
         color: #ec5330;
-        line-height: 20px;
-
+        margin-top: -4px;
         .living-margin {
           margin-right: 4px;
         }
@@ -102,11 +102,11 @@ export default {
 
     .item-desc {
       font-size: 26px;
-      font-weight: bold;
+      font-weight: 400;
       color: #999999;
       line-height: 26px;
-      margin-top: 16px;
-      margin-bottom: 24px;
+      margin-top: 12px;
+      margin-bottom: 16px;
     }
 
     .item-img {
@@ -126,6 +126,7 @@ export default {
       align-items: flex-end;
       width: 16px;
       height: 16px;
+      margin-top: 6px;
       .living-bar {
         padding: 0 1px;
         background-color: #ec5330;

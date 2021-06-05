@@ -4,6 +4,7 @@ import { CHIPS_WAP_BASE_URL } from '../config/constant'
 
 const userinfoApi = {
   info: `${CHIPS_WAP_BASE_URL}/yk/user/v1/info.do`, // 获取用户信息
+  info_decrypt: `${CHIPS_WAP_BASE_URL}/yk/user/v1/find_user_decrypt_by_id.do`, // 获取用户信息明文
   update: `${CHIPS_WAP_BASE_URL}/yk/user/v1/update.do`, // 修改用户信息
   loginOut: `${CHIPS_WAP_BASE_URL}/nk/login/v1/logout.do`, // 退出登录
   configuration: `${CHIPS_WAP_BASE_URL}/nk/user/v1/configuration.do`, // 获取用户配置

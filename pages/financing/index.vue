@@ -1,7 +1,7 @@
 <template>
   <div class="page-content">
     <!-- S 头部Header -->
-    <div class="header-bg">
+    <div class="header-bg" :class="isInApp ? 'header-inapp-bg' : ''">
       <Header
         title="企业助贷"
         :disabled="true"
@@ -16,7 +16,12 @@
     <!-- E 头部Header -->
 
     <!-- S 金刚区 -->
-    <Nav :roll-nav="rollNav" class="nav"></Nav>
+    <Nav
+      v-show="rollNav.length > 0"
+      :roll-nav="rollNav"
+      class="nav"
+      :class="isInApp ? 'nav_top' : ''"
+    ></Nav>
     <!-- E 金刚区 -->
 
     <!-- S 工具 -->
@@ -69,12 +74,14 @@ import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
 import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
 import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
 import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
-import Notice from '@/components/financing/common/Notice'
-import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList'
+import Notice from '@/components/financing/common/Notice.vue'
+import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList.vue'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
+import openappChips from '~/mixins/openappChips'
 import imHandle from '@/mixins/imHandle'
 import isLogin from '@/mixins/isLogin'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'Index',
   components: {
@@ -91,7 +98,7 @@ export default {
     BottomNotes,
     BtnPlanner,
   },
-  mixins: [imHandle, isLogin],
+  mixins: [imHandle, isLogin, openappChips],
   async asyncData({ $axios }) {
     try {
       const res = await $axios.get(`${newSpreadApi.list}`, {
@@ -128,98 +135,7 @@ export default {
     return {
       placeholder: '请输入关键字',
       // 默认数据
-      rollNav: [
-        {
-          code: 1,
-          name: '企业贷',
-          url: '/financing/enterprise',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/fs3c25ztbk80000.png',
-        },
-        {
-          code: 2,
-          name: '有抵押贷',
-          url: '/financing/mortgageList',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/4wwtf6yr0m80000.png',
-        },
-        {
-          code: 3,
-          name: '无抵押贷',
-          url: '/financing/unsecured',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/8v4ibhewj300000.png',
-        },
-        {
-          code: 4,
-          name: '我有车',
-          url: '/financing/carOwner',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/2wzb1t4y4640000.png',
-        },
-        {
-          code: 5,
-          name: '我有房',
-          url: '/financing/mortgage',
-          label: '',
-          size: 'big',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/2vhkegwaogk0000.png',
-        },
-        {
-          code: 6,
-          name: '大额借款',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/204jg9dseeo000.png',
-        },
-        {
-          code: 7,
-          name: '快速借钱',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/1ic9r4qxwdsw000.png',
-        },
-        {
-          code: 8,
-          name: '信用贷款',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6a280h75tbk0000.png',
-        },
-        {
-          code: 9,
-          name: '免费咨询',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/dl1corse37s0000.png',
-        },
-        {
-          code: 10,
-          name: '全部',
-          url: '',
-          label: '',
-          size: 'small',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/5mym0kibchg000.png',
-        },
-      ],
+      rollNav: [],
       activityList: [
         {
           title: '签到有礼',
@@ -362,7 +278,7 @@ export default {
       console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },
@@ -574,7 +490,69 @@ export default {
       }
       this.$refs.plannerIM.onlineConsult()
     },
-    jumpLink2(url) {
+    jumpLink2(url, title) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      if (url === 'app直播') {
+        if (!this.isInApp) {
+          this.openApp()
+        } else {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSTabBarViewController///push/animation',
+            parameter: {
+              selectedIndex: '3',
+            },
+          }
+          const androidRouter = {
+            path: '/main/android/main',
+            parameter: {
+              selectedIndex: 3,
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+        }
+        return
+      }
+      if (title === '点我咨询' && this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          parameter: {
+            urlstr: url,
+            isHideNav: 1,
+          },
+        }
+        const androidRouter = {
+          path: '/common/android/SingleWeb',
+          parameter: {
+            urlstr: url,
+            isHideNav: 1,
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+        return
+      }
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
@@ -593,17 +571,24 @@ export default {
   height: auto;
   background: #f5f5f5;
   margin: 0 auto;
+  .header-inapp-bg {
+    width: 100%;
+    background-color: #4974f5;
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 500px;
+    background-position: 0 48px;
+  }
   .header-bg {
     width: 100%;
-    height: 420px;
-    background: url('https://cdn.shupian.cn/sp-pt/wap/images/bmjxoxb7fq80000.png')
-      no-repeat;
+    height: 500px;
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-repeat: no-repeat;
     background-size: 100% 100%;
-
     .header-content {
       margin-left: 38px;
-      margin-top: 50px;
-
+      margin-top: 90px;
       .header-title {
         font-size: 48px;
         font-weight: 600;
@@ -621,7 +606,10 @@ export default {
     }
   }
   .nav {
-    margin-top: -70px;
+    margin-top: -112px;
+  }
+  .nav_top {
+    margin-top: -76px;
   }
   .tools {
     margin-top: 18px;
@@ -632,7 +620,7 @@ export default {
   }
   .activities {
     margin-top: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
   }
   .bottom-notes {
     margin-top: 40px;

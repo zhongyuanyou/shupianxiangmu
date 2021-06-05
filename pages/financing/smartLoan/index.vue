@@ -2,8 +2,13 @@
   <div class="smart-loan">
     <Head title="智能贷款"></Head>
     <!-- banner图展示 -->
-    <div class="banner">
-      <sp-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+    <div v-if="imgList.length" class="banner">
+      <sp-swipe
+        class="my-swipe"
+        :autoplay="3000"
+        indicator-color="#4974F5"
+        :show-indicators="imgList.length > 1"
+      >
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
           ><img :src="item.img" alt=""
         /></sp-swipe-item>
@@ -48,7 +53,7 @@
               name="list_ic_next"
               size="0.32rem"
               color="#CCCCCC"
-              @click.native="onLeftClick"
+              @click.native="chooseShow"
             ></my-icon>
           </div>
         </div>
@@ -128,22 +133,7 @@ export default {
     [Toast.name]: Toast,
   },
   mixins: [imHandle, isLogin],
-  props: {
-    imgList: {
-      type: Array,
-      default: () => {
-        return [
-          {
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2oggsns53y80000.png',
-            url: '', // 外链
-            iosUrl: '', // 内链接ios
-            adrUrl: '', // 内链安卓链接
-            wapUrl: '', // wap内链
-          },
-        ]
-      },
-    },
-  },
+
   data() {
     return {
       // 页面规划师
@@ -159,6 +149,7 @@ export default {
       columns: [],
       cityList: {},
       pickerShow: false,
+      imgList: [],
     }
   },
   computed: {
@@ -178,21 +169,53 @@ export default {
     },
   },
   mounted() {
+    this.$appFn.dggCityCode((res) => {
+      this.city = res.data.cityName
+    })
+    this.city = this.postionCity
     this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
+    this.getAd('ad100063')
   },
   methods: {
     getCity() {
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
-      this.$axios.get(url, { params: { code: 2147483647 } }).then((res) => {
-        if (res.code === 200) {
-          this.cityList = res.data.city
-          this.columns = [
-            { values: Object.keys(this.cityList) },
-            { values: this.cityList['北京市'] },
-          ]
-        }
-      })
+      this.$axios
+        .get(financingApi.get_city, { params: { code: 2147483647 } })
+        .then((res) => {
+          if (res.code === 200) {
+            this.cityList = res.data.city
+            this.columns = [
+              { values: Object.keys(this.cityList) },
+              { values: this.cityList['北京市'] },
+            ]
+          }
+        })
+    },
+    getAd(code) {
+      const url =
+        'http://127.0.0.1:7001/service/nk/financing/v1/get_advertising.do'
+      // financingApi.get_ad_data
+      this.$axios
+        .get(financingApi.get_ad_data, {
+          params: {
+            locationCode: code,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data[0].sortMaterialList.forEach((item) => {
+              const obj = {
+                img: item.materialList[0].materialUrl,
+                url: item.materialList[0].materialLink, // 外链
+                iosUrl: item.materialList[0].iosLink, // 内链接ios
+                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                wapUrl: item.materialList[0].wapLink, // wap内链
+              }
+              this.imgList.push(obj)
+            })
+          }
+        })
     },
     onChange(picker, value) {
       picker.setColumnValues(1, this.cityList[value[0]])
@@ -281,7 +304,7 @@ export default {
       }, 1000)
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_smsCode.do'
       this.$axios
-        .get(url, {
+        .get(financingApi.smsCode, {
           params: {
             phone: phones,
           },
@@ -296,11 +319,19 @@ export default {
         })
     },
     onForm() {
-      if (!this.isLogin) {
+      const planner = {
+        mchUserId: this.pagePlanner.id,
+        userName: this.pagePlanner.name,
+        type: this.pagePlanner.type,
+        templateIds: '',
+        msgParam: {},
+      }
+      if (this.isInApp && this.userPhone === '') {
         const url =
           'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
         this.$axios
-          .get(url, {
+          .get(financingApi.check_smsCode, {
             params: {
               phone: this.phone,
               smsCode: this.sms,
@@ -308,24 +339,36 @@ export default {
           })
           .then((res) => {
             if (res.code === 200 && res.data === true) {
-              this.$xToast.showLoading({ message: '正在联系规划师...' })
-              const planner = {
-                mchUserId: this.pagePlanner.id,
-                userName: this.pagePlanner.name,
-                type: this.pagePlanner.type,
-              }
+              this.uPIM(planner)
+            } else if (res.code !== 200 && this.smsRes === this.sms) {
               this.uPIM(planner)
             } else {
-              Toast('验证码不真确！')
+              Toast('验证码不正确！')
             }
           })
-      } else {
-        this.$xToast.showLoading({ message: '正在联系规划师...' })
-        const planner = {
-          mchUserId: this.pagePlanner.id,
-          userName: this.pagePlanner.name,
-          type: this.pagePlanner.type,
-        }
+      } else if (this.userPhone !== '' && this.isInApp) {
+        this.uPIM(planner)
+      }
+      if (this.userPhone === '' && !this.isInApp) {
+        const url =
+          'http://127.0.0.1:7001/service/nk/financing/v1/validation_smsCode.do'
+        // financingApi.check_smsCode
+        this.$axios
+          .get(financingApi.check_smsCode, {
+            params: {
+              phone: this.phone,
+              smsCode: this.sms,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200 && res.data === true) {
+              //   this.$xToast.showLoading({ message: '正在联系规划师...' })
+              this.uPIM(planner)
+            } else {
+              Toast('验证码不正确！')
+            }
+          })
+      } else if (this.userPhone !== '' && !this.isInApp) {
         this.uPIM(planner)
       }
     },
@@ -354,7 +397,7 @@ export default {
     },
     linesReg(e) {
       e.target.value = e.target.value.match(/^(\d{0,3})/g)[0] || null
-      this.lines = e.target.value
+      this.lines = e.target.value > 101 ? 100 : e.target.value
     },
     // 输入校验 E
     // 贷款期限弹出层取消按钮
@@ -380,11 +423,11 @@ export default {
   }
   .banner {
     width: 750px;
-    height: 300px;
+    height: 280px;
     background: #d8d8d8;
     .my-swipe .sp-swipe-item {
       font-size: 20px;
-      height: 300px;
+      height: 280px;
       text-align: center;
       border-radius: 12px;
       background: #dddddd;
@@ -413,7 +456,6 @@ export default {
         align-items: center;
         .user-phone-input {
           width: 482px;
-          height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
@@ -426,8 +468,8 @@ export default {
           display: block;
         }
         .title {
-          width: 130px;
-          height: 45px;
+          width: 135px;
+
           font-size: 32px;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 700;
@@ -436,13 +478,13 @@ export default {
         }
         > input {
           width: 238px;
-          height: 45px;
+
           font-size: 32px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
-          line-height: 45px;
+          line-height: 50px;
           border: none;
-          margin-left: 58px;
+          margin-left: 53px;
           color: #222222;
         }
         > input:-ms-input-placeholder {
@@ -471,6 +513,7 @@ export default {
           .active {
             background: #f2f5ff;
             border-radius: 8px;
+            color: #4974f5;
             border: 1px solid #4974f5;
           }
         }
@@ -489,7 +532,7 @@ export default {
           font-weight: 400;
           color: #222222;
           line-height: 32px;
-          margin-left: 40px;
+          margin-left: auto;
         }
         .lines-input {
           width: 378px;
@@ -509,7 +552,7 @@ export default {
           font-weight: 400;
           color: #4974f5;
           line-height: 45px;
-          margin-left: 20px;
+          margin-left: auto;
         }
       }
     }

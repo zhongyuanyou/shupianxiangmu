@@ -51,10 +51,11 @@
     <div class="price-btn-box">
       <div class="content">
         <div class="price-box">
-          <span class="price">{{ product.price }}</span>
-          <span> 元</span>
+          <span class="price">{{ price(product.price) }}</span>
+          <span v-if="product.price > 10000" class="item-price-unit">万元</span>
+          <span v-else class="item-price-unit">元</span>
         </div>
-        <span class="sales">月销量{{ product.sales }}</span>
+        <span class="sales">月销量 {{ product.sales }}</span>
       </div>
       <!-- <a class="btn" @click="onMore(product.id)">立即购买</a> -->
     </div>
@@ -62,6 +63,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'Product',
@@ -73,13 +75,49 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   methods: {
     onMore(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      }
+    },
+    price(price) {
+      if (price % 1) {
+        return price > 10000 ? (price / 10000).toFixed(1) : price
+      } else {
+        return parseInt(price > 10000 ? (price / 10000).toFixed(1) : price)
+      }
     },
   },
 }
@@ -118,7 +156,6 @@ export default {
       background: #ec5330;
       border-radius: 4px;
       font-size: 20px;
-      font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #ffffff;
       text-align: center;
@@ -126,8 +163,7 @@ export default {
     }
     .product-title {
       display: block;
-      font-size: 32px;
-      font-family: PingFangSC-Medium, PingFang SC;
+      font-size: 30px;
       font-weight: bold;
       color: #222222;
       line-height: 40px;
@@ -146,7 +182,6 @@ export default {
       background: #ec5330;
       border-radius: 4px;
       font-size: 20px;
-      font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #ffffff;
       line-height: 36px;
@@ -154,7 +189,6 @@ export default {
     .score {
       display: block;
       font-size: 22px;
-      font-family: PingFangSC-Medium, PingFang SC;
       font-weight: bold;
       color: #fdb032;
     }
@@ -175,7 +209,6 @@ export default {
         background: #f0f2f5;
         border-radius: 4px;
         font-size: 20px;
-        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: bold;
         color: #5c7499;
         // line-height: 20px;
@@ -197,20 +230,19 @@ export default {
     justify-content: space-between;
     .content {
       .price-box {
+        vertical-align: baseline;
         display: flex;
         .price {
           display: block;
           font-size: 36px;
-          font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           color: #ec5330;
           line-height: 36px;
           padding-right: 4px;
         }
-        > span:last-child {
+        > .item-price-unit {
           display: block;
           font-size: 22px;
-          font-family: PingFangSC-Medium, PingFang SC;
           font-weight: bold;
           color: #ec5330;
           line-height: 36px;
@@ -221,7 +253,6 @@ export default {
       .sales {
         display: block;
         font-size: 20px;
-        font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: #999999;
         line-height: 28px;
@@ -233,7 +264,6 @@ export default {
       border-radius: 8px;
       border: 1px solid #4974f5;
       font-size: 24px;
-      font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       color: #4974f5;
       line-height: 48px;

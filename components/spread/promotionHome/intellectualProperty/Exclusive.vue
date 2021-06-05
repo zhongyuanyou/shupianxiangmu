@@ -205,7 +205,7 @@ export default {
         // }
       }
       .product {
-        border: 1px solid rgba(205, 205, 205, 0.5);
+        border: 1px solid #f4f4f4;
         margin-left: 16px;
         width: 410px;
         height: 160px;
@@ -305,6 +305,7 @@ export default {
       p:last-child {
         color: #999999;
         font-size: 24px;
+        font-weight: 400;
       }
       img {
         position: absolute;
@@ -316,6 +317,7 @@ export default {
     }
     &-list:first-child {
       > p {
+        font-weight: bold;
         width: 100px;
       }
     }

@@ -3,7 +3,7 @@
     <sp-list
       v-model="loading"
       :finished="finished"
-      :offset="200"
+      :offset="0"
       finished-text="没有更多了"
       @load="onLoad"
     >
@@ -19,13 +19,15 @@
 <script>
 import { List } from '@chipspc/vant-dgg'
 import ProductItem from './ProductItem'
-
+import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
     ProductItem,
     [List.name]: List,
   },
-  props: {},
+  props: {
+    classCode: { type: String, default: '' },
+  },
   data() {
     return {
       productList: [],
@@ -41,9 +43,9 @@ export default {
       const url =
         'http://127.0.0.1:7001/service/nk/newChipSpread/v1/service_product_list.do'
       this.$axios
-        .get(url, {
+        .get(newSpreadApi.service_product_list, {
           params: {
-            classCodes: 'FL20210425164558',
+            classCodes: this.classCode,
             start: this.start,
             limit: 15,
           },

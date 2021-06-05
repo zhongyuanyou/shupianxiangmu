@@ -66,9 +66,10 @@
 <script>
 import { Field, Toast, TopNavBar, Icon } from '@chipspc/vant-dgg'
 import { mapState, mapMutations } from 'vuex'
-import { userinfoApi, consult } from '@/api'
+import { userinfoApi, consult, formApi } from '@/api'
 import LoadingCenter from '@/components/common/loading/LoadingCenter'
 import Header from '@/components/common/head/header'
+const BASE = require('~/config/index.js')
 export default {
   layout: 'keepAlive',
   name: 'Second',
@@ -116,6 +117,9 @@ export default {
       )
       this.formData = Object.assign(this.formData, sessionStorageFormData)
     }
+    console.log('this.currentCity', this.currentCity.code)
+    this.city = this.$cookies.get('currentCity') || 'VISITOR'
+    console.log('this.city', this.city)
   },
   destroyed() {
     // 缓存表单填写的数据
@@ -127,6 +131,10 @@ export default {
     }
   },
   methods: {
+    getCookie(name) {
+      const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)', 'g')
+      return document.cookie.match(reg)
+    },
     // 选中
     select() {
       this.formData.content['是否允许电话联系'] =
@@ -162,61 +170,148 @@ export default {
       return new Promise((resolve) => {
         // 获取用户信息
         this.$axios
-          .get(userinfoApi.info, {
-            params: { id: userId },
+          .get(userinfoApi.info_decrypt, {
+            params: {
+              id: userId || this.$cookies.get('userId', { path: '/' }),
+            },
           })
           .then((res) => {
-            if (res.code === 200) {
+            if (res && res.code === 200) {
               resolve(res.data)
             } else {
               this.loading = false
-              this.$xToast.error('获取当前登陆用户的信息失败')
+              this.$xToast.error('查询用户信息失败！')
             }
+          })
+          .catch((error) => {
+            console.log('error', error)
+            this.$xToast.error('查询用户信息失败！')
           })
       })
     },
-    // 提交表单
     async consultForm() {
-      if (this.loading) {
-        return
-      }
       this.loading = true
-      const { mainAccountFull, fullName } = await this.getUserInfo(this.userId)
-      this.formData.name = fullName
-      this.formData.tel = mainAccountFull
-      const newFormData = JSON.parse(JSON.stringify(this.formData))
-      newFormData.content = JSON.stringify(newFormData.content)
-      // 提交表单
-      consult
-        .consultAdd(newFormData)
+      const userInfo = await this.getUserInfo(this.userId)
+      if (!userInfo) return
+      const params = {
+        bizAreaCode: this.city.code,
+        bizAreaName: this.city.name,
+        comment: this.formData.content.备注,
+        customerAttribute: JSON.stringify(this.formData.content),
+        customerName: userInfo.fullName,
+        customerPhone: userInfo.mainAccount,
+        customerSex: userInfo.sex || 1,
+        sourceUrl: location.href,
+        sourceSyscode: 'crisps-app', // 来源系统
+        firstSourceChannel: 'crisps-app-one-home-page', // 一级来源渠道
+        secondSourceChannel: 'crisps-app-two-look-service', // 二级来源渠道
+        requireCode: 'gszc', // 需求编码
+        requireName: '公司资产', // 需求名称
+        // "bizAreaCode": "string",
+        // "bizAreaName": "string",
+        // "comment": "string",
+        // "customerAttribute": "string",
+        // "customerName": "string",
+        // "customerPhone": "string",
+        // "customerSex": "string",
+        // "ext1": "string",
+        // "ext2": "string",
+        // "ext3": "string",
+        // "ext4": "string",
+        // "extJson": "string",
+        // "firstSourceChannel": "string",
+        // "intentionLevel": 0,
+        // "keyword": "string",
+        // "productTypeCode": "string",
+        // "requireCode": "string",
+        // "requireName": "string",
+        // "requireParentCode": "string",
+        // "requireParentName": "string",
+        // "secondSourceChannel": "string",
+        // "sourceSyscode": "string",
+        // "sourceUrl": "string"
+      }
+      this.$axios
+        .post(BASE.formApi + formApi, params)
         .then((res) => {
           this.loading = false
-          this.$xToast.success('提交成功，请注意接听电话')
-          sessionStorage.removeItem('formData')
-          this.formData = {
-            type: 'gszc',
-            tel: '', // 电话
-            name: '', // 姓名
-            web: 'sp', // 归属（原网站类型）
-            place: 'all',
-            url: '',
-            content: {
-              备注: '',
-              是否允许电话联系: '是',
-            },
+          if (res.code === 200) {
+            this.$xToast.success('提交成功，请注意接听电话')
+            sessionStorage.removeItem('formData')
+            this.formData = {
+              type: 'gszc',
+              tel: '', // 电话
+              name: '', // 姓名
+              web: 'sp', // 归属（原网站类型）
+              place: 'all',
+              url: '',
+              content: {
+                备注: '',
+                是否允许电话联系: '是',
+              },
+            }
+            this.$router.go(-2)
+          } else {
+            this.$xToast.show({
+              message: res.message || '提交失败，请稍后再试！',
+              duration: 1000,
+              icon: 'toast_ic_error',
+              forbidClick: true,
+            })
           }
-          this.$router.go(-2)
         })
-        .catch((res) => {
+        .catch((error) => {
           this.loading = false
           this.$xToast.show({
-            message: res.message,
+            message: error.message || '提交失败，请稍后再试！',
             duration: 1000,
             icon: 'toast_ic_error',
             forbidClick: true,
           })
         })
     },
+    // 提交表单
+    // async consultForm() {
+    //   if (this.loading) {
+    //     return
+    //   }
+    //   this.loading = true
+    //   const { mainAccountFull, fullName } = await this.getUserInfo(this.userId)
+    //   this.formData.name = fullName
+    //   this.formData.tel = mainAccountFull
+    //   const newFormData = JSON.parse(JSON.stringify(this.formData))
+    //   newFormData.content = JSON.stringify(newFormData.content)
+    //   // 提交表单
+    //   consult
+    //     .consultAdd(newFormData)
+    //     .then((res) => {
+    //       this.loading = false
+    //       this.$xToast.success('提交成功，请注意接听电话')
+    //       sessionStorage.removeItem('formData')
+    //       this.formData = {
+    //         type: 'gszc',
+    //         tel: '', // 电话
+    //         name: '', // 姓名
+    //         web: 'sp', // 归属（原网站类型）
+    //         place: 'all',
+    //         url: '',
+    //         content: {
+    //           备注: '',
+    //           是否允许电话联系: '是',
+    //         },
+    //       }
+    //       this.$router.go(-2)
+    //     })
+    //     .catch((res) => {
+    //       this.loading = false
+    //       this.$xToast.show({
+    //         message: res.message,
+    //         duration: 1000,
+    //         icon: 'toast_ic_error',
+    //         forbidClick: true,
+    //       })
+    //     })
+    // },
     // 输入框文字发生改变
     changeFont(val) {
       const font = document.getElementsByClassName('sp-field__word-num')[0]

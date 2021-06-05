@@ -113,7 +113,7 @@ export default {
         height: 234px;
         // background: #ffffff;
         border-radius: 8px;
-        border: 1px solid rgba(205, 205, 205, 0.5);
+        border: 1px solid #f4f4f4;
         background-size: 100%;
         padding: 10px;
         margin-right: 10px;
@@ -135,12 +135,15 @@ export default {
           .textOverflow(1);
         }
         .content-right-item-desc {
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 400;
           color: #ec5330;
           line-height: 30px;
           .textOverflow(1);
         }
+      }
+      .content-right-item:first-child {
+        border: 0px;
       }
     }
   }

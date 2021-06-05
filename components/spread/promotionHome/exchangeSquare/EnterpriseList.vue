@@ -278,7 +278,6 @@ export default {
           .region-title {
             margin-bottom: 20px;
             font-size: 32px;
-            font-family: PingFang;
             font-weight: bold;
             color: #222222;
             line-height: 40px;
@@ -310,7 +309,6 @@ export default {
           margin-top: 20px;
           height: 22px;
           font-size: 22px;
-          font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #222;
           line-height: 26px;
@@ -332,7 +330,6 @@ export default {
           }
           .original-price {
             font-size: 22px;
-            font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
             color: #999999;
             line-height: 22px;

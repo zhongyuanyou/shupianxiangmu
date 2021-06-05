@@ -38,6 +38,7 @@
  *           'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
  *      }  planner 需要传的参数
  **/
+import { mapState } from 'vuex'
 import imHandle from '@/mixins/imHandle'
 export default {
   mixins: [imHandle],
@@ -60,15 +61,26 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+    }),
+  },
+  mounted() {},
   methods: {
     onlineConsult() {
-      if (JSON.stringify(this.planner) === '{}') return
       const planner = {
         mchUserId: this.planner.id,
         userName: this.planner.name,
         type: this.planner.type,
+        msgParam: {},
+        templateIds: '',
       }
-      this.uPIM(planner)
+      if (this.isInApp) {
+        this.uPIM(planner)
+      } else {
+        this.uPIM(planner)
+      }
     },
   },
 }

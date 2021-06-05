@@ -121,7 +121,7 @@ import TabCurve from '~/components/spread/transactionPro/common/TabCurve'
 // import LoadingDown from '~/components/common/loading/LoadingDown'
 import adJumpHandle from '~/mixins/adJumpHandle'
 import Fruitless from '~/components/spread/transactionPro/common/Fruitless'
-import GoodItem from '~/components/spread/transactionPro/companyTransaction/GoodItem'
+import GoodItem from '~/components/spread/transactionPro/companyTransaction/GoodItem.vue'
 import { newSpreadApi } from '@/api/spread'
 
 export default {

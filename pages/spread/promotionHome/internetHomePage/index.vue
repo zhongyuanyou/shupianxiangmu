@@ -36,8 +36,8 @@ import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.
 import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import { internetData } from '@/assets/spread/promotionHome/internetHomePage.js'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 
 export default {
   components: {
@@ -155,7 +155,7 @@ export default {
       console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
-          path: 'CPSCustomer:CPSCustomer/CPSBaseWebViewController///push/animation',
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/search/page',
           },
@@ -194,6 +194,8 @@ export default {
             size: 'small',
             label: '',
             imageUrl: item.navigationImageUrl,
+            description: item.description || '',
+            execution: item.executionParameters || '',
           }
           navList.push(obj)
         })
@@ -352,12 +354,116 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url, name) {
-      if (name === '全部服务') {
-        this.$router.push('/financing/category')
-        return
+    jumpLink(url, description, execution) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+
+      // app跳转
+      try {
+        // 直播跳转
+        if (url === 'app直播') {
+          if (!this.isInApp) {
+            this.openApp()
+          } else {
+            const iOSRouter = {
+              path: 'CPSCustomer:CPSCustomer/CPSTabBarViewController///push/animation',
+              parameter: {
+                selectedIndex: '3',
+              },
+            }
+            const androidRouter = {
+              path: '/main/android/main',
+              parameter: {
+                selectedIndex: 3,
+              },
+            }
+            const iOSRouterStr = JSON.stringify(iOSRouter)
+            const androidRouterStr = JSON.stringify(androidRouter)
+            this.$appFn.dggJumpRoute(
+              {
+                iOSRouter: iOSRouterStr,
+                androidRouter: androidRouterStr,
+              },
+              (res) => {
+                console.log(res)
+              }
+            )
+          }
+          return
+        }
+        // 更多路由
+        if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const androidRouter = {
+            path: '/common/android/SingleWeb',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+          return
+        }
+        // 详情页
+        if (this.isInApp && execution.split(':')[0] === 'appServiceDetails') {
+          const iOSRouters = {
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1],
+              parameter: { productId: description },
+            },
+          }
+          const androidRouters = {
+            path: '/flutter/main',
+            parameter: {
+              routerPath: execution.split(':')[1],
+              parameter: { productId: description },
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouters)
+          const androidRouterStr = JSON.stringify(androidRouters)
+          this.$appFn.dggJumpRoute({
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          })
+          return
+        }
+        // 分类列表
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          console.log(lastObj, execution.split(':')[0])
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
       }
       if (url) {
+        if (url.indexOf('/spread/') > -1) {
+          this.$router.push(url)
+          return
+        }
         if (url.indexOf('http') > -1) {
           window.location.href = url
           return

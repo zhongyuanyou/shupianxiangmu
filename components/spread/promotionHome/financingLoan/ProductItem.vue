@@ -10,6 +10,7 @@
         <div class="item-labels">
           <span
             v-for="(label, index) in product.labels"
+            v-show="index < 3"
             :key="index"
             class="item-label"
             >{{ label }}</span
@@ -17,13 +18,9 @@
         </div>
         <div class="item-price">
           <span class="item-price-num">
-            {{
-              product.price > 10000
-                ? (product.price / 10000).toFixed(1)
-                : product.price
-            }}
+            {{ price(product.price) }}
           </span>
-          <span v-if="product.price > 10000" class="item-price-unit">万</span>
+          <span v-if="product.price > 10000" class="item-price-unit">万元</span>
           <span v-else class="item-price-unit">元</span>
           <span class="item-price-note">最高可借</span>
         </div>
@@ -33,6 +30,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { newSpreadApi } from '@/api/spread'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
@@ -56,13 +54,49 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   methods: {
     onMore(id) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      if (this.isInApp) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: id },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else {
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      }
+    },
+    price(price) {
+      if (price % 1) {
+        return price > 10000 ? (price / 10000).toFixed(1) : price
+      } else {
+        return parseInt(price > 10000 ? (price / 10000).toFixed(1) : price)
+      }
     },
   },
 }
@@ -80,12 +114,13 @@ export default {
   .item-img {
     width: 180px;
     height: 180px;
-    background: linear-gradient(180deg, #46494d 5%, #797d83 75%, #414347 100%);
+    // background: linear-gradient(180deg, #46494d 5%, #797d83 75%, #414347 100%);
     border-radius: 14px;
     margin-right: 32px;
     img {
       width: 180px;
       height: 180px;
+      border-radius: 14px;
     }
   }
 
@@ -93,22 +128,21 @@ export default {
     position: relative;
     width: 100%;
     .item-title {
-      height: 34px;
+      // height: 34px;
       font-size: 32px;
       font-weight: bold;
       color: #222222;
       line-height: 34px;
       margin-bottom: 10px;
-      // 超出省略号
-      overflow: hidden;
-      text-overflow: ellipsis;
-      //white-space: nowrap;
+      width: 418px;
+      .textOverflow(2);
     }
     .item-desc {
       font-size: 22px;
       font-weight: 400;
       color: #222222;
       line-height: 26px;
+      width: 418px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -119,12 +153,12 @@ export default {
       display: flex;
       align-items: center;
       overflow: hidden;
+      width: 418px;
       .item-label {
         flex: none;
         background: #f0f2f5;
         border-radius: 4px;
         font-size: 20px;
-        font-weight: bold;
         color: #5c7499;
         line-height: 20px;
         padding: 4px 6px;
@@ -147,6 +181,7 @@ export default {
       .item-price-unit {
         margin-left: 2px;
         font-size: 22px;
+        height: 22px;
         font-weight: bold;
         color: #ec5330;
         line-height: 22px;
