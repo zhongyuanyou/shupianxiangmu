@@ -33,6 +33,8 @@
             }"
             @click="handleClick(index)"
           >
+            <i v-if="index === TabNavList - 1" class="circular"></i>
+            <i v-if="index === TabNavList - 1" class="circular1"></i>
             <div v-show="TabNavList == index" class="line"></div>
             <span>{{ item.title }}</span>
             <i v-if="index === TabNavList + 1" class="radio"></i>
@@ -429,6 +431,28 @@ export default {
         }
         > .radio1 {
           border-top-right-radius: 20px;
+          background: #fff;
+          width: 143px;
+          height: 124px;
+          position: absolute;
+          display: block;
+          z-index: 2;
+          top: 0;
+          left: 0;
+        }
+        > .circular {
+          background: #f5f5f5;
+          width: 143px;
+          height: 124px;
+          position: absolute;
+          display: block;
+          z-index: 1;
+          top: 0;
+          left: 0;
+        }
+        > .circular1 {
+          border-bottom-right-radius: 20px;
+
           background: #fff;
           width: 143px;
           height: 124px;
