@@ -22,18 +22,22 @@
       </div>
     </div>
     <!-- <div v-if="imgList.length !== 0" class="banner"> -->
-    <div class="banner">
-      <img :src="imgUrl" alt="" />
-      <!-- <sp-swipe
+    <div
+      v-show="
+        imgList && imgList.length > 1 && JSON.stringify(imgList[0]) != '{}'
+      "
+      class="banner"
+    >
+      <sp-swipe
         class="my-swipe"
         :autoplay="3000"
         indicator-color="#4974F5"
         :show-indicators="imgList.length > 1"
       >
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
-          ><img :src="imgUrl" alt=""
+          ><img :src="item.img" alt=""
         /></sp-swipe-item>
-      </sp-swipe> -->
+      </sp-swipe>
     </div>
     <div class="container_form">
       <sp-form @submit="onSubmit">
@@ -413,16 +417,18 @@ export default {
         })
         .then((res) => {
           if (res.code === 200) {
-            res.data[0].sortMaterialList.forEach((item) => {
-              const obj = {
-                img: item.materialList[0].materialUrl,
-                url: item.materialList[0].materialLink, // 外链
-                iosUrl: item.materialList[0].iosLink, // 内链接ios
-                adrUrl: item.materialList[0].androidLink, // 内链安卓链接
-                wapUrl: item.materialList[0].wapLink, // wap内链
-              }
-              this.imgList.push(obj)
-            })
+            if (JSON.stringify(res.data[0]) !== '{}') {
+              res.data[0].sortMaterialList.forEach((item) => {
+                const obj = {
+                  img: item.materialList[0].materialUrl,
+                  url: item.materialList[0].materialLink, // 外链
+                  iosUrl: item.materialList[0].iosLink, // 内链接ios
+                  adrUrl: item.materialList[0].androidLink, // 内链安卓链接
+                  wapUrl: item.materialList[0].wapLink, // wap内链
+                }
+                this.imgList.push(obj)
+              })
+            }
           }
         })
     },
