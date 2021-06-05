@@ -21,7 +21,7 @@ export default {
         ? this.$cookies.get('currentCity', { path: '/' })
         : this.$cookies.get('currentCity', { path: '.shupian' })
     )
-    this.postionCity = this.cityMsg.name
+    this.postionCity = this.cityMsg.name || '成都'
   },
   mounted() {
     this.strcookie = document.cookie
