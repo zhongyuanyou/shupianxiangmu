@@ -207,7 +207,7 @@ export default {
     handleScroll(e) {
       this.showTitle = e.isFixed
       this.scrollTop = e.scrollTop
-      console.log(this.scrollTop)
+      // console.log(this.scrollTop)
       // this.scrollTop > 160 ? (this.title = '本月热销榜') : (this.title = '')
     },
     onRefresh() {
