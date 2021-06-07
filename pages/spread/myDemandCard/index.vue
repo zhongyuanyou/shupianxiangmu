@@ -113,27 +113,45 @@ export default {
     toDemandCardPage() {
       switch (this.navTabs[this.activeNavTabIndex]) {
         case '公司注册': {
-          this.$router.push({ path: '/spread/myDemandCard/companyRegister' })
+          localStorage.setItem('needCode', 'FL20210425163709')
+          this.$router.push({
+            path: '/spread/myDemandCard/companyRegister',
+          })
           break
         }
         case '代理记账': {
-          this.$router.push({ path: '/spread/myDemandCard/agentBilling' })
+          localStorage.setItem('needCode', 'FL20210425163832')
+          this.$router.push({
+            path: '/spread/myDemandCard/agentBilling',
+          })
           break
         }
         case '公司交易': {
-          this.$router.push({ path: '/spread/myDemandCard/companyTransaction' })
+          localStorage.setItem('needCode', 'FL20201224136319')
+          this.$router.push({
+            path: '/spread/myDemandCard/companyTransaction',
+          })
           break
         }
         case '工商变更': {
-          this.$router.push({ path: '/spread/myDemandCard/companyAlteration' })
+          localStorage.setItem('needCode', 'FL20210425163722')
+          this.$router.push({
+            path: '/spread/myDemandCard/companyAlteration',
+          })
           break
         }
         case '审计业务': {
-          this.$router.push({ path: '/spread/myDemandCard/auditingService' })
+          localStorage.setItem('needCode', 'FL20210425164379')
+          this.$router.push({
+            path: '/spread/myDemandCard/auditingService',
+          })
           break
         }
         case '许可证办理': {
-          this.$router.push({ path: '/spread/myDemandCard/permitHandling' })
+          localStorage.setItem('needCode', 'FL20210425163737')
+          this.$router.push({
+            path: '/spread/myDemandCard/permitHandling',
+          })
           break
         }
       }

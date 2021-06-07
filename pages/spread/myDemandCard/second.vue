@@ -203,7 +203,7 @@ export default {
         sourceSyscode: 'crisps-app', // 来源系统
         firstSourceChannel: 'crisps-app-one-home-page', // 一级来源渠道
         secondSourceChannel: 'crisps-app-two-look-service', // 二级来源渠道
-        requireCode: 'FL20210425163709', // 需求编码
+        requireCode: localStorage.getItem('needCode'), // 需求编码
         requireName: '工商变更', // 需求名称
         // "bizAreaCode": "string",
         // "bizAreaName": "string",
