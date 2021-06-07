@@ -51,11 +51,11 @@ export default ({ app, store }) => {
           } else {
             next()
           }
-        } else if (routerBlackList.includes(to.path)) {
-          next({
-            path: loginRoutePath,
-            query: { redirect: to.path },
-          })
+          // } else if (routerBlackList.includes(to.path)) {
+          //   next({
+          //     path: loginRoutePath,
+          //     query: { redirect: to.path },
+          //   })
         } else {
           next()
         }

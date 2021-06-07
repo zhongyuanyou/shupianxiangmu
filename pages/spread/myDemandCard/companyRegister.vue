@@ -165,39 +165,39 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
-  mounted() {
-    // 数据回显
-    const sessionStorageFormData = JSON.parse(
-      sessionStorage.getItem('formData')
-    )
-    if (sessionStorageFormData) {
-      this.$nextTick(() => {
-        this.formData.content.yxblqy =
-          sessionStorageFormData.content.yxblqy || this.formData.content.yxblqy
-        this.formData.content.sydz =
-          sessionStorageFormData.content.sydz || this.formData.content.sydz
-        this.formData.content['公司信息确认完毕'] =
-          sessionStorageFormData.content['公司信息确认完毕'] ||
-          this.formData.content['公司信息确认完毕']
-        this.formData.content['办理时间'] =
-          sessionStorageFormData.content['办理时间'] ||
-          this.formData.content['办理时间']
-        this.choose.forEach((item, index) => {
-          if (item === this.formData.content.sydz) {
-            this.chooseActived = index
-          }
-          if (item === this.formData.content['公司信息确认完毕']) {
-            this.confirmActived = index
-          }
-        })
-        this.times.forEach((item, index) => {
-          if (item === this.formData.content['办理时间']) {
-            this.transactActived = index
-          }
-        })
-      })
-    }
-  },
+  // mounted() {
+  //   // 数据回显
+  //   const sessionStorageFormData = JSON.parse(
+  //     sessionStorage.getItem('formData')
+  //   )
+  //   if (sessionStorageFormData) {
+  //     this.$nextTick(() => {
+  //       this.formData.content.yxblqy =
+  //         sessionStorageFormData.content.yxblqy || this.formData.content.yxblqy
+  //       this.formData.content.sydz =
+  //         sessionStorageFormData.content.sydz || this.formData.content.sydz
+  //       this.formData.content['公司信息确认完毕'] =
+  //         sessionStorageFormData.content['公司信息确认完毕'] ||
+  //         this.formData.content['公司信息确认完毕']
+  //       this.formData.content['办理时间'] =
+  //         sessionStorageFormData.content['办理时间'] ||
+  //         this.formData.content['办理时间']
+  //       this.choose.forEach((item, index) => {
+  //         if (item === this.formData.content.sydz) {
+  //           this.chooseActived = index
+  //         }
+  //         if (item === this.formData.content['公司信息确认完毕']) {
+  //           this.confirmActived = index
+  //         }
+  //       })
+  //       this.times.forEach((item, index) => {
+  //         if (item === this.formData.content['办理时间']) {
+  //           this.transactActived = index
+  //         }
+  //       })
+  //     })
+  //   }
+  // },
   methods: {
     // 获取地区
     onCity(val) {

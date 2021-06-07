@@ -5,7 +5,7 @@ import xToast from '@/components/common/spToast'
 // const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 const BASE = require('~/config/index.js')
 console.log('--------BASE.baseURL')
-console.log(BASE.baseURL)
+console.log('BASE', BASE)
 export default function ({ $axios, redirect, app, store }) {
   $axios.defaults.withCredentials = false
   $axios.defaults.timeout = 12000
@@ -79,6 +79,12 @@ export default function ({ $axios, redirect, app, store }) {
             xToast.error('登录失效，请重新登录')
             const timer = setTimeout(() => {
               clearTimeout(timer)
+              const nowUrl = location.href
+              location.href =
+                BASE.mainAppUrl +
+                '/login?sourcePlatform=crips-wap-tg&' +
+                'redirect=' +
+                nowUrl
             }, 1500)
           }
         }
@@ -91,6 +97,7 @@ export default function ({ $axios, redirect, app, store }) {
     }
   )
   $axios.onError((error) => {
+    console.log('error', error)
     const code = parseInt(error.response && error.response.status)
     if (code === 400) {
       redirect('/404')
