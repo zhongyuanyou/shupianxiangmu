@@ -116,6 +116,7 @@ export default {
       )
       this.formData = Object.assign(this.formData, sessionStorageFormData)
     }
+    this.city = this.$cookies.get('currentCity') || 'VISITOR'
   },
   destroyed() {
     // 缓存表单填写的数据
@@ -177,8 +178,46 @@ export default {
     },
     // 提交表单
     async consultForm() {
-      if (this.loading) {
-        return
+      this.loading = true
+      const userInfo = await this.getUserInfo(this.userId)
+      if (!userInfo) return
+      const params = {
+        bizAreaCode: this.city.code,
+        bizAreaName: this.city.name,
+        comment: this.formData.content.备注,
+        customerAttribute: JSON.stringify(this.formData.content),
+        customerName: userInfo.fullName,
+        customerPhone: userInfo.mainAccount,
+        customerSex: userInfo.sex || 2,
+        sourceUrl: location.href,
+        sourceSyscode: 'crisps-app', // 来源系统
+        firstSourceChannel: 'crisps-app-one-home-page', // 一级来源渠道
+        secondSourceChannel: 'crisps-app-two-look-service', // 二级来源渠道
+        requireCode: localStorage.getItem('needCode'), // 需求编码
+        requireName: '工商变更', // 需求名称
+        // "bizAreaCode": "string",
+        // "bizAreaName": "string",
+        // "comment": "string",
+        // "customerAttribute": "string",
+        // "customerName": "string",
+        // "customerPhone": "string",
+        // "customerSex": "string",
+        // "ext1": "string",
+        // "ext2": "string",
+        // "ext3": "string",
+        // "ext4": "string",
+        // "extJson": "string",
+        // "firstSourceChannel": "string",
+        // "intentionLevel": 0,
+        // "keyword": "string",
+        // "productTypeCode": "string",
+        // "requireCode": "string",
+        // "requireName": "string",
+        // "requireParentCode": "string",
+        // "requireParentName": "string",
+        // "secondSourceChannel": "string",
+        // "sourceSyscode": "string",
+        // "sourceUrl": "string"
       }
       this.loading = true
       const { mainAccountFull, fullName } = await this.getUserInfo(this.userId)
