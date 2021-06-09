@@ -113,7 +113,7 @@ export default {
       current_url: location.href,
       referrer: document.referrer,
     }
-    window.sensors.registerPage(param) // 设置公共属性
+    // window.sensors.registerPage(param) // 设置公共属性
   },
   head() {
     return {

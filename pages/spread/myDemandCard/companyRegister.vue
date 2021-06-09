@@ -11,7 +11,7 @@
         <span class="company-area-title">您的公司打算成立在哪个区域？</span>
         <div class="company-area-input" @click="show">
           <input
-            v-model="formData.content.yxblqy"
+            v-model="formData.content.公司成立区域"
             type="text"
             placeholder="不限"
             readonly="readonly"
@@ -132,8 +132,8 @@ export default {
         type: 'gszc',
         url: '',
         content: {
-          yxblqy: '',
-          sydz: '是',
+          公司成立区域: '',
+          是否有公司地址: '是',
           公司信息确认完毕: '是',
           办理时间: '1月内',
         },
@@ -146,9 +146,9 @@ export default {
       let isHave = false
       const { content } = this.formData
       const regionLength = this.actionsRegion.length
-      if (content.yxblqy && regionLength) {
+      if (content.公司成立区域 && regionLength) {
         for (let i = 0; i < this.actionsRegion.length; i++) {
-          if (this.actionsRegion[i] === content.yxblqy) {
+          if (this.actionsRegion[i] === content.公司成立区域) {
             num = i
             isHave = true
             break
@@ -156,7 +156,7 @@ export default {
         }
         // 若之前选择的区域在当前区域列表中未找到，清空数据，取消回显
         if (!isHave) {
-          content.yxblqy = ''
+          content.公司成立区域 = ''
         }
       }
       return num
@@ -172,10 +172,10 @@ export default {
   //   )
   //   if (sessionStorageFormData) {
   //     this.$nextTick(() => {
-  //       this.formData.content.yxblqy =
-  //         sessionStorageFormData.content.yxblqy || this.formData.content.yxblqy
-  //       this.formData.content.sydz =
-  //         sessionStorageFormData.content.sydz || this.formData.content.sydz
+  //       this.formData.content.公司成立区域 =
+  //         sessionStorageFormData.content.公司成立区域 || this.formData.content.公司成立区域
+  //       this.formData.content.是否有公司地址 =
+  //         sessionStorageFormData.content.是否有公司地址 || this.formData.content.是否有公司地址
   //       this.formData.content['公司信息确认完毕'] =
   //         sessionStorageFormData.content['公司信息确认完毕'] ||
   //         this.formData.content['公司信息确认完毕']
@@ -183,7 +183,7 @@ export default {
   //         sessionStorageFormData.content['办理时间'] ||
   //         this.formData.content['办理时间']
   //       this.choose.forEach((item, index) => {
-  //         if (item === this.formData.content.sydz) {
+  //         if (item === this.formData.content.是否有公司地址) {
   //           this.chooseActived = index
   //         }
   //         if (item === this.formData.content['公司信息确认完毕']) {
@@ -209,20 +209,20 @@ export default {
       this.isShow = true
     },
     onChange(picker, value, index) {
-      this.formData.content.yxblqy = value
+      this.formData.content.公司成立区域 = value
     },
     onCancel() {
       this.isShow = false
     },
     // 点确定回显城市
     onConfirm(value) {
-      this.formData.content.yxblqy = value
+      this.formData.content.公司成立区域 = value
       this.isShow = false
     },
     // 获取公司是否有地址的选择
     isChoose(index) {
       this.chooseActived = index
-      this.formData.content.sydz = this.choose[index]
+      this.formData.content.是否有公司地址 = this.choose[index]
     },
 
     // 获取公司信息是否完成的选择
