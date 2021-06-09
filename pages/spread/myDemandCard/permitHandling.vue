@@ -116,7 +116,7 @@ export default {
       current_url: location.href,
       referrer: document.referrer,
     }
-    window.sensors.registerPage(param) // 设置公共属性
+    // window.sensors.registerPage(param) // 设置公共属性
 
     // 数据回显
     const sessionStorageFormData = JSON.parse(
@@ -125,8 +125,9 @@ export default {
     if (sessionStorageFormData) {
       this.$nextTick(() => {
         console.log(sessionStorageFormData)
-        this.$refs.companySelec.title = sessionStorageFormData.content.xkzlx
-        this.permission = sessionStorageFormData.content.xkzlx
+        this.$refs.companySelec.title =
+          sessionStorageFormData.content.变更业务类型
+        this.permission = sessionStorageFormData.content.变更业务类型
         this.isDecision = sessionStorageFormData.content['主要决策人']
         for (let index = 0; index < this.selectActive.length; index++) {
           if (this.selectActive[index].name === this.isDecision) {
@@ -166,7 +167,7 @@ export default {
         type: 'xkx',
         url: window.location.href,
         content: {
-          xkzlx: this.permission,
+          变更业务类型: this.permission,
           主要决策人: this.isDecision,
           办理时间: this.handlingTime,
         },

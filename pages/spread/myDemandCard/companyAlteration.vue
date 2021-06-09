@@ -169,7 +169,7 @@ export default {
       current_url: location.href,
       referrer: document.referrer,
     }
-    window.sensors.registerPage(param) // 设置公共属性
+    // window.sensors.registerPage(param) // 设置公共属性
 
     // 数据回显
     const sessionStorageFormData = JSON.parse(
@@ -231,7 +231,7 @@ export default {
     },
     onButton() {
       let content = {
-        bgxm: this.permission,
+        变更业务类型: this.permission,
         注册区域: this.district,
         身份: this.identity,
         办理时间: this.handlingTime,
