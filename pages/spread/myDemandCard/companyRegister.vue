@@ -166,12 +166,10 @@ export default {
     }),
   },
   mounted() {
-    console.log('cityVal', this.cityVal)
     this.cityVal = this.$cookies.get('currentCity', { path: '/' }) || {
       name: '成都市',
       code: '510100',
     }
-    console.log('cityVal', this.cityVal)
   },
   // mounted() {
   //   // 数据回显
