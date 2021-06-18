@@ -124,10 +124,7 @@ export default {
       transactActived: 0,
       isShow: false,
       actionsRegion: [],
-      cityVal: {
-        code: '510100',
-        name: '成都市',
-      },
+      cityVal: {},
       formData: {
         type: 'gszc',
         url: '',
@@ -166,7 +163,10 @@ export default {
     }),
   },
   mounted() {
-    this.cityVal = this.$cookies.get('currentCity', { path: '/' }) || {
+    this.cityVal = this.$cookies.get('currentCity', {
+      path: '/',
+      domain: '.shupian.cn',
+    }) || {
       name: '成都市',
       code: '510100',
     }
@@ -207,6 +207,15 @@ export default {
   methods: {
     // 获取地区
     onCity(val) {
+      if (!this.cityVal.code) {
+        this.cityVal = this.$cookies.get('currentCity', {
+          path: '/',
+          domain: '.shupian.cn',
+        }) || {
+          name: '成都市',
+          code: '510100',
+        }
+      }
       if (val.code !== undefined) this.cityVal = val
       this.getRegionList(this.cityVal.code || '510100')
     },
