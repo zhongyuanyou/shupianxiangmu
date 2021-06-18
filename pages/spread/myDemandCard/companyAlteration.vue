@@ -236,7 +236,7 @@ export default {
     onButton() {
       let content = {
         变更业务类型: this.permission,
-        注册区域: this.district,
+        注册区域: this.cityVal.name + this.district,
         身份: this.identity,
         办理时间: this.handlingTime,
       }
