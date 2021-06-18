@@ -162,6 +162,10 @@ export default {
     },
   },
   mounted() {
+    this.cityVal = this.$cookies.get('currentCity', { path: '/' }) || {
+      name: '成都市',
+      code: '510100',
+    }
     const param = {
       platform_type: 'H5', // 平台类型：App，H5，Web
       app_name: '薯片wap端', // 应用名称

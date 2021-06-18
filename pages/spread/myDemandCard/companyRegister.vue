@@ -165,6 +165,12 @@ export default {
       isInApp: (state) => state.app.isInApp,
     }),
   },
+  mounted() {
+    this.cityVal = this.$cookies.get('currentCity', { path: '/' }) || {
+      name: '成都市',
+      code: '510100',
+    }
+  },
   // mounted() {
   //   // 数据回显
   //   const sessionStorageFormData = JSON.parse(
@@ -202,7 +208,7 @@ export default {
     // 获取地区
     onCity(val) {
       if (val.code !== undefined) this.cityVal = val
-      this.getRegionList(this.cityVal.code)
+      this.getRegionList(this.cityVal.code || '510100')
     },
     // 显示下拉框
     show() {
@@ -241,14 +247,17 @@ export default {
       const sessionStorageFormData = JSON.parse(
         sessionStorage.getItem('formData')
       )
+      const formNow = JSON.parse(JSON.stringify(this.formData))
+      formNow.content.公司成立区域 =
+        this.cityVal.name + formNow.content.公司成立区域
       // 合并两个页面之间缓存的数据
       if (sessionStorageFormData) {
-        this.formData.content = Object.assign(
+        formNow.content = Object.assign(
           sessionStorageFormData.content,
-          this.formData.content
+          formNow.content
         )
       }
-      const newFormData = JSON.stringify(this.formData)
+      const newFormData = JSON.stringify(formNow)
       // 将数据存储
       sessionStorage.setItem('formData', newFormData)
       this.$router.push({ path: '/spread/myDemandCard/second' })
