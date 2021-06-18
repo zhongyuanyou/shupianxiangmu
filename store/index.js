@@ -20,7 +20,13 @@ export const actions = {
     const userId = app.$cookies.get('userId', { path: '/' })
     const userType = app.$cookies.get('userType', { path: '/' })
 
-    commit('city/SET_CITY', currentCity || {})
+    commit(
+      'city/SET_CITY',
+      currentCity || {
+        name: '成都市',
+        code: '510100',
+      }
+    )
     commit('city/SET_POSITION_CITY', positionCityName || '')
     commit('city/SET_POSITION_STATUS', positionStatus || null)
     if (token && userId && userType)

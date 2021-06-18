@@ -24,7 +24,7 @@
         rows="5"
         :autofocus="true"
         type="textarea"
-        maxlength="300"
+        maxlength="200"
         placeholder="更准确的描述需求，将有助于我们为您更好的服务"
         :show-word-limit="true"
         class="form-text"
@@ -117,7 +117,7 @@ export default {
       )
       this.formData = Object.assign(this.formData, sessionStorageFormData)
     }
-    this.city = this.$cookies.get('currentCity') || 'VISITOR'
+    this.city = this.$cookies.get('currentCity', { path: '/' })
   },
   destroyed() {
     // 缓存表单填写的数据
