@@ -62,7 +62,7 @@
     <div class="help">
       <ConsultTel
         :title="'有疑问？千万企服规划师为您免费解答'"
-        :tel="'4000-962540'"
+        :tel="'028-954310'"
         button="免费咨询"
         md-type="售前"
         md-name="工商注册_还有疑问_立即咨询"
@@ -108,7 +108,7 @@
     <div class="help">
       <ConsultTel
         :title="'有疑问？千万企服规划师为您免费解答'"
-        :tel="'4000-962540'"
+        :tel="'028-954310'"
         button="免费咨询"
         md-type="售前"
         md-name="工商注册_还有疑问_立即咨询"

@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     telPhone() {
-      window.location.href = 'tel:400-962540'
+      window.location.href = 'tel:028-954310'
     },
   },
 }
