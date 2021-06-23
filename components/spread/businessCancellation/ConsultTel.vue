@@ -45,7 +45,7 @@ export default {
     tel: {
       type: String,
       default: () => {
-        return '4000-962540'
+        return '028-954310'
       },
     },
     button: {

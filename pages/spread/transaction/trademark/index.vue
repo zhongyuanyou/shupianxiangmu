@@ -259,7 +259,7 @@ export default {
         id: '7862495547640840192',
         name: '张毅',
         jobNum: '107547',
-        telephone: '4000962540',
+        telephone: '028-954310',
         imgSrc:
           'https://dgg-xiaodingyun.oss-cn-beijing.aliyuncs.com/xdy-xcx/my/trueAndFalse/gw_defult.png',
       },
