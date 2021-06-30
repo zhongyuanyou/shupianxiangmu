@@ -11,7 +11,7 @@
         <span class="company-area-title">您的公司打算成立在哪个区域？</span>
         <div class="company-area-input" @click="show">
           <input
-            v-model="formData.content.yxblqy"
+            v-model="formData.content.公司成立区域"
             type="text"
             placeholder="不限"
             readonly="readonly"
@@ -124,16 +124,13 @@ export default {
       transactActived: 0,
       isShow: false,
       actionsRegion: [],
-      cityVal: {
-        code: '510100',
-        name: '成都市',
-      },
+      cityVal: {},
       formData: {
         type: 'gszc',
         url: '',
         content: {
-          yxblqy: '',
-          sydz: '是',
+          公司成立区域: '',
+          是否有公司地址: '是',
           公司信息确认完毕: '是',
           办理时间: '1月内',
         },
@@ -146,9 +143,9 @@ export default {
       let isHave = false
       const { content } = this.formData
       const regionLength = this.actionsRegion.length
-      if (content.yxblqy && regionLength) {
+      if (content.公司成立区域 && regionLength) {
         for (let i = 0; i < this.actionsRegion.length; i++) {
-          if (this.actionsRegion[i] === content.yxblqy) {
+          if (this.actionsRegion[i] === content.公司成立区域) {
             num = i
             isHave = true
             break
@@ -156,7 +153,7 @@ export default {
         }
         // 若之前选择的区域在当前区域列表中未找到，清空数据，取消回显
         if (!isHave) {
-          content.yxblqy = ''
+          content.公司成立区域 = ''
         }
       }
       return num
@@ -166,63 +163,81 @@ export default {
     }),
   },
   mounted() {
-    // 数据回显
-    const sessionStorageFormData = JSON.parse(
-      sessionStorage.getItem('formData')
-    )
-    if (sessionStorageFormData) {
-      this.$nextTick(() => {
-        this.formData.content.yxblqy =
-          sessionStorageFormData.content.yxblqy || this.formData.content.yxblqy
-        this.formData.content.sydz =
-          sessionStorageFormData.content.sydz || this.formData.content.sydz
-        this.formData.content['公司信息确认完毕'] =
-          sessionStorageFormData.content['公司信息确认完毕'] ||
-          this.formData.content['公司信息确认完毕']
-        this.formData.content['办理时间'] =
-          sessionStorageFormData.content['办理时间'] ||
-          this.formData.content['办理时间']
-        this.choose.forEach((item, index) => {
-          if (item === this.formData.content.sydz) {
-            this.chooseActived = index
-          }
-          if (item === this.formData.content['公司信息确认完毕']) {
-            this.confirmActived = index
-          }
-        })
-        this.times.forEach((item, index) => {
-          if (item === this.formData.content['办理时间']) {
-            this.transactActived = index
-          }
-        })
-      })
+    this.cityVal = this.$cookies.get('currentCity', {
+      path: '/',
+      domain: '.shupian.cn',
+    }) || {
+      name: '成都市',
+      code: '510100',
     }
   },
+  // mounted() {
+  //   // 数据回显
+  //   const sessionStorageFormData = JSON.parse(
+  //     sessionStorage.getItem('formData')
+  //   )
+  //   if (sessionStorageFormData) {
+  //     this.$nextTick(() => {
+  //       this.formData.content.公司成立区域 =
+  //         sessionStorageFormData.content.公司成立区域 || this.formData.content.公司成立区域
+  //       this.formData.content.是否有公司地址 =
+  //         sessionStorageFormData.content.是否有公司地址 || this.formData.content.是否有公司地址
+  //       this.formData.content['公司信息确认完毕'] =
+  //         sessionStorageFormData.content['公司信息确认完毕'] ||
+  //         this.formData.content['公司信息确认完毕']
+  //       this.formData.content['办理时间'] =
+  //         sessionStorageFormData.content['办理时间'] ||
+  //         this.formData.content['办理时间']
+  //       this.choose.forEach((item, index) => {
+  //         if (item === this.formData.content.是否有公司地址) {
+  //           this.chooseActived = index
+  //         }
+  //         if (item === this.formData.content['公司信息确认完毕']) {
+  //           this.confirmActived = index
+  //         }
+  //       })
+  //       this.times.forEach((item, index) => {
+  //         if (item === this.formData.content['办理时间']) {
+  //           this.transactActived = index
+  //         }
+  //       })
+  //     })
+  //   }
+  // },
   methods: {
     // 获取地区
     onCity(val) {
+      if (!this.cityVal.code) {
+        this.cityVal = this.$cookies.get('currentCity', {
+          path: '/',
+          domain: '.shupian.cn',
+        }) || {
+          name: '成都市',
+          code: '510100',
+        }
+      }
       if (val.code !== undefined) this.cityVal = val
-      this.getRegionList(this.cityVal.code)
+      this.getRegionList(this.cityVal.code || '510100')
     },
     // 显示下拉框
     show() {
       this.isShow = true
     },
     onChange(picker, value, index) {
-      this.formData.content.yxblqy = value
+      this.formData.content.公司成立区域 = value
     },
     onCancel() {
       this.isShow = false
     },
     // 点确定回显城市
     onConfirm(value) {
-      this.formData.content.yxblqy = value
+      this.formData.content.公司成立区域 = value
       this.isShow = false
     },
     // 获取公司是否有地址的选择
     isChoose(index) {
       this.chooseActived = index
-      this.formData.content.sydz = this.choose[index]
+      this.formData.content.是否有公司地址 = this.choose[index]
     },
 
     // 获取公司信息是否完成的选择
@@ -241,14 +256,17 @@ export default {
       const sessionStorageFormData = JSON.parse(
         sessionStorage.getItem('formData')
       )
+      const formNow = JSON.parse(JSON.stringify(this.formData))
+      formNow.content.公司成立区域 =
+        this.cityVal.name + formNow.content.公司成立区域
       // 合并两个页面之间缓存的数据
       if (sessionStorageFormData) {
-        this.formData.content = Object.assign(
+        formNow.content = Object.assign(
           sessionStorageFormData.content,
-          this.formData.content
+          formNow.content
         )
       }
-      const newFormData = JSON.stringify(this.formData)
+      const newFormData = JSON.stringify(formNow)
       // 将数据存储
       sessionStorage.setItem('formData', newFormData)
       this.$router.push({ path: '/spread/myDemandCard/second' })

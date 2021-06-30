@@ -42,7 +42,7 @@ export default {
       type: String,
       required: true,
       default: () => {
-        return '4000-962540'
+        return '028-954310'
       },
     },
     button: {
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     telPhone() {
-      window.location.href = 'tel:4000962540'
+      window.location.href = 'tel:028-954310'
     },
   },
 }

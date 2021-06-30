@@ -12,4 +12,5 @@ module.exports = {
   // 网关签名密钥
   SECRET: '1624afea172ca5ed25a5ac6722b7d232',
   formApi: 'https://dspmicrouag.shupian.cn/crisps-resource-house', // 资源表单地址 新 -企大顺
+  mainAppUrl: 'https://dm.shupian.cn', // 主站地址
 }

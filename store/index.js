@@ -13,14 +13,23 @@ export const mutations = {}
 export const actions = {
   nuxtServerInit({ commit, state }, { app }) {
     // 从缓存的cookies获取城市信息
-    const currentCity = app.$cookies.get('currentCity')
+    const currentCity = app.$cookies.get('currentCity', {
+      path: '/',
+      domain: '.shupian.cn',
+    })
     const positionCityName = app.$cookies.get('positionCityName')
     const positionStatus = app.$cookies.get('positionStatus')
     const token = app.$cookies.get('token', { path: '/' })
     const userId = app.$cookies.get('userId', { path: '/' })
     const userType = app.$cookies.get('userType', { path: '/' })
 
-    commit('city/SET_CITY', currentCity || {})
+    commit(
+      'city/SET_CITY',
+      currentCity || {
+        name: '成都市',
+        code: '510100',
+      }
+    )
     commit('city/SET_POSITION_CITY', positionCityName || '')
     commit('city/SET_POSITION_STATUS', positionStatus || null)
     if (token && userId && userType)

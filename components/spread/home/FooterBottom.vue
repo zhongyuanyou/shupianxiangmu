@@ -170,7 +170,7 @@ export default {
     },
     // 电话咨询
     telConsult() {
-      window.location.href = `tel:4000962540`
+      window.location.href = `tel:028-954310`
     },
   },
 }

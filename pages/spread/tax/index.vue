@@ -134,7 +134,7 @@ export default {
         },
       },
       consultTitle: '对于代理记账还有疑问？企服专家为您免费解答',
-      consultTel: '4000-962540',
+      consultTel: '028-954310',
       serveData: [],
       // 请求失败的备用数据
       planlerList: '',

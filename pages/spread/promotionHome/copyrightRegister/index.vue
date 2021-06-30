@@ -38,7 +38,7 @@
             v-model="haveProduct"
             name="有无作品"
             label="有无作品"
-            placeholder="请输入作品名称"
+            placeholder="请选择有无作品"
             right-icon="arrow"
             readonly
             @click="openPop"

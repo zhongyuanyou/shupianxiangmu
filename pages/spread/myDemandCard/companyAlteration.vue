@@ -119,10 +119,7 @@ export default {
       // 办理时间
       handlingTime: '1个月内',
       // 城市
-      cityVal: {
-        code: '510100',
-        name: '成都市',
-      },
+      cityVal: {},
     }
   },
   computed: {
@@ -162,6 +159,13 @@ export default {
     },
   },
   mounted() {
+    this.cityVal = this.$cookies.get('currentCity', {
+      path: '/',
+      domain: '.shupian.cn',
+    }) || {
+      name: '成都市',
+      code: '510100',
+    }
     const param = {
       platform_type: 'H5', // 平台类型：App，H5，Web
       app_name: '薯片wap端', // 应用名称
@@ -169,7 +173,7 @@ export default {
       current_url: location.href,
       referrer: document.referrer,
     }
-    window.sensors.registerPage(param) // 设置公共属性
+    // window.sensors.registerPage(param) // 设置公共属性
 
     // 数据回显
     const sessionStorageFormData = JSON.parse(
@@ -210,6 +214,15 @@ export default {
   methods: {
     // 城市
     onCity(val) {
+      if (!this.cityVal.code) {
+        this.cityVal = this.$cookies.get('currentCity', {
+          path: '/',
+          domain: '.shupian.cn',
+        }) || {
+          name: '成都市',
+          code: '510100',
+        }
+      }
       if (val.code !== undefined) this.cityVal = val
       this.getRegionList(this.cityVal.code)
     },
@@ -231,8 +244,8 @@ export default {
     },
     onButton() {
       let content = {
-        bgxm: this.permission,
-        注册区域: this.district,
+        变更业务类型: this.permission,
+        注册区域: this.cityVal.name + this.district,
         身份: this.identity,
         办理时间: this.handlingTime,
       }
