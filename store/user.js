@@ -17,14 +17,17 @@ export const state = () => ({
 export const mutations = {
   SET_USER(state, data = {}) {
     this.$cookies.set('token', data.token, {
+      domain: 'shupian.cn',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 过期时间
     })
     this.$cookies.set('userId', data.userId, {
+      domain: 'shupian.cn',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 过期时间
     })
     this.$cookies.set('userType', data.userType, {
+      domain: 'shupian.cn',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 过期时间
     })
