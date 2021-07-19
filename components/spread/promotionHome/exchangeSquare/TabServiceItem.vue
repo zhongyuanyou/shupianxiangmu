@@ -240,7 +240,7 @@ export default {
               this.list.push({
                 code: index + 1,
                 img:
-                  elem.img.split(',')[1] ||
+                  elem.img.split(',')[0] ||
                   'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
                 title: elem.title,
                 label: elem.field ? elem.field.join(' | ') : '',
