@@ -124,8 +124,7 @@
 import { mapState } from 'vuex'
 import { Sticky, PullRefresh, List } from '@chipspc/vant-dgg'
 import imHandle from '@/mixins/imHandle'
-// import Header from '@/components/common/head/header'
-import { financingApi, plannerApi, newSpreadApi } from '@/api/spread'
+import { newSpreadApi } from '@/api/spread'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 
 export default {
@@ -176,7 +175,6 @@ export default {
   },
   mounted() {
     this.init()
-    this.getHotList()
     this.appType = this.isAndroidOrIOS()
   },
   methods: {
@@ -200,6 +198,7 @@ export default {
         res.data.classList.forEach((item) => {
           this.itemArray.push(item)
         })
+        this.getHotList(this.itemArray[0].ext1)
       } else {
         this.$xToast.show(res.message)
       }
@@ -228,9 +227,12 @@ export default {
     },
     // 获取热榜列表数据
     async getHotList(code) {
-      if (code) {
-        this.params.classCodes = code
+      if (!code) {
+        this.finished = true
+        console.log('请求数据')
+        return
       }
+      this.params.classCodes = code
       const url = newSpreadApi.service_product_list
       const params = this.params
       const res = await this.$axios.get(url, { params })
