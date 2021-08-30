@@ -15,35 +15,7 @@
 export default {
   name: 'Tools',
   data() {
-    return {
-      // list: [
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/cyb9mn6k7lk0000.png',
-      //     title: '额度评估',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/76nvcmvpmlw0000.png',
-      //     title: '贷款计算器',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/6cb9xtrp8h80000.png',
-      //     title: '智能贷款',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/cjraco2vifc0000.png',
-      //     title: '申请进度',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/enxy8p7b2k00000.png',
-      //     title: '我的贷款',
-      //     url: '',
-      //   },
-      // ],
-    }
+    return {}
   },
   computed: {
     list() {
@@ -58,8 +30,7 @@ export default {
   background: #ffffff;
   border-radius: 24px;
   margin: 0px 20px;
-  padding: 32px 0;
-
+  padding: 40px 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -80,7 +51,7 @@ export default {
 
     .item-title {
       font-size: 24px;
-      font-weight: bold;
+      //   font-weight: bold;
       color: #222222;
     }
   }

@@ -14,34 +14,43 @@
       </div>
     </div>
     <!-- E 头部Header -->
-
+    <!-- 一键贷款表单S  -->
+    <Borrowing></Borrowing>
+    <!-- 一键贷款表单E-->
     <!-- S 金刚区 -->
-    <Nav
+    <NavBar></NavBar>
+    <!-- <Nav
       v-show="rollNav.length > 0"
       :roll-nav="rollNav"
       class="nav"
       :class="isInApp ? 'nav_top' : ''"
-    ></Nav>
+    ></Nav> -->
     <!-- E 金刚区 -->
 
     <!-- S 工具 -->
-    <Tools v-if="false" class="tools" />
+    <Tools v-if="true" class="tools" />
     <!-- E 工具 -->
 
+    <!-- 广告展示 S -->
+    <Advertising></Advertising>
+    <!-- 广告展示 E -->
+    <!-- 活动展示 S -->
+    <Activity></Activity>
+    <!-- 活动展示 E -->
     <!-- S 我要借款 -->
-    <Loan />
+    <!-- <Loan /> -->
     <!-- E 我要借款 -->
 
     <!-- S 新人专属礼包 -->
-    <NewcomerPack class="newcomer-pack" />
+    <!-- <NewcomerPack class="newcomer-pack" /> -->
     <!-- E 新人专属礼包 -->
 
     <!-- S 点我咨询和资讯直播 -->
-    <Live />
+    <!-- <Live /> -->
     <!-- E 点我咨询和资讯直播 -->
 
     <!-- S 活动 -->
-    <Activities class="activities" />
+    <!-- <Activities class="activities" /> -->
     <!-- E 活动 -->
 
     <!-- S 轮播咨询 -->
@@ -67,17 +76,20 @@
 import { mapState } from 'vuex'
 import { Toast } from '@chipspc/vant-dgg'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import Nav from '@/components/spread/common/Nav.vue'
+import NavBar from '@/components/financing/common/NavBar.vue'
 import Header from '@/components/spread/common/NavTop.vue'
-import Activities from '@/components/spread/promotionHome/financingLoan/Activities.vue'
-import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
-import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
-import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
+import Advertising from '@/components/financing/common/Advertising.vue'
+import Activity from '@/components/financing/common/Activity.vue'
+// import Activities from '@/components/spread/promotionHome/financingLoan/Activities.vue'
+// import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
+// import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
+// import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
 import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
 import Notice from '@/components/financing/common/Notice.vue'
 import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList.vue'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
+import Borrowing from '@/components/financing/common/Borrowing.vue'
 import openappChips from '~/mixins/openappChips'
 import imHandle from '@/mixins/imHandle'
 import isLogin from '@/mixins/isLogin'
@@ -87,16 +99,19 @@ export default {
   components: {
     [Toast.name]: Toast,
     Header,
-    Nav,
-    Activities,
-    Live,
-    Loan,
-    NewcomerPack,
+    NavBar,
+    Advertising,
+    Activity,
+    // Activities,
+    // Live,
+    // Loan,
+    // NewcomerPack,
     Tools,
     FinancingList,
     Notice,
     BottomNotes,
     BtnPlanner,
+    Borrowing,
   },
   mixins: [imHandle, isLogin, openappChips],
   async asyncData({ $axios }) {
@@ -201,28 +216,28 @@ export default {
       ],
       toolList: [
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cyb9mn6k7lk0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/15ryj7pa9tr400.png',
           title: '额度评估',
           url: '',
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/76nvcmvpmlw0000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/fsnf63nzeq80000.png',
           title: '贷款计算器',
           url: '',
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6cb9xtrp8h80000.png',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9d5h5gx7r100000.png',
           title: '智能贷款',
           url: '',
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cjraco2vifc0000.png',
-          title: '申请进度',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/8gcwzvp0azc0000.png',
+          title: '风险查询',
           url: '',
         },
         {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/enxy8p7b2k00000.png',
-          title: '我的贷款',
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/ef8erzej3og0000.png',
+          title: '征信查询',
           url: '',
         },
       ],

@@ -2,7 +2,7 @@
   <div class="notice">
     <div class="img-box">
       <img
-        src="https://cdn.shupian.cn/sp-pt/wap/images/fji7e1g3vns0000.png"
+        src="https://cdn.shupian.cn/sp-pt/wap/images/9k4g0n3bgoc0000.png?x-oss-process=image/resize,m_fill,w_32,h_32,limit_0"
         alt=""
       />
     </div>
@@ -124,7 +124,7 @@ export default {
   margin: 0 auto;
   width: 710px;
   height: 72px;
-  background: #e7e7e7;
+  background: #ffffff;
   border-radius: 24px;
   display: flex;
   align-items: center;
@@ -153,7 +153,7 @@ export default {
       font-size: 26px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      color: #555555;
+      color: #222222;
       line-height: 32px;
     }
     .advertising {

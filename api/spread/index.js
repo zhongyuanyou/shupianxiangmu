@@ -1,6 +1,7 @@
 import {
   CHIPS_WAP_SPREAD_BASE_URL,
   CHIPS_WAP_BASE_URL,
+  CHIPS_LAW_SPREAD_BASE_URL,
 } from '../../config/constant'
 
 const newSpreadApi = {
@@ -19,6 +20,7 @@ const financingApi = {
   productList: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/product_list.do`,
   get_city: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_city.do`,
   get_ad_data: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_advertising.do`,
+  get_product_code: `${CHIPS_LAW_SPREAD_BASE_URL}/nk/product/v1/typeList.do`,
 }
 const spreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/list.do`,

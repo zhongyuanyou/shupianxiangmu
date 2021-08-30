@@ -8,7 +8,7 @@
       :swipe-threshold="titleName.length - 1"
       title-inactive-color="#555555"
       :offset-top="offsetTop"
-      :background="isFixed === true ? fixedColor : bgColor"
+      :background="isFixed ? fixedColor : bgColor"
       @scroll="scroll"
       @click="onClick()"
     >
@@ -23,6 +23,25 @@
             <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
+        <sp-sticky :offset-top="top">
+          <div
+            v-show="item.name !== '推荐'"
+            class="labels"
+            :style="{ paddingTop: isFixed ? '10px' : '' }"
+          >
+            <div class="lab-box">
+              <div
+                v-for="(classItem, classIndex) in classList"
+                :key="classIndex"
+                class="lab"
+                :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
+                @click="chooesClass(classIndex)"
+              >
+                {{ classItem.name }}
+              </div>
+            </div>
+          </div>
+        </sp-sticky>
         <sp-list
           v-model="loading"
           :finished="finished"
@@ -48,16 +67,17 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List } from '@chipspc/vant-dgg'
+import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 import product from '@/components/spread/promotionHome/financingLoan/ProductItem.vue'
-import { newSpreadApi } from '@/api/spread'
+import { newSpreadApi, financingApi } from '@/api/spread'
 export default {
   name: 'FinacingList',
   components: {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
     [List.name]: List,
+    [Sticky.name]: Sticky,
     product,
     // Waterfall,
   },
@@ -89,6 +109,17 @@ export default {
         ]
       },
     },
+    classList: {
+      type: Array,
+      default: () => {
+        return [
+          { name: '人气产品', code: '' },
+          { name: '低息好借', code: '' },
+          { name: '随借随还', code: '' },
+          { name: '大额面签', code: '' },
+        ]
+      },
+    },
   },
   data() {
     return {
@@ -104,6 +135,10 @@ export default {
       error: false,
       max: 2,
       pageNumber: 1,
+      classActive: -1,
+      top: 0,
+      classArr: '',
+      classCode: '',
     }
   },
   computed: {
@@ -120,15 +155,31 @@ export default {
   mounted() {
     if (this.isInApp) {
       this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
+      this.top = this.appInfo.statusBarHeight + 57 + 44
     } else {
       this.offsetTop = 57 + 'px'
+      this.top = 101
     }
+    this.getClassCode()
   },
   methods: {
+    // 选择二级分类
+    chooesClass(i) {
+      this.classCode = this.classList[i].code
+      this.classActive = i
+    },
     scroll(e) {
-      this.isFixed = e.isFixed
+      this.$nextTick(() => {
+        this.isFixed = e.isFixed
+      })
     },
     onClick() {
+      this.classActive = -1
+      this.classArr.forEach((item, index) => {
+        if (item.name === this.titleName[this.active].name) {
+          this.classList = item.children
+        }
+      })
       this.initialize()
     },
     initialize(changeObj) {
@@ -147,11 +198,22 @@ export default {
     jumpLink(url) {
       this.$parent.jumpLink(url)
     },
+    getClassCode() {
+      const params = {
+        code: 'FL20210425164558',
+      }
+      this.$axios.get(financingApi.get_product_code, { params }).then((res) => {
+        if (res.code === 200) {
+          this.classArr = res.data
+        }
+      })
+    },
     // 请求数据
     selectTab(item) {
       // 当前无数据不执行
       if (this.finished && !this.loading) return
       this.loading = true
+
       const type = this.titleName[this.active].type
       // 2、调用接口
       const url =
@@ -221,8 +283,9 @@ export default {
     padding-left: 20px;
   }
   ::v-deep.sp-tab {
-    padding: 0 20px;
+    padding: 0;
     flex: 0 0 auto;
+    margin-right: 46px;
     .sp-tab__text {
       font-size: 32px;
       font-family: PingFangSC-Regular, PingFang SC;
@@ -264,7 +327,34 @@ export default {
       border-radius: 6px;
     }
   }
+  .labels {
+    padding: 0 20px 20px;
+    background: #f5f5f5;
 
+    .lab-box::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+    .lab-box {
+      width: 100%;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
+      height: 56px;
+      .lab {
+        height: 56px;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 16px 20px;
+        font-size: 24px;
+        color: #555555;
+        line-height: 24px;
+        margin-right: 10px;
+        flex-shrink: 0;
+        text-align: center;
+      }
+    }
+  }
   .secondary-label {
     > ul {
       width: 100%;

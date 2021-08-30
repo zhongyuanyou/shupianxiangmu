@@ -1,6 +1,6 @@
 <template>
   <div class="container_body">
-    <div class="container">
+    <div class="container" :style="{ height: userPhone ? '456px' : '' }">
       <sp-sticky @scroll="handleScroll">
         <div
           class="container_header"
@@ -112,7 +112,7 @@
       <div class="ads_box">
         <div v-for="(item, index) in arr" :key="index" class="ads_item">
           <img :src="item.adsImg" alt="" />
-          <p>{{ item.text }}</p>
+          <div class="item_text">{{ item.text }}</div>
           <div class="btn" @click="goIM">{{ item.btn_content }}</div>
         </div>
       </div>
@@ -729,7 +729,7 @@ input:-webkit-autofill {
     position: relative;
     .container_form {
       width: 94.6%;
-      height: 648px;
+      //   height: 648px;
       background: #ffffff;
       box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.06);
       border-radius: 24px;
@@ -807,6 +807,7 @@ input:-webkit-autofill {
         width: 230px;
         height: 224px;
         margin-bottom: 10px;
+
         img {
           width: 100%;
           height: 100%;
@@ -868,9 +869,19 @@ input:-webkit-autofill {
         box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.06);
         border-radius: 8px;
         margin-bottom: 20px;
+        .item_text {
+          font-size: 28px;
+          color: #222222;
+          text-align: center;
+          line-height: 28px;
+          font-weight: 700;
+          margin: 34px 0 24px;
+          .textoverflow(1);
+        }
         img {
           display: block;
           width: 100%;
+          height: 120px;
         }
 
         p {
