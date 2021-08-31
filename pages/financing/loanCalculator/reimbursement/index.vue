@@ -35,15 +35,15 @@ export default {
   components: {
     Head,
   },
-  computed: {
-    ...mapState({
-      isInApp: (state) => state.app.isInApp,
-    }),
-  },
   data() {
     return {
       numList: [],
     }
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+    }),
   },
   created() {
     this.numList = this.$route.query.list
