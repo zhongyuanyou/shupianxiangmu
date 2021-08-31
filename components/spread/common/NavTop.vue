@@ -45,7 +45,6 @@
         </Search>
       </div>
     </sp-sticky>
-    <div v-for="(item, index) of 120" :key="index"></div>
   </div>
 </template>
 

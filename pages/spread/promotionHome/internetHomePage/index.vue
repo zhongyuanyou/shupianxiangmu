@@ -8,45 +8,82 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Nav :roll-nav="rollNav" class="nav"></Nav>
+      <Banner></Banner>
+      <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- 金刚区 -->
-
+    <!-- NavBar  s-->
+    <NavBar :navList="navList"></NavBar>
+    <!-- NavBar  e-->
+    <!-- 活动专区 S -->
+    <ActivityZone></ActivityZone>
+    <!-- 活动专区E -->
+    <!--咨询广播区S  -->
+    <Radio></Radio>
+    <!-- 咨询广播区E -->
+    <!-- 热销商品 S -->
+    <HotSales></HotSales>
+    <!-- 热销商品 E -->
+    <!-- 活动专区 S -->
+    <Activity></Activity>
+    <!-- 活动专区 E -->
+    <!-- 免费工具 S -->
+    <FreeTool></FreeTool>
+    <!-- 免费工具 E -->
+    <!-- 规划师立即咨询 S -->
+    <Planner :planner="pagePlanner"></Planner>
+    <!-- 规划师立即质询 E -->
     <!-- 新人红包 -->
-    <GiftBag
+    <!-- <GiftBag
       v-show="giftBagList.length"
       class="gift-bag"
       :gift-bag-list="giftBagList"
-    ></GiftBag>
+    ></GiftBag> -->
     <!-- 活动功能展示 -->
-    <Advertising :advertising-list="advertisingList"></Advertising>
+    <!-- <Advertising :advertising-list="advertisingList"></Advertising> -->
     <!-- 产品列表 -->
     <Recommended :title-name="titleName"></Recommended>
 
     <!-- 规划师 -->
-    <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
+    <!-- <BtnPlanner ref="plannerIM" :planner="pagePlanner" /> -->
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import Nav from '@/components/spread/common/Nav.vue'
+// import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
-import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
-import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
+import Banner from '@/components/spread/promotionHome/internetHomePage/Banner.vue'
+import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
+import ActivityZone from '@/components/spread/promotionHome/internetHomePage/ActivityZone.vue'
+import Radio from '@/components/spread/promotionHome/internetHomePage/Radio.vue'
+import HotSales from '@/components/spread/promotionHome/internetHomePage/HotSales.vue'
+import Activity from '@/components/spread/promotionHome/internetHomePage/Activity.vue'
+import FreeTool from '@/components/spread/promotionHome/internetHomePage/FreeTool.vue'
+import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.vue'
+// import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
+// import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
+// import BtnPlanner from '@/components/spread/common/BtnPlanner'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 
 export default {
   components: {
     Header,
-    Nav,
-    GiftBag,
-    Advertising,
+    Banner,
+    NavBar,
+    ActivityZone,
+    Radio,
+    HotSales,
+    Activity,
+    FreeTool,
+    Planner,
+    // Nav,
+    // GiftBag,
+    // Advertising,
     Recommended,
-    BtnPlanner,
+    // BtnPlanner,
   },
   async asyncData({ $axios }) {
     try {
@@ -84,6 +121,33 @@ export default {
       placeholder: '请输入关键字',
       // marginTop: -120,
       rollNav: [],
+      navList: [
+        {
+          title: '小程序',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g8as29uy5e00000.png',
+          url: '',
+        },
+        {
+          title: '电商运营',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/9w68yknwru00000.png',
+          url: '',
+        },
+        {
+          title: '网站建设',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f1l4zlbscns0000.png',
+          url: '',
+        },
+        {
+          title: '营销推广',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
+          url: '',
+        },
+        {
+          title: '定制开发',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7ratpz2wb1w0000.png',
+          url: '',
+        },
+      ],
       giftBagList: [{}],
       advertisingList: {
         limitedTime: {

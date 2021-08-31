@@ -15,19 +15,29 @@
         <template #title>
           <div class="title">
             <span>{{ item.name }}</span>
-            <span :class="active === itemKey ? 'span--active' : ''">{{
-              item.describe
-            }}</span>
+            <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
         <!-- 二级分类 -->
-        <!-- <div class="secondary-label">
-          <ul>
-            <li v-for="(item, index) in secondaryLabel" :key="index">
-              {{ item }}
-            </li>
-          </ul>
-        </div> -->
+        <sp-sticky :offset-top="top">
+          <div
+            v-show="item.name !== '推荐'"
+            class="secondary-label"
+            :style="{ paddingTop: isFixed ? '10px' : '' }"
+          >
+            <div class="class-box">
+              <div
+                v-for="(className, index) in secondaryLabel"
+                :key="index"
+                class="class-name"
+                :style="{ color: calssActive === index ? '#4974F5' : '' }"
+                @click="chooes(index)"
+              >
+                {{ className.name }}
+              </div>
+            </div>
+          </div>
+        </sp-sticky>
         <sp-list
           v-model="loading"
           :finished="finished"
@@ -38,29 +48,8 @@
         >
           <div class="product-box">
             <div v-if="oddList.length > 0" class="product-odd">
-              <product
+              <ProductItem
                 v-for="(proItem, proKey) of oddList"
-                :key="proKey"
-                class="product-item"
-                :product="proItem"
-              />
-            </div>
-            <div class="product-event">
-              <!-- 待改跳转 -->
-              <div
-                v-show="active === 0"
-                class="hot-product"
-                @click="
-                  jumpLink('/spread/promotionHome/hotSaleTop?code=CRISPS-HLW')
-                "
-              >
-                <img
-                  src="https://cdn.shupian.cn/sp-pt/wap/images/9le2yzoxk1s000.png"
-                  alt=""
-                />
-              </div>
-              <product
-                v-for="(proItem, proKey) of eventList"
                 :key="proKey"
                 class="product-item"
                 :product="proItem"
@@ -75,17 +64,20 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List } from '@chipspc/vant-dgg'
+import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
-import product from '@/components/spread/promotionHome/internetHomePage/Product.vue'
-import { newSpreadApi } from '@/api/spread'
+// import product from '@/components/spread/promotionHome/internetHomePage/Product.vue'
+import ProductItem from '@/components/spread/promotionHome/internetHomePage/ProductItem.vue'
+import { newSpreadApi, financingApi } from '@/api/spread'
 export default {
   name: 'Recommended',
   components: {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
     [List.name]: List,
-    product,
+    [Sticky.name]: Sticky,
+    // product,
+    ProductItem,
     // Waterfall,
   },
   props: {
@@ -293,7 +285,7 @@ export default {
       isFixed: false,
       fixedColor: '#ffffff',
       bgColor: '#f5f5f5',
-      // secondaryLabel: ['全部', '免费维护', '极速交付', '多方案维护'],
+      secondaryLabel: [],
       loading: false,
       finished: false,
       list: [],
@@ -302,6 +294,10 @@ export default {
       error: false,
       pageNumber: 1,
       max: 2,
+      calssActive: -1,
+      top: 0,
+      classArr: '',
+      classCode: '',
     }
   },
   computed: {
@@ -318,16 +314,40 @@ export default {
   mounted() {
     if (this.isInApp) {
       this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
+      this.top = this.appInfo.statusBarHeight + 57 + 44
     } else {
       this.offsetTop = 57 + 'px'
+      this.top = 101
     }
+    this.getClassCode()
   },
   methods: {
+    // 获取三级分类
+    getClassCode() {
+      const params = {
+        code: 'FL20210425164016',
+      }
+      this.$axios.get(financingApi.get_product_code, { params }).then((res) => {
+        if (res.code === 200) {
+          this.classArr = res.data
+        }
+      })
+    },
+    chooes(idx) {
+      this.calssActive = idx
+    },
     scroll(e) {
       this.isFixed = e.isFixed
     },
     onClick() {
+      this.calssActive = -1
+      this.secondaryLabel = []
       this.initialize()
+      this.classArr.forEach((item, index) => {
+        if (item.name === this.titleName[this.active].name) {
+          this.secondaryLabel = item.children
+        }
+      })
     },
     initialize(changeObj) {
       this.pageNumber = 1
@@ -381,7 +401,7 @@ export default {
                 sales: elem.saleNum || 0,
                 activeTag: '', // 活动标签
                 url: '',
-                // desc: elem.desc, // 说明
+                desc: elem.desc, // 说明
                 id: elem.id,
               }
               if (index % 2 === 0) {
@@ -413,6 +433,7 @@ export default {
 .recommended {
   width: 100%;
   margin-top: 27px;
+
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
@@ -421,28 +442,30 @@ export default {
     padding-left: 20px;
   }
   ::v-deep.sp-tab {
-    padding: 0 32px;
+    padding: 0;
+    flex: 0 0 auto;
+    margin-right: 46px;
     .sp-tab__text {
       font-size: 32px;
       font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
       color: #999999;
     }
   }
 
   ::v-deep.sp-tabs__line {
+    display: none;
     width: 60px;
     height: 12px;
-    background-color: transparent;
-    background-image: linear-gradient(to right, #4974f5, transparent);
-    top: 32px;
-    display: none;
+    background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
+    border-radius: 6px;
+    top: 30px;
+    left: 34px;
   }
   ::v-deep.sp-tab--active {
-    // line-height: 32px;
+    font-weight: bold;
+    line-height: 32px;
     .sp-tab__text {
-      // font-size: 32px;
-      font-weight: bold;
+      font-size: 32px;
       font-family: PingFangSC-Regular, PingFang SC;
       color: #222222;
     }
@@ -451,83 +474,49 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    > span:last-child {
-      display: flex;
-      align-items: center;
-      height: 33px;
-      font-size: 22px;
-      padding: 0 12px;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
-      color: #999999;
-      border-radius: 16px;
-      line-height: 33px;
-      margin-top: 10px;
-    }
-    > .span--active {
-      height: 32px !important;
-      background: #4974f5;
-      color: #ffffff !important;
+    .title_tag {
+      position: absolute;
+      bottom: 24px;
+      right: 0;
+      width: 60px;
+      height: 12px;
+      background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
+      border-radius: 6px;
+      z-index: 2;
     }
   }
 
   .secondary-label {
-    > ul {
+    width: 100%;
+
+    padding: 0 20px;
+    padding-bottom: 20px;
+    background: #f5f5f5;
+    .class-box::-webkit-scrollbar {
+      display: none;
+    }
+    .class-box {
       width: 100%;
-      height: 56px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-top: 11px;
-      > li {
-        width: 164px;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      .class-name {
+        flex-shrink: 0;
         height: 56px;
         background: #ffffff;
         border-radius: 8px;
-        font-size: 24px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: bold;
-        color: #555555;
-        text-align: center;
         line-height: 56px;
+        padding: 0 19px;
+        margin-right: 10px;
+        font-size: 24px;
+        color: #555555;
       }
     }
   }
   .product-box {
     margin-top: 32px;
     width: 100%;
-    display: flex;
-    min-height: 1000px;
-    .product-box {
-      width: 50%;
-      padding-left: 20px;
-    }
-    .product-odd {
-      padding-left: 20px;
-    }
-    .product-event {
-      padding-left: 20px;
-    }
-    .hot-product {
-      width: 345px;
-      height: 518px;
-      background: #ffffff;
-      border-radius: 24px;
-      margin-bottom: 20px;
-      img {
-        width: 345px;
-        height: 518px;
-      }
-    }
-  }
-  ::v-deep.sp-tab--active {
-    // line-height: 32px;
-    .sp-tab__text {
-      // font-size: 32px;
-      font-weight: bold;
-      font-family: PingFangSC-Regular, PingFang SC;
-      color: #222222;
-    }
   }
 }
 </style>

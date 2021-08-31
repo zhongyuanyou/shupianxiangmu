@@ -3,9 +3,14 @@
     <div class="nav-content">
       <div
         class="content"
-        :style="{ overflowX: navList.length < 6 ? 'hidden' : '' }"
+        :style="{ overflowX: navList.length < 5 ? 'hidden' : '' }"
       >
-        <div v-for="(nav, index) in navList" :key="index" class="navs">
+        <div
+          v-for="(nav, index) in navList"
+          :key="index"
+          class="navs"
+          :style="{ marginRight: navList.length > 5 ? '16px' : '' }"
+        >
           <img
             :src="`${nav.icon}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
             alt=""
@@ -25,28 +30,28 @@ export default {
       default: () => {
         return [
           {
-            title: '企业信贷',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/4evlkrr6rsi0000.png',
+            title: '小程序',
+            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g8as29uy5e00000.png',
             url: '',
           },
           {
-            title: '企业抵押贷',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7vrewu11obk0000.png',
+            title: '电商运营',
+            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/9w68yknwru00000.png',
             url: '',
           },
           {
-            title: '个人信贷',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2ot1uzcy2v20000.png',
+            title: '网站建设',
+            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f1l4zlbscns0000.png',
             url: '',
           },
           {
-            title: '个人抵押贷',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/fd1uvha2wps0000.png',
+            title: '营销推广',
+            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
             url: '',
           },
           {
-            title: '免费咨询',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/e0sxb8n40qg0000.png',
+            title: '定制开发',
+            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7ratpz2wb1w0000.png',
             url: '',
           },
         ]
@@ -85,7 +90,7 @@ export default {
         flex-direction: column;
         align-items: center;
         flex-shrink: 0;
-        margin-right: 29px;
+        // margin-right: 29px;
         > img {
           width: 104px;
           height: 72px;
