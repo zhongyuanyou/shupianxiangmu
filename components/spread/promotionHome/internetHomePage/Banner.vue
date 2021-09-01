@@ -11,6 +11,10 @@
 <script>
 import { Swipe, SwipeItem } from '@chipspc/vant-dgg'
 export default {
+  components: {
+    [Swipe.name]: Swipe,
+    [SwipeItem.name]: SwipeItem,
+  },
   props: {
     images: {
       type: Array,
@@ -21,10 +25,6 @@ export default {
         ]
       },
     },
-  },
-  components: {
-    [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem,
   },
 }
 </script>
