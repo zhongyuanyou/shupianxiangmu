@@ -48,12 +48,31 @@
         >
           <div class="product-box">
             <div v-if="oddList.length > 0" class="product-odd">
-              <ProductItem
-                v-for="(proItem, proKey) of oddList"
-                :key="proKey"
-                class="product-item"
-                :product="proItem"
-              />
+              <div v-for="(proItem, proKey) of oddList" :key="proKey">
+                <ProductItem
+                  v-if="proKey !== 3"
+                  class="product-item"
+                  :product="proItem"
+                />
+                <div v-if="proKey === 3" class="content">
+                  <div class="content-box">
+                    <div class="box-left">
+                      <img
+                        src="https://cdn.shupian.cn/sp-pt/wap/images/eztp2h80bo00000.png"
+                        alt=""
+                      />
+                    </div>
+                    <div class="box-right">
+                      <div class="title">增长用户从拥有一款小程序开始</div>
+                      <div class="labs">
+                        <div v-for="(lab, index) in labs" :key="index">
+                          {{ lab }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </sp-list>
@@ -298,6 +317,7 @@ export default {
       top: 0,
       classArr: '',
       classCode: '',
+      labs: ['规划', '开发', '一站式服务'],
     }
   },
   computed: {
@@ -377,7 +397,7 @@ export default {
         .get(newSpreadApi.service_product_list, {
           params: {
             start: this.pageNumber,
-            limit: '14',
+            limit: '10',
             classCodes: type,
           },
         })
@@ -404,14 +424,12 @@ export default {
                 desc: elem.desc, // 说明
                 id: elem.id,
               }
-              if (index % 2 === 0) {
-                this.oddList.push(obj)
-              } else {
-                this.eventList.push(obj)
-              }
+              this.oddList.push(obj)
             })
+            this.oddList.splice(3, 0, {})
+            console.log(this.oddList, 444)
             this.loading = false
-            if (result.length < 14) this.finished = true
+            if (result.length < 10) this.finished = true
 
             return
           }
@@ -511,6 +529,58 @@ export default {
         margin-right: 10px;
         font-size: 24px;
         color: #555555;
+      }
+    }
+  }
+  .content {
+    width: 100%;
+    height: 240px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    .content-box {
+      width: 100%;
+      border-radius: 24px;
+      background: #fff;
+      display: flex;
+      .box-left {
+        width: 240px;
+        height: 240px;
+        border-top-left-radius: 24px;
+        border-bottom-left-radius: 24px;
+        display: flex;
+        > img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .box-right {
+        padding: 46px 32px;
+        .title {
+          font-size: 32px;
+          color: #222222;
+          letter-spacing: 0;
+          line-height: 44px;
+          font-weight: 700;
+          .textOverflow(2);
+        }
+        .labs {
+          display: flex;
+          align-items: center;
+          height: 41px;
+          flex-wrap: wrap;
+          overflow: hidden;
+          margin-top: 20px;
+          > div {
+            margin-right: 8px;
+            height: 41px;
+            line-height: 41px;
+            background: #f2f5ff;
+            border-radius: 8px;
+            padding: 0 24px;
+            font-size: 26px;
+            color: #547cf8;
+          }
+        }
       }
     }
   }

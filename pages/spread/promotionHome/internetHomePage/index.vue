@@ -279,7 +279,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
-          describe: item.ext2 || '优质选购',
+          children: item.children,
         })
       })
       // this.titleName = classArr

@@ -8,21 +8,29 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Nav
-        :roll-nav="rollNav"
-        class="navs"
-        :style="{ 'margin-top': marginTop + 'px' }"
-      />
+      <Banner></Banner>
     </div>
     <!-- E 头部和金刚区 -->
-
+    <NavBars
+      :roll-nav="rollNav"
+      class="navs"
+      :style="{ 'margin-top': marginTop + 'px' }"
+    />
+    <!-- 福利专区 S -->
+    <Welfare />
+    <!-- banner区 S -->
+    <BannerSwiper />
+    <!-- 免费工具 S -->
+    <FreeTool />
+    <!-- 经营必备 S -->
+    <ManagementMust />
     <!--S 广告区 -->
-    <Advertising
+    <!-- <Advertising
       v-if="gift.length > 0"
       :gift="gift"
       :pro-discounts="proDiscounts"
       :introduce="introduce"
-    />
+    /> -->
     <!--E 广告区 -->
 
     <!-- S 列表 -->
@@ -41,16 +49,28 @@ import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
 import NavTop from '@/components/spread/common/NavTop.vue'
-import Nav from '@/components/spread/common/Nav.vue'
-import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
+import Banner from '@/components/spread/promotionHome/internetHomePage/Banner.vue'
+// import Nav from '@/components/spread/common/Nav.vue'
+import NavBars from '@/components/spread/promotionHome/enterpriseService/NavBars.vue'
+import Welfare from '@/components/spread/promotionHome/enterpriseService/Welfare.vue'
+import BannerSwiper from '@/components/spread/promotionHome/enterpriseService/BannerSwiper.vue'
+import FreeTool from '@/components/spread/promotionHome/enterpriseService/FreeTool.vue'
+import ManagementMust from '@/components/spread/promotionHome/enterpriseService/ManagementMust.vue'
+// import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 export default {
   name: 'Index',
   components: {
     NavTop,
-    Nav,
-    Advertising,
+    Banner,
+    NavBars,
+    Welfare,
+    BannerSwiper,
+    FreeTool,
+    ManagementMust,
+    // Nav,
+    // Advertising,
     TabServiceItem,
     BtnPlanner,
   },
@@ -408,10 +428,9 @@ export default {
           }
         })
         this.rollNav.reverse()
-        // console.log(this.rollNav)
       }
     },
-
+    //
     // 薯片推广企业服务新人专属礼页面
     giftData(data) {
       if (data.length !== 0) {
@@ -458,6 +477,7 @@ export default {
     },
     // 产品分类
     productClassData(data) {
+      console.log(data, 1111)
       if (data.length === 0) return
       this.changeState = {
         type: data[0].ext1,
@@ -471,6 +491,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
+          children: item.children,
         })
       })
       this.titleName = classArr

@@ -434,6 +434,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
+          children: item.children,
         })
       })
       // this.titleName = classArr
