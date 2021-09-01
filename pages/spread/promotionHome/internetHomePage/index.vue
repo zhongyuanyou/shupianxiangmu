@@ -13,7 +13,7 @@
     </div>
     <!-- 金刚区 -->
     <!-- NavBar  s-->
-    <NavBar :navList="navList"></NavBar>
+    <NavBar :nav-list="navList"></NavBar>
     <!-- NavBar  e-->
     <!-- 活动专区 S -->
     <ActivityZone></ActivityZone>
@@ -92,7 +92,7 @@ export default {
           //  locationCodes:
           //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
           locationCodes:
-            'ad113229,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045',
+            'ad113229,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,ad100079',
           navCodes: 'nav100061',
           code: 'CRISPS-HLW',
         },
