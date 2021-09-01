@@ -7,7 +7,7 @@
           v-for="(tool, index) in toolList"
           :key="index"
           class="tool"
-          @click="jump(index)"
+          @click="jump(tool.url)"
         >
           <div class="img-box"><img :src="tool.img" alt="" /></div>
           <div class="name">{{ tool.name }}</div>
@@ -54,8 +54,10 @@ export default {
     },
   },
   methods: {
-    jump(index) {
-      console.log(index)
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }
@@ -64,7 +66,6 @@ export default {
 <style lang="less" scoped>
 .free-tool {
   width: 100%;
-  height: 227px;
   padding: 0 20px;
   margin-bottom: 20px;
   .content {
@@ -90,11 +91,11 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-right: 26px;
+        margin-right: 24px;
 
         .img-box {
-          width: 51px;
-          height: 51px;
+          width: 74px;
+          height: 74px;
           display: flex;
           > img {
             width: 100%;

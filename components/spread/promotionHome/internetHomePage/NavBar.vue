@@ -10,6 +10,7 @@
           :key="index"
           class="navs"
           :style="{ marginRight: navList.length > 5 ? '16px' : '' }"
+          @click="jump(nav.url)"
         >
           <img
             :src="`${nav.icon}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
@@ -60,6 +61,13 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
+    },
   },
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="banner-box">
     <sp-swipe :autoplay="10000">
       <sp-swipe-item v-for="(image, index) in images" :key="index">
-        <img v-lazy="image" />
+        <img v-lazy="image.img" @click="jump(image.url)" />
       </sp-swipe-item>
     </sp-swipe>
   </div>
@@ -19,11 +19,15 @@ export default {
     images: {
       type: Array,
       default: () => {
-        return [
-          'https://cdn.shupian.cn/sp-pt/wap/images/5nrpxax6my80000.png',
-          'https://cdn.shupian.cn/sp-pt/wap/images/8ld8amrd9000000.png',
-        ]
+        return [{ img: '', url: '' }]
       },
+    },
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }

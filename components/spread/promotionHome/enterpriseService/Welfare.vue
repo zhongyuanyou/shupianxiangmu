@@ -7,7 +7,7 @@
           v-for="(item, index) in welfareList"
           :key="index"
           class="item"
-          @click="jump(index)"
+          @click="jump(item.url)"
         >
           <img
             :src="`${item.img}?x-oss-process=image/resize,m_fill,w_329,h_134,limit_0`"
@@ -27,32 +27,18 @@ export default {
       default: () => {
         return [
           {
-            title: '千万补贴',
             url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/b00y6jdgvkk0000.png',
-          },
-          {
-            title: '限时秒杀',
-            url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2i046mnvvho0000.png',
-          },
-          {
-            title: '99专区',
-            url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/9h3rtpcbul80000.png',
-          },
-          {
-            title: '新客专享',
-            url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/9aim02xnqp00000.png',
+            img: '',
           },
         ]
       },
     },
   },
   methods: {
-    jump(idx) {
-      console.log(idx)
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }

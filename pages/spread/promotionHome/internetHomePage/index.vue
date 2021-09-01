@@ -8,7 +8,7 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Banner></Banner>
+      <Banner :images="banner"></Banner>
       <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- 金刚区 -->
@@ -91,8 +91,7 @@ export default {
         params: {
           //  locationCodes:
           //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
-          locationCodes:
-            'ad113229,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,ad100079',
+          locationCodes: 'ad100086',
           navCodes: 'nav100061',
           code: 'CRISPS-HLW',
         },
@@ -120,7 +119,7 @@ export default {
     return {
       placeholder: '请输入关键字',
       // marginTop: -120,
-      rollNav: [],
+      banner: [], // banner
       navList: [
         {
           title: '小程序',
@@ -148,31 +147,6 @@ export default {
           url: '',
         },
       ],
-      giftBagList: [{}],
-      advertisingList: {
-        limitedTime: {
-          title: '限时秒杀1',
-          describe: '爆款低价1',
-          imgUrl: '',
-          label: '',
-          url: '',
-        },
-        live: {
-          title: '企服直播1',
-          describe: '无门槛 新用户专享1',
-          product: [],
-        },
-        freeTrial: {
-          title: '免费试用1',
-          describe: '0元体验 名额有限1',
-          product: [],
-        },
-        course: {
-          title: '薯片课程1',
-          describe: '优质课程 创业首选1',
-          product: [],
-        },
-      },
       titleName: [
         // {
         //   code: 'FL20210425163778',
@@ -216,7 +190,6 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
@@ -247,25 +220,20 @@ export default {
     },
     // 金刚区数据处
     navDetail(data) {
+      console.log(data)
       if (data.length !== 0) {
         const navList = []
         data.forEach((item, index) => {
           const obj = {
-            code: index + 1,
-            sort: item.sort,
-            name: item.name,
+            title: item.name,
             url: item.url,
-            size: 'small',
-            label: '',
-            imageUrl: item.navigationImageUrl,
-            description: item.description || '',
-            execution: item.executionParameters || '',
+            icon: item.navigationImageUrl,
           }
           navList.push(obj)
         })
-        // this.rollNav = navList.reverse()
-        this.rollNav = navList
-        this.rollNav.sort((a, b) => {
+
+        this.navList = navList
+        this.navList.sort((a, b) => {
           return a.sort - b.sort
         })
       }
@@ -287,23 +255,16 @@ export default {
     getData(data) {
       data.forEach((item, idx) => {
         // 新人红包数据处理
-        if (item.locationCode === 'ad113229') {
+        if (item.locationCode === 'ad100086') {
           const bagList = []
           item.sortMaterialList.forEach((elem, index) => {
-            const msg = elem.materialList[0].materialDescription.split('#')
             const obj = {
-              // maxTitle: elem.materialList[0].materialName.split('#')[1],
-              code: index + 1,
-              headImage: elem.materialList[0].materialUrl,
-              // label: msg[0],
-              // title: elem.materialList[0].materialName.split('#')[1],
-              title: msg[0],
-              price: msg[1],
               url: elem.materialList[0].materialLink,
+              img: elem.materialList[0].materialUrl,
             }
             bagList.push(obj)
           })
-          this.giftBagList = bagList
+          this.banner = bagList
         }
         if (item.locationCode === 'ad113270') {
           item.sortMaterialList.forEach((elem, index) => {

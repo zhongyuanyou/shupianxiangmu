@@ -8,7 +8,7 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Banner></Banner>
+      <Banner v-show="bannerTop.length" :images="bannerTop"></Banner>
     </div>
     <!-- E 头部和金刚区 -->
     <NavBars
@@ -17,22 +17,13 @@
       :style="{ 'margin-top': marginTop + 'px' }"
     />
     <!-- 福利专区 S -->
-    <Welfare />
+    <Welfare v-show="welfareList.length" :welfareList="welfareList" />
     <!-- banner区 S -->
-    <BannerSwiper />
+    <BannerSwiper v-show="bannerBottom.length" :images="bannerBottom" />
     <!-- 免费工具 S -->
-    <FreeTool />
+    <FreeTool v-show="toolList.length" :toolList="toolList" />
     <!-- 经营必备 S -->
-    <ManagementMust />
-    <!--S 广告区 -->
-    <!-- <Advertising
-      v-if="gift.length > 0"
-      :gift="gift"
-      :pro-discounts="proDiscounts"
-      :introduce="introduce"
-    /> -->
-    <!--E 广告区 -->
-
+    <ManagementMust :topList="topList" :bottomList="bottomList" />
     <!-- S 列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
     </TabServiceItem>
@@ -75,7 +66,7 @@ export default {
     BtnPlanner,
   },
   async asyncData({ $axios }) {
-    const locations = 'ad113257,ad113252,ad113250,ad113227'
+    const locations = 'ad100080,ad100081,ad100082,ad100083,ad100084,ad100085'
     const code = 'nav100057'
     const centerCode = 'CRISPS-C-QYFW'
     const dataRes = defaultRes
@@ -111,71 +102,6 @@ export default {
       marginTop: 0,
       // 金刚区
       rollNav: [],
-      // 新人专属
-      gift: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/oqnu6gqeojk000.png',
-          url: '',
-          title: '有限公司注册',
-          price: '0元',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/13ue2gpa99mo000.png',
-          url: '',
-          title: '一般纳税人…',
-          price: '1元/月',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/b9s8062zh1s0000.png',
-          url: '',
-          title: '服务代金券',
-          price: '600元',
-        },
-      ],
-      // 直播补贴
-      proDiscounts: [
-        {
-          proTitle: '企服直播',
-          subheading: '行业大牛助力企业',
-          label: '直播中',
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/g3rg0424lp40000.png',
-          url: '',
-        },
-        {
-          proTitle: '1000万补贴',
-          subheading: '万款服务全补贴',
-          label: '优惠放送',
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/3s76r4rbngc0000.png',
-          url: '',
-        },
-      ],
-      // 活动广告位
-      introduce: [
-        {
-          title: '99元团',
-          subheading: '品质拼团',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2hzc75qqmue0000.png',
-          url: '',
-        },
-        {
-          title: '先服务后收费',
-          subheading: '平台担保放心购',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7qxwt6b084w0000.png',
-          url: '',
-        },
-        {
-          title: '领券中心',
-          subheading: '服务销冠',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/doh8spl2kkg0000.png',
-          url: '',
-        },
-        {
-          title: '帮找服务',
-          subheading: '免费高效',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/hpselpo4ug0000.png',
-          url: '',
-        },
-      ],
       // 列表导航
       titleName: [
         {
@@ -317,6 +243,12 @@ export default {
           type: '售前',
         },
       },
+      bannerTop: [], // 头部banner
+      welfareList: [], // 福利专区
+      bannerBottom: [], // banner
+      toolList: [], // 免费工具
+      topList: [], // 经营必备top
+      bottomList: [], // 经营必备bottom
     }
   },
   computed: {
@@ -357,14 +289,23 @@ export default {
         this.navList(resData.navs.nav100057 || [])
         this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
-          if (elem.locationCode === 'ad113250') {
-            this.giftData(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100080') {
+            this.getBanner(elem.sortMaterialList, 'ad100080')
           }
-          if (elem.locationCode === 'ad113252') {
-            this.proDiscountsData(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100081') {
+            this.getWelfare(elem.sortMaterialList)
           }
-          if (elem.locationCode === 'ad113257') {
-            this.introduceData(elem.sortMaterialList, resData)
+          if (elem.locationCode === 'ad100082') {
+            this.getBanner(elem.sortMaterialList, 'ad100082')
+          }
+          if (elem.locationCode === 'ad100083') {
+            this.getFreeTool(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad100084') {
+            this.getBusiness(elem.sortMaterialList, 'ad100084')
+          }
+          if (elem.locationCode === 'ad100085') {
+            this.getBusiness(elem.sortMaterialList, 'ad100085')
           }
         })
       }
@@ -430,54 +371,83 @@ export default {
         this.rollNav.reverse()
       }
     },
-    //
-    // 薯片推广企业服务新人专属礼页面
-    giftData(data) {
+    // banner广告位
+    getBanner(data, code) {
       if (data.length !== 0) {
-        this.gift = data.map((elem, index) => {
+        if (code === 'ad100080') {
+          this.bannerTop = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+            }
+          })
+        }
+        if (code === 'ad100082') {
+          this.bannerBottom = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+            }
+          })
+        }
+      } else {
+        this.bannerBottom = []
+        this.bannerTop = []
+      }
+    },
+    // 福利专区
+    getWelfare(data) {
+      if (data.length !== 0) {
+        this.welfareList = data.map((elem, index) => {
           return {
-            mainTitle:
-              index === 0 ? elem.materialList[0].materialDescription : '',
             img: elem.materialList[0].materialUrl,
             url: elem.materialList[0].materialLink,
-            title: elem.materialList[0].materialDescription.split(',')[0] || '',
-            price: elem.materialList[0].materialDescription.split(',')[1] || '',
           }
         })
       } else {
-        this.gift = []
+        this.welfareList = []
       }
     },
-    // 直播 补贴
-    proDiscountsData(data) {
-      this.proDiscounts = data.map((elem, index) => {
-        const labelData = ['直播中', '优惠放送']
-        return {
-          proTitle: elem.materialList[0].materialDescription.split(',')[0],
-          subheading: elem.materialList[0].materialDescription.split(',')[1],
-          label: labelData[index] || '',
-          bgImg: elem.materialList[0].materialUrl,
-          url: elem.materialList[0].materialLink,
-        }
-      })
-      console.log(this.proDiscountsData, 46546)
-    },
-    // 活动广告位
-    introduceData(data, resData) {
+    // 免费查询工具
+    getFreeTool(data) {
       if (data.length !== 0) {
-        this.introduce = data.map((elem, index) => {
+        this.toolList = data.map((elem, index) => {
           return {
-            title: elem.materialList[0].materialDescription.split(',')[0],
-            subheading: elem.materialList[0].materialDescription.split(',')[1],
             img: elem.materialList[0].materialUrl,
             url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].materialName.split('-')[2],
           }
         })
+      } else {
+        this.toolList = []
+      }
+    },
+    // 经营必备
+    getBusiness(data, code) {
+      if (data.length !== 0) {
+        if (code === 'ad100084') {
+          this.topList = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+            }
+          })
+        }
+        if (code === 'ad100085') {
+          this.bottomList = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+            }
+          })
+        }
+      } else {
+        this.topList = []
+        this.bottomList = []
       }
     },
     // 产品分类
     productClassData(data) {
-      console.log(data, 1111)
       if (data.length === 0) return
       this.changeState = {
         type: data[0].ext1,

@@ -14,7 +14,7 @@
             v-for="(item, index) in topList"
             :key="index"
             class="img-box"
-            @click="jump('top', index)"
+            @click="jump('top', item.url)"
           >
             <img
               :src="`${item.img}?x-oss-process=image/resize,m_fill,w_329,h_120,limit_0`"
@@ -27,7 +27,7 @@
             v-for="(item, index) in bottomList"
             :key="index"
             class="img-box"
-            @click="jump('bottom', index)"
+            @click="jump('bottom', item.url)"
           >
             <img
               :src="`${item.img}?x-oss-process=image/resize,m_fill,w_158,h_176,limit_0`"
@@ -48,14 +48,8 @@ export default {
       default: () => {
         return [
           {
-            name: '公司注册',
             url: '',
             img: 'https://cdn.shupian.cn/sp-pt/wap/images/bbt895d2jts0000.png',
-          },
-          {
-            name: '会计代理',
-            url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/9hznli6pxa80000.png',
           },
         ]
       },
@@ -65,37 +59,24 @@ export default {
       default: () => {
         return [
           {
-            name: '办证',
             url: '',
             img: 'https://cdn.shupian.cn/sp-pt/wap/images/ephzcy1vqe00000.png',
-          },
-          {
-            name: '银行开户',
-            url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/cpgxjqvbhag0000.png',
-          },
-          {
-            name: '商标注册',
-            url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/5jrpauyb0dk0000.png',
-          },
-          {
-            name: '旧账整理',
-            url: '',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/c82pe1vqxpc0000.png',
           },
         ]
       },
     },
   },
   methods: {
-    jump(type, index) {
+    jump(type, url) {
       if (type === 'more') {
-        console.log('跳转更多')
       } else if (type === 'top') {
-        console.log(index)
+        if (url.indexOf('http') !== -1) {
+          window.location.href = url
+        }
       } else if (type === 'bottom') {
-        console.log(index)
+        if (url.indexOf('http') !== -1) {
+          window.location.href = url
+        }
       }
     },
   },

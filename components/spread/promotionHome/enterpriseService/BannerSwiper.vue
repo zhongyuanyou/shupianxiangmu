@@ -32,14 +32,8 @@ export default {
       default: () => {
         return [
           {
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/9q080ym0keg0000.png',
+            img: '',
             url: '',
-            name: '',
-          },
-          {
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/9q080ym0keg0000.png',
-            url: '',
-            name: '',
           },
         ]
       },
@@ -47,7 +41,9 @@ export default {
   },
   methods: {
     jump(url) {
-      console.log(url)
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }
