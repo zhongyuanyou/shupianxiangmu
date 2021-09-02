@@ -16,19 +16,19 @@
     <NavBar :nav-list="navList"></NavBar>
     <!-- NavBar  e-->
     <!-- 活动专区 S -->
-    <ActivityZone></ActivityZone>
+    <ActivityZone :activity-list="activityList"></ActivityZone>
     <!-- 活动专区E -->
     <!--咨询广播区S  -->
     <Radio></Radio>
     <!-- 咨询广播区E -->
     <!-- 热销商品 S -->
-    <HotSales></HotSales>
+    <HotSales :images="images" :img-list="hotSales"></HotSales>
     <!-- 热销商品 E -->
     <!-- 活动专区 S -->
-    <Activity></Activity>
+    <Activity :activity-list="activities"></Activity>
     <!-- 活动专区 E -->
     <!-- 免费工具 S -->
-    <FreeTool></FreeTool>
+    <FreeTool :tool-list="freeTool"></FreeTool>
     <!-- 免费工具 E -->
     <!-- 规划师立即咨询 S -->
     <Planner :planner="pagePlanner"></Planner>
@@ -45,7 +45,7 @@
     <Recommended :title-name="titleName"></Recommended>
 
     <!-- 规划师 -->
-    <!-- <BtnPlanner ref="plannerIM" :planner="pagePlanner" /> -->
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
   </div>
 </template>
 
@@ -65,9 +65,8 @@ import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.
 // import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-// import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
-
 export default {
   components: {
     Header,
@@ -83,7 +82,7 @@ export default {
     // GiftBag,
     // Advertising,
     Recommended,
-    // BtnPlanner,
+    BtnPlanner,
   },
   async asyncData({ $axios }) {
     try {
@@ -91,7 +90,8 @@ export default {
         params: {
           //  locationCodes:
           //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
-          locationCodes: 'ad100086',
+          locationCodes:
+            'ad100086,ad100087,ad100088,ad100089,ad100090,ad100091',
           navCodes: 'nav100061',
           code: 'CRISPS-HLW',
         },
@@ -157,6 +157,11 @@ export default {
       ],
       // 页面规划师
       pagePlanner: {},
+      activityList: [], // 活动区1
+      images: {}, // 热销商品1
+      hotSales: [], // 热销商品列表
+      activities: [], // 活动区2
+      freeTool: [], // 免费工具
     }
   },
   computed: {
@@ -233,9 +238,7 @@ export default {
         })
 
         this.navList = navList
-        this.navList.sort((a, b) => {
-          return a.sort - b.sort
-        })
+        this.navList.reverse()
       }
     },
     // 产品分类
@@ -254,7 +257,7 @@ export default {
     },
     getData(data) {
       data.forEach((item, idx) => {
-        // 新人红包数据处理
+        // 头部banner
         if (item.locationCode === 'ad100086') {
           const bagList = []
           item.sortMaterialList.forEach((elem, index) => {
@@ -266,60 +269,63 @@ export default {
           })
           this.banner = bagList
         }
-        if (item.locationCode === 'ad113270') {
+        // 活动专区1
+        if (item.locationCode === 'ad100087') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
               code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.limitedTime = obj
+            this.activityList.push(obj)
           })
         }
-        if (item.locationCode === (this.isInApp ? 'ad100042' : 'ad113271')) {
+        // 热销商品
+        if (item.locationCode === 'ad100088') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
               code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.live = obj
+            this.images = obj
           })
         }
-        if (item.locationCode === 'ad113272') {
+        if (item.locationCode === 'ad100089') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
               code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.freeTrial = obj
+            this.hotSales.push(obj)
           })
         }
-        if (item.locationCode === (this.isInApp ? 'ad100045' : 'ad113274')) {
+        if (item.locationCode === 'ad100090') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
               code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.course = obj
+            this.activities.push(obj)
+          })
+        }
+        if (item.locationCode === 'ad100091') {
+          item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
+            console.log(resObj)
+            const obj = {
+              code: index,
+              name: resObj.materialName.split('-')[2],
+              img: resObj.materialUrl,
+              url: resObj.materialLink,
+            }
+            this.freeTool.push(obj)
           })
         }
       })

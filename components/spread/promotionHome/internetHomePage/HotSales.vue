@@ -12,18 +12,15 @@
         />
       </div>
       <div class="content-msg">
-        <div class="content-left" @click="jump">
-          <img
-            src="https://cdn.shupian.cn/sp-pt/wap/images/flmorlbvogw0000.png"
-            alt=""
-          />
+        <div class="content-left" @click="jump(images.url)">
+          <img :src="images.img" alt="" />
         </div>
         <div class="content-right">
           <div
             v-for="(item, index) in imgList"
             :key="index"
             class="img-box"
-            @click="jump2(index)"
+            @click="jump2(item.url)"
           >
             <img :src="item.img" alt="" />
           </div>
@@ -36,6 +33,15 @@
 <script>
 export default {
   props: {
+    images: {
+      type: Object,
+      default: () => {
+        return {
+          img: 'https://cdn.shupian.cn/sp-pt/wap/images/flmorlbvogw0000.png',
+          url: '',
+        }
+      },
+    },
     imgList: {
       type: Array,
       default: () => {
@@ -65,11 +71,15 @@ export default {
     },
   },
   methods: {
-    jump() {
-      console.log('跳转')
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
-    jump2(index) {
-      console.log(index)
+    jump2(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }
@@ -144,6 +154,7 @@ export default {
           height: 116px;
           border-radius: 12px;
           display: flex;
+          margin-bottom: 12px;
           > img {
             width: 100%;
             height: 100%;

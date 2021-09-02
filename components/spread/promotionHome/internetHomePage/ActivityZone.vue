@@ -1,7 +1,12 @@
 <template>
   <div class="activity-zone">
     <div class="activity-box">
-      <div v-for="(item, index) in activityList" :key="index" class="img-box">
+      <div
+        v-for="(item, index) in activityList"
+        :key="index"
+        class="img-box"
+        @click="jump(item.url)"
+      >
         <img
           :src="`${item.img}?x-oss-process=image/resize,m_fill,w_142,h_176,limit_0`"
           alt=""
@@ -46,6 +51,13 @@ export default {
           },
         ]
       },
+    },
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }

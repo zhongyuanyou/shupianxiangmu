@@ -17,13 +17,17 @@
       :style="{ 'margin-top': marginTop + 'px' }"
     />
     <!-- 福利专区 S -->
-    <Welfare v-show="welfareList.length" :welfareList="welfareList" />
+    <Welfare v-show="welfareList.length" :welfare-list="welfareList" />
     <!-- banner区 S -->
     <BannerSwiper v-show="bannerBottom.length" :images="bannerBottom" />
     <!-- 免费工具 S -->
-    <FreeTool v-show="toolList.length" :toolList="toolList" />
+    <FreeTool v-show="toolList.length" :tool-list="toolList" />
     <!-- 经营必备 S -->
-    <ManagementMust :topList="topList" :bottomList="bottomList" />
+    <ManagementMust
+      v-show="bottomList.length"
+      :top-list="topList"
+      :bottom-list="bottomList"
+    />
     <!-- S 列表 -->
     <TabServiceItem :title-name="titleName" @change="onChange">
     </TabServiceItem>

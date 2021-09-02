@@ -315,7 +315,7 @@ export default {
       max: 2,
       calssActive: -1,
       top: 0,
-      classArr: '',
+      classArr: [],
       classCode: '',
       labs: ['规划', '开发', '一站式服务'],
     }

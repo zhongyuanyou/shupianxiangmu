@@ -5,7 +5,7 @@
         v-for="(item, index) in activityList"
         :key="index"
         class="msg"
-        @click="jump(index)"
+        @click="jump(item.url)"
       >
         <img :src="item.img" alt="" />
       </div>
@@ -35,8 +35,10 @@ export default {
     },
   },
   methods: {
-    jump(index) {
-      console.log(index)
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }
