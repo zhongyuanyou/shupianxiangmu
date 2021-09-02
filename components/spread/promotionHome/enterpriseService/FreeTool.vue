@@ -1,7 +1,7 @@
 <template>
   <div class="free-tool">
     <div class="content">
-      <div class="title">免费工具查询</div>
+      <div class="title">{{ title }}</div>
       <div class="tool-box">
         <div
           v-for="(tool, index) in toolList"
@@ -51,6 +51,10 @@ export default {
           },
         ]
       },
+    },
+    title: {
+      type: String,
+      default: '免费工具查询',
     },
   },
   methods: {

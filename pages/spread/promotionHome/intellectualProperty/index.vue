@@ -1,35 +1,68 @@
 <template>
   <div class="intellectual-property">
     <!-- S 头部和金刚区 -->
-    <div class="top-background">
+    <!-- <div class="top-background">
       <NavTop
         title="知识产权"
         :disabled="true"
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Nav
-        :roll-nav="rollNav"
-        class="navs"
-        :style="{ 'margin-top': marginTop + 'px' }"
-      />
-    </div>
+     
+    </div> -->
     <!-- E 头部和金刚区 -->
-
+    <div class="head">
+      <Header
+        title="知识产权"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
+      <Banner></Banner>
+      <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
+    </div>
+    <!-- NavBar  s-->
+    <Nav
+      :roll-nav="rollNav"
+      class="navs"
+      :style="{ 'margin-top': marginTop + 'px' }"
+    />
+    <!-- NavBar  e-->
+    <!-- 知产头条S -->
+    <Headlines></Headlines>
+    <!-- 知产头条E -->
+    <!-- 新人大礼包S -->
+    <Giftbag :list="GiftList"></Giftbag>
+    <!-- 新人大礼包E -->
+    <!-- 先服务后收费S -->
+    <Firstservice :img-content="FirstList"></Firstservice>
+    <!-- 先服务后收费S -->
+    <!-- 特色服务S -->
+    <FreeTool title="特色服务"></FreeTool>
+    <!-- 特色服务E -->
+    <!-- 经营必备S -->
+    <ManagementMust />
+    <!-- 经营必备E -->
+    <!-- 补贴测算S -->
+    <Subsidy></Subsidy>
+    <!-- 补贴测算E -->
+    <!-- 推荐商品S -->
+    <Productlist></Productlist>
+    <!-- 推荐商品E -->
     <!-- S 新人专属 -->
-    <Exclusive
+    <!-- <Exclusive
       v-if="proTitle.length > 0"
       :pro-title="proTitle"
       :img-content="imgContent"
-    />
+    /> -->
     <!-- E 新人专属 -->
 
     <!--S 免费体验 薯片课程 -->
-    <Choiceness :content="content" />
+    <!-- <Choiceness :content="content" /> -->
     <!--E 免费体验 薯片课程-->
 
     <!-- S 列表 -->
-    <IntellectualList :title-name="titleName" />
+    <!-- <IntellectualList :title-name="titleName" /> -->
     <!-- E 列表 -->
 
     <!-- START 规划师-->
@@ -42,20 +75,39 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import NavTop from '@/components/spread/common/NavTop.vue'
+// import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
-import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
-import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
-import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList.vue'
+import Header from '@/components/spread/common/NavTop.vue'
+import Banner from '@/components/spread/promotionHome/internetHomePage/Banner.vue'
+import Headlines from '@/components/spread/promotionHome/intellectualProperty/Headlines.vue'
+import Giftbag from '@/components/spread/promotionHome/intellectualProperty/Giftbag.vue'
+import Firstservice from '@/components/spread/promotionHome/intellectualProperty/Firstservice.vue'
+import Subsidy from '@/components/spread/promotionHome/intellectualProperty/Subsidy.vue'
+import Productlist from '@/components/spread/promotionHome/intellectualProperty/Productlist.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import FreeTool from '@/components/spread/promotionHome/enterpriseService/FreeTool.vue'
+import ManagementMust from '@/components/spread/promotionHome/enterpriseService/ManagementMust.vue'
+// import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
+// import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
+// import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList.vue'
+
 export default {
   name: 'IntellectualProperty',
   components: {
-    NavTop,
+    // NavTop,
+    // Exclusive,
+    // Choiceness,
+    // IntellectualList,
+    Productlist,
+    Subsidy,
+    ManagementMust,
+    FreeTool,
+    Firstservice,
+    Giftbag,
+    Headlines,
     Nav,
-    Exclusive,
-    Choiceness,
-    IntellectualList,
+    Header,
+    Banner,
     BtnPlanner,
   },
   async asyncData({ $axios }) {
@@ -93,7 +145,7 @@ export default {
       placeholder: '请输入关键字',
       marginTop: 0,
       // 金刚区
-      rollNav: [],
+      // rollNav: [],
       // 新人专属
       proTitle: [
         {
@@ -261,6 +313,86 @@ export default {
           type: '售前',
         },
       },
+      navList1: [
+        {
+          title: '小程序',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g8as29uy5e00000.png',
+          url: '',
+        },
+        {
+          title: '电商运营',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/9w68yknwru00000.png',
+          url: '',
+        },
+        {
+          title: '网站建设',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f1l4zlbscns0000.png',
+          url: '',
+        },
+        {
+          title: '营销推广',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
+          url: '',
+        },
+        {
+          title: '定制开发',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7ratpz2wb1w0000.png',
+          url: '',
+        },
+        {
+          title: '小程序',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g8as29uy5e00000.png',
+          url: '',
+        },
+        {
+          title: '电商运营',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/9w68yknwru00000.png',
+          url: '',
+        },
+        {
+          title: '网站建设',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f1l4zlbscns0000.png',
+          url: '',
+        },
+        {
+          title: '营销推广',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
+          url: '',
+        },
+        {
+          title: '定制开发',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7ratpz2wb1w0000.png',
+          url: '',
+        },
+        {
+          title: '营销推广',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
+          url: '',
+        },
+      ], // nav列表
+      GiftList: [
+        'https://cdn.shupian.cn/sp-pt/wap/images/g9sw5ghb43c0000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/images/3pkag12g860000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
+        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
+      ], // 新人大礼包
+      FirstList: [
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/2jezar5e5jq0000.png',
+        },
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/3892wl2nxli0000.png',
+        },
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/83d724tlfgs0000.png',
+        },
+        {
+          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/ber28clfpf40000.png',
+        },
+      ], // 先服务后收费
     }
   },
   computed: {
@@ -566,6 +698,11 @@ export default {
   width: @spread-page-width;
   background: #f5f5f5;
   margin: 0 auto;
+  .head {
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/8un99iso7e40000.png');
+    background-repeat: no-repeat;
+    background-size: 100%, 100%;
+  }
   .top-background {
     // background: linear-gradient(0deg, #f5f5f5, #4974f5);
     background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)
