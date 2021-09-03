@@ -38,7 +38,7 @@
     <Firstservice :img-content="FirstList"></Firstservice>
     <!-- 先服务后收费S -->
     <!-- 特色服务S -->
-    <FreeTool title="特色服务" :toolList="toolList"></FreeTool>
+    <FreeTool title="特色服务" :tool-list="toolList"></FreeTool>
     <!-- 特色服务E -->
     <!-- 经营必备S -->
     <ManagementMust :top-list="businessTop" :bottom-list="businessBottom" />
@@ -47,7 +47,7 @@
     <Subsidy></Subsidy>
     <!-- 补贴测算E -->
     <!-- 推荐商品S -->
-    <Productlist></Productlist>
+    <Productlist :title-name="titleName"></Productlist>
     <!-- 推荐商品E -->
     <!-- S 新人专属 -->
     <!-- <Exclusive
@@ -505,6 +505,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
+          children: item.children,
         })
       })
       // this.titleName = classArr
@@ -548,7 +549,6 @@ export default {
             }
           )
           .then((res) => {
-            console.log(res, '调用规划师')
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
@@ -606,7 +606,6 @@ export default {
             execution.split(':')[1] || ''
           }":"${description}"}}`
           const jsonObj = JSON.parse(lastObj)
-          console.log(lastObj, execution.split(':')[0])
           this.$appFn.dggProperty(jsonObj, (res) => {})
           return
         }

@@ -26,6 +26,7 @@ const spreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/list.do`,
   knowledge_list: `${CHIPS_LAW_SPREAD_BASE_URL}/nk/law_knowledge/v1/knowledge_list`,
   knowledge_detail: `${CHIPS_LAW_SPREAD_BASE_URL}/nk/articlePage/v1/details.do`,
+  recommend_product: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/recommend_product_list.do`, // 推荐商品
 }
 const plannerApi = {
   planner: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/planner.do`,

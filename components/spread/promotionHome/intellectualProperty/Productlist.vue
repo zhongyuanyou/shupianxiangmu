@@ -21,7 +21,7 @@
         <!-- 二级分类 -->
         <sp-sticky :offset-top="top">
           <div
-            v-show="item.name !== '推荐'"
+            v-show="itemKey !== 0 && secondaryLabel.length"
             class="secondary-label"
             :style="{ paddingTop: isFixed ? '10px' : '' }"
           >
@@ -65,7 +65,8 @@ import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 // import product from '@/components/spread/promotionHome/internetHomePage/Product.vue'
 import ProductItem from '@/components/spread/promotionHome/internetHomePage/ProductItem.vue'
-import { newSpreadApi, financingApi } from '@/api/spread'
+
+import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
 export default {
   name: 'Recommended',
   components: {
@@ -296,12 +297,14 @@ export default {
       classArr: [],
       classCode: '',
       labs: ['规划', '开发', '一站式服务'],
+      activeCode: '',
     }
   },
   computed: {
     ...mapState({
       isInApp: (state) => state.app.isInApp,
       appInfo: (state) => state.app.appInfo, // app信息
+      currentCity: (state) => state.city.currentCity,
     }),
   },
   watch: {
@@ -317,22 +320,14 @@ export default {
       this.offsetTop = 57 + 'px'
       this.top = 101
     }
-    this.getClassCode()
   },
   methods: {
-    // 获取三级分类
-    getClassCode() {
-      const params = {
-        code: 'FL20210425164016',
-      }
-      this.$axios.get(financingApi.get_product_code, { params }).then((res) => {
-        if (res.code === 200) {
-          this.classArr = res.data
-        }
-      })
-    },
     chooes(idx) {
       this.calssActive = idx
+      this.activeCode = this.titleName[this.active].children[idx].ext1
+      this.pageNumber = 1
+      this.oddList = []
+      this.finished = false
     },
     scroll(e) {
       this.isFixed = e.isFixed
@@ -340,12 +335,10 @@ export default {
     onClick() {
       this.calssActive = -1
       this.secondaryLabel = []
+      this.oddList = []
+      this.activeCode = this.titleName[this.active].type
       this.initialize()
-      this.classArr.forEach((item, index) => {
-        if (item.name === this.titleName[this.active].name) {
-          this.secondaryLabel = item.children
-        }
-      })
+      this.secondaryLabel = this.titleName[this.active].children
     },
     initialize(changeObj) {
       this.pageNumber = 1
@@ -357,7 +350,6 @@ export default {
       // // 异步更新数据
       if (this.pageNumber === 1) {
         this.oddList = []
-        this.eventList = []
       }
       this.selectTab()
     },
@@ -365,61 +357,89 @@ export default {
       this.$parent.jumpLink(url)
     },
     // 请求数据
-    selectTab(item) {
+    async selectTab(item) {
       // 当前无数据不执行
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
+
       if (this.finished && !this.loading) return
       this.loading = true
-      const type = this.titleName[this.active].type
       // 2、调用接口
-      this.$axios
-        .get(newSpreadApi.service_product_list, {
-          params: {
-            start: this.pageNumber,
-            limit: '10',
-            classCodes: type,
-          },
-        })
-        .then((res) => {
-          // 调用回调函数处理数据
-          const result = res.data.records
-          if (res.code === 200 && result.length !== 0) {
-            if (res.data.pageNumber === 1) {
-              this.list = []
-            }
-            ++this.pageNumber
-            result.forEach((elem, index) => {
-              const obj = {
-                code: index + 1,
-                imageUrl:
-                  elem.img ||
-                  'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
-                title: elem.title,
-                labels: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
-                price: elem.price,
-                sales: elem.saleNum || 0,
-                activeTag: '', // 活动标签
-                url: '',
-                desc: elem.desc, // 说明
-                id: elem.id,
+      if (this.active !== 0) {
+        this.$axios
+          .get(newSpreadApi.service_product_list, {
+            params: {
+              start: this.pageNumber,
+              limit: '10',
+              classCodes: this.activeCode,
+            },
+          })
+          .then((res) => {
+            // 调用回调函数处理数据
+            const result = res.data.records
+            if (res.code === 200 && result.length !== 0) {
+              if (res.data.pageNumber === 1) {
+                this.list = []
               }
-              this.oddList.push(obj)
-            })
-            this.oddList.splice(3, 0, {})
-            console.log(this.oddList, 444)
+              ++this.pageNumber
+              result.forEach((elem, index) => {
+                const obj = {
+                  code: index + 1,
+                  imageUrl:
+                    elem.img ||
+                    'https://cdn.shupian.cn/crisps-product-packing%3Asell_goods%3A840087290498569750%3Apic%3ACOMDIC_TERMINAL_APP_1619769745000_kefu_1599649695799_oop68.png',
+                  title: elem.title,
+                  labels: elem.tabs || ['套餐优惠', '热销好品', '金牌团队'],
+                  price: elem.price,
+                  sales: elem.saleNum || 0,
+                  activeTag: '', // 活动标签
+                  url: '',
+                  desc: elem.desc, // 说明
+                  id: elem.id,
+                }
+                this.oddList.push(obj)
+              })
+              this.loading = false
+              if (result.length < 10) this.finished = true
+            } else {
+              this.loading = false
+              this.finished = true
+            }
+          })
+          .catch((err) => {
             this.loading = false
-            if (result.length < 10) this.finished = true
-
-            return
-          }
-          this.loading = false
-          this.finished = true
-        })
-        .catch((err) => {
-          this.loading = false
-          this.finished = true
-          this.error = true
-          console.log(err)
-        })
+            this.finished = true
+            this.error = true
+            console.log(err)
+          })
+      } else {
+        this.$axios
+          .post(spreadApi.recommend_product, {
+            userId: '',
+            deviceId: '9036341960355128675',
+            platform: 'APP',
+            areaCode: this.currentCity.code || '510100',
+            sceneId: 'app-zscqjhy-W-01',
+            formatIdOnes: 'FL20210425164438#FL20210425164496', // 商品一级分类集合，#作为分隔，知识产权分为版权，专利(FL20210425164496)和商标(FL20210425164438)
+            productType: 'PRO_CLASS_TYPE_SALES',
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              res.data.records.forEach((item, index) => {
+                item.imageUrl = item.img
+                this.oddList.push(item)
+              })
+              this.finished = true
+            } else {
+              this.finished = true
+            }
+          })
+          .catch((err) => {
+            this.finished = true
+            console.log(err)
+          })
+      }
     },
   },
 }

@@ -25,7 +25,7 @@
         <!-- 二级分类 -->
         <sp-sticky :offset-top="top">
           <div
-            v-show="items.name !== '推荐'"
+            v-show="proKey !== 0"
             class="secondary-label"
             :style="{ paddingTop: isFixed ? '10px' : '' }"
           >
@@ -60,18 +60,21 @@
                 @click="onMore(item.id)"
               >
                 <ProductCard v-if="itemKey !== 4" :product="item"></ProductCard>
-                <div v-else class="advertising-box">
+                <div
+                  v-else-if="proKey === 0 && itemKey === 4"
+                  class="advertising-box"
+                >
                   <div class="advertising">
                     <div class="title">您的企业需求是什么？</div>
                     <div class="list-box">
                       <div class="list">
                         <div
-                          v-for="(elem, index) in demandList"
+                          v-for="(elem, index) in recommendedList"
                           :key="index"
                           :class="[
                             demandActive === index ? 'item-active' : 'item',
                           ]"
-                          @click.stop="demandChooes(index)"
+                          @click.stop="demandChooes(index, elem.url)"
                         >
                           {{ elem.name }}
                         </div>
@@ -94,7 +97,7 @@ import { mapState } from 'vuex'
 import { Toast, Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/spread/promotionHome/enterpriseService/ProductCard.vue'
 // import EnterpriseList from '@/components/spread/promotionHome/common/EnterpriseList'
-import { newSpreadApi, financingApi } from '@/api/spread'
+import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'TabServiceItem',
@@ -109,6 +112,12 @@ export default {
   },
   props: {
     titleName: {
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+    recommendedList: {
       type: Array,
       default: () => {
         return []
@@ -142,6 +151,7 @@ export default {
       top: 0,
       classArr: '',
       classCode: '',
+      activeCode: '',
     }
   },
   computed: {
@@ -163,7 +173,14 @@ export default {
     // 获取三级分类
 
     chooes(idx) {
+      this.list = []
       this.calssActive = idx
+      this.activeCode = this.titleName[this.active].children[idx].ext1
+      this.pageNumber = 1
+      this.finished = false
+      this.loading = true
+      scrollTo(0, 800)
+      this.selectTab()
     },
     price(price) {
       if (price % 1) {
@@ -173,11 +190,11 @@ export default {
       }
     },
     onClick() {
-      // console.log(this.active)
-      // this.$emit('change', this.titleName[name])
+      this.activeCode = this.titleName[this.active].type
       this.initialize()
       this.calssActive = -1
       this.secondaryLabel = []
+      this.finished = false
     },
     scroll(e) {
       this.isFixed = e.isFixed
@@ -187,6 +204,7 @@ export default {
       this.pageNumber = 1
       this.finished = false
       this.loading = true
+      this.list = []
       this.onLoad()
     },
     onLoad() {
@@ -197,8 +215,9 @@ export default {
       this.selectTab()
     },
     // 分类选择
-    demandChooes(index) {
+    demandChooes(index, url) {
       this.demandActive = index
+      console.log(url)
     },
     onMore(id) {
       let base = ''
@@ -231,35 +250,25 @@ export default {
       }
     },
     // 请求数据
-    selectTab(item) {
+    selectTab() {
       // 当前无数据不执行
       if (this.finished && !this.loading) return
       this.loading = true
-      const type = this.titleName[this.active].type
-      const obj = {
-        start: this.pageNumber,
-        limit: '4',
-        classCodes: type,
-        naem: this.titleName[this.active].name,
-      }
-      console.log(obj, '请求数据')
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {
           params: {
             start: this.pageNumber,
             limit: '15',
-            classCodes: type,
+            classCodes: this.activeCode,
+            configFlg: 1,
           },
         })
         .then((res) => {
           // 调用回调函数处理数据
           const result = res.data.records
           if (res.code === 200 && result.length !== 0) {
-            if (res.data.pageNumber === 1) {
-              this.list = []
-            }
-            ++this.pageNumber
+            this.pageNumber++
             result.forEach((elem, index) => {
               this.list.push({
                 code: index + 1,
@@ -276,14 +285,15 @@ export default {
                 sales: elem.saleNum,
               })
             })
-            this.list.splic(3, 0, {})
-            this.loading = false
-            if (result.length < 15) this.finished = true
 
-            return
+            this.loading = false
+            if (result.length < 15) {
+              this.finished = true
+            }
+          } else {
+            this.loading = false
+            this.finished = true
           }
-          this.loading = false
-          this.finished = true
         })
         .catch((err) => {
           this.loading = false

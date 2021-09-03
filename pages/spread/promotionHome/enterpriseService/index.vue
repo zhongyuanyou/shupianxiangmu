@@ -29,7 +29,11 @@
       :bottom-list="bottomList"
     />
     <!-- S 列表 -->
-    <TabServiceItem :title-name="titleName" @change="onChange">
+    <TabServiceItem
+      :title-name="titleName"
+      :recommended-list="recommendedList"
+      @change="onChange"
+    >
     </TabServiceItem>
     <!-- E 列表 -->
 
@@ -70,7 +74,8 @@ export default {
     BtnPlanner,
   },
   async asyncData({ $axios }) {
-    const locations = 'ad100080,ad100081,ad100082,ad100083,ad100084,ad100085'
+    const locations =
+      'ad100080,ad100081,ad100082,ad100083,ad100084,ad100085,ad100108'
     const code = 'nav100057'
     const centerCode = 'CRISPS-C-QYFW'
     const dataRes = defaultRes
@@ -252,6 +257,7 @@ export default {
       toolList: [], // 免费工具
       topList: [], // 经营必备top
       bottomList: [], // 经营必备bottom
+      recommendedList: [],
     }
   },
   computed: {
@@ -309,6 +315,9 @@ export default {
           }
           if (elem.locationCode === 'ad100085') {
             this.getBusiness(elem.sortMaterialList, 'ad100085')
+          }
+          if (elem.locationCode === 'ad100108') {
+            this.getRecommendedList(elem.sortMaterialList)
           }
         })
       }
@@ -449,6 +458,20 @@ export default {
         this.bottomList = []
       }
     },
+    getRecommendedList(data) {
+      if (data.length !== 0) {
+        this.recommendedList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].materialName.split('-')[2],
+            title: elem.materialList[0].materialDescription,
+          }
+        })
+      } else {
+        this.recommendedList = []
+      }
+    },
     // 产品分类
     productClassData(data) {
       if (data.length === 0) return
@@ -468,6 +491,7 @@ export default {
         })
       })
       this.titleName = classArr
+      console.log(this.titleName)
     },
 
     // 列表导航

@@ -16,7 +16,10 @@
     <NavBar :nav-list="navList"></NavBar>
     <!-- NavBar  e-->
     <!-- 活动专区 S -->
-    <ActivityZone :activity-list="activityList"></ActivityZone>
+    <ActivityZone
+      v-show="activityList.length"
+      :activity-list="activityList"
+    ></ActivityZone>
     <!-- 活动专区E -->
     <!--咨询广播区S  -->
     <Radio></Radio>
@@ -42,7 +45,10 @@
     <!-- 活动功能展示 -->
     <!-- <Advertising :advertising-list="advertisingList"></Advertising> -->
     <!-- 产品列表 -->
-    <Recommended :title-name="titleName"></Recommended>
+    <Recommended
+      :title-name="titleName"
+      :recommended-banner="recommendedBanner"
+    ></Recommended>
 
     <!-- 规划师 -->
     <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
@@ -91,7 +97,7 @@ export default {
           //  locationCodes:
           //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
           locationCodes:
-            'ad100086,ad100087,ad100088,ad100089,ad100090,ad100091',
+            'ad100086,ad100087,ad100088,ad100089,ad100090,ad100091,ad100107',
           navCodes: 'nav100061',
           code: 'CRISPS-HLW',
         },
@@ -162,6 +168,7 @@ export default {
       hotSales: [], // 热销商品列表
       activities: [], // 活动区2
       freeTool: [], // 免费工具
+      recommendedBanner: [],
     }
   },
   computed: {
@@ -318,7 +325,6 @@ export default {
         if (item.locationCode === 'ad100091') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
-            console.log(resObj)
             const obj = {
               code: index,
               name: resObj.materialName.split('-')[2],
@@ -326,6 +332,17 @@ export default {
               url: resObj.materialLink,
             }
             this.freeTool.push(obj)
+          })
+        }
+        if (item.locationCode === 'ad100107') {
+          item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
+            const obj = {
+              code: index,
+              img: resObj.materialUrl,
+              url: resObj.materialLink,
+            }
+            this.recommendedBanner.push(obj)
           })
         }
       })

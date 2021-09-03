@@ -24,7 +24,7 @@
             <div class="num">{{ product.currentPrice }}</div>
             <div class="unit">元</div>
           </div>
-          <div class="sales">销量 {{ product.sales }}</div>
+          <!-- <div class="sales">销量 {{ product.sales }}</div> -->
         </div>
       </div>
     </div>
