@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="my-component">
-      <div v-for="(item, index) in list" :key="index" class="item">
+      <div
+        v-for="(item, index) in list"
+        :key="index"
+        class="item"
+        @click="jump(item.url)"
+      >
         <div class="item-wrap-img">
           <img class="item-img" :src="item.img" />
         </div>
@@ -20,6 +25,13 @@ export default {
   computed: {
     list() {
       return this.$parent.toolList
+    },
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') > -1) {
+        window.location.href = url
+      }
     },
   },
 }

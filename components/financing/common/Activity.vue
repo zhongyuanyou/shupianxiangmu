@@ -1,15 +1,21 @@
 <template>
   <div class="activity">
     <div class="activity-box">
-      <div v-for="(item, index) in activityList" :key="index" class="contnet">
-        <div class="title">{{ item.title }}</div>
+      <div
+        v-for="(item, index) in activityList"
+        :key="index"
+        class="contnet"
+        @click="jump(item.url)"
+      >
+        <img :src="item.img" alt="" />
+        <!-- <div class="title">{{ item.title }}</div>
         <div class="slogan">{{ item.slogan }}</div>
         <div class="img-box">
           <img
             :src="`${item.img}?x-oss-process=image/resize,m_fill,w_32,h_32,limit_0`"
             alt=""
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -24,24 +30,31 @@ export default {
         return [
           {
             title: '千万补贴',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/a5mwe2wvym80000.png',
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2a56yh9ydqf4000.png',
             url: '',
             slogan: '万款服务全补贴',
           },
           {
             title: '先服务后收费',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/8a1fy2mxstc0000.png',
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2c3sx9xvdias000.png',
             url: '',
             slogan: '平台担保放心购',
           },
           {
             title: '99元特卖',
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/e88p7gezzcw0000.png',
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/2874h1jfnajo000.png',
             url: '',
             slogan: '特价享超值优惠',
           },
         ]
       },
+    },
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') !== -1) {
+        window.location.href = url
+      }
     },
   },
 }
@@ -69,10 +82,13 @@ export default {
     .contnet {
       width: 230px;
       height: 128px;
-      background: #ffffff;
-      padding: 23px 20px;
       position: relative;
       overflow: hidden;
+      display: flex;
+      > img {
+        width: 100%;
+        height: 100%;
+      }
       .title {
         font-size: 26px;
         color: #222222;

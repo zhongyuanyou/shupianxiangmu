@@ -5,7 +5,12 @@
         class="content"
         :style="{ overflowX: navList.length < 6 ? 'hidden' : '' }"
       >
-        <div v-for="(nav, index) in navList" :key="index" class="navs">
+        <div
+          v-for="(nav, index) in navList"
+          :key="index"
+          class="navs"
+          @click="jump(nav.url)"
+        >
           <img
             :src="`${nav.icon}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
             alt=""
@@ -55,6 +60,13 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') > -1) {
+        window.location.href = url
+      }
+    },
   },
 }
 </script>

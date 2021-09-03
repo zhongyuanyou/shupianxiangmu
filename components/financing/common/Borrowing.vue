@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     freeBtn() {
-      console.log(11)
+      this.$router.push('/financing/financing')
       this.$emit('freeBtn')
     },
   },

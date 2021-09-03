@@ -32,16 +32,16 @@
     <Headlines></Headlines>
     <!-- 知产头条E -->
     <!-- 新人大礼包S -->
-    <Giftbag :list="GiftList"></Giftbag>
+    <Giftbag :list="GiftList" :gift="gift"></Giftbag>
     <!-- 新人大礼包E -->
     <!-- 先服务后收费S -->
     <Firstservice :img-content="FirstList"></Firstservice>
     <!-- 先服务后收费S -->
     <!-- 特色服务S -->
-    <FreeTool title="特色服务"></FreeTool>
+    <FreeTool title="特色服务" :toolList="toolList"></FreeTool>
     <!-- 特色服务E -->
     <!-- 经营必备S -->
-    <ManagementMust />
+    <ManagementMust :top-list="businessTop" :bottom-list="businessBottom" />
     <!-- 经营必备E -->
     <!-- 补贴测算S -->
     <Subsidy></Subsidy>
@@ -111,7 +111,8 @@ export default {
     BtnPlanner,
   },
   async asyncData({ $axios }) {
-    const locationCodes = 'ad113236,ad113279,ad113265,ad113277,ad100046'
+    const locationCodes =
+      'ad100097,ad100098,ad100099,ad100100,ad100102,ad100105'
     const navCodes = 'nav100060'
     const code = 'CRISPS-C-ZSCQ'
     const dataRes = defaultRes
@@ -145,7 +146,7 @@ export default {
       placeholder: '请输入关键字',
       marginTop: 0,
       // 金刚区
-      // rollNav: [],
+      rollNav: [],
       // 新人专属
       proTitle: [
         {
@@ -313,86 +314,12 @@ export default {
           type: '售前',
         },
       },
-      navList1: [
-        {
-          title: '小程序',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g8as29uy5e00000.png',
-          url: '',
-        },
-        {
-          title: '电商运营',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/9w68yknwru00000.png',
-          url: '',
-        },
-        {
-          title: '网站建设',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f1l4zlbscns0000.png',
-          url: '',
-        },
-        {
-          title: '营销推广',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
-          url: '',
-        },
-        {
-          title: '定制开发',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7ratpz2wb1w0000.png',
-          url: '',
-        },
-        {
-          title: '小程序',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g8as29uy5e00000.png',
-          url: '',
-        },
-        {
-          title: '电商运营',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/9w68yknwru00000.png',
-          url: '',
-        },
-        {
-          title: '网站建设',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f1l4zlbscns0000.png',
-          url: '',
-        },
-        {
-          title: '营销推广',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
-          url: '',
-        },
-        {
-          title: '定制开发',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7ratpz2wb1w0000.png',
-          url: '',
-        },
-        {
-          title: '营销推广',
-          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
-          url: '',
-        },
-      ], // nav列表
-      GiftList: [
-        'https://cdn.shupian.cn/sp-pt/wap/images/g9sw5ghb43c0000.png',
-        'https://cdn.shupian.cn/sp-pt/wap/images/3pkag12g860000.png',
-        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
-        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
-        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
-        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
-        'https://cdn.shupian.cn/sp-pt/wap/images/1qmfmok1whnk000.png',
-      ], // 新人大礼包
-      FirstList: [
-        {
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/2jezar5e5jq0000.png',
-        },
-        {
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/3892wl2nxli0000.png',
-        },
-        {
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/83d724tlfgs0000.png',
-        },
-        {
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/ber28clfpf40000.png',
-        },
-      ], // 先服务后收费
+      gift: [],
+      GiftList: [], // 新人大礼包
+      FirstList: [], // 先服务后收费
+      toolList: [], // 特色服务列表
+      businessTop: [], // 经营必备1
+      businessBottom: [], // 经营必备2
     }
   },
   computed: {
@@ -412,17 +339,23 @@ export default {
         this.navList(resData.navs.nav100060 || [])
         this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
-          if (elem.locationCode === 'ad113236') {
-            this.proTitleData(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100097') {
+            this.proTitleData(elem.sortMaterialList, 'ad100097')
           }
-          if (elem.locationCode === 'ad113279') {
+          if (elem.locationCode === 'ad100098') {
+            this.proTitleData(elem.sortMaterialList, 'ad100098')
+          }
+          if (elem.locationCode === 'ad100099') {
             this.imgContentData(elem.sortMaterialList)
           }
-          if (elem.locationCode === 'ad113265') {
+          if (elem.locationCode === 'ad100100') {
             this.experience(elem.sortMaterialList)
           }
-          if (elem.locationCode === (this.isInApp ? 'ad100046' : 'ad113277')) {
-            this.curriculum(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100102') {
+            this.curriculum(elem.sortMaterialList, 'top')
+          }
+          if (elem.locationCode === 'ad100105') {
+            this.curriculum(elem.sortMaterialList, 'bottom')
           }
         })
       }
@@ -488,37 +421,41 @@ export default {
             execution: elem.executionParameters || '',
           }
         })
-        // this.rollNav.reverse()
+
         this.rollNav.sort((a, b) => {
           return a.sort - b.sort
         })
       }
     },
     // 新人专属
-    proTitleData(data) {
+    proTitleData(data, code) {
       if (data.length !== 0) {
-        this.proTitle = data.map((elem, index) => {
-          const data = elem.materialList[0]
-          return {
-            title: data.materialName.split('#')[1] || '',
-            price: parseInt(data.materialDescription.split('#')[0]),
-            label: data.materialDescription.split('#')[1],
-            count: data.materialDescription.split('#')[2],
-            img: data.materialUrl,
-            url: data.materialLink,
-          }
-        })
+        if (code === 'ad100097') {
+          this.gift = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink,
+            }
+          })
+        } else if (code === 'ad100098') {
+          this.GiftList = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink,
+            }
+          })
+        }
       }
     },
     // 广告说明
     imgContentData(data) {
       if (data.length !== 0) {
-        this.imgContent = data.map((elem, index) => {
+        this.FirstList = data.map((elem, index) => {
           const data = elem.materialList[0]
           return {
             bgImg: data.materialUrl,
-            title: data.materialName.split('#')[1] || '',
-            assistantTitle: data.materialDescription,
             url: data.materialLink,
           }
         })
@@ -527,36 +464,40 @@ export default {
     // 体验 课程
     experience(data) {
       if (data.length !== 0) {
-        this.content.experience.imgVal = data.map((elem, index) => {
+        this.toolList = data.map((elem, index) => {
           const data = elem.materialList[0]
           return {
             img: data.materialUrl,
-            title: data.materialName.split('#')[1],
-            imgNmae: data.materialDescription.split('#')[0],
-            label: data.materialDescription.split('#')[1],
-            url: data.materialLink || '',
+            name: data.materialName.split('-')[2],
+            url: data.materialLink,
           }
         })
       }
     },
-    curriculum(data) {
+    curriculum(data, type) {
       if (data.length !== 0) {
-        this.content.curriculum.imgVal = data.map((elem, index) => {
-          const data = elem.materialList[0]
-          return {
-            img: data.materialUrl,
-            title: data.materialName.split('#')[1],
-            imgNmae: data.materialDescription.split('#')[0],
-            label: data.materialDescription.split('#')[1],
-            url: data.materialLink || '',
-          }
-        })
+        if (type === 'top') {
+          this.businessTop = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink || '',
+            }
+          })
+        } else if (type === 'bottom') {
+          this.businessBottom = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink || '',
+            }
+          })
+        }
       }
     },
 
     // 列表导航
     productClassData(data) {
-      console.log(1344, data)
       if (data.length === 0) return
       // const classArr = []
       data.forEach((item, index) => {

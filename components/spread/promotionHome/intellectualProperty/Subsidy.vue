@@ -5,8 +5,8 @@
       <span v-for="(item, index) in tagList" :key="index">{{ item }}</span>
     </div>
     <div class="box">
-      <div class="btn">免费评估补贴金额</div>
-      <div class="tit">
+      <div class="btn" @click="jump">免费评估补贴金额</div>
+      <div class="tit" @click="jump1">
         <p>完善资料测算更精准</p>
         <my-icon
           name="order_ic_listnext"
@@ -19,12 +19,29 @@
 </template>
 
 <script>
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'Subsidy',
   data() {
     return {
       tagList: ['申报早规划', '补贴不漏报', '智能精匹配'],
     }
+  },
+  methods: {
+    jump() {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}mtool.shupian.cn/policySubsidy/measure`
+    },
+    jump1() {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}mtool.shupian.cn/policySubsidy/measure/perfectData`
+    },
   },
 }
 </script>

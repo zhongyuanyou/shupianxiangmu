@@ -24,7 +24,7 @@
             <div class="num">{{ price(product.price) }}</div>
             <div class="unit">元</div>
           </div>
-          <div class="sales">销量 {{ product.sales }}</div>
+          <!-- <div class="sales">销量 {{ product.sales }}</div> -->
         </div>
       </div>
     </div>
@@ -114,12 +114,6 @@ export default {
       border-radius: 12px;
       display: flex;
       flex-shrink: 0;
-      background-image: radial-gradient(
-        50% 176%,
-        #46494d 50%,
-        #797d83 50%,
-        #414347 100%
-      );
       > img {
         width: 100%;
         height: 100%;

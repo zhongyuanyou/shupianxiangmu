@@ -54,7 +54,10 @@
                   class="product-item"
                   :product="proItem"
                 />
-                <div v-if="proKey === 3" class="content">
+                <div
+                  v-if="proKey === 3 && item.name === '推荐'"
+                  class="content"
+                >
                   <div class="content-box">
                     <div class="box-left">
                       <img
@@ -426,8 +429,10 @@ export default {
               }
               this.oddList.push(obj)
             })
-            this.oddList.splice(3, 0, {})
-            console.log(this.oddList, 444)
+            if (this.pageNumber === 1) {
+              this.oddList.splice(3, 0, {})
+            }
+
             this.loading = false
             if (result.length < 10) this.finished = true
 

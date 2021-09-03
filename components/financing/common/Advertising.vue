@@ -1,7 +1,12 @@
 <template>
   <div class="advertising">
     <div class="advertising-box">
-      <div v-for="(item, index) in adList" :key="index" class="ad-msg">
+      <div
+        v-for="(item, index) in adList"
+        :key="index"
+        class="ad-msg"
+        @click="jump(item.url)"
+      >
         <div class="title-box">
           <div class="title">{{ item.title }}</div>
           <div
@@ -63,6 +68,13 @@ export default {
           },
         ]
       },
+    },
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') > -1) {
+        window.location.href = url
+      }
     },
   },
 }
