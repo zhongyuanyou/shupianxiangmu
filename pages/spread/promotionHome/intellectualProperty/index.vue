@@ -482,6 +482,7 @@ export default {
             return {
               img: data.materialUrl,
               url: data.materialLink || '',
+              code: data.materialDescription,
             }
           })
         } else if (type === 'bottom') {
@@ -490,6 +491,7 @@ export default {
             return {
               img: data.materialUrl,
               url: data.materialLink || '',
+              code: data.materialDescription,
             }
           })
         }

@@ -284,15 +284,18 @@ export default {
                 slogan: activity.materialDescription.split('#')[1],
                 img: activity.materialUrl,
                 url: activity.materialLink,
+                type: activity.executeParam,
               }
               this.activities.push(obj)
             })
+            console.log(this.activities)
             break
           }
           // 新人礼包广告位
           case 'ad100094': {
             item.sortMaterialList.forEach((elem, idx) => {
               const projec = elem.materialList[0]
+
               const obj = {
                 title: projec.materialName.split('-')[2],
                 img: projec.materialUrl,
