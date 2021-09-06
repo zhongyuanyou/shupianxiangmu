@@ -119,7 +119,7 @@ module.exports = {
     { src: '@/plugins/axios', ssr: true },
     { src: '@/plugins/router', ssr: false },
     { src: '@/plugins/my-icon', ssr: true },
-    { src: '@/plugins/vconsole', ssr: false },
+    { src: '@/plugins/vconsole', ssr: true },
     { src: '@/plugins/app-sdk', ssr: false },
     { src: '@/plugins/lazyload', ssr: true },
     { src: '@/plugins/oss', ssr: true },

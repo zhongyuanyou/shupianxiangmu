@@ -229,9 +229,9 @@ export default {
             console.log(res)
           }
         )
-        return
+      } else {
+        window.location.href = 'https://m.shupian.cn/search/'
       }
-      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 处理导航数据
     handleNavData(navsData) {
@@ -378,13 +378,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
-          return
         } else {
-          this.$router.push(url)
-          return
+          this.$refs.plannerIM.onlineConsult()
         }
       }
-      this.$refs.plannerIM.onlineConsult()
     },
     jumpLink2(url, title) {
       let base = ''
