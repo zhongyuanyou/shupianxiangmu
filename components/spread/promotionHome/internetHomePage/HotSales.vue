@@ -12,7 +12,7 @@
         />
       </div>
       <div class="content-msg">
-        <div class="content-left" @click="jump(images.url)">
+        <div class="content-left" @click="jumpLink(images.url)">
           <img :src="images.img" alt="" />
         </div>
         <div class="content-right">
@@ -20,7 +20,7 @@
             v-for="(item, index) in imgList"
             :key="index"
             class="img-box"
-            @click="jump2(item.url)"
+            @click="jumpLink(item.url)"
           >
             <img :src="item.img" alt="" />
           </div>
@@ -71,15 +71,8 @@ export default {
     },
   },
   methods: {
-    jump(url) {
-      if (url.indexOf('http') !== -1) {
-        window.location.href = url
-      }
-    },
-    jump2(url) {
-      if (url.indexOf('http') !== -1) {
-        window.location.href = url
-      }
+    jumpLink(url) {
+      this.$parent.jumpLink(url)
     },
   },
 }
@@ -135,12 +128,14 @@ export default {
         flex-shrink: 0;
         width: 202px;
         height: 244px;
-        background-image: linear-gradient(-46deg, #edf4ff 0%, #f7fbff 100%);
+        // background-image: linear-gradient(-46deg, #edf4ff 0%, #f7fbff 100%);
         border-radius: 12px;
+        border-color: transparent;
         > img {
           width: 100%;
           height: 100%;
           border-radius: 12px;
+          border-color: transparent;
         }
       }
       .content-right {

@@ -196,6 +196,8 @@ export default {
      */
 
     creatImSessionMixin(data) {
+      this.$xToast.showLoading({ message: '正在联系规划师...' })
+
       const userInfo = this.$store.state.user.userInfo
       if (userInfo) {
         let params = {

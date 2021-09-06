@@ -28,7 +28,7 @@
     <HotSales :images="images" :img-list="hotSales"></HotSales>
     <!-- 热销商品 E -->
     <!-- 活动专区 S -->
-    <Activity :activity-list="activities"></Activity>
+    <Activity :ad-list="activities"></Activity>
     <!-- 活动专区 E -->
     <!-- 免费工具 S -->
     <FreeTool :tool-list="freeTool"></FreeTool>
@@ -97,7 +97,7 @@ export default {
           //  locationCodes:
           //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
           locationCodes:
-            'ad100086,ad100087,ad100088,ad100089,ad100090,ad100091,ad100107',
+            'ad100086,ad100087,ad100088,ad100089,ad100090,ad100091,ad100107,ad100109,ad100111',
           navCodes: 'nav100061',
           code: 'CRISPS-HLW',
         },
@@ -311,13 +311,17 @@ export default {
             this.hotSales.push(obj)
           })
         }
-        if (item.locationCode === 'ad100090') {
+        if (item.locationCode === (this.isInApp ? 'ad100109' : 'ad100111')) {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
+            console.log(resObj)
             const obj = {
               code: index,
               img: resObj.materialUrl,
               url: resObj.materialLink,
+              title: resObj.materialName.split('-')[2],
+              slogan: resObj.materialDescription,
+              tag: resObj.materialName.split('-')[3] || '',
             }
             this.activities.push(obj)
           })

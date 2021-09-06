@@ -10,7 +10,7 @@
       />
       <div class="right">
         <div v-for="(item, index) in list" :key="index" class="div-box">
-          <img :src="item.img" alt="" @click="jump(item.url)" />
+          <img :src="item.img" alt="" @click="jumpLink(item.url)" />
         </div>
       </div>
     </div>
@@ -38,8 +38,8 @@ export default {
     console.log(this.list)
   },
   methods: {
-    jump(url) {
-      console.log(url)
+    jumpLink(url) {
+      this.$parent.jumpLink(url)
     },
   },
 }

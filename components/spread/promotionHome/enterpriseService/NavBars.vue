@@ -54,8 +54,8 @@
               class="img-second"
             />
           </div>
-          <div class="content">进入直播</div>
-          <div class="right">
+          <div class="content" @click="jump()">进入直播</div>
+          <div class="right" @click="jump()">
             <img
               src="https://cdn.shupian.cn/sp-pt/wap/images/7x08ukaxwdo0000.png?x-oss-process=image/resize,m_fill,w_8,h_14,limit_0"
               alt=""
@@ -167,6 +167,9 @@ export default {
           break
       }
       return url
+    },
+    jump() {
+      this.$parent.jump()
     },
   },
 }

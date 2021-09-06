@@ -70,13 +70,9 @@ export default {
     jump(type, url) {
       if (type === 'more') {
       } else if (type === 'top') {
-        if (url.indexOf('http') !== -1) {
-          window.location.href = url
-        }
+        this.$parent.jumpLink(url)
       } else if (type === 'bottom') {
-        if (url.indexOf('http') !== -1) {
-          window.location.href = url
-        }
+        this.$parent.jumpLink(url)
       }
     },
   },

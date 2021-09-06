@@ -24,9 +24,7 @@ export default {
   },
   methods: {
     onMore(url) {
-      if (url.indexOf('http') !== -1) {
-        window.location.href = url
-      }
+      this.$parent.jumpLink(url)
     },
   },
 }

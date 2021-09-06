@@ -58,8 +58,10 @@ import ManagementMust from '@/components/spread/promotionHome/enterpriseService/
 // import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import openappChips from '@/mixins/openappChips'
 export default {
   name: 'Index',
+  mixins: [openappChips],
   components: {
     NavTop,
     Banner,
@@ -328,7 +330,6 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
@@ -568,14 +569,95 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url) {
+    jumpLink(url, description, execution) {
+      // if (name === '全部服务') {
+      //   this.$router.push('/financing/category')
+      //   return
+      // }
+      // app跳转
+      try {
+        // 更多路由
+        if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const androidRouter = {
+            path: '/common/android/SingleWeb',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+          return
+        }
+        // 产品列表路由
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
+      }
       if (url) {
+        if (url.indexOf('/spread/') > -1) {
+          this.$router.push(url)
+          return
+        }
         if (url.indexOf('http') > -1) {
           window.location.href = url
           return
         }
       }
       this.$refs.plannerIM.onlineConsult()
+    },
+    jump() {
+      if (!this.isInApp) {
+        console.log(this.thisType)
+        this.openApp()
+      } else {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSTabBarViewController///push/animation',
+          parameter: {
+            selectedIndex: '3',
+          },
+        }
+        const androidRouter = {
+          path: '/main/android/main',
+          parameter: {
+            selectedIndex: 3,
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+      }
     },
   },
   head() {

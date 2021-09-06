@@ -41,9 +41,7 @@ export default {
   },
   methods: {
     jump(url) {
-      if (url.indexOf('http') !== -1) {
-        window.location.href = url
-      }
+      this.$parent.jumpLink(url)
     },
   },
 }
