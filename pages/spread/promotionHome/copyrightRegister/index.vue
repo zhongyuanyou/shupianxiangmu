@@ -1,6 +1,6 @@
 <template>
   <div class="container_body">
-    <div class="container" :style="{ height: userPhone ? '456px' : '' }">
+    <div class="container">
       <sp-sticky @scroll="handleScroll">
         <div
           class="container_header"
@@ -25,7 +25,10 @@
           </div>
         </div>
       </sp-sticky>
-      <div class="container_form">
+      <div
+        class="container_form"
+        :style="isInApp && appType === 'IOS' ? 'margin-top:110px' : ''"
+      >
         <div class="form_title">
           <img :src="imgLeft" alt="" />
           <p>我的版权能否登记</p>
@@ -722,7 +725,8 @@ input:-webkit-autofill {
       }
     }
     width: 100%;
-    height: 1012px;
+    // height: 1012px;
+    padding-bottom: 20px;
     background: url('https://cdn.shupian.cn/sp-pt/wap/9pj2y0rwmfw0000.png')
       no-repeat;
     background-size: 100%;
@@ -733,10 +737,10 @@ input:-webkit-autofill {
       background: #ffffff;
       box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.06);
       border-radius: 24px;
-      position: absolute;
-      top: 340px;
-      left: 20px;
+      //   position: absolute;
       margin: 0 auto;
+      margin-top: 232px;
+      padding: 64px 0 20px;
       .form_title {
         position: relative;
         .flexMixin();
@@ -744,7 +748,7 @@ input:-webkit-autofill {
         font: bold 36px/34px @font-medium;
         color: #222222;
         justify-content: center;
-        margin: 64px 0 16px 0;
+        margin-bottom: 16px;
         img {
           width: 38px;
           height: 27px;
