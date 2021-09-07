@@ -249,7 +249,7 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '企业服务聚合页_底部展位_在线咨询',
+          name: '企业服务页规划师展位点击',
           type: '售前',
         },
       },
@@ -564,6 +564,14 @@ export default {
                 imgSrc: res.data[0].imgaes,
               }
             }
+            // @--神策埋点-浏览事件-只执行一次
+            window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+              name: `企业服务页规划师展位曝光`,
+              track_code: this.isInApp ? 'SPP001118' : 'SPW000117',
+              recommend_number: '',
+              planner_number: this.pagePlanner.jobNum,
+              planner_name: this.pagePlanner.name,
+            })
           })
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)

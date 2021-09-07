@@ -51,7 +51,7 @@
     ></Recommended>
 
     <!-- 规划师 -->
-    <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
   </div>
 </template>
 
@@ -163,6 +163,13 @@ export default {
       ],
       // 页面规划师
       pagePlanner: {},
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: 'IT服务页规划师展位点击',
+          type: '售前',
+        },
+      },
       activityList: [], // 活动区1
       images: {}, // 热销商品1
       hotSales: [], // 热销商品列表
@@ -400,6 +407,14 @@ export default {
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,
               }
+              // @--神策埋点-浏览事件-只执行一次
+              window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+                name: `IT服务页规划师展位曝光`,
+                track_code: this.isInApp ? 'SPP001126' : 'SPP001125',
+                recommend_number: '',
+                planner_number: this.pagePlanner.jobNum,
+                planner_name: this.pagePlanner.name,
+              })
             }
           })
       } catch (error) {

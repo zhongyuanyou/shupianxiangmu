@@ -310,7 +310,7 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '知识产权聚合页_底部展位_在线咨询',
+          name: '知识产权页规划师展位点击',
           type: '售前',
         },
       },
@@ -558,6 +558,14 @@ export default {
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,
               }
+              // @--神策埋点-浏览事件-只执行一次
+              window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+                name: `知识产权页规划师展位曝光`,
+                track_code: this.isInApp ? 'SPP001122' : 'SPW000121',
+                recommend_number: '',
+                planner_number: this.pagePlanner.jobNum,
+                planner_name: this.pagePlanner.name,
+              })
             }
           })
       } catch (error) {

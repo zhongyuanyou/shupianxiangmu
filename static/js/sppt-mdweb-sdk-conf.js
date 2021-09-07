@@ -1,7 +1,7 @@
 const SPPTMDCONFIG = {
   platform_type: 'Web', // 类型
   app_name: 'web薯推广页', // 名称
-  server_url: window.location.origin.match('shupian.dgg.cn')
+  server_url: window.location.origin.match('https://mtg.shupian.cn')
     ? 'https://shence.dgg.cn:6443/sa?project=production' // 正式项目地址
     : 'https://shence.dgg.cn:6443/sa?project=default', // 测试项目地址 project=default
   show_log: true, // 打印日志
