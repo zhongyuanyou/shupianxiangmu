@@ -468,7 +468,7 @@ export default {
             img: elem.materialList[0].materialUrl,
             url: elem.materialList[0].materialLink,
             name: elem.materialList[0].materialName.split('-')[2],
-            title: elem.materialList[0].materialDescription,
+            code: elem.materialList[0].materialDescription,
           }
         })
       } else {
@@ -494,7 +494,6 @@ export default {
         })
       })
       this.titleName = classArr
-      console.log(this.titleName)
     },
 
     // 列表导航

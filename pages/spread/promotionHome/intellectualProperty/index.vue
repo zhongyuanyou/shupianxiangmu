@@ -112,7 +112,7 @@ export default {
   },
   async asyncData({ $axios }) {
     const locationCodes =
-      'ad100097,ad100098,ad100099,ad100100,ad100102,ad100105'
+      'ad100095,ad100097,ad100098,ad100099,ad100100,ad100102,ad100105'
     const navCodes = 'nav100060'
     const code = 'CRISPS-C-ZSCQ'
     const dataRes = defaultRes

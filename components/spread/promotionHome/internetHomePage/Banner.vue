@@ -2,7 +2,7 @@
   <div class="banner-box">
     <sp-swipe :autoplay="10000">
       <sp-swipe-item v-for="(image, index) in images" :key="index">
-        <img v-lazy="image.img" @click="jump(image.url)" />
+        <img :src="image.img" @click="jump(image.url)" />
       </sp-swipe-item>
     </sp-swipe>
   </div>

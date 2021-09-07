@@ -42,6 +42,7 @@
 
 <script>
 import { mapState } from 'vuex'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
     topList: {
@@ -76,8 +77,13 @@ export default {
   },
   methods: {
     jump(type, url, code) {
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+
       if (type === 'more') {
-        window.location.href = 'https://tm.shupian.cn/list/transactionList'
+        window.location.href = `https://${base}m.shupian.cn/list/transactionList`
       } else if (type === 'top') {
         if (url && this.isInApp) {
           const iOSRouter = {

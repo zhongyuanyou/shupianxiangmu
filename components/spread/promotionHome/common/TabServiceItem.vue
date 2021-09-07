@@ -25,7 +25,7 @@
         <!-- 二级分类 -->
         <sp-sticky :offset-top="top">
           <div
-            v-show="proKey !== 0"
+            v-show="proKey !== 0 && titleName[active].children.length"
             class="secondary-label"
             :style="{ paddingTop: isFixed ? '10px' : '' }"
           >
@@ -74,7 +74,7 @@
                           :class="[
                             demandActive === index ? 'item-active' : 'item',
                           ]"
-                          @click.stop="demandChooes(index, elem.url)"
+                          @click.stop="demandChooes(index, elem.url, elem.code)"
                         >
                           {{ elem.name }}
                         </div>
@@ -215,9 +215,37 @@ export default {
       this.selectTab()
     },
     // 分类选择
-    demandChooes(index, url) {
+    demandChooes(index, url, code) {
       this.demandActive = index
-      console.log(url)
+      if (url && this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+          parameter: {
+            type: 1,
+            classCode: code.split('#')[1],
+          },
+        }
+        const androidRouter = {
+          path: '/reform/flutter/classify_result',
+          parameter: {
+            trade: false,
+            classCode: code.split('#')[1],
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+      } else {
+        window.location.href = url
+      }
     },
     onMore(id) {
       let base = ''
