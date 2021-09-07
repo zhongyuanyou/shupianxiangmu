@@ -8,25 +8,32 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Nav
-        :roll-nav="rollNav"
-        class="navs"
-        :style="{ 'margin-top': marginTop + 'px' }"
-      />
+      <Banner v-show="bannerTop.length" :images="bannerTop"></Banner>
     </div>
     <!-- E 头部和金刚区 -->
-
-    <!--S 广告区 -->
-    <Advertising
-      v-if="gift.length > 0"
-      :gift="gift"
-      :pro-discounts="proDiscounts"
-      :introduce="introduce"
+    <NavBars
+      :roll-nav="rollNav"
+      class="navs"
+      :style="{ 'margin-top': marginTop + 'px' }"
     />
-    <!--E 广告区 -->
-
+    <!-- 福利专区 S -->
+    <Welfare v-show="welfareList.length" :welfare-list="welfareList" />
+    <!-- banner区 S -->
+    <BannerSwiper v-show="bannerBottom.length" :images="bannerBottom" />
+    <!-- 免费工具 S -->
+    <FreeTool v-show="toolList.length" :tool-list="toolList" />
+    <!-- 经营必备 S -->
+    <ManagementMust
+      v-show="bottomList.length"
+      :top-list="topList"
+      :bottom-list="bottomList"
+    />
     <!-- S 列表 -->
-    <TabServiceItem :title-name="titleName" @change="onChange">
+    <TabServiceItem
+      :title-name="titleName"
+      :recommended-list="recommendedList"
+      @change="onChange"
+    >
     </TabServiceItem>
     <!-- E 列表 -->
 
@@ -41,21 +48,36 @@ import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/enterpriseService.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
 import NavTop from '@/components/spread/common/NavTop.vue'
-import Nav from '@/components/spread/common/Nav.vue'
-import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
+import Banner from '@/components/spread/promotionHome/internetHomePage/Banner.vue'
+// import Nav from '@/components/spread/common/Nav.vue'
+import NavBars from '@/components/spread/promotionHome/enterpriseService/NavBars.vue'
+import Welfare from '@/components/spread/promotionHome/enterpriseService/Welfare.vue'
+import BannerSwiper from '@/components/spread/promotionHome/enterpriseService/BannerSwiper.vue'
+import FreeTool from '@/components/spread/promotionHome/enterpriseService/FreeTool.vue'
+import ManagementMust from '@/components/spread/promotionHome/enterpriseService/ManagementMust.vue'
+// import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import openappChips from '@/mixins/openappChips'
 export default {
   name: 'Index',
+  mixins: [openappChips],
   components: {
     NavTop,
-    Nav,
-    Advertising,
+    Banner,
+    NavBars,
+    Welfare,
+    BannerSwiper,
+    FreeTool,
+    ManagementMust,
+    // Nav,
+    // Advertising,
     TabServiceItem,
     BtnPlanner,
   },
   async asyncData({ $axios }) {
-    const locations = 'ad113257,ad113252,ad113250,ad113227'
+    const locations =
+      'ad100080,ad100081,ad100082,ad100083,ad100084,ad100085,ad100108'
     const code = 'nav100057'
     const centerCode = 'CRISPS-C-QYFW'
     const dataRes = defaultRes
@@ -67,7 +89,6 @@ export default {
           code: centerCode,
         },
       })
-      console.log(res.message)
       if (res.code === 200) {
         console.log('请求成功')
         return {
@@ -91,71 +112,6 @@ export default {
       marginTop: 0,
       // 金刚区
       rollNav: [],
-      // 新人专属
-      gift: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/oqnu6gqeojk000.png',
-          url: '',
-          title: '有限公司注册',
-          price: '0元',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/13ue2gpa99mo000.png',
-          url: '',
-          title: '一般纳税人…',
-          price: '1元/月',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/b9s8062zh1s0000.png',
-          url: '',
-          title: '服务代金券',
-          price: '600元',
-        },
-      ],
-      // 直播补贴
-      proDiscounts: [
-        {
-          proTitle: '企服直播',
-          subheading: '行业大牛助力企业',
-          label: '直播中',
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/g3rg0424lp40000.png',
-          url: '',
-        },
-        {
-          proTitle: '1000万补贴',
-          subheading: '万款服务全补贴',
-          label: '优惠放送',
-          bgImg: 'https://cdn.shupian.cn/sp-pt/wap/images/3s76r4rbngc0000.png',
-          url: '',
-        },
-      ],
-      // 活动广告位
-      introduce: [
-        {
-          title: '99元团',
-          subheading: '品质拼团',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/2hzc75qqmue0000.png',
-          url: '',
-        },
-        {
-          title: '先服务后收费',
-          subheading: '平台担保放心购',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7qxwt6b084w0000.png',
-          url: '',
-        },
-        {
-          title: '领券中心',
-          subheading: '服务销冠',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/doh8spl2kkg0000.png',
-          url: '',
-        },
-        {
-          title: '帮找服务',
-          subheading: '免费高效',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/hpselpo4ug0000.png',
-          url: '',
-        },
-      ],
       // 列表导航
       titleName: [
         {
@@ -293,10 +249,17 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '企业服务聚合页_底部展位_在线咨询',
+          name: '企业服务页规划师展位点击',
           type: '售前',
         },
       },
+      bannerTop: [], // 头部banner
+      welfareList: [], // 福利专区
+      bannerBottom: [], // banner
+      toolList: [], // 免费工具
+      topList: [], // 经营必备top
+      bottomList: [], // 经营必备bottom
+      recommendedList: [],
     }
   },
   computed: {
@@ -337,14 +300,26 @@ export default {
         this.navList(resData.navs.nav100057 || [])
         this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
-          if (elem.locationCode === 'ad113250') {
-            this.giftData(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100080') {
+            this.getBanner(elem.sortMaterialList, 'ad100080')
           }
-          if (elem.locationCode === 'ad113252') {
-            this.proDiscountsData(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100081') {
+            this.getWelfare(elem.sortMaterialList)
           }
-          if (elem.locationCode === 'ad113257') {
-            this.introduceData(elem.sortMaterialList, resData)
+          if (elem.locationCode === 'ad100082') {
+            this.getBanner(elem.sortMaterialList, 'ad100082')
+          }
+          if (elem.locationCode === 'ad100083') {
+            this.getFreeTool(elem.sortMaterialList)
+          }
+          if (elem.locationCode === 'ad100084') {
+            this.getBusiness(elem.sortMaterialList, 'ad100084')
+          }
+          if (elem.locationCode === 'ad100085') {
+            this.getBusiness(elem.sortMaterialList, 'ad100085')
+          }
+          if (elem.locationCode === 'ad100108') {
+            this.getRecommendedList(elem.sortMaterialList)
           }
         })
       }
@@ -355,7 +330,6 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
@@ -408,52 +382,97 @@ export default {
           }
         })
         this.rollNav.reverse()
-        // console.log(this.rollNav)
       }
     },
-
-    // 薯片推广企业服务新人专属礼页面
-    giftData(data) {
+    // banner广告位
+    getBanner(data, code) {
       if (data.length !== 0) {
-        this.gift = data.map((elem, index) => {
+        if (code === 'ad100080') {
+          this.bannerTop = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+            }
+          })
+        }
+        if (code === 'ad100082') {
+          this.bannerBottom = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+            }
+          })
+        }
+      } else {
+        this.bannerBottom = []
+        this.bannerTop = []
+      }
+    },
+    // 福利专区
+    getWelfare(data) {
+      if (data.length !== 0) {
+        this.welfareList = data.map((elem, index) => {
           return {
-            mainTitle:
-              index === 0 ? elem.materialList[0].materialDescription : '',
             img: elem.materialList[0].materialUrl,
             url: elem.materialList[0].materialLink,
-            title: elem.materialList[0].materialDescription.split(',')[0] || '',
-            price: elem.materialList[0].materialDescription.split(',')[1] || '',
           }
         })
       } else {
-        this.gift = []
+        this.welfareList = []
       }
     },
-    // 直播 补贴
-    proDiscountsData(data) {
-      this.proDiscounts = data.map((elem, index) => {
-        const labelData = ['直播中', '优惠放送']
-        return {
-          proTitle: elem.materialList[0].materialDescription.split(',')[0],
-          subheading: elem.materialList[0].materialDescription.split(',')[1],
-          label: labelData[index] || '',
-          bgImg: elem.materialList[0].materialUrl,
-          url: elem.materialList[0].materialLink,
-        }
-      })
-      console.log(this.proDiscountsData, 46546)
-    },
-    // 活动广告位
-    introduceData(data, resData) {
+    // 免费查询工具
+    getFreeTool(data) {
       if (data.length !== 0) {
-        this.introduce = data.map((elem, index) => {
+        this.toolList = data.map((elem, index) => {
           return {
-            title: elem.materialList[0].materialDescription.split(',')[0],
-            subheading: elem.materialList[0].materialDescription.split(',')[1],
             img: elem.materialList[0].materialUrl,
             url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].materialName.split('-')[2],
           }
         })
+      } else {
+        this.toolList = []
+      }
+    },
+    // 经营必备
+    getBusiness(data, code) {
+      if (data.length !== 0) {
+        if (code === 'ad100084') {
+          this.topList = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+              code: elem.materialList[0].materialDescription,
+            }
+          })
+        }
+        if (code === 'ad100085') {
+          this.bottomList = data.map((elem, index) => {
+            return {
+              img: elem.materialList[0].materialUrl,
+              url: elem.materialList[0].materialLink,
+              code: elem.materialList[0].materialDescription,
+            }
+          })
+        }
+      } else {
+        this.topList = []
+        this.bottomList = []
+      }
+    },
+    getRecommendedList(data) {
+      if (data.length !== 0) {
+        this.recommendedList = data.map((elem, index) => {
+          return {
+            img: elem.materialList[0].materialUrl,
+            url: elem.materialList[0].materialLink,
+            name: elem.materialList[0].materialName.split('-')[2],
+            code: elem.materialList[0].materialDescription,
+          }
+        })
+      } else {
+        this.recommendedList = []
       }
     },
     // 产品分类
@@ -471,6 +490,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
+          children: item.children,
         })
       })
       this.titleName = classArr
@@ -545,19 +565,108 @@ export default {
                 imgSrc: res.data[0].imgaes,
               }
             }
+            // @--神策埋点-浏览事件-只执行一次
+            window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+              name: `企业服务页规划师展位曝光`,
+              track_code: this.isInApp ? 'SPP001118' : 'SPW000117',
+              recommend_number: '',
+              planner_number: this.pagePlanner.jobNum,
+              planner_name: this.pagePlanner.name,
+            })
           })
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
-    jumpLink(url) {
+    jumpLink(url, description, execution) {
+      // if (name === '全部服务') {
+      //   this.$router.push('/financing/category')
+      //   return
+      // }
+      // app跳转
+      try {
+        // 更多路由
+        if (this.isInApp && execution.split(':')[0] === 'appRouterPath') {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const androidRouter = {
+            path: '/common/android/SingleWeb',
+            parameter: {
+              routerPath: execution.split(':')[1] || 'cpsc/classify/page',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+          return
+        }
+        // 产品列表路由
+        if (this.isInApp && execution.split(':')[0] === 'appFilter') {
+          const code =
+            url.split('?')[1].split('=')[1].split('&')[0] || 'FL20201224136341'
+          const lastObj = `{"classCode":"${code}","field":{"${
+            execution.split(':')[1] || ''
+          }":"${description}"}}`
+          const jsonObj = JSON.parse(lastObj)
+          this.$appFn.dggProperty(jsonObj, (res) => {})
+          return
+        }
+      } catch (error) {
+        console.log(error)
+      }
       if (url) {
+        if (url.indexOf('/spread/') > -1) {
+          this.$router.push(url)
+          return
+        }
         if (url.indexOf('http') > -1) {
           window.location.href = url
           return
         }
       }
       this.$refs.plannerIM.onlineConsult()
+    },
+    jump() {
+      if (!this.isInApp) {
+        console.log(this.thisType)
+        this.openApp()
+      } else {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSTabBarViewController///push/animation',
+          parameter: {
+            selectedIndex: '3',
+          },
+        }
+        const androidRouter = {
+          path: '/main/android/main',
+          parameter: {
+            selectedIndex: 3,
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+      }
     },
   },
   head() {

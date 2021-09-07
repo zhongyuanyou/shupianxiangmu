@@ -1,35 +1,68 @@
 <template>
   <div class="intellectual-property">
     <!-- S 头部和金刚区 -->
-    <div class="top-background">
+    <!-- <div class="top-background">
       <NavTop
         title="知识产权"
         :disabled="true"
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Nav
-        :roll-nav="rollNav"
-        class="navs"
-        :style="{ 'margin-top': marginTop + 'px' }"
-      />
-    </div>
+     
+    </div> -->
     <!-- E 头部和金刚区 -->
-
+    <div class="head">
+      <Header
+        title="知识产权"
+        :disabled="true"
+        :placeholder="placeholder"
+        @clickInputHandle="clickInputHandle"
+      />
+      <Banner></Banner>
+      <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
+    </div>
+    <!-- NavBar  s-->
+    <Nav
+      :roll-nav="rollNav"
+      class="navs"
+      :style="{ 'margin-top': marginTop + 'px' }"
+    />
+    <!-- NavBar  e-->
+    <!-- 知产头条S -->
+    <Headlines></Headlines>
+    <!-- 知产头条E -->
+    <!-- 新人大礼包S -->
+    <Giftbag :list="GiftList" :gift="gift"></Giftbag>
+    <!-- 新人大礼包E -->
+    <!-- 先服务后收费S -->
+    <Firstservice :img-content="FirstList"></Firstservice>
+    <!-- 先服务后收费S -->
+    <!-- 特色服务S -->
+    <FreeTool title="特色服务" :tool-list="toolList"></FreeTool>
+    <!-- 特色服务E -->
+    <!-- 经营必备S -->
+    <ManagementMust :top-list="businessTop" :bottom-list="businessBottom" />
+    <!-- 经营必备E -->
+    <!-- 补贴测算S -->
+    <Subsidy></Subsidy>
+    <!-- 补贴测算E -->
+    <!-- 推荐商品S -->
+    <Productlist :title-name="titleName"></Productlist>
+    <!-- 推荐商品E -->
     <!-- S 新人专属 -->
-    <Exclusive
+    <!-- <Exclusive
       v-if="proTitle.length > 0"
       :pro-title="proTitle"
       :img-content="imgContent"
-    />
+    /> -->
     <!-- E 新人专属 -->
 
     <!--S 免费体验 薯片课程 -->
-    <Choiceness :content="content" />
+    <!-- <Choiceness :content="content" /> -->
     <!--E 免费体验 薯片课程-->
 
     <!-- S 列表 -->
-    <IntellectualList :title-name="titleName" />
+    <!-- <IntellectualList :title-name="titleName" /> -->
     <!-- E 列表 -->
 
     <!-- START 规划师-->
@@ -42,24 +75,44 @@
 import { mapState } from 'vuex'
 import { defaultRes } from '@/assets/spread/promotionHome/intellectualProprty.js'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import NavTop from '@/components/spread/common/NavTop.vue'
+// import NavTop from '@/components/spread/common/NavTop.vue'
 import Nav from '@/components/spread/common/Nav.vue'
-import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
-import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
-import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList.vue'
+import Header from '@/components/spread/common/NavTop.vue'
+import Banner from '@/components/spread/promotionHome/internetHomePage/Banner.vue'
+import Headlines from '@/components/spread/promotionHome/intellectualProperty/Headlines.vue'
+import Giftbag from '@/components/spread/promotionHome/intellectualProperty/Giftbag.vue'
+import Firstservice from '@/components/spread/promotionHome/intellectualProperty/Firstservice.vue'
+import Subsidy from '@/components/spread/promotionHome/intellectualProperty/Subsidy.vue'
+import Productlist from '@/components/spread/promotionHome/intellectualProperty/Productlist.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import FreeTool from '@/components/spread/promotionHome/enterpriseService/FreeTool.vue'
+import ManagementMust from '@/components/spread/promotionHome/enterpriseService/ManagementMust.vue'
+// import Exclusive from '@/components/spread/promotionHome/intellectualProperty/Exclusive.vue'
+// import Choiceness from '@/components/spread/promotionHome/intellectualProperty/Choiceness.vue'
+// import IntellectualList from '@/components/spread/promotionHome/intellectualProperty/IntellectualList.vue'
+
 export default {
   name: 'IntellectualProperty',
   components: {
-    NavTop,
+    // NavTop,
+    // Exclusive,
+    // Choiceness,
+    // IntellectualList,
+    Productlist,
+    Subsidy,
+    ManagementMust,
+    FreeTool,
+    Firstservice,
+    Giftbag,
+    Headlines,
     Nav,
-    Exclusive,
-    Choiceness,
-    IntellectualList,
+    Header,
+    Banner,
     BtnPlanner,
   },
   async asyncData({ $axios }) {
-    const locationCodes = 'ad113236,ad113279,ad113265,ad113277,ad100046'
+    const locationCodes =
+      'ad100095,ad100097,ad100098,ad100099,ad100100,ad100102,ad100105'
     const navCodes = 'nav100060'
     const code = 'CRISPS-C-ZSCQ'
     const dataRes = defaultRes
@@ -257,10 +310,16 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '知识产权聚合页_底部展位_在线咨询',
+          name: '知识产权页规划师展位点击',
           type: '售前',
         },
       },
+      gift: [],
+      GiftList: [], // 新人大礼包
+      FirstList: [], // 先服务后收费
+      toolList: [], // 特色服务列表
+      businessTop: [], // 经营必备1
+      businessBottom: [], // 经营必备2
     }
   },
   computed: {
@@ -280,17 +339,23 @@ export default {
         this.navList(resData.navs.nav100060 || [])
         this.productClassData(resData.classList || [])
         resData.adList.filter((elem) => {
-          if (elem.locationCode === 'ad113236') {
-            this.proTitleData(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100097') {
+            this.proTitleData(elem.sortMaterialList, 'ad100097')
           }
-          if (elem.locationCode === 'ad113279') {
+          if (elem.locationCode === 'ad100098') {
+            this.proTitleData(elem.sortMaterialList, 'ad100098')
+          }
+          if (elem.locationCode === 'ad100099') {
             this.imgContentData(elem.sortMaterialList)
           }
-          if (elem.locationCode === 'ad113265') {
+          if (elem.locationCode === 'ad100100') {
             this.experience(elem.sortMaterialList)
           }
-          if (elem.locationCode === (this.isInApp ? 'ad100046' : 'ad113277')) {
-            this.curriculum(elem.sortMaterialList)
+          if (elem.locationCode === 'ad100102') {
+            this.curriculum(elem.sortMaterialList, 'top')
+          }
+          if (elem.locationCode === 'ad100105') {
+            this.curriculum(elem.sortMaterialList, 'bottom')
           }
         })
       }
@@ -356,37 +421,41 @@ export default {
             execution: elem.executionParameters || '',
           }
         })
-        // this.rollNav.reverse()
+
         this.rollNav.sort((a, b) => {
           return a.sort - b.sort
         })
       }
     },
     // 新人专属
-    proTitleData(data) {
+    proTitleData(data, code) {
       if (data.length !== 0) {
-        this.proTitle = data.map((elem, index) => {
-          const data = elem.materialList[0]
-          return {
-            title: data.materialName.split('#')[1] || '',
-            price: parseInt(data.materialDescription.split('#')[0]),
-            label: data.materialDescription.split('#')[1],
-            count: data.materialDescription.split('#')[2],
-            img: data.materialUrl,
-            url: data.materialLink,
-          }
-        })
+        if (code === 'ad100097') {
+          this.gift = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink,
+            }
+          })
+        } else if (code === 'ad100098') {
+          this.GiftList = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink,
+            }
+          })
+        }
       }
     },
     // 广告说明
     imgContentData(data) {
       if (data.length !== 0) {
-        this.imgContent = data.map((elem, index) => {
+        this.FirstList = data.map((elem, index) => {
           const data = elem.materialList[0]
           return {
             bgImg: data.materialUrl,
-            title: data.materialName.split('#')[1] || '',
-            assistantTitle: data.materialDescription,
             url: data.materialLink,
           }
         })
@@ -395,36 +464,42 @@ export default {
     // 体验 课程
     experience(data) {
       if (data.length !== 0) {
-        this.content.experience.imgVal = data.map((elem, index) => {
+        this.toolList = data.map((elem, index) => {
           const data = elem.materialList[0]
           return {
             img: data.materialUrl,
-            title: data.materialName.split('#')[1],
-            imgNmae: data.materialDescription.split('#')[0],
-            label: data.materialDescription.split('#')[1],
-            url: data.materialLink || '',
+            name: data.materialName.split('-')[2],
+            url: data.materialLink,
           }
         })
       }
     },
-    curriculum(data) {
+    curriculum(data, type) {
       if (data.length !== 0) {
-        this.content.curriculum.imgVal = data.map((elem, index) => {
-          const data = elem.materialList[0]
-          return {
-            img: data.materialUrl,
-            title: data.materialName.split('#')[1],
-            imgNmae: data.materialDescription.split('#')[0],
-            label: data.materialDescription.split('#')[1],
-            url: data.materialLink || '',
-          }
-        })
+        if (type === 'top') {
+          this.businessTop = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink || '',
+              code: data.materialDescription,
+            }
+          })
+        } else if (type === 'bottom') {
+          this.businessBottom = data.map((elem, index) => {
+            const data = elem.materialList[0]
+            return {
+              img: data.materialUrl,
+              url: data.materialLink || '',
+              code: data.materialDescription,
+            }
+          })
+        }
       }
     },
 
     // 列表导航
     productClassData(data) {
-      console.log(1344, data)
       if (data.length === 0) return
       // const classArr = []
       data.forEach((item, index) => {
@@ -432,6 +507,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
+          children: item.children,
         })
       })
       // this.titleName = classArr
@@ -475,7 +551,6 @@ export default {
             }
           )
           .then((res) => {
-            console.log(res, '调用规划师')
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
@@ -485,6 +560,14 @@ export default {
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,
               }
+              // @--神策埋点-浏览事件-只执行一次
+              window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+                name: `知识产权页规划师展位曝光`,
+                track_code: this.isInApp ? 'SPP001122' : 'SPW000121',
+                recommend_number: '',
+                planner_number: this.pagePlanner.jobNum,
+                planner_name: this.pagePlanner.name,
+              })
             }
           })
       } catch (error) {
@@ -533,7 +616,6 @@ export default {
             execution.split(':')[1] || ''
           }":"${description}"}}`
           const jsonObj = JSON.parse(lastObj)
-          console.log(lastObj, execution.split(':')[0])
           this.$appFn.dggProperty(jsonObj, (res) => {})
           return
         }
@@ -566,6 +648,11 @@ export default {
   width: @spread-page-width;
   background: #f5f5f5;
   margin: 0 auto;
+  .head {
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/8un99iso7e40000.png');
+    background-repeat: no-repeat;
+    background-size: 100%, 100%;
+  }
   .top-background {
     // background: linear-gradient(0deg, #f5f5f5, #4974f5);
     background: url(https://cdn.shupian.cn/sp-pt/wap/images/apakh2k9z3c0000.png)

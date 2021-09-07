@@ -22,7 +22,26 @@
             <span v-show="active === proKey" class="title_tag"></span>
           </div>
         </template>
-        <!-- <slot name="list"></slot> -->
+        <!-- 二级分类 -->
+        <sp-sticky :offset-top="top">
+          <div
+            v-show="proKey !== 0 && titleName[active].children.length"
+            class="secondary-label"
+            :style="{ paddingTop: isFixed ? '10px' : '' }"
+          >
+            <div class="class-box">
+              <div
+                v-for="(className, index) in titleName[active].children"
+                :key="index"
+                class="class-name"
+                :style="{ color: calssActive === index ? '#4974F5' : '' }"
+                @click="chooes(index)"
+              >
+                {{ className.name }}
+              </div>
+            </div>
+          </div>
+        </sp-sticky>
         <div class="enterprise-list">
           <sp-list
             v-model="loading"
@@ -40,36 +59,27 @@
                 class="content-list"
                 @click="onMore(item.id)"
               >
-                <div class="imge"><img :src="item.img" alt="" /></div>
-                <div class="region">
-                  <div class="region-content">
-                    <p class="region-title">{{ item.title }}</p>
-                    <label v-if="item.label.length > 0">
-                      <span
-                        v-for="(labels, labelKey) of item.label"
-                        :key="labelKey"
-                      >
-                        {{ labels }}
-                      </span>
-                    </label>
-                    <div class="region-explain">{{ item.desc }}</div>
-                  </div>
-                  <div
-                    v-show="item.currentPrice !== '' && item.currentPrice"
-                    class="region-price"
-                  >
-                    {{ price(item.currentPrice) }}
-                    <span
-                      v-if="item.currentPrice > 10000"
-                      class="item-price-unit"
-                      >万元</span
-                    >
-                    <span v-else class="item-price-unit">元</span>
-                    <!--              <span-->
-                    <!--                v-show="item.originalPrice !== '' && item.originalPrice"-->
-                    <!--                class="original-price"-->
-                    <!--                >{{ item.originalPrice }}元</span-->
-                    <!--              >-->
+                <ProductCard v-if="itemKey !== 4" :product="item"></ProductCard>
+                <div
+                  v-else-if="proKey === 0 && itemKey === 4"
+                  class="advertising-box"
+                >
+                  <div class="advertising">
+                    <div class="title">您的企业需求是什么？</div>
+                    <div class="list-box">
+                      <div class="list">
+                        <div
+                          v-for="(elem, index) in recommendedList"
+                          :key="index"
+                          :class="[
+                            demandActive === index ? 'item-active' : 'item',
+                          ]"
+                          @click.stop="demandChooes(index, elem.url, elem.code)"
+                        >
+                          {{ elem.name }}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -84,9 +94,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Toast, Tab, Tabs, List } from '@chipspc/vant-dgg'
+import { Toast, Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
+import ProductCard from '@/components/spread/promotionHome/enterpriseService/ProductCard.vue'
 // import EnterpriseList from '@/components/spread/promotionHome/common/EnterpriseList'
-import { newSpreadApi } from '@/api/spread'
+import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'TabServiceItem',
@@ -95,34 +106,21 @@ export default {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
     [List.name]: List,
+    ProductCard,
+    [Sticky.name]: Sticky,
     // EnterpriseList,
   },
   props: {
     titleName: {
       type: Array,
       default: () => {
-        return [
-          {
-            code: 1,
-            type: 1,
-            name: '工商服务',
-          },
-          {
-            code: 2,
-            type: 1,
-            name: '会计服务',
-          },
-          {
-            code: 3,
-            type: 1,
-            name: '知识服务',
-          },
-          {
-            code: 4,
-            type: 1,
-            name: '资质服务',
-          },
-        ]
+        return []
+      },
+    },
+    recommendedList: {
+      type: Array,
+      default: () => {
+        return []
       },
     },
   },
@@ -139,6 +137,21 @@ export default {
       list: [],
       defaultState: {},
       count: 0,
+      demandList: [
+        { name: '公司注册', code: '' },
+        { name: '印章服务', code: '' },
+        { name: '地址变更', code: '' },
+        { name: '公司注销', code: '' },
+        { name: '续期服务', code: '' },
+        { name: '其他服务', code: '' },
+      ],
+      demandActive: 0,
+      secondaryLabel: [],
+      calssActive: -1,
+      top: 0,
+      classArr: '',
+      classCode: '',
+      activeCode: '',
     }
   },
   computed: {
@@ -149,12 +162,26 @@ export default {
   },
   mounted() {
     if (this.isInApp) {
-      this.offsetTop = this.appInfo.statusBarHeight + 56 + 'px'
+      this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
+      this.top = this.appInfo.statusBarHeight + 57 + 44
     } else {
-      this.offsetTop = 58 + 'px'
+      this.offsetTop = 57 + 'px'
+      this.top = 101
     }
   },
   methods: {
+    // 获取三级分类
+
+    chooes(idx) {
+      this.list = []
+      this.calssActive = idx
+      this.activeCode = this.titleName[this.active].children[idx].ext1
+      this.pageNumber = 1
+      this.finished = false
+      this.loading = true
+      scrollTo(0, 800)
+      this.selectTab()
+    },
     price(price) {
       if (price % 1) {
         return price > 10000 ? (price / 10000).toFixed(1) : price
@@ -163,9 +190,11 @@ export default {
       }
     },
     onClick() {
-      // console.log(this.active)
-      // this.$emit('change', this.titleName[name])
+      this.activeCode = this.titleName[this.active].type
       this.initialize()
+      this.calssActive = -1
+      this.secondaryLabel = []
+      this.finished = false
     },
     scroll(e) {
       this.isFixed = e.isFixed
@@ -175,6 +204,7 @@ export default {
       this.pageNumber = 1
       this.finished = false
       this.loading = true
+      this.list = []
       this.onLoad()
     },
     onLoad() {
@@ -183,6 +213,39 @@ export default {
         this.list = []
       }
       this.selectTab()
+    },
+    // 分类选择
+    demandChooes(index, url, code) {
+      this.demandActive = index
+      if (url && this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+          parameter: {
+            type: 1,
+            classCode: code.split('#')[1],
+          },
+        }
+        const androidRouter = {
+          path: '/reform/flutter/classify_result',
+          parameter: {
+            trade: false,
+            classCode: code.split('#')[1],
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+      } else {
+        window.location.href = url
+      }
     },
     onMore(id) {
       let base = ''
@@ -215,35 +278,25 @@ export default {
       }
     },
     // 请求数据
-    selectTab(item) {
+    selectTab() {
       // 当前无数据不执行
       if (this.finished && !this.loading) return
       this.loading = true
-      const type = this.titleName[this.active].type
-      const obj = {
-        start: this.pageNumber,
-        limit: '4',
-        classCodes: type,
-        naem: this.titleName[this.active].name,
-      }
-      console.log(obj, '请求数据')
       // 2、调用接口
       this.$axios
         .get(newSpreadApi.service_product_list, {
           params: {
             start: this.pageNumber,
             limit: '15',
-            classCodes: type,
+            classCodes: this.activeCode,
+            configFlg: 1,
           },
         })
         .then((res) => {
           // 调用回调函数处理数据
           const result = res.data.records
           if (res.code === 200 && result.length !== 0) {
-            if (res.data.pageNumber === 1) {
-              this.list = []
-            }
-            ++this.pageNumber
+            this.pageNumber++
             result.forEach((elem, index) => {
               this.list.push({
                 code: index + 1,
@@ -257,15 +310,18 @@ export default {
                 url: '',
                 desc: elem.desc,
                 id: elem.id,
+                sales: elem.saleNum,
               })
             })
-            this.loading = false
-            if (result.length < 15) this.finished = true
 
-            return
+            this.loading = false
+            if (result.length < 15) {
+              this.finished = true
+            }
+          } else {
+            this.loading = false
+            this.finished = true
           }
-          this.loading = false
-          this.finished = true
         })
         .catch((err) => {
           this.loading = false
@@ -280,94 +336,78 @@ export default {
 
 <style lang="less" scoped>
 .tab-service-item {
+  .secondary-label {
+    width: 100%;
+    padding: 0 20px;
+    padding-bottom: 20px;
+    background: #f5f5f5;
+    .class-box::-webkit-scrollbar {
+      display: none;
+    }
+    .class-box {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      .class-name {
+        flex-shrink: 0;
+        height: 56px;
+        background: #ffffff;
+        border-radius: 8px;
+        line-height: 56px;
+        padding: 0 19px;
+        margin-right: 10px;
+        font-size: 24px;
+        color: #555555;
+      }
+    }
+  }
   .enterprise-list {
     min-height: 1224px;
-    padding-left: 20px;
+
     .content {
       .content-list {
-        display: flex;
-        width: 710px;
-        min-height: 276px;
-        padding: 28px 20px;
-        background: #ffffff;
-        border-radius: 14px;
-        margin: 0 20px 20px 0;
-        .imge {
-          width: 220px;
-          height: 220px;
-          // background: #b2b2b2;
-          border-radius: 14px;
-          border-radius: 12px;
-          margin-right: 32px;
-          img {
-            width: 220px;
-            height: 220px;
-          }
-        }
-        .region {
-          &-content {
-            min-height: 150px;
-            .region-title {
-              font-size: 32px;
-              font-weight: bold;
+        .advertising-box {
+          width: 100%;
+          padding: 0 20px;
+          margin-bottom: 20px;
+          .advertising {
+            width: 100%;
+            border-radius: 24px;
+            padding: 24px 20px 12px;
+            background: #fff;
+            .title {
+              font-size: 30px;
               color: #222222;
-              line-height: 40px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
+              font-weight: 700;
+              line-height: 35px;
             }
-            label {
-              display: flex;
-              margin-top: 20px;
-              span {
-                background: #f0f2f5;
-                border-radius: 4px;
-                font-size: 20px;
-                font-weight: 400;
-                color: #5c7499;
-                line-height: 32px;
-                margin-right: 8px;
-                padding: 4px 6px;
-                max-width: 120px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            .list-box {
+              margin-top: 24px;
+              .list {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                align-items: center;
+
+                width: 100%;
+                > div {
+                  margin-bottom: 12px;
+                  width: 330px;
+                  height: 70px;
+                  font-size: 26px;
+                  color: #222222;
+                  background: #f5f5f5;
+                  border-radius: 12px;
+                  line-height: 70px;
+                  text-align: center;
+                }
+                .item-active {
+                  background: rgba(73, 116, 245, 0.1);
+                  color: #4974f5;
+                }
               }
-              span:nth-child(n + 4) {
-                display: none;
-              }
-            }
-            .region-explain {
-              margin-top: 20px;
-              height: 22px;
-              font-size: 22px;
-              font-weight: 400;
-              color: #222;
-              line-height: 22px;
-              .textOverflow(1);
-              width: 100%;
-            }
-          }
-          &-price {
-            // height: 30px;
-            font-size: 36px;
-            font-weight: bold;
-            color: #ec5330;
-            padding-top: 28px;
-            .item-price-unit {
-              height: 20px;
-              font-size: 22px;
-              font-weight: bold;
-              color: #ec5330;
-              line-height: 20px;
-            }
-            .original-price {
-              font-size: 22px;
-              font-weight: 400;
-              color: #999999;
-              line-height: 22px;
             }
           }
         }

@@ -8,43 +8,85 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Nav :roll-nav="rollNav" class="nav"></Nav>
+      <Banner :images="banner"></Banner>
+      <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- 金刚区 -->
-
+    <!-- NavBar  s-->
+    <NavBar :nav-list="navList"></NavBar>
+    <!-- NavBar  e-->
+    <!-- 活动专区 S -->
+    <ActivityZone
+      v-show="activityList.length"
+      :activity-list="activityList"
+    ></ActivityZone>
+    <!-- 活动专区E -->
+    <!--咨询广播区S  -->
+    <Radio></Radio>
+    <!-- 咨询广播区E -->
+    <!-- 热销商品 S -->
+    <HotSales :images="images" :img-list="hotSales"></HotSales>
+    <!-- 热销商品 E -->
+    <!-- 活动专区 S -->
+    <Activity :ad-list="activities"></Activity>
+    <!-- 活动专区 E -->
+    <!-- 免费工具 S -->
+    <FreeTool :tool-list="freeTool"></FreeTool>
+    <!-- 免费工具 E -->
+    <!-- 规划师立即咨询 S -->
+    <Planner :planner="pagePlanner"></Planner>
+    <!-- 规划师立即质询 E -->
     <!-- 新人红包 -->
-    <GiftBag
+    <!-- <GiftBag
       v-show="giftBagList.length"
       class="gift-bag"
       :gift-bag-list="giftBagList"
-    ></GiftBag>
+    ></GiftBag> -->
     <!-- 活动功能展示 -->
-    <Advertising :advertising-list="advertisingList"></Advertising>
+    <!-- <Advertising :advertising-list="advertisingList"></Advertising> -->
     <!-- 产品列表 -->
-    <Recommended :title-name="titleName"></Recommended>
+    <Recommended
+      :title-name="titleName"
+      :recommended-banner="recommendedBanner"
+    ></Recommended>
 
     <!-- 规划师 -->
-    <BtnPlanner ref="plannerIM" :planner="pagePlanner" />
+    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import Nav from '@/components/spread/common/Nav.vue'
+// import Nav from '@/components/spread/common/Nav.vue'
 import Header from '@/components/spread/common/NavTop.vue'
-import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
-import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
+import Banner from '@/components/spread/promotionHome/internetHomePage/Banner.vue'
+import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
+import ActivityZone from '@/components/spread/promotionHome/internetHomePage/ActivityZone.vue'
+import Radio from '@/components/spread/promotionHome/internetHomePage/Radio.vue'
+import HotSales from '@/components/spread/promotionHome/internetHomePage/HotSales.vue'
+import Activity from '@/components/spread/promotionHome/internetHomePage/Activity.vue'
+import FreeTool from '@/components/spread/promotionHome/internetHomePage/FreeTool.vue'
+import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.vue'
+// import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
+// import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
 import BtnPlanner from '@/components/spread/common/BtnPlanner'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
-
 export default {
   components: {
     Header,
-    Nav,
-    GiftBag,
-    Advertising,
+    Banner,
+    NavBar,
+    ActivityZone,
+    Radio,
+    HotSales,
+    Activity,
+    FreeTool,
+    Planner,
+    // Nav,
+    // GiftBag,
+    // Advertising,
     Recommended,
     BtnPlanner,
   },
@@ -55,7 +97,7 @@ export default {
           //  locationCodes:
           //   'ad113267,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045,  ad113229,ad113270,ad113271,ad113272,ad113274,ad113280',
           locationCodes:
-            'ad113229,ad113270,ad113272,ad113271,ad100042,ad113274,ad100045',
+            'ad100086,ad100087,ad100088,ad100089,ad100090,ad100091,ad100107,ad100109,ad100111',
           navCodes: 'nav100061',
           code: 'CRISPS-HLW',
         },
@@ -83,32 +125,34 @@ export default {
     return {
       placeholder: '请输入关键字',
       // marginTop: -120,
-      rollNav: [],
-      giftBagList: [{}],
-      advertisingList: {
-        limitedTime: {
-          title: '限时秒杀1',
-          describe: '爆款低价1',
-          imgUrl: '',
-          label: '',
+      banner: [], // banner
+      navList: [
+        {
+          title: '小程序',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g8as29uy5e00000.png',
           url: '',
         },
-        live: {
-          title: '企服直播1',
-          describe: '无门槛 新用户专享1',
-          product: [],
+        {
+          title: '电商运营',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/9w68yknwru00000.png',
+          url: '',
         },
-        freeTrial: {
-          title: '免费试用1',
-          describe: '0元体验 名额有限1',
-          product: [],
+        {
+          title: '网站建设',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f1l4zlbscns0000.png',
+          url: '',
         },
-        course: {
-          title: '薯片课程1',
-          describe: '优质课程 创业首选1',
-          product: [],
+        {
+          title: '营销推广',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/2m2m7l2drfs0000.png',
+          url: '',
         },
-      },
+        {
+          title: '定制开发',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7ratpz2wb1w0000.png',
+          url: '',
+        },
+      ],
       titleName: [
         // {
         //   code: 'FL20210425163778',
@@ -119,6 +163,19 @@ export default {
       ],
       // 页面规划师
       pagePlanner: {},
+      // 底部规划师埋点
+      fixedMd: {
+        imMd: {
+          name: 'IT服务页规划师展位点击',
+          type: '售前',
+        },
+      },
+      activityList: [], // 活动区1
+      images: {}, // 热销商品1
+      hotSales: [], // 热销商品列表
+      activities: [], // 活动区2
+      freeTool: [], // 免费工具
+      recommendedBanner: [],
     }
   },
   computed: {
@@ -152,7 +209,6 @@ export default {
   methods: {
     // 搜索
     clickInputHandle(e) {
-      console.log(this.$router)
       if (this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
@@ -183,27 +239,20 @@ export default {
     },
     // 金刚区数据处
     navDetail(data) {
+      console.log(data)
       if (data.length !== 0) {
         const navList = []
         data.forEach((item, index) => {
           const obj = {
-            code: index + 1,
-            sort: item.sort,
-            name: item.name,
+            title: item.name,
             url: item.url,
-            size: 'small',
-            label: '',
-            imageUrl: item.navigationImageUrl,
-            description: item.description || '',
-            execution: item.executionParameters || '',
+            icon: item.navigationImageUrl,
           }
           navList.push(obj)
         })
-        // this.rollNav = navList.reverse()
-        this.rollNav = navList
-        this.rollNav.sort((a, b) => {
-          return a.sort - b.sort
-        })
+
+        this.navList = navList
+        this.navList.reverse()
       }
     },
     // 产品分类
@@ -215,86 +264,96 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
-          describe: item.ext2 || '优质选购',
+          children: item.children,
         })
       })
       // this.titleName = classArr
     },
     getData(data) {
       data.forEach((item, idx) => {
-        // 新人红包数据处理
-        if (item.locationCode === 'ad113229') {
+        // 头部banner
+        if (item.locationCode === 'ad100086') {
           const bagList = []
           item.sortMaterialList.forEach((elem, index) => {
-            const msg = elem.materialList[0].materialDescription.split('#')
             const obj = {
-              // maxTitle: elem.materialList[0].materialName.split('#')[1],
-              code: index + 1,
-              headImage: elem.materialList[0].materialUrl,
-              // label: msg[0],
-              // title: elem.materialList[0].materialName.split('#')[1],
-              title: msg[0],
-              price: msg[1],
               url: elem.materialList[0].materialLink,
+              img: elem.materialList[0].materialUrl,
             }
             bagList.push(obj)
           })
-          this.giftBagList = bagList
+          this.banner = bagList
         }
-        if (item.locationCode === 'ad113270') {
+        // 活动专区1
+        if (item.locationCode === 'ad100087') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
               code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.limitedTime = obj
+            this.activityList.push(obj)
           })
         }
-        if (item.locationCode === (this.isInApp ? 'ad100042' : 'ad113271')) {
+        // 热销商品
+        if (item.locationCode === 'ad100088') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
-              code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              code: resObj.materialDescription,
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.live = obj
+            this.images = obj
           })
         }
-        if (item.locationCode === 'ad113272') {
+        if (item.locationCode === 'ad100089') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
-              code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              code: resObj.materialDescription,
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.freeTrial = obj
+            this.hotSales.push(obj)
           })
         }
-        if (item.locationCode === (this.isInApp ? 'ad100045' : 'ad113274')) {
+        if (item.locationCode === (this.isInApp ? 'ad100111' : 'ad100109')) {
+          item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
+            console.log(resObj)
+            const obj = {
+              code: index,
+              img: resObj.materialUrl,
+              url: resObj.materialLink,
+              title: resObj.materialName.split('-')[2],
+              slogan: resObj.materialDescription,
+              tag: resObj.materialName.split('-')[3] || '',
+            }
+            this.activities.push(obj)
+          })
+        }
+        if (item.locationCode === 'ad100091') {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
               code: index,
-              title: resObj.materialDescription.split('#')[0] || '',
-              describe: resObj.materialDescription.split('#')[1] || '',
-              imgUrl: resObj.materialUrl,
-              label: resObj.materialName.split('#')[1] || '',
+              name: resObj.materialName.split('-')[2],
+              img: resObj.materialUrl,
               url: resObj.materialLink,
             }
-            this.advertisingList.course = obj
+            this.freeTool.push(obj)
+          })
+        }
+        if (item.locationCode === 'ad100107') {
+          item.sortMaterialList.forEach((elem, index) => {
+            const resObj = elem.materialList[0]
+            const obj = {
+              code: index,
+              img: resObj.materialUrl,
+              url: resObj.materialLink,
+            }
+            this.recommendedBanner.push(obj)
           })
         }
       })
@@ -348,6 +407,14 @@ export default {
                 telephone: res.data[0].phone,
                 imgSrc: res.data[0].imgaes,
               }
+              // @--神策埋点-浏览事件-只执行一次
+              window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+                name: `IT服务页规划师展位曝光`,
+                track_code: this.isInApp ? 'SPP001126' : 'SPP001125',
+                recommend_number: '',
+                planner_number: this.pagePlanner.jobNum,
+                planner_name: this.pagePlanner.name,
+              })
             }
           })
       } catch (error) {

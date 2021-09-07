@@ -14,34 +14,43 @@
       </div>
     </div>
     <!-- E 头部Header -->
-
+    <!-- 一键贷款表单S  -->
+    <Borrowing></Borrowing>
+    <!-- 一键贷款表单E-->
     <!-- S 金刚区 -->
-    <Nav
+    <NavBar :nav-list="rollNav"></NavBar>
+    <!-- <Nav
       v-show="rollNav.length > 0"
       :roll-nav="rollNav"
       class="nav"
       :class="isInApp ? 'nav_top' : ''"
-    ></Nav>
+    ></Nav> -->
     <!-- E 金刚区 -->
 
     <!-- S 工具 -->
-    <Tools v-if="false" class="tools" />
+    <Tools v-if="true" class="tools" />
     <!-- E 工具 -->
 
+    <!-- 广告展示 S -->
+    <Advertising :ad-list="activities"></Advertising>
+    <!-- 广告展示 E -->
+    <!-- 活动展示 S -->
+    <Activity :activity-list="projectList"></Activity>
+    <!-- 活动展示 E -->
     <!-- S 我要借款 -->
-    <Loan />
+    <!-- <Loan /> -->
     <!-- E 我要借款 -->
 
     <!-- S 新人专属礼包 -->
-    <NewcomerPack class="newcomer-pack" />
+    <!-- <NewcomerPack class="newcomer-pack" /> -->
     <!-- E 新人专属礼包 -->
 
     <!-- S 点我咨询和资讯直播 -->
-    <Live />
+    <!-- <Live /> -->
     <!-- E 点我咨询和资讯直播 -->
 
     <!-- S 活动 -->
-    <Activities class="activities" />
+    <!-- <Activities class="activities" /> -->
     <!-- E 活动 -->
 
     <!-- S 轮播咨询 -->
@@ -67,17 +76,20 @@
 import { mapState } from 'vuex'
 import { Toast } from '@chipspc/vant-dgg'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import Nav from '@/components/spread/common/Nav.vue'
+import NavBar from '@/components/financing/common/NavBar.vue'
 import Header from '@/components/spread/common/NavTop.vue'
-import Activities from '@/components/spread/promotionHome/financingLoan/Activities.vue'
-import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
-import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
-import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
+import Advertising from '@/components/financing/common/Advertising.vue'
+import Activity from '@/components/financing/common/Activity.vue'
+// import Activities from '@/components/spread/promotionHome/financingLoan/Activities.vue'
+// import Live from '@/components/spread/promotionHome/financingLoan/Live.vue'
+// import Loan from '@/components/spread/promotionHome/financingLoan/Loan.vue'
+// import NewcomerPack from '@/components/spread/promotionHome/financingLoan/NewcomerPack.vue'
 import Tools from '@/components/spread/promotionHome/financingLoan/Tools.vue'
 import Notice from '@/components/financing/common/Notice.vue'
 import FinancingList from '@/components/spread/promotionHome/financingLoan/FinancingList.vue'
 import BottomNotes from '@/components/spread/promotionHome/financingLoan/BottomNotes.vue'
 import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
+import Borrowing from '@/components/financing/common/Borrowing.vue'
 import openappChips from '~/mixins/openappChips'
 import imHandle from '@/mixins/imHandle'
 import isLogin from '@/mixins/isLogin'
@@ -87,16 +99,19 @@ export default {
   components: {
     [Toast.name]: Toast,
     Header,
-    Nav,
-    Activities,
-    Live,
-    Loan,
-    NewcomerPack,
+    NavBar,
+    Advertising,
+    Activity,
+    // Activities,
+    // Live,
+    // Loan,
+    // NewcomerPack,
     Tools,
     FinancingList,
     Notice,
     BottomNotes,
     BtnPlanner,
+    Borrowing,
   },
   mixins: [imHandle, isLogin, openappChips],
   async asyncData({ $axios }) {
@@ -104,8 +119,9 @@ export default {
       const res = await $axios.get(`${newSpreadApi.list}`, {
         // const res = await $axios.get(url, {
         params: {
-          locationCodes:
-            'ad113242,ad113239,ad100048,ad113237,ad113234,ad100050',
+          //   locationCodes:
+          //     'ad113242,ad113239,ad100048,ad113237,ad113234,ad100050',
+          locationCodes: 'ad100092,ad100093,ad100094',
           navCodes: 'nav100058',
           code: 'CRISPS-C-RZDK',
         },
@@ -136,96 +152,7 @@ export default {
       placeholder: '请输入关键字',
       // 默认数据
       rollNav: [],
-      activityList: [
-        {
-          title: '签到有礼',
-          desc: '天天领福利',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/a1nyy8rq0fc0000.png',
-          url: '',
-        },
-        {
-          title: '领券中心',
-          desc: '省钱券包',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bvcj0w07g000000.png',
-          url: '',
-        },
-        {
-          title: '点我抽奖',
-          desc: '现金红包待领',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/dahfjspspsw0000.png',
-          url: '',
-        },
-        {
-          title: '有奖问答',
-          desc: '涨知识享豪礼',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/89fka9m5m3o0000.png',
-          url: '',
-        },
-      ],
-      liveList: [
-        {
-          title: '点我咨询',
-          desc: '一键咨询全贷款业务',
-          label: '先服务后收费',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/9szxp9wdiio0000.png',
-          url: '',
-        },
-        {
-          title: '资讯直播',
-          desc: '精彩直播 等你来找',
-          label: '直播中',
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/bz3o6gdyrug0000.png',
-          url: '',
-        },
-      ],
-      newcomerPackList: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/g5x72ibmgj40000.png',
-          title: '测额度得红包',
-          desc: '最高得888元',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/alx5rih2hw00000.png',
-          title: '限时抢券',
-          desc: '抢7天免息券',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/7097zqzjqa80000.png',
-          title: '贷即得',
-          desc: '年利率7%起',
-          url: '',
-        },
-        {},
-      ],
-      toolList: [
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cyb9mn6k7lk0000.png',
-          title: '额度评估',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/76nvcmvpmlw0000.png',
-          title: '贷款计算器',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/6cb9xtrp8h80000.png',
-          title: '智能贷款',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/cjraco2vifc0000.png',
-          title: '申请进度',
-          url: '',
-        },
-        {
-          img: 'https://cdn.shupian.cn/sp-pt/wap/images/enxy8p7b2k00000.png',
-          title: '我的贷款',
-          url: '',
-        },
-      ],
+      toolList: [], // 工具列表
       // 我要借贷
       loans: {},
       // 列表导航
@@ -241,10 +168,12 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '知识产权聚合页_底部展位_在线咨询',
+          name: '企业助贷页规划师展位点击',
           type: '售前',
         },
       },
+      activities: [], // 活动数据列表
+      projectList: [], // 专题列表
     }
   },
   computed: {
@@ -300,9 +229,9 @@ export default {
             console.log(res)
           }
         )
-        return
+      } else {
+        window.location.href = 'https://m.shupian.cn/search/'
       }
-      window.location.href = 'https://m.shupian.cn/search/'
     },
     // 处理导航数据
     handleNavData(navsData) {
@@ -310,26 +239,15 @@ export default {
       const navArr = navsData.nav100058 || []
       const rollNav = []
       navArr.forEach((item, index) => {
-        // this.rollNav[navArr.length - 1 - index].name = item.name
-        // this.rollNav[navArr.length - 1 - index].url = item.url
-        // this.rollNav[navArr.length - 1 - index].imageUrl =
-        //   item.navigationImageUrl
-
         rollNav.push({
-          sort: item.sort,
-          code: index + 1,
-          name: item.name,
+          title: item.name,
           url: item.url,
-          label: '',
-          size: index + 1 > navArr.length / 2 ? 'big' : 'small',
-          imageUrl: item.navigationImageUrl,
+          icon: item.navigationImageUrl,
         })
       })
       // rollNav.reverse()
       this.rollNav = rollNav
-      this.rollNav.sort((a, b) => {
-        return a.sort - b.sort
-      })
+      this.rollNav.reverse()
       const toolArr = navsData.nav100063 || []
       toolArr.forEach((item, index) => {
         this.toolList[navArr.length - 1 - index].name = item.name
@@ -343,69 +261,49 @@ export default {
       adData.forEach((item, index) => {
         switch (item.locationCode) {
           // 活动广告位
-          case 'ad113242': {
-            const list = item.sortMaterialList
-            for (let i = 0; i < list.length; i++) {
-              const title = list[i].materialList[0].materialName.split('#')[1]
-              this.activityList[i].title = title
-              this.activityList[i].desc =
-                list[i].materialList[0].materialDescription
-              this.activityList[i].img = list[i].materialList[0].materialUrl
-              this.activityList[i].url = list[i].materialList[0].materialLink
-            }
+          case 'ad100092': {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const tool = elem.materialList[0]
+              const obj = {
+                title: tool.materialName.split('-')[2],
+                img: tool.materialUrl,
+                url: tool.materialLink,
+              }
+              this.toolList.push(obj)
+            })
             break
           }
-          // 资讯直播广告位
-          case this.isInApp ? 'ad100048' : 'ad113239': {
-            // const splitArr = item.locationName.split('#')
-            const list = item.sortMaterialList[0].materialList[0]
-            const index = 1
 
-            this.liveList[index].title = list.materialDescription.split('#')[0]
-            this.liveList[index].label = list.materialName.split('#')[1] || ''
-
-            this.liveList[index].desc = list.materialDescription.split('#')[1]
-            this.liveList[index].img = list.materialUrl
-            this.liveList[index].url = list.materialLink
-            break
-          }
-          // 点我咨询广告位
-          case 'ad113237': {
-            // const splitArr = item.locationName.split('#')
-            const list = item.sortMaterialList[0].materialList[0]
-            const index = 0
-
-            this.liveList[index].title = list.materialDescription.split('#')[0]
-            this.liveList[index].label = list.materialName.split('#')[1] || ''
-
-            this.liveList[index].desc = list.materialDescription.split('#')[1]
-            this.liveList[index].img = list.materialUrl
-            this.liveList[index].url = list.materialLink
+          // 新人礼包广告位
+          case 'ad100093': {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const activity = elem.materialList[0]
+              const obj = {
+                title: activity.materialName.split('-')[2],
+                tag: activity.materialDescription.split('#')[0],
+                slogan: activity.materialDescription.split('#')[1],
+                img: activity.materialUrl,
+                url: activity.materialLink,
+                type: activity.executeParam,
+              }
+              this.activities.push(obj)
+            })
+            console.log(this.activities)
             break
           }
           // 新人礼包广告位
-          case 'ad113234': {
-            const list = item.sortMaterialList
-            for (let i = 0; i < list.length; i++) {
-              const title =
-                list[i].materialList[0].materialName.split('#')[1] || ''
-              this.newcomerPackList[i].title = title
-              this.newcomerPackList[i].desc =
-                list[i].materialList[0].materialDescription
-              this.newcomerPackList[i].img = list[i].materialList[0].materialUrl
-              this.newcomerPackList[i].url =
-                list[i].materialList[0].materialLink
-            }
+          case 'ad100094': {
+            item.sortMaterialList.forEach((elem, idx) => {
+              const projec = elem.materialList[0]
+
+              const obj = {
+                title: projec.materialName.split('-')[2],
+                img: projec.materialUrl,
+                url: projec.materialLink,
+              }
+              this.projectList.push(obj)
+            })
             break
-          }
-          // 广告图
-          case 'ad100050': {
-            const list = item.sortMaterialList[0].materialList[0]
-            const obj = {
-              image: list.materialUrl || '',
-              url: list.materialLink,
-            }
-            this.loans = obj
           }
         }
       })
@@ -419,6 +317,7 @@ export default {
           type: item.ext1,
           code: item.ext1,
           name: item.name,
+          children: item.children,
         })
       })
       // this.titleName = classArr
@@ -473,6 +372,14 @@ export default {
                 imgSrc: res.data[0].imgaes,
               }
             }
+            // @--神策埋点-浏览事件-只执行一次
+            window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+              name: `企业助贷页规划师展位曝光`,
+              track_code: this.isInApp ? 'SPP001134' : 'SPW000133',
+              recommend_number: '',
+              planner_number: this.pagePlanner.jobNum,
+              planner_name: this.pagePlanner.name,
+            })
           })
       } catch (error) {
         console.log('plannerApi.plannerReferrals error：', error.message)
@@ -482,13 +389,10 @@ export default {
       if (url) {
         if (url.indexOf('http') > -1) {
           window.location.href = url
-          return
         } else {
-          this.$router.push(url)
-          return
+          this.$refs.plannerIM.onlineConsult()
         }
       }
-      this.$refs.plannerIM.onlineConsult()
     },
     jumpLink2(url, title) {
       let base = ''

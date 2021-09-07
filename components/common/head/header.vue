@@ -38,6 +38,7 @@
 import { mapState } from 'vuex'
 
 import safeAreaInsets from 'safe-area-insets'
+import config from '@/config'
 
 export default {
   name: 'Header',
@@ -100,7 +101,15 @@ export default {
   },
   methods: {
     onLeftClick() {
-      this.$router.back(-1)
+      if (this.isInApp) {
+        this.$appFn.dggWebGoBack((res) => {})
+        return
+      }
+      if (window.history.length <= 1) {
+        window.location.href = config.domainUrl
+      } else {
+        this.$router.back()
+      }
       this.$emit('backHandle')
     },
     getTopMargin() {

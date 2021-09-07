@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="my-component">
-      <div v-for="(item, index) in list" :key="index" class="item">
+      <div
+        v-for="(item, index) in list"
+        :key="index"
+        class="item"
+        @click="jump(item.url)"
+      >
         <div class="item-wrap-img">
           <img class="item-img" :src="item.img" />
         </div>
@@ -15,39 +20,18 @@
 export default {
   name: 'Tools',
   data() {
-    return {
-      // list: [
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/cyb9mn6k7lk0000.png',
-      //     title: '额度评估',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/76nvcmvpmlw0000.png',
-      //     title: '贷款计算器',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/6cb9xtrp8h80000.png',
-      //     title: '智能贷款',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/cjraco2vifc0000.png',
-      //     title: '申请进度',
-      //     url: '',
-      //   },
-      //   {
-      //     img: 'https://cdn.shupian.cn/sp-pt/wap/images/enxy8p7b2k00000.png',
-      //     title: '我的贷款',
-      //     url: '',
-      //   },
-      // ],
-    }
+    return {}
   },
   computed: {
     list() {
       return this.$parent.toolList
+    },
+  },
+  methods: {
+    jump(url) {
+      if (url.indexOf('http') > -1) {
+        window.location.href = url
+      }
     },
   },
 }
@@ -58,8 +42,7 @@ export default {
   background: #ffffff;
   border-radius: 24px;
   margin: 0px 20px;
-  padding: 32px 0;
-
+  padding: 40px 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -80,7 +63,7 @@ export default {
 
     .item-title {
       font-size: 24px;
-      font-weight: bold;
+      //   font-weight: bold;
       color: #222222;
     }
   }

@@ -1,6 +1,6 @@
 <template>
-  <div class="mortgage">
-    <Head title="房贷"></Head>
+  <div class="car-owner">
+    <Head title="一键贷款"></Head>
     <!-- banner图展示 -->
     <div v-if="imgList.length !== 0" class="banner">
       <sp-swipe
@@ -10,9 +10,7 @@
         :show-indicators="imgList.length > 1"
       >
         <sp-swipe-item v-for="(item, idx) in imgList" :key="idx"
-          ><img
-            :src="`${item.img}?x-oss-process=image/resize,m_fill,w_750,h_280,limit_0`"
-            alt=""
+          ><img :src="item.img" alt=""
         /></sp-swipe-item>
       </sp-swipe>
     </div>
@@ -119,12 +117,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { Swipe, SwipeItem, Picker, Popup, Toast } from '@chipspc/vant-dgg'
-import Head from '@/components/financing/common/Header'
+import { mapState } from 'vuex'
 import { financingApi, plannerApi } from '@/api/spread'
 import imHandle from '@/mixins/imHandle'
+import Head from '@/components/financing/common/Header'
 import isLogin from '@/mixins/isLogin'
+
 export default {
   components: {
     Head,
@@ -135,15 +134,17 @@ export default {
     [Toast.name]: Toast,
   },
   mixins: [imHandle, isLogin],
-
   data() {
     return {
+      // 页面规划师
+      pagePlanner: {},
       name: '', // 用户姓名
-      city: '', // 所造城市
+      city: '', // 所在城市
       lines: '', // 申请额度
       phone: '', // 用户电话
       sms: '', // 验证码
       test: '获取验证码',
+      smsRes: 0, // 验证码
       sexList: ['先生', '女士'],
       actived: 0,
       columns: [],
@@ -153,11 +154,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      isInApp: (state) => state.app.isInApp,
-      currentCity: (state) => state.city.currentCity,
-      appInfo: (state) => state.app.appInfo, // app信息
-    }),
     isShow() {
       if (this.name && this.city && this.lines && this.phone && this.sms) {
         return false
@@ -167,17 +163,26 @@ export default {
         return true
       }
     },
+
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCitys: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
+  created() {},
   mounted() {
     this.$appFn.dggCityCode((res) => {
       this.city = res.data.cityName
     })
     this.city = this.postionCity
-    this.getPagePlanner('app-ghsdgye-02')
     this.getCity()
-    this.getAd('ad100062')
+    this.getPagePlanner('app-ghsdgye-02')
+
+    this.getAd('ad100078')
   },
   methods: {
+    // 获取banner
     getAd(code) {
       const url =
         'http://127.0.0.1:7001/service/nk/financing/v1/get_advertising.do'
@@ -203,23 +208,6 @@ export default {
           }
         })
     },
-    getCity() {
-      const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
-      this.$axios
-        .get(financingApi.get_city, { params: { code: 2147483647 } })
-        .then((res) => {
-          if (res.code === 200) {
-            this.cityList = res.data.city
-            this.columns = [
-              { values: Object.keys(this.cityList) },
-              { values: this.cityList['北京市'] },
-            ]
-          }
-        })
-    },
-    onChange(picker, value) {
-      picker.setColumnValues(1, this.cityList[value[0]])
-    },
     // 推介规划师
     async getPagePlanner(scene) {
       const device = await this.$getFinger().then((res) => {
@@ -232,7 +220,7 @@ export default {
           areaCode = res.data.adCode
         })
       } else {
-        areaCode = this.currentCity.code
+        areaCode = this.currentCitys.code
       }
       try {
         this.$axios
@@ -259,7 +247,6 @@ export default {
             }
           )
           .then((res) => {
-            console.log(res, '调用规划师')
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
@@ -275,6 +262,21 @@ export default {
         console.log('plannerApi.plannerReferrals error：', error.message)
       }
     },
+    nameReg() {
+      this.name = this.name.replace(/[^\u4E00-\u9FA5]/g, '')
+    },
+    linesReg(e) {
+      e.target.value = e.target.value.match(/^(\d{0,3})/g)[0] || null
+      this.lines = e.target.value > 101 ? 100 : e.target.value
+    },
+    phoneReg(e) {
+      e.target.value = e.target.value.match(/^(\d{0,11})/g)[0] || null
+      this.phone = e.target.value
+    },
+    smsReg(e) {
+      e.target.value = e.target.value.match(/^(\d{0,6})/g)[0] || null
+      this.sms = e.target.value
+    },
     // 验证码 发送前验证
     onSms() {
       const _tel = this.phone
@@ -285,7 +287,9 @@ export default {
       if (!_reg.test(_tel)) {
         return Toast('请输入正确手机号码')
       }
-      this.sendSms(_tel)
+      if (this.test === '获取验证码') {
+        this.sendSms(_tel)
+      }
     },
     // 获取验证码
     sendSms(phones) {
@@ -302,6 +306,7 @@ export default {
         }
       }, 1000)
       const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_smsCode.do'
+      // financingApi.smsCode
       this.$axios
         .get(financingApi.smsCode, {
           params: {
@@ -313,7 +318,7 @@ export default {
             Toast('验证码发送成功,请注意查收！')
             this.smsRes = res.data
           } else {
-            Toast(res.data)
+            Toast('获取验证码频繁，请稍后再试！')
           }
         })
     },
@@ -336,10 +341,11 @@ export default {
         forwardAbstract: '【咨询信息】',
         title: this.name + this.sexList[this.actived],
         area: typeof this.city !== 'string' ? this.city.join(',') : this.city,
-        productName: '房贷',
+        productName: '车主贷',
         intention: this.lines + '万元',
         routerId: '',
       }
+      const msgParamsMsg = JSON.stringify(msgParams)
       const planner = {
         mchUserId: this.pagePlanner.id,
         userName: this.pagePlanner.name,
@@ -396,6 +402,23 @@ export default {
     choose(idx) {
       this.actived = idx
     },
+    getCity() {
+      const url = 'http://127.0.0.1:7001/service/nk/financing/v1/get_city.do'
+      this.$axios
+        .get(financingApi.get_city, { params: { code: 2147483647 } })
+        .then((res) => {
+          if (res.code === 200) {
+            this.cityList = res.data.city
+            this.columns = [
+              { values: Object.keys(this.cityList) },
+              { values: this.cityList['北京市'] },
+            ]
+          }
+        })
+    },
+    onChange(picker, value) {
+      picker.setColumnValues(1, this.cityList[value[0]])
+    },
     chooseShow() {
       this.pickerShow = true
     },
@@ -404,35 +427,31 @@ export default {
       this.city = value
       this.pickerShow = false
     },
-    // 贷款期限切换方法
-    // onChange(picker, value, index) {
-    //   this.city = value
-    //   this.pickerShow = false
-    // },
+
     // 贷款期限弹出层取消按钮
     onCancel() {
       this.pickerShow = false
     },
-    nameReg() {
-      this.name = this.name.replace(/[^\u4E00-\u9FA5]/g, '')
-    },
-    linesReg(e) {
-      e.target.value = e.target.value.match(/^(\d{0,3})/g)[0] || null
-      this.lines = e.target.value > 101 ? 100 : e.target.value
-    },
-    phoneReg(e) {
-      e.target.value = e.target.value.match(/^(\d{0,11})/g)[0] || null
-      this.phone = e.target.value
-    },
-    smsReg(e) {
-      e.target.value = e.target.value.match(/^(\d{0,6})/g)[0] || null
-      this.sms = e.target.value
-    },
+
+    calculate() {},
+  },
+  head() {
+    return {
+      title: '一键贷款',
+      script: [
+        {
+          src: 'https://tgform.dgg.cn/form/new_form/promotion-sdk-v1.0.min.js',
+          ssr: false,
+          type: 'text/javascript',
+          charset: 'utf-8',
+        },
+      ],
+    }
   },
 }
 </script>
 <style lang="less" scoped>
-.mortgage {
+.car-owner {
   width: 750px;
   margin: 0 auto;
   ::v-deep.my-head {
@@ -474,36 +493,43 @@ export default {
         font-size: 0;
         display: flex;
         align-items: center;
+        .phone-input {
+          width: 482px;
+        }
+        .user-phone-input {
+          width: 482px;
+          height: 45px;
+          font-size: 32px;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          line-height: 45px;
+          border: none;
+          margin-left: 58px;
+          color: #222222;
+        }
         > span {
           display: block;
         }
+
         .title {
-          width: 145px;
+          width: 135px;
+          height: 45px;
           font-size: 32px;
           font-family: PingFangSC-Medium, PingFang SC;
           font-weight: 700;
           color: #222222;
           line-height: 45px;
         }
-        .user-phone-input {
-          width: 482px;
-          font-size: 32px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          line-height: 45px;
-          border: none;
-          margin-left: 43px;
-          color: #222222;
-        }
         > input {
           width: 238px;
           font-size: 32px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
-          line-height: 50px;
           border: none;
-          margin-left: 43px;
+          margin-left: 53px;
           color: #222222;
+          display: block;
+          line-height: 50px;
         }
         > input:-ms-input-placeholder {
           color: #999999;
@@ -556,7 +582,7 @@ export default {
           width: 378px;
         }
         .sms-input {
-          width: 274px;
+          width: 265px;
         }
         .line {
           width: 1px;
@@ -569,7 +595,7 @@ export default {
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #4974f5;
-          line-height: 45px;
+          //   line-height: 45px;
           margin-left: auto;
         }
       }

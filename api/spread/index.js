@@ -1,6 +1,7 @@
 import {
   CHIPS_WAP_SPREAD_BASE_URL,
   CHIPS_WAP_BASE_URL,
+  CHIPS_LAW_SPREAD_BASE_URL,
 } from '../../config/constant'
 
 const newSpreadApi = {
@@ -19,9 +20,13 @@ const financingApi = {
   productList: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/product_list.do`,
   get_city: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_city.do`,
   get_ad_data: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/financing/v1/get_advertising.do`,
+  get_product_code: `${CHIPS_LAW_SPREAD_BASE_URL}/nk/product/v1/typeList.do`,
 }
 const spreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/list.do`,
+  knowledge_list: `${CHIPS_LAW_SPREAD_BASE_URL}/nk/law_knowledge/v1/knowledge_list`,
+  knowledge_detail: `${CHIPS_LAW_SPREAD_BASE_URL}/nk/articlePage/v1/details.do`,
+  recommend_product: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/recommend_product_list.do`, // 推荐商品
 }
 const plannerApi = {
   planner: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/spread/v1/planner.do`,

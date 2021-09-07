@@ -3,9 +3,12 @@
     <div
       v-md-map
       v-md:p_IMClick
+      v-md:p_plannerBoothClick
       class="btn-planner_item"
-      :data-name="`${md.imMd.name}`"
+      :data-commodity_name="`${md.imMd.name}`"
       :data-im_type="`${md.imMd.type}`"
+      :data-booth_number="`${planner.jobNum}`"
+      :data-planner_name="`${planner.name}`"
       @click="onlineConsult"
     >
       <div class="btn-planner_item_img">

@@ -67,18 +67,33 @@ export default {
       if (rollNav.length <= 10) {
         return rollNav
       }
-      //   超过10个，改变前10个的排列顺序
+      //   //   超过10个，改变前10个的排列顺序
+      //   const newRollNav = JSON.parse(JSON.stringify(rollNav))
+      //   // 取前10个中的奇数项
+      //   const oddNavArr = rollNav.filter((item, index) => {
+      //     return (index + 1) % 2 !== 0 && index < 10
+      //   })
+      //   // 取前10个的偶数项
+      //   const evenNavArr = rollNav.filter((item, index) => {
+      //     return (index + 1) % 2 === 0 && index < 10
+      //   })
+      //   newRollNav.splice(0, 10, ...oddNavArr.concat(evenNavArr))
+      //   return newRollNav
       const newRollNav = JSON.parse(JSON.stringify(rollNav))
-      // 取前10个中的奇数项
-      const oddNavArr = rollNav.filter((item, index) => {
-        return (index + 1) % 2 !== 0 && index < 10
+      const newRollNav1 = JSON.parse(JSON.stringify(newRollNav))
+      let length = newRollNav.length
+      length = Math.ceil(length / 2)
+      let star = []
+      star = newRollNav.splice(0, length)
+      const end = newRollNav1.splice(length)
+      const arr = []
+      star.forEach((i, a) => {
+        arr.push(star[a])
+        if (end[a]) {
+          arr.push(end[a])
+        }
       })
-      // 取前10个的偶数项
-      const evenNavArr = rollNav.filter((item, index) => {
-        return (index + 1) % 2 === 0 && index < 10
-      })
-      newRollNav.splice(0, 10, ...oddNavArr.concat(evenNavArr))
-      return newRollNav
+      return arr
     },
   },
   mounted() {

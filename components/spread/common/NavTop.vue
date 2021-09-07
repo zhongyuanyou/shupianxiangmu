@@ -45,7 +45,6 @@
         </Search>
       </div>
     </sp-sticky>
-    <div v-for="(item, index) of 120" :key="index"></div>
   </div>
 </template>
 
@@ -53,6 +52,7 @@
 import { Icon, Sticky } from '@chipspc/vant-dgg'
 import { mapState } from 'vuex'
 import safeAreaInsets from 'safe-area-insets'
+import config from '@/config'
 
 import Search from '@/components/common/search/Search.vue'
 export default {
@@ -162,7 +162,11 @@ export default {
         this.$appFn.dggWebGoBack((res) => {})
         return
       }
-      this.$router.back()
+      if (window.history.length <= 1) {
+        window.location.href = config.domainUrl
+      } else {
+        this.$router.back()
+      }
     },
     // app 头部兼容
     getTopMargin() {

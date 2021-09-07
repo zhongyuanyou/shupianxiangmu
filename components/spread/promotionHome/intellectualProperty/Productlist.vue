@@ -21,7 +21,7 @@
         <!-- 二级分类 -->
         <sp-sticky :offset-top="top">
           <div
-            v-show="item.name !== '推荐'"
+            v-show="itemKey !== 0 && secondaryLabel.length"
             class="secondary-label"
             :style="{ paddingTop: isFixed ? '10px' : '' }"
           >
@@ -49,46 +49,7 @@
           <div class="product-box">
             <div v-if="oddList.length > 0" class="product-odd">
               <div v-for="(proItem, proKey) of oddList" :key="proKey">
-                <ProductItem
-                  v-if="proKey !== 3"
-                  class="product-item"
-                  :product="proItem"
-                />
-                <div
-                  v-if="proKey === 3 && item.name === '推荐'"
-                  class="content"
-                >
-                  <div v-show="recommendedBanner.length" class="content-box">
-                    <sp-swipe
-                      class="my-swipe"
-                      :autoplay="3000"
-                      indicator-color="white"
-                    >
-                      <sp-swipe-item
-                        v-for="(banner, index) in recommendedBanner"
-                        :key="index"
-                        class="sp-swipe-item"
-                        @click="jumpLink(banner.url)"
-                      >
-                        <img :src="banner.img" alt="" />
-                      </sp-swipe-item>
-                    </sp-swipe>
-                    <!-- <div class="box-left">
-                      <img
-                        src="https://cdn.shupian.cn/sp-pt/wap/images/eztp2h80bo00000.png"
-                        alt=""
-                      />
-                    </div>
-                    <div class="box-right">
-                      <div class="title">增长用户从拥有一款小程序开始</div>
-                      <div class="labs">
-                        <div v-for="(lab, index) in labs" :key="index">
-                          {{ lab }}
-                        </div>
-                      </div>
-                    </div> -->
-                  </div>
-                </div>
+                <ProductItem class="product-item" :product="proItem" />
               </div>
             </div>
           </div>
@@ -100,10 +61,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List, Sticky, Swipe, SwipeItem } from '@chipspc/vant-dgg'
+import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 // import product from '@/components/spread/promotionHome/internetHomePage/Product.vue'
 import ProductItem from '@/components/spread/promotionHome/internetHomePage/ProductItem.vue'
+
 import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
 export default {
   name: 'Recommended',
@@ -112,8 +74,6 @@ export default {
     [Tabs.name]: Tabs,
     [List.name]: List,
     [Sticky.name]: Sticky,
-    [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem,
     // product,
     ProductItem,
     // Waterfall,
@@ -315,12 +275,6 @@ export default {
         ]
       },
     },
-    recommendedBanner: {
-      type: Array,
-      default: () => {
-        return []
-      },
-    },
   },
   data() {
     return {
@@ -371,10 +325,9 @@ export default {
     chooes(idx) {
       this.calssActive = idx
       this.activeCode = this.titleName[this.active].children[idx].ext1
-      this.finished = false
       this.pageNumber = 1
       this.oddList = []
-      this.selectTab()
+      this.finished = false
     },
     scroll(e) {
       this.isFixed = e.isFixed
@@ -382,6 +335,7 @@ export default {
     onClick() {
       this.calssActive = -1
       this.secondaryLabel = []
+      this.oddList = []
       this.activeCode = this.titleName[this.active].type
       this.initialize()
       this.secondaryLabel = this.titleName[this.active].children
@@ -396,29 +350,29 @@ export default {
       // // 异步更新数据
       if (this.pageNumber === 1) {
         this.oddList = []
-        this.eventList = []
       }
       this.selectTab()
     },
     jumpLink(url) {
       this.$parent.jumpLink(url)
     },
-
     // 请求数据
     async selectTab(item) {
       // 当前无数据不执行
+      const device = await this.$getFinger().then((res) => {
+        return res
+      })
 
       if (this.finished && !this.loading) return
       this.loading = true
+      // 2、调用接口
       if (this.active !== 0) {
-        // 2、调用接口
         this.$axios
           .get(newSpreadApi.service_product_list, {
             params: {
               start: this.pageNumber,
               limit: '10',
               classCodes: this.activeCode,
-              configFlg: 1,
             },
           })
           .then((res) => {
@@ -443,18 +397,15 @@ export default {
                   url: '',
                   desc: elem.desc, // 说明
                   id: elem.id,
-                  cycle: elem.handleCycleNumber,
                 }
                 this.oddList.push(obj)
               })
-
               this.loading = false
               if (result.length < 10) this.finished = true
-
-              return
+            } else {
+              this.loading = false
+              this.finished = true
             }
-            this.loading = false
-            this.finished = true
           })
           .catch((err) => {
             this.loading = false
@@ -463,19 +414,14 @@ export default {
             console.log(err)
           })
       } else {
-        const device = await this.$getFinger().then((res) => {
-          return res
-        })
-        const platforms = this.isInApp ? 'APP' : 'WAP'
-        const sceneIds = this.isInApp ? 'app-itnetjhy-01' : 'app-itnetjhy-W-01'
         this.$axios
           .post(spreadApi.recommend_product, {
             userId: '',
             deviceId: '9036341960355128675',
             platform: 'APP',
-            areaCode: '510100',
-            sceneId: 'app-itnetjhy-W-01',
-            formatIdOne: 'FL20210425164016',
+            areaCode: this.currentCity.code || '510100',
+            sceneId: 'app-zscqjhy-W-01',
+            formatIdOnes: 'FL20210425164438#FL20210425164496', // 商品一级分类集合，#作为分隔，知识产权分为版权，专利(FL20210425164496)和商标(FL20210425164438)
             productType: 'PRO_CLASS_TYPE_SALES',
           })
           .then((res) => {
@@ -484,9 +430,6 @@ export default {
                 item.imageUrl = item.img
                 this.oddList.push(item)
               })
-              if (this.pageNumber === 1) {
-                this.oddList.splice(3, 0, {})
-              }
               this.finished = true
             } else {
               this.finished = true
@@ -594,21 +537,9 @@ export default {
     padding: 0 20px;
     .content-box {
       width: 100%;
-      height: 240px;
       border-radius: 24px;
+      background: #fff;
       display: flex;
-      .sp-swipe {
-        width: 100%;
-        height: 100%;
-        .sp-swipe-item {
-          width: 100%;
-          height: 100%;
-          > img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
       .box-left {
         width: 240px;
         height: 240px;

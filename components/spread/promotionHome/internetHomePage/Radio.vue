@@ -2,10 +2,11 @@
   <div class="notice">
     <div class="img-box">
       <img
-        src="https://cdn.shupian.cn/sp-pt/wap/images/9k4g0n3bgoc0000.png?x-oss-process=image/resize,m_fill,w_32,h_32,limit_0"
+        src="https://cdn.shupian.cn/sp-pt/wap/images/ft7dl6ygxtk0000.png"
         alt=""
       />
     </div>
+    <div class="line"></div>
     <div class="swipe-box">
       <sp-swipe
         class="my-swipe"
@@ -67,11 +68,11 @@ export default {
         break
       case 'release':
         this.base = 't'
-        this.clasCode = 'bdsp100216'
+        this.clasCode = 'bdsp100240'
         break
       case 'production':
         this.base = ''
-        this.clasCode = 'bdsp100102'
+        this.clasCode = 'bdsp100104'
         break
     }
   },
@@ -123,26 +124,30 @@ export default {
 .notice {
   margin: 0 auto;
   width: 710px;
-  height: 72px;
+  height: 80px;
   background: #ffffff;
   border-radius: 24px;
   display: flex;
   align-items: center;
-  padding: 0 32px 0 20px;
+  padding: 18px 25px 18px 20px;
+  margin-bottom: 20px;
   .img-box {
-    width: 32px;
-    height: 32px;
-    margin-top: 4px;
+    width: 126px;
+    height: 33px;
     display: flex;
-    font-size: 0;
     > img {
       width: 100%;
-      height: 100%;
     }
   }
+  .line {
+    width: 1px;
+    height: 24px;
+    background: #f4f4f4;
+    margin: 0 20px;
+  }
   .swipe-box {
-    width: 560px;
-    height: 36px;
+    width: 360px;
+    height: 33px;
     // line-height: 36px;
     display: inline-block;
     padding-top: 3px;
@@ -150,7 +155,7 @@ export default {
     .my-swipe .sp-swipe-item {
       height: 100%;
       width: 100%;
-      font-size: 26px;
+      font-size: 24px;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       color: #222222;
@@ -164,6 +169,7 @@ export default {
     }
   }
   .jump-box {
+    margin-left: auto;
     .img-box;
     width: 8px;
     height: 14px;
