@@ -443,6 +443,7 @@ export default {
             return {
               img: elem.materialList[0].materialUrl,
               url: elem.materialList[0].materialLink,
+              code: elem.materialList[0].materialDescription,
             }
           })
         }
@@ -451,6 +452,7 @@ export default {
             return {
               img: elem.materialList[0].materialUrl,
               url: elem.materialList[0].materialLink,
+              code: elem.materialList[0].materialDescription,
             }
           })
         }

@@ -12,7 +12,7 @@
         />
       </div>
       <div class="content-msg">
-        <div class="content-left" @click="jumpLink(images.url)">
+        <div class="content-left" @click="jumpLink(images.url, images.code)">
           <img :src="images.img" alt="" />
         </div>
         <div class="content-right">
@@ -20,7 +20,7 @@
             v-for="(item, index) in imgList"
             :key="index"
             class="img-box"
-            @click="jumpLink(item.url)"
+            @click="jumpLink(item.url, item.code)"
           >
             <img :src="item.img" alt="" />
           </div>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     images: {
@@ -70,9 +71,41 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   methods: {
-    jumpLink(url) {
-      this.$parent.jumpLink(url)
+    jumpLink(url, code) {
+      if (this.isInApp && url) {
+        const iOSRouters = {
+          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: code },
+          },
+        }
+        const androidRouters = {
+          path: '/flutter/main',
+          parameter: {
+            routerPath: 'cpsc/goods/details/service',
+            parameter: { productId: code },
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouters)
+        const androidRouterStr = JSON.stringify(androidRouters)
+        this.$appFn.dggJumpRoute({
+          iOSRouter: iOSRouterStr,
+          androidRouter: androidRouterStr,
+        })
+      } else if (url.indexOf('http') > -1) {
+        window.location.href = url
+      } else {
+        this.$parent.$refs.plannerIM.onlineConsult()
+      }
     },
   },
 }

@@ -5,7 +5,7 @@
         v-for="(item, index) in adList"
         :key="index"
         class="ad-msg"
-        @click="jump(item.url)"
+        @click="jump(item.url, item.type)"
       >
         <div class="title-box">
           <div class="title">{{ item.title }}</div>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     adList: {
@@ -70,9 +71,77 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   methods: {
-    jump(url) {
-      this.$parent.jumpLink(url)
+    jump(url, type) {
+      if (url) {
+        if (!this.isInApp) {
+          window.location.href = url
+        }
+        if (this.isInApp) {
+          if (type === '2') {
+            const iOSRouter = {
+              path: 'CPSCustomer:CPSCustomer/CPSTabBarViewController///push/animation',
+              parameter: {
+                selectedIndex: '1',
+              },
+            }
+            const androidRouter = {
+              path: '/main/android/main',
+              parameter: {
+                selectedIndex: 1,
+              },
+            }
+            const iOSRouterStr = JSON.stringify(iOSRouter)
+            const androidRouterStr = JSON.stringify(androidRouter)
+            this.$appFn.dggJumpRoute(
+              {
+                iOSRouter: iOSRouterStr,
+                androidRouter: androidRouterStr,
+              },
+              (res) => {
+                console.log(res)
+              }
+            )
+          } else if (type === '3') {
+            const iOSRouter = {
+              path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+              parameter: {
+                type: 1,
+                classCode: '',
+              },
+            }
+            const androidRouter = {
+              path: '/reform/flutter/classify_result',
+              parameter: {
+                trade: false,
+                classCode: '',
+              },
+            }
+            const iOSRouterStr = JSON.stringify(iOSRouter)
+            const androidRouterStr = JSON.stringify(androidRouter)
+            this.$appFn.dggJumpRoute(
+              {
+                iOSRouter: iOSRouterStr,
+                androidRouter: androidRouterStr,
+              },
+              (res) => {
+                console.log(res)
+              }
+            )
+          } else {
+            window.location.href = url
+          }
+        }
+      } else {
+        this.$parent.$refs.plannerIM.onlineConsult()
+      }
     },
   },
 }

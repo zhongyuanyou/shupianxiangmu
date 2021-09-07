@@ -300,7 +300,7 @@ export default {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
-              code: index,
+              code: resObj.materialDescription,
               img: resObj.materialUrl,
               url: resObj.materialLink,
             }
@@ -311,14 +311,14 @@ export default {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {
-              code: index,
+              code: resObj.materialDescription,
               img: resObj.materialUrl,
               url: resObj.materialLink,
             }
             this.hotSales.push(obj)
           })
         }
-        if (item.locationCode === (this.isInApp ? 'ad100109' : 'ad100111')) {
+        if (item.locationCode === (this.isInApp ? 'ad100111' : 'ad100109')) {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             console.log(resObj)

@@ -14,7 +14,7 @@
             v-for="(item, index) in topList"
             :key="index"
             class="img-box"
-            @click="jump('top', item.url)"
+            @click="jump('top', item.url, item.code)"
           >
             <img
               :src="`${item.img}?x-oss-process=image/resize,m_fill,w_329,h_120,limit_0`"
@@ -27,7 +27,7 @@
             v-for="(item, index) in bottomList"
             :key="index"
             class="img-box"
-            @click="jump('bottom', item.url)"
+            @click="jump('top', item.url, item.code)"
           >
             <img
               :src="`${item.img}?x-oss-process=image/resize,m_fill,w_158,h_176,limit_0`"
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     topList: {
@@ -66,13 +67,47 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   methods: {
-    jump(type, url) {
+    jump(type, url, code) {
       if (type === 'more') {
+        window.location.href = 'https://tm.shupian.cn/list/transactionList'
       } else if (type === 'top') {
-        this.$parent.jumpLink(url)
-      } else if (type === 'bottom') {
-        this.$parent.jumpLink(url)
+        if (url && this.isInApp) {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+            parameter: {
+              type: 1,
+              classCode: code.split('#')[1],
+            },
+          }
+          const androidRouter = {
+            path: '/reform/flutter/classify_result',
+            parameter: {
+              trade: false,
+              classCode: code.split('#')[1],
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+        } else {
+          window.location.href = url
+        }
       }
     },
   },
