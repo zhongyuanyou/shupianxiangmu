@@ -18,7 +18,7 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Banner></Banner>
+      <Banner :images="images"></Banner>
       <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- NavBar  s-->
@@ -320,6 +320,7 @@ export default {
       toolList: [], // 特色服务列表
       businessTop: [], // 经营必备1
       businessBottom: [], // 经营必备2
+      images: [],
     }
   },
   computed: {
@@ -357,6 +358,9 @@ export default {
           if (elem.locationCode === 'ad100105') {
             this.curriculum(elem.sortMaterialList, 'bottom')
           }
+          if (elem.locationCode === 'ad100095') {
+            this.banner(elem.sortMaterialList, 'bottom')
+          }
         })
       }
     } catch (error) {
@@ -371,6 +375,17 @@ export default {
     }
   },
   methods: {
+    banner(data) {
+      if (data.length !== 0) {
+        this.images = data.map((elem, index) => {
+          const data = elem.materialList[0]
+          return {
+            img: data.materialUrl,
+            url: data.materialLink,
+          }
+        })
+      }
+    },
     // 搜索
     clickInputHandle(e) {
       if (this.isInApp) {
