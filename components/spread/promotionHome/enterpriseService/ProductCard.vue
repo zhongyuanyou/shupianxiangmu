@@ -132,13 +132,14 @@ export default {
         align-items: flex-start;
 
         .title {
-          margin-left: 8px;
+          //   margin-left: 8px;
           font-size: 32px;
           color: #222222;
           line-height: 42px;
           font-weight: bold;
           .textOverflow(2);
           .tag {
+            margin-right: 8px;
             height: 32px;
             background: #ec5330;
             border-radius: 4px;
