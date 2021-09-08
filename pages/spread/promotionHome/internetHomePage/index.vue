@@ -71,7 +71,7 @@ import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.
 // import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
 import { plannerApi, newSpreadApi } from '@/api/spread'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   components: {
@@ -169,6 +169,7 @@ export default {
           name: 'IT服务页规划师展位点击',
           type: '售前',
         },
+        code: '', // 埋点code
       },
       activityList: [], // 活动区1
       images: {}, // 热销商品1
@@ -192,6 +193,7 @@ export default {
     }
   },
   mounted() {
+    this.fixedMd.code = this.isInApp ? 'SPP001128' : 'SPW000127'
     try {
       if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)

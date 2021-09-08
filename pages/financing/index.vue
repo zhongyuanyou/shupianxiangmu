@@ -171,6 +171,7 @@ export default {
           name: '企业助贷页规划师展位点击',
           type: '售前',
         },
+        code: '', // 埋点code
       },
       activities: [], // 活动数据列表
       projectList: [], // 专题列表
@@ -184,6 +185,7 @@ export default {
     }),
   },
   mounted() {
+    this.fixedMd.code = this.isInApp ? 'SPP001136' : 'SPW000135'
     // 请求出错也要保证页面正常显示：使用默认数据
     try {
       if (JSON.stringify(this.resultData) !== '{}') {

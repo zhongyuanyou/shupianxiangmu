@@ -313,6 +313,7 @@ export default {
           name: '知识产权页规划师展位点击',
           type: '售前',
         },
+        code: '', // 埋点code
       },
       gift: [],
       GiftList: [], // 新人大礼包
@@ -331,6 +332,7 @@ export default {
     }),
   },
   mounted() {
+    this.fixedMd.code = this.isInApp ? 'SPP001124' : 'SPW000123'
     // 初始化数据
     // this.onChange({ type: 1 })
     // 处理后台数据
