@@ -252,6 +252,7 @@ export default {
           name: '企业服务页规划师展位点击',
           type: '售前',
         },
+        code: '', // 埋点code
       },
       bannerTop: [], // 头部banner
       welfareList: [], // 福利专区
@@ -277,6 +278,7 @@ export default {
     }
   },
   mounted() {
+    this.fixedMd.code = this.isInApp ? 'SPP001120' : 'SPW000119'
     // @--神策埋点-浏览事件-只执行一次
     window.spptMd.spptTrackRow('pageview', {
       name: `推广企业服务聚合页浏览`,

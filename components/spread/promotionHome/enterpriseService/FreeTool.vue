@@ -73,7 +73,7 @@ export default {
   padding: 0 20px;
   margin-bottom: 20px;
   .content {
-    padding: 18px 20px 32px;
+    padding: 18px 0px 20px 20px;
     background: #fff;
     border-radius: 24px;
     .title {
