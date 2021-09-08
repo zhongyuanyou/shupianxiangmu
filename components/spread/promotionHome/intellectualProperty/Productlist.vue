@@ -499,6 +499,7 @@ export default {
       background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
       border-radius: 6px;
       z-index: 2;
+      opacity: 0.8;
     }
   }
 
