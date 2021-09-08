@@ -57,14 +57,13 @@
                 v-for="(item, itemKey) of list"
                 :key="itemKey"
                 class="content-list"
-                @click="onMore(item.id)"
               >
                 <ProductCard v-if="itemKey !== 4" :product="item"></ProductCard>
                 <div
                   v-else-if="proKey === 0 && itemKey === 4"
                   class="advertising-box"
                 >
-                  <div class="advertising">
+                  <div v-show="recommendedList.length" class="advertising">
                     <div class="title">您的企业需求是什么？</div>
                     <div class="list-box">
                       <div class="list">
@@ -247,36 +246,36 @@ export default {
         window.location.href = url
       }
     },
-    onMore(id) {
-      let base = ''
-      DGG_SERVER_ENV === 'development' && (base = 'd')
-      DGG_SERVER_ENV === 'release' && (base = 't')
-      DGG_SERVER_ENV === 'production' && (base = '')
-      if (this.isInApp) {
-        const iOSRouters = {
-          path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
-          parameter: {
-            routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
-          },
-        }
-        const androidRouters = {
-          path: '/flutter/main',
-          parameter: {
-            routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
-          },
-        }
-        const iOSRouterStr = JSON.stringify(iOSRouters)
-        const androidRouterStr = JSON.stringify(androidRouters)
-        this.$appFn.dggJumpRoute({
-          iOSRouter: iOSRouterStr,
-          androidRouter: androidRouterStr,
-        })
-      } else {
-        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
-      }
-    },
+    // onMore(id) {
+    //   let base = ''
+    //   DGG_SERVER_ENV === 'development' && (base = 'd')
+    //   DGG_SERVER_ENV === 'release' && (base = 't')
+    //   DGG_SERVER_ENV === 'production' && (base = '')
+    //   if (this.isInApp) {
+    //     const iOSRouters = {
+    //       path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
+    //       parameter: {
+    //         routerPath: 'cpsc/goods/details/service',
+    //         parameter: { productId: id },
+    //       },
+    //     }
+    //     const androidRouters = {
+    //       path: '/flutter/main',
+    //       parameter: {
+    //         routerPath: 'cpsc/goods/details/service',
+    //         parameter: { productId: id },
+    //       },
+    //     }
+    //     const iOSRouterStr = JSON.stringify(iOSRouters)
+    //     const androidRouterStr = JSON.stringify(androidRouters)
+    //     this.$appFn.dggJumpRoute({
+    //       iOSRouter: iOSRouterStr,
+    //       androidRouter: androidRouterStr,
+    //     })
+    //   } else {
+    //     window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+    //   }
+    // },
     // 请求数据
     selectTab() {
       // 当前无数据不执行
@@ -311,8 +310,12 @@ export default {
                 desc: elem.desc,
                 id: elem.id,
                 sales: elem.saleNum,
+                cycle: elem.handleCycleNumber,
               })
             })
+            if (this.recommendedList) {
+              this.list.splice(4, 0, {})
+            }
 
             this.loading = false
             if (result.length < 15) {

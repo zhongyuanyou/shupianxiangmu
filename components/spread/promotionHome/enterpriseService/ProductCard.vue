@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     onMore(id) {
+      if (!id) return
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
