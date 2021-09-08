@@ -8,7 +8,7 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Banner :images="banner"></Banner>
+      <Banner v-show="banner.length" :images="banner"></Banner>
       <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- 金刚区 -->
@@ -166,7 +166,7 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: 'IT服务页规划师展位点击',
+          name: 'IT服务页规划师咨询点击',
           type: '售前',
         },
         code: '', // 埋点code
@@ -194,6 +194,7 @@ export default {
   },
   mounted() {
     this.fixedMd.code = this.isInApp ? 'SPP001128' : 'SPW000127'
+    this.isInApp && this.mdAppViewScreen()
     try {
       if (JSON.stringify(this.result) !== '{}') {
         this.navDetail(this.result.data.navs.nav100061)
@@ -209,6 +210,13 @@ export default {
     }
   },
   methods: {
+    mdAppViewScreen(info) {
+      // 处理埋点逻辑
+      window.spptMd.spptTrackRow('$AppViewScreen', {
+        track_code: 'SPP001125',
+        content_type: '其他',
+      })
+    },
     // 搜索
     clickInputHandle(e) {
       if (this.isInApp) {

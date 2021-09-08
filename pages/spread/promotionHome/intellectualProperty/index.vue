@@ -18,7 +18,7 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Banner :images="images"></Banner>
+      <Banner v-show="images.length" :images="images"></Banner>
       <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- NavBar  s-->
@@ -310,7 +310,7 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '知识产权页规划师展位点击',
+          name: '知识产权页规划师咨询点击',
           type: '售前',
         },
         code: '', // 埋点code
@@ -333,6 +333,7 @@ export default {
   },
   mounted() {
     this.fixedMd.code = this.isInApp ? 'SPP001124' : 'SPW000123'
+    this.isInApp && this.mdAppViewScreen()
     // 初始化数据
     // this.onChange({ type: 1 })
     // 处理后台数据
@@ -377,6 +378,13 @@ export default {
     }
   },
   methods: {
+    mdAppViewScreen(info) {
+      // 处理埋点逻辑
+      window.spptMd.spptTrackRow('$AppViewScreen', {
+        track_code: 'SPP001121',
+        content_type: '其他',
+      })
+    },
     banner(data) {
       if (data.length !== 0) {
         this.images = data.map((elem, index) => {
