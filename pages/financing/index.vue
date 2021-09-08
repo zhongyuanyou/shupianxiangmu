@@ -168,7 +168,7 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '企业助贷页规划师展位点击',
+          name: '企业助贷页规划师咨询点击',
           type: '售前',
         },
         code: '', // 埋点code
@@ -186,6 +186,7 @@ export default {
   },
   mounted() {
     this.fixedMd.code = this.isInApp ? 'SPP001136' : 'SPW000135'
+    this.isInApp && this.mdAppViewScreen()
     // 请求出错也要保证页面正常显示：使用默认数据
     try {
       if (JSON.stringify(this.resultData) !== '{}') {
@@ -204,6 +205,13 @@ export default {
     }
   },
   methods: {
+    mdAppViewScreen(info) {
+      // 处理埋点逻辑
+      window.spptMd.spptTrackRow('$AppViewScreen', {
+        track_code: 'SPP001133',
+        content_type: '其他',
+      })
+    },
     // 搜索
     clickInputHandle(e) {
       console.log(this.$router)

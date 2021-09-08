@@ -107,7 +107,7 @@ export default {
       // 底部规划师埋点
       fixedMd: {
         imMd: {
-          name: '资产交易页规划师展位点击',
+          name: '资产交易页规划师咨询点击',
           type: '售前',
         },
         code: '', // 埋点code
@@ -191,6 +191,7 @@ export default {
   },
   mounted() {
     this.fixedMd.code = this.isInApp ? 'SPP001132' : 'SPW000131'
+    this.isInApp && this.mdAppViewScreen()
     // @--神策埋点-浏览事件-只执行一次
     window.spptMd.spptTrackRow('pageview', {
       name: `推广交易广场聚合页浏览`,
@@ -233,6 +234,13 @@ export default {
     }
   },
   methods: {
+    mdAppViewScreen(info) {
+      // 处理埋点逻辑
+      window.spptMd.spptTrackRow('$AppViewScreen', {
+        track_code: 'SPP001129',
+        content_type: '其他',
+      })
+    },
     // 搜索
     clickInputHandle(e) {
       if (this.isInApp) {
