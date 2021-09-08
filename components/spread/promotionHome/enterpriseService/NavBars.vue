@@ -40,14 +40,19 @@
       <div v-if="rollNavHandle.length > 10" class="scroll-box">
         <span><i :style="{ left: scroLeft + '%' }"></i></span>
       </div>
-      <div class="live-box">
+      <div
+        class="live-box"
+        :style="{ marginTop: rollNavHandle.length > 10 ? '10px' : '0' }"
+      >
         <div class="live">
           <div class="left">
-            <img
-              src="https://cdn.shupian.cn/sp-pt/wap/images/3fxdy1o7bso0000.png?x-oss-process=image/resize,m_fill,w_28,h_28,limit_0"
-              alt=""
-              class="img-first"
-            />
+            <div class="img-first">
+              <span class="living-icon">
+                <span class="living-bar living-bar1"></span>
+                <span class="living-bar living-bar2"></span>
+                <span class="living-bar living-bar3"></span>
+              </span>
+            </div>
             <img
               src="https://cdn.shupian.cn/sp-pt/wap/images/dtcx1vonuxk0000.png?x-oss-process=image/resize,m_fill,w_141,h_28,limit_0"
               alt=""
@@ -369,14 +374,59 @@ export default {
     align-items: center;
     .left {
       display: flex;
+      .img-first {
+        border-radius: 4px;
+        font-size: 20px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: bold;
+        color: #4974f5;
+        width: 28px;
+        height: 28px;
+        line-height: 32px;
+        display: flex;
+        margin-bottom: 6px;
+        // 直播动态图标
+        .living-icon {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          width: 28px;
+          height: 28px;
+          margin-right: 4px;
+
+          .living-bar {
+            padding: 0 3px;
+            background-color: #4974f5;
+            animation-name: living-bar;
+            animation-duration: 0.5s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate-reverse;
+            animation-timing-function: linear;
+          }
+          .living-bar1 {
+            animation-delay: 0.2s;
+          }
+          .living-bar2 {
+            animation-delay: 0s;
+          }
+          .living-bar3 {
+            animation-delay: 0.4s;
+          }
+          @keyframes living-bar {
+            from {
+              height: 28px;
+            }
+            to {
+              height: 16px;
+            }
+          }
+        }
+      }
       > img {
         display: block;
         width: 100%;
       }
-      .img-first {
-        width: 28px;
-        height: 28px;
-      }
+
       .img-second {
         width: 141px;
         height: 28px;

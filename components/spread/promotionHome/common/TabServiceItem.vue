@@ -426,14 +426,25 @@ export default {
     .sp-tabs__wrap {
       width: @spread-page-width;
       margin: 0 auto;
-      // padding-left: 20px;
     }
+  }
+  .sp-tabs__wrap1 {
+    background: transparent;
+  }
+  .sp-tabs__wrap2 {
+    background: #fff;
+  }
+  ::v-deep.sp-tab {
+    padding: 0;
+    flex: none;
+    margin-right: 40px;
   }
   .title {
     position: relative;
     &_name {
       position: relative;
       z-index: 2;
+      line-height: 40px;
     }
     &_tag {
       position: absolute;
