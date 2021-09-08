@@ -3,12 +3,13 @@
     <div
       v-md-map
       v-md:p_IMClick
-      v-md:p_plannerBoothClick
+      :data-commodity_name="`${md.imMd.name || ''}`"
+      :data-im_type="`${md.imMd.type || ''}`"
+      :data-track_code="md.code || ''"
+      :data-planner_number="planner.jobNum || ''"
+      :data-crisps_fraction="planner.point || ''"
+      :data-planner_name="planner.name || ''"
       class="btn-planner_item"
-      :data-commodity_name="`${md.imMd.name}`"
-      :data-im_type="`${md.imMd.type}`"
-      :data-booth_number="`${planner.jobNum}`"
-      :data-planner_name="`${planner.name}`"
       @click="onlineConsult"
     >
       <div class="btn-planner_item_img">

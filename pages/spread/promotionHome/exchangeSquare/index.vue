@@ -110,6 +110,7 @@ export default {
           name: '资产交易页规划师展位点击',
           type: '售前',
         },
+        code: '', // 埋点code
       },
       rollNav: [],
       activityList: [
@@ -189,6 +190,7 @@ export default {
     }
   },
   mounted() {
+    this.fixedMd.code = this.isInApp ? 'SPP001132' : 'SPW000131'
     // @--神策埋点-浏览事件-只执行一次
     window.spptMd.spptTrackRow('pageview', {
       name: `推广交易广场聚合页浏览`,
