@@ -27,6 +27,7 @@
       v-show="bottomList.length"
       :top-list="topList"
       :bottom-list="bottomList"
+      class="management-must"
     />
     <!-- S 列表 -->
     <TabServiceItem
@@ -702,6 +703,9 @@ export default {
   }
   .navs {
     position: relative;
+  }
+  .management-must {
+    margin-bottom: 0;
   }
 }
 </style>
