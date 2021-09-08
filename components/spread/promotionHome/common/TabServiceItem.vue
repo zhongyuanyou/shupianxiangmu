@@ -288,7 +288,7 @@ export default {
           params: {
             start: this.pageNumber,
             limit: '15',
-            classCodes: this.activeCode,
+            classCodes: this.activeCode || this.titleName[this.active].type,
             configFlg: 1,
           },
         })
