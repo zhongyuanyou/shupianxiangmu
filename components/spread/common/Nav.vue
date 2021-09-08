@@ -225,7 +225,8 @@ export default {
   }
   .left-and-right {
     overflow: hidden;
-    width: 710px;
+    // width: 710px;
+    width: 100%;
     margin: 0 auto;
     background: #ffffff;
     border-radius: 24px;

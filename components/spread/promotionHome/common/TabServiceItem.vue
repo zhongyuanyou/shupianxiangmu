@@ -424,7 +424,8 @@ export default {
   ::v-deep.sp-tabs {
     // 最外层宽度
     .sp-tabs__wrap {
-      width: @spread-page-width;
+      // width: @spread-page-width;
+      width: 100%;
       margin: 0 auto;
       // padding-left: 20px;
     }
