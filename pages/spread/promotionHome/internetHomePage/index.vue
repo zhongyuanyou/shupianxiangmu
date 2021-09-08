@@ -8,7 +8,7 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Banner :images="banner"></Banner>
+      <Banner v-show="banner.length" :images="banner"></Banner>
       <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- 金刚区 -->

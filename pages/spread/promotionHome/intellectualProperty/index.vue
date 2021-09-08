@@ -18,7 +18,7 @@
         :placeholder="placeholder"
         @clickInputHandle="clickInputHandle"
       />
-      <Banner :images="images"></Banner>
+      <Banner v-show="images.length" :images="images"></Banner>
       <!-- <Nav :roll-nav="rollNav" class="nav"></Nav> -->
     </div>
     <!-- NavBar  s-->
