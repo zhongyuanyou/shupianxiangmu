@@ -420,7 +420,7 @@ export default {
               // @--神策埋点-浏览事件-只执行一次
               window.spptMd.spptTrackRow('p_plannerBoothVisit', {
                 name: `IT服务页规划师展位曝光`,
-                track_code: this.isInApp ? 'SPP001126' : 'SPP001125',
+                track_code: this.isInApp ? 'SPP001126' : 'SPW000125',
                 recommend_number: '',
                 planner_number: this.pagePlanner.jobNum,
                 planner_name: this.pagePlanner.name,
