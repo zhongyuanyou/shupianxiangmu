@@ -28,7 +28,7 @@
     <!-- E 金刚区 -->
 
     <!-- S 工具 -->
-    <Tools v-if="true" class="tools" />0
+    <Tools v-if="true" class="tools" />
     <!-- E 工具 -->
 
     <!-- 广告展示 S -->
