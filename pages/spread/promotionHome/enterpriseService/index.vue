@@ -62,7 +62,6 @@ import BtnPlanner from '@/components/spread/common/BtnPlanner'
 import openappChips from '@/mixins/openappChips'
 export default {
   name: 'Index',
-  mixins: [openappChips],
   components: {
     NavTop,
     Banner,
@@ -76,6 +75,7 @@ export default {
     TabServiceItem,
     BtnPlanner,
   },
+  mixins: [openappChips],
   async asyncData({ $axios }) {
     const locations =
       'ad100080,ad100081,ad100082,ad100083,ad100084,ad100085,ad100108'
