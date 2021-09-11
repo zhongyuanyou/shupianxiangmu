@@ -383,7 +383,7 @@ export default {
               platform: 'app',
               productId: '', //
               thirdTypeCodes: '', // 三级code
-              firstTypeCode: '', // 一级code
+              firstTypeCode: 'FL20210809166627', // 交易一级code固定
             },
             {
               headers: {
