@@ -227,7 +227,7 @@ export default {
     // 分类选择
     demandChooes(index, url, code) {
       this.demandActive = index
-      if (url && this.isInApp) {
+      if (url && url !== '/' && this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
           parameter: {
