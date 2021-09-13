@@ -259,6 +259,7 @@ export default {
               margin-top: 13px;
               white-space: nowrap;
               .textOverflow(1);
+              width: 100%;
             }
           }
         }
