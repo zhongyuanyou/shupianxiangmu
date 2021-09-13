@@ -34,7 +34,7 @@
     <FreeTool :tool-list="freeTool"></FreeTool>
     <!-- 免费工具 E -->
     <!-- 规划师立即咨询 S -->
-    <Planner :planner="pagePlanner"></Planner>
+    <!-- <Planner :planner="pagePlanner"></Planner> -->
     <!-- 规划师立即质询 E -->
     <!-- 新人红包 -->
     <!-- <GiftBag
@@ -66,7 +66,7 @@ import Radio from '@/components/spread/promotionHome/internetHomePage/Radio.vue'
 import HotSales from '@/components/spread/promotionHome/internetHomePage/HotSales.vue'
 import Activity from '@/components/spread/promotionHome/internetHomePage/Activity.vue'
 import FreeTool from '@/components/spread/promotionHome/internetHomePage/FreeTool.vue'
-import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.vue'
+// import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.vue'
 // import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
 // import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
@@ -83,7 +83,7 @@ export default {
     HotSales,
     Activity,
     FreeTool,
-    Planner,
+    // Planner,
     // Nav,
     // GiftBag,
     // Advertising,

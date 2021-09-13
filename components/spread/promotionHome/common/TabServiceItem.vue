@@ -97,9 +97,11 @@ import { Toast, Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/spread/promotionHome/enterpriseService/ProductCard.vue'
 // import EnterpriseList from '@/components/spread/promotionHome/common/EnterpriseList'
 import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
+import imHandle from '@/mixins/imHandle'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'TabServiceItem',
+  mixins: [imHandle],
   components: {
     [Toast.name]: Toast,
     [Tab.name]: Tab,
@@ -110,6 +112,12 @@ export default {
     // EnterpriseList,
   },
   props: {
+    planner: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     titleName: {
       type: Array,
       default: () => {
@@ -178,7 +186,7 @@ export default {
       this.pageNumber = 1
       this.finished = false
       this.loading = true
-      scrollTo(0, 800)
+      //   scrollTo(0, 800)
       this.selectTab()
     },
     price(price) {
@@ -242,6 +250,19 @@ export default {
             console.log(res)
           }
         )
+      } else if (url === '/') {
+        const planner = {
+          mchUserId: this.planner.id,
+          userName: this.planner.name,
+          type: this.planner.type,
+          msgParam: {},
+          templateIds: '',
+        }
+        if (this.isInApp) {
+          this.uPIM(planner)
+        } else {
+          this.uPIM(planner)
+        }
       } else {
         window.location.href = url
       }
@@ -367,8 +388,7 @@ export default {
     }
   }
   .enterprise-list {
-    min-height: 1224px;
-
+    min-height: calc(100vh - 88px);
     .content {
       .content-list {
         .advertising-box {
