@@ -33,6 +33,7 @@
     <TabServiceItem
       :title-name="titleName"
       :recommended-list="recommendedList"
+      :planner="pagePlanner"
       @change="onChange"
     >
     </TabServiceItem>
