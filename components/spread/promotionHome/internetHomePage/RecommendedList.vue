@@ -19,61 +19,65 @@
           </div>
         </template>
         <!-- 二级分类 -->
-        <sp-sticky :offset-top="top">
-          <div
-            v-show="item.name !== '推荐'"
-            class="secondary-label"
-            :style="{ paddingTop: isFixed ? '10px' : '' }"
-          >
-            <div class="class-box">
-              <div
-                v-for="(className, index) in secondaryLabel"
-                :key="index"
-                class="class-name"
-                :style="{ color: calssActive === index ? '#4974F5' : '' }"
-                @click="chooes(index)"
-              >
-                {{ className.name }}
-              </div>
+        <!-- <sp-sticky :offset-top="top"> -->
+        <div
+          v-show="itemKey !== 0 && secondaryLabel.length"
+          class="secondary-label"
+          :style="{
+            paddingTop: isFixed ? '10px' : '',
+            top: isFixed ? top - 1 + 'px' : '',
+          }"
+        >
+          <div class="class-box">
+            <div
+              v-for="(className, index) in secondaryLabel"
+              :key="index"
+              class="class-name"
+              :style="{ color: calssActive === index ? '#4974F5' : '' }"
+              @click="chooes(index)"
+            >
+              {{ className.name }}
             </div>
           </div>
-        </sp-sticky>
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          :error.sync="error"
-          finished-text="没有更多了"
-          error-text=""
-          @load="onLoad"
-        >
-          <div class="product-box">
-            <div v-if="oddList.length > 0" class="product-odd">
-              <div v-for="(proItem, proKey) of oddList" :key="proKey">
-                <ProductItem
-                  v-if="proKey !== 3"
-                  class="product-item"
-                  :product="proItem"
-                />
-                <div
-                  v-if="proKey === 3 && item.name === '推荐'"
-                  class="content"
-                >
-                  <div v-show="recommendedBanner.length" class="content-box">
-                    <sp-swipe
-                      class="my-swipe"
-                      :autoplay="3000"
-                      indicator-color="white"
-                    >
-                      <sp-swipe-item
-                        v-for="(banner, index) in recommendedBanner"
-                        :key="index"
-                        class="sp-swipe-item"
-                        @click="jumpLink(banner.url)"
+        </div>
+        <!-- </sp-sticky> -->
+        <div class="pro-list">
+          <sp-list
+            v-model="loading"
+            :finished="finished"
+            :error.sync="error"
+            finished-text="没有更多了"
+            error-text=""
+            @load="onLoad"
+          >
+            <div class="product-box">
+              <div v-if="oddList.length > 0" class="product-odd">
+                <div v-for="(proItem, proKey) of oddList" :key="proKey">
+                  <ProductItem
+                    v-if="proKey !== 3"
+                    class="product-item"
+                    :product="proItem"
+                  />
+                  <div
+                    v-if="proKey === 3 && item.name === '推荐'"
+                    class="content"
+                  >
+                    <div v-show="recommendedBanner.length" class="content-box">
+                      <sp-swipe
+                        class="my-swipe"
+                        :autoplay="3000"
+                        indicator-color="white"
                       >
-                        <img :src="banner.img" alt="" />
-                      </sp-swipe-item>
-                    </sp-swipe>
-                    <!-- <div class="box-left">
+                        <sp-swipe-item
+                          v-for="(banner, index) in recommendedBanner"
+                          :key="index"
+                          class="sp-swipe-item"
+                          @click="jumpLink(banner.url)"
+                        >
+                          <img :src="banner.img" alt="" />
+                        </sp-swipe-item>
+                      </sp-swipe>
+                      <!-- <div class="box-left">
                       <img
                         src="https://cdn.shupian.cn/sp-pt/wap/images/eztp2h80bo00000.png"
                         alt=""
@@ -87,12 +91,13 @@
                         </div>
                       </div>
                     </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </sp-list>
+          </sp-list>
+        </div>
       </sp-tab>
     </sp-tabs>
   </div>
@@ -444,6 +449,9 @@ export default {
                   desc: elem.desc, // 说明
                   id: elem.id,
                   cycle: elem.handleCycleNumber,
+                  priceType: elem.priceType,
+                  salesPrice: elem.salesPrice,
+                  refConfig: elem.refConfig,
                 }
                 this.oddList.push(obj)
               })
@@ -563,10 +571,12 @@ export default {
 
   .secondary-label {
     width: 100%;
-
     padding: 0 20px;
     padding-bottom: 20px;
     background: #f5f5f5;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
     .class-box::-webkit-scrollbar {
       display: none;
     }
@@ -653,8 +663,11 @@ export default {
       }
     }
   }
+  .pro-list {
+    min-height: calc(100vh - 88px);
+  }
   .product-box {
-    margin-top: 32px;
+    // margin-top: 32px;
     width: 100%;
   }
 }

@@ -382,15 +382,17 @@ export default {
     // 金刚区导航栏
     navList(data) {
       if (data.length !== 0) {
+        console.log(data)
         this.rollNav = data.map((elem, index) => {
           return {
-            code: elem.sort,
+            codes: elem.sort,
             name: elem.name,
             url: elem.url,
             // url: '',
             size: 'small',
             label: '',
             imageUrl: elem.navigationImageUrl,
+            code: elem.description,
           }
         })
         this.rollNav.reverse()

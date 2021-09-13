@@ -19,41 +19,46 @@
           </div>
         </template>
         <!-- 二级分类 -->
-        <sp-sticky :offset-top="top">
-          <div
-            v-show="itemKey !== 0 && secondaryLabel.length"
-            class="secondary-label"
-            :style="{ paddingTop: isFixed ? '10px' : '' }"
-          >
-            <div class="class-box">
-              <div
-                v-for="(className, index) in secondaryLabel"
-                :key="index"
-                class="class-name"
-                :style="{ color: calssActive === index ? '#4974F5' : '' }"
-                @click="chooes(index)"
-              >
-                {{ className.name }}
-              </div>
-            </div>
-          </div>
-        </sp-sticky>
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          :error.sync="error"
-          finished-text="没有更多了"
-          error-text=""
-          @load="onLoad"
+        <!-- <sp-sticky ref="sticky" :offset-top="top"> -->
+        <div
+          v-if="itemKey !== 0 && secondaryLabel.length"
+          class="secondary-label"
+          :style="{
+            paddingTop: isFixed ? '10px' : '',
+            top: isFixed ? top + 'px' : '',
+          }"
         >
-          <div class="product-box">
-            <div v-if="oddList.length > 0" class="product-odd">
-              <div v-for="(proItem, proKey) of oddList" :key="proKey">
-                <ProductItem class="product-item" :product="proItem" />
-              </div>
+          <div class="class-box">
+            <div
+              v-for="(className, index) in secondaryLabel"
+              :key="index"
+              class="class-name"
+              :style="{ color: calssActive === index ? '#4974F5' : '' }"
+              @click="chooes(index)"
+            >
+              {{ className.name }}
             </div>
           </div>
-        </sp-list>
+        </div>
+        <!-- </sp-sticky> -->
+        <div class="list-box">
+          <sp-list
+            v-model="loading"
+            :finished="finished"
+            :error.sync="error"
+            finished-text="没有更多了"
+            error-text=""
+            @load="onLoad"
+          >
+            <div class="product-box">
+              <div v-if="oddList.length > 0" class="product-odd">
+                <div v-for="(proItem, proKey) of oddList" :key="proKey">
+                  <ProductItem class="product-item" :product="proItem" />
+                </div>
+              </div>
+            </div>
+          </sp-list>
+        </div>
       </sp-tab>
     </sp-tabs>
   </div>
@@ -317,8 +322,8 @@ export default {
       this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
       this.top = this.appInfo.statusBarHeight + 57 + 44
     } else {
-      this.offsetTop = 57 + 'px'
       this.top = 101
+      this.offsetTop = 57 + 'px'
     }
   },
   methods: {
@@ -397,6 +402,9 @@ export default {
                   url: '',
                   desc: elem.desc, // 说明
                   id: elem.id,
+                  priceType: elem.priceType,
+                  salesPrice: elem.salesPrice,
+                  refConfig: elem.refConfig,
                 }
                 this.oddList.push(obj)
               })
@@ -449,7 +457,7 @@ export default {
 .recommended {
   width: 100%;
   margin-top: 27px;
-
+  position: relative;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
@@ -509,6 +517,10 @@ export default {
     padding: 0 20px;
     padding-bottom: 20px;
     background: #f5f5f5;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 999;
     .class-box::-webkit-scrollbar {
       display: none;
     }
@@ -583,9 +595,12 @@ export default {
       }
     }
   }
-  .product-box {
-    margin-top: 32px;
-    width: 100%;
+  .list-box {
+    min-height: calc(100vh - 88px);
+    .product-box {
+      margin-top: 32px;
+      width: 100%;
+    }
   }
 }
 </style>

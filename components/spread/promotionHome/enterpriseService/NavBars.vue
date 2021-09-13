@@ -15,7 +15,7 @@
             :data-name="`${item.name}`"
           >
             <div v-if="item.label">{{ item.label }}</div>
-            <a @click="onHerf(item.url, item.description, item.execution)">
+            <a @click="onHerf(item.url, item.code)">
               <img
                 v-if="item.size === 'small'"
                 v-lazy="item.imageUrl + $ossImgSet(48, 48)"
@@ -76,7 +76,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import imHandle from '@/mixins/imHandle'
 export default {
+  mixins: [imHandle],
   props: {
     // 滚动导航
     rollNav: {
@@ -85,12 +88,6 @@ export default {
         return []
       },
     },
-  },
-  data() {
-    return {
-      canScrollWidth: 0,
-      scroLeft: 0,
-    }
   },
   computed: {
     // 滚共导航数处理；个数小于等于10，横向排列；个数大于10，前10个横向排列，后面上下排列
@@ -126,7 +123,18 @@ export default {
       })
       return arr
     },
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
+  data() {
+    return {
+      canScrollWidth: 0,
+      scroLeft: 0,
+    }
+  },
+
   mounted() {
     const scrollWidth = this.$refs.refScroll.scrollWidth // 容器文档总宽
     const clientWidth = this.$refs.refScroll.clientWidth // 容器可视宽度
@@ -138,14 +146,56 @@ export default {
       const scroLeft = Math.floor((scrollLeft / this.canScrollWidth) * 100) // 计算导航容器滚动百分比
       this.scroLeft = scroLeft / 2
     },
-    onHerf(url, description, execution) {
+    onHerf(url, code) {
       // if (url) {
       //   if (url.indexOf('http') > -1) {
       //     window.location.href = url
       //     // return
       //   }
       // }
-      this.$parent.jumpLink(url, description, execution)
+      if (url && this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+          parameter: {
+            type: 1,
+            classCode: code,
+          },
+        }
+        const androidRouter = {
+          path: '/reform/flutter/classify_result',
+          parameter: {
+            trade: false,
+            classCode: code,
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+      } else if (url === '/') {
+        const planner = {
+          mchUserId: this.planner.id,
+          userName: this.planner.name,
+          type: this.planner.type,
+          msgParam: {},
+          templateIds: '',
+        }
+        if (this.isInApp) {
+          this.uPIM(planner)
+        } else {
+          this.uPIM(planner)
+        }
+      } else {
+        window.location.href = url
+      }
+      //   this.$parent.jumpLink(url, description, execution)
     },
     jumpHandle(item) {
       let url = ''

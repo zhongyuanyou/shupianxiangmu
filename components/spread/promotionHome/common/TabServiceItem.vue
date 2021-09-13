@@ -23,25 +23,28 @@
           </div>
         </template>
         <!-- 二级分类 -->
-        <sp-sticky :offset-top="top">
-          <div
-            v-show="proKey !== 0 && titleName[active].children.length"
-            class="secondary-label"
-            :style="{ paddingTop: isFixed ? '10px' : '' }"
-          >
-            <div class="class-box">
-              <div
-                v-for="(className, index) in titleName[active].children"
-                :key="index"
-                class="class-name"
-                :style="{ color: calssActive === index ? '#4974F5' : '' }"
-                @click="chooes(index)"
-              >
-                {{ className.name }}
-              </div>
+        <!-- <sp-sticky :offset-top="top"> -->
+        <div
+          v-show="proKey !== 0 && titleName[active].children.length"
+          class="secondary-label"
+          :style="{
+            paddingTop: isFixed ? '10px' : '',
+            top: isFixed ? top + 'px' : '',
+          }"
+        >
+          <div class="class-box">
+            <div
+              v-for="(className, index) in titleName[active].children"
+              :key="index"
+              class="class-name"
+              :style="{ color: calssActive === index ? '#4974F5' : '' }"
+              @click="chooes(index)"
+            >
+              {{ className.name }}
             </div>
           </div>
-        </sp-sticky>
+        </div>
+        <!-- </sp-sticky> -->
         <div class="enterprise-list">
           <sp-list
             v-model="loading"
@@ -224,7 +227,7 @@ export default {
     // 分类选择
     demandChooes(index, url, code) {
       this.demandActive = index
-      if (url && this.isInApp) {
+      if (url && url !== '/' && this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
           parameter: {
@@ -315,7 +318,7 @@ export default {
         .then((res) => {
           // 调用回调函数处理数据
           const result = res.data.records
-          if (res.code === 200 && result.length !== 0) {
+          if (res.code === 200 && result !== 0) {
             this.pageNumber++
             result.forEach((elem, index) => {
               this.list.push({
@@ -332,9 +335,12 @@ export default {
                 id: elem.id,
                 sales: elem.saleNum,
                 cycle: elem.handleCycleNumber,
+                priceType: elem.priceType,
+                salesPrice: elem.salesPrice,
+                refConfig: elem.refConfig,
               })
             })
-            if (this.recommendedList) {
+            if (this.recommendedList && this.pageNumber === 1) {
               this.list.splice(4, 0, {})
             }
 
@@ -365,6 +371,10 @@ export default {
     padding: 0 20px;
     padding-bottom: 20px;
     background: #f5f5f5;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 99;
     .class-box::-webkit-scrollbar {
       display: none;
     }
