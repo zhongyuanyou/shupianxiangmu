@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
@@ -53,6 +54,12 @@ export default {
         }
       },
     },
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
   methods: {
     onMore(id) {
