@@ -27,7 +27,12 @@
     </TabServiceItem>
 
     <!-- START 规划师-->
-    <BtnPlanner ref="plannerIM" :planner="pagePlanner" :md="fixedMd" />
+    <BtnPlanner
+      v-if="false"
+      ref="plannerIM"
+      :planner="pagePlanner"
+      :md="fixedMd"
+    />
     <!-- END 规划师-->
   </div>
 </template>

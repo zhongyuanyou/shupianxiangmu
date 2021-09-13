@@ -13,16 +13,39 @@
             {{ product.title }}
           </div>
         </div>
-        <div v-show="product.label.length" class="tab-list">
+        <div
+          v-if="product.label && product.label.length !== 0"
+          class="tab-list"
+        >
           <div v-for="(item, index) in product.label" :key="index">
             {{ item }}
           </div>
         </div>
         <div class="cycle">办理周期：{{ product.cycle || '--' }}天</div>
         <div class="price-box">
-          <div class="price">
-            <div class="num">{{ product.currentPrice }}</div>
-            <div class="unit">元</div>
+          <div v-if="product.priceType === 'PRO_FLOATING_PRICE'" class="price">
+            <div class="num1">{{ product.currentPrice }}%</div>
+            <div class="unit">服务费</div>
+          </div>
+          <div v-else class="price">
+            <div class="num">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? product.currentPrice
+                  : ''
+              }}
+            </div>
+            <div class="unit">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? '元'
+                  : '面议'
+              }}
+            </div>
           </div>
           <!-- <div class="sales">销量 {{ product.sales }}</div> -->
         </div>
@@ -198,6 +221,13 @@ export default {
             color: #ec5330;
             line-height: 36px;
             font-weight: bold;
+          }
+          .num1 {
+            font-size: 36px;
+            color: #ec5330;
+            line-height: 36px;
+            font-weight: bold;
+            margin-right: 15px;
           }
           .unit {
             margin-left: 2px;

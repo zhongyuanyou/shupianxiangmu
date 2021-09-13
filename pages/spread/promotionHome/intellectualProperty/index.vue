@@ -131,6 +131,7 @@ export default {
         }
       }
       console.log('请求失败')
+      console.log(res)
       return {
         // resultData: dataRes.data,
       }

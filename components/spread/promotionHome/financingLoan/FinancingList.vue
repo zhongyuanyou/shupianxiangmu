@@ -23,25 +23,29 @@
             <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
-        <sp-sticky :offset-top="top">
-          <div
-            v-show="itemKey !== 0 && classList.length"
-            class="labels"
-            :style="{ paddingTop: isFixed ? '10px' : '' }"
-          >
-            <div class="lab-box">
-              <div
-                v-for="(classItem, classIndex) in classList"
-                :key="classIndex"
-                class="lab"
-                :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
-                @click="chooesClass(classIndex)"
-              >
-                {{ classItem.name }}
-              </div>
+        <!-- <sp-sticky :offset-top="top"> -->
+        <div
+          v-show="itemKey !== 0 && classList.length"
+          class="labels"
+          :style="{
+            paddingTop: isFixed ? '10px' : '',
+            top: isFixed ? top - 1 + 'px' : '',
+          }"
+        >
+          <div class="lab-box">
+            <div
+              v-for="(classItem, classIndex) in classList"
+              :key="classIndex"
+              class="lab"
+              :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
+              @click="chooesClass(classIndex)"
+            >
+              {{ classItem.name }}
             </div>
           </div>
-        </sp-sticky>
+        </div>
+        <!-- </sp-sticky> -->
+
         <sp-list
           v-model="loading"
           :finished="finished"
@@ -217,6 +221,7 @@ export default {
               start: this.pageNumber,
               limit: '14',
               classCodes: this.activeCode,
+              configFlg: 1,
             },
           })
           .then((res) => {
@@ -241,6 +246,10 @@ export default {
                   url: '',
                   desc: elem.desc, // 说明
                   id: elem.id,
+                  cycle: elem.handleCycleNumber,
+                  priceType: elem.priceType,
+                  salesPrice: elem.salesPrice,
+                  refConfig: elem.refConfig,
                 }
                 this.list.push(obj)
               })
@@ -349,7 +358,10 @@ export default {
   .labels {
     padding: 0 20px 20px;
     background: #f5f5f5;
-
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 99;
     .lab-box::-webkit-scrollbar {
       display: none; /* Chrome Safari */
     }

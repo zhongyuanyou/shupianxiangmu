@@ -13,16 +13,36 @@
             {{ product.title }}
           </div>
         </div>
-        <div class="desc">{{ product.desc }}</div>
+        <div v-show="product.desc" class="desc">{{ product.desc }}</div>
         <div class="tab-list">
           <div v-for="(item, index) in product.labels" :key="index">
             {{ item }}
           </div>
         </div>
         <div class="price-box">
-          <div class="price">
-            <div class="num">{{ price(product.price) }}</div>
-            <div class="unit">元</div>
+          <div v-if="product.priceType === 'PRO_FLOATING_PRICE'" class="price">
+            <div class="num1">{{ product.price }}%</div>
+            <div class="unit">服务费</div>
+          </div>
+          <div v-else class="price">
+            <div class="num">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? product.price
+                  : ''
+              }}
+            </div>
+            <div class="unit">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? '元'
+                  : '面议'
+              }}
+            </div>
           </div>
           <!-- <div class="sales">销量 {{ product.sales }}</div> -->
         </div>
@@ -123,18 +143,18 @@ export default {
     .item-right {
       margin-left: 32px;
       flex: 1;
+      position: relative;
       .title-box {
         display: flex;
         align-items: flex-start;
-
         .title {
-          margin-left: 8px;
           font-size: 32px;
           color: #222222;
           line-height: 45px;
           font-weight: bold;
           .textOverflow(2);
           .tag {
+            margin-right: 8px;
             height: 32px;
             background: #ec5330;
             border-radius: 4px;
@@ -175,13 +195,20 @@ export default {
         }
       }
       .price-box {
-        margin-top: 20px;
+        position: absolute;
+        bottom: 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
         .price {
           display: flex;
-
+          .num1 {
+            font-size: 36px;
+            color: #ec5330;
+            line-height: 36px;
+            font-weight: bold;
+            margin-right: 15px;
+          }
           .num {
             font-size: 36px;
             color: #ec5330;
