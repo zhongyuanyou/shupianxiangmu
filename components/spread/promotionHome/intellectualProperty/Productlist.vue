@@ -484,7 +484,6 @@ export default {
   }
   ::v-deep.sp-tabs__wrap {
     height: 80px;
-    // margin-bottom: 20px;
   }
   ::v-deep.sp-tab {
     padding: 0;
@@ -539,7 +538,7 @@ export default {
     width: 100%;
 
     padding: 0 20px;
-    padding-bottom: 24px;
+    padding-bottom: 20px;
     background: #f5f5f5;
     position: -webkit-sticky;
     position: sticky;
