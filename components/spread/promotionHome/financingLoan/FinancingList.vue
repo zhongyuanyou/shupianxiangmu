@@ -54,6 +54,11 @@
           error-text=""
           @load="onLoad"
         >
+          <template #loading>
+            <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+              <sp-loading size="12px" />加载中...
+            </div>
+          </template>
           <div class="product-box">
             <div v-if="list.length > 0" class="product-item">
               <product
@@ -144,6 +149,7 @@ export default {
       classArr: '',
       classCode: '',
       activeCode: '',
+      num: 1,
     }
   },
   computed: {
@@ -169,6 +175,7 @@ export default {
   methods: {
     // 选择二级分类
     chooesClass(i) {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.activeCode = this.titleName[this.active].children[i].ext1
       this.pageNumber = 1
       this.classActive = i
@@ -182,6 +189,7 @@ export default {
       })
     },
     onClick() {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.pageNumber = 1
       this.classActive = -1
       this.classList = this.titleName[this.active].children
@@ -228,9 +236,11 @@ export default {
             // 调用回调函数处理数据
             const result = res.data.records
             if (res.code === 200 && result.length !== 0) {
+              this.$xToast.hideLoading()
               if (res.data.pageNumber === 1) {
                 this.list = []
               }
+              this.num = 2
               ++this.pageNumber
               result.forEach((elem, index) => {
                 const obj = {
@@ -255,13 +265,14 @@ export default {
               })
               this.loading = false
               if (result.length < 14) this.finished = true
-
-              return
+            } else {
+              this.$xToast.hideLoading()
+              this.loading = false
+              this.finished = true
             }
-            this.loading = false
-            this.finished = true
           })
           .catch((err) => {
+            this.$xToast.hideLoading()
             this.loading = false
             this.finished = true
             this.error = true
@@ -280,17 +291,23 @@ export default {
           })
           .then((res) => {
             if (res.code === 200) {
+              this.$xToast.hideLoading()
               res.data.records.forEach((item, index) => {
                 item.imageUrl = item.img
                 this.list.push(item)
               })
+              this.loading = false
               this.finished = true
             } else {
+              this.loading = false
               this.finished = true
+              this.$xToast.hideLoading()
             }
           })
           .catch((err) => {
+            this.loading = false
             this.finished = true
+            this.$xToast.hideLoading()
             console.log(err)
           })
       }

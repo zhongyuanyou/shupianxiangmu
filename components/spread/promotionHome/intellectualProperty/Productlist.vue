@@ -50,6 +50,11 @@
             error-text=""
             @load="onLoad"
           >
+            <template #loading>
+              <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+                <sp-loading size="12px" />加载中...
+              </div>
+            </template>
             <div class="product-box">
               <div v-if="oddList.length > 0" class="product-odd">
                 <div v-for="(proItem, proKey) of oddList" :key="proKey">
@@ -303,6 +308,7 @@ export default {
       classCode: '',
       labs: ['规划', '开发', '一站式服务'],
       activeCode: '',
+      num: 1,
     }
   },
   computed: {
@@ -328,6 +334,7 @@ export default {
   },
   methods: {
     chooes(idx) {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.calssActive = idx
       this.activeCode = this.titleName[this.active].children[idx].ext1
       this.pageNumber = 1
@@ -338,6 +345,7 @@ export default {
       this.isFixed = e.isFixed
     },
     onClick() {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.calssActive = -1
       this.secondaryLabel = []
       this.oddList = []
@@ -369,6 +377,7 @@ export default {
       })
 
       if (this.finished && !this.loading) return
+
       this.loading = true
       // 2、调用接口
       if (this.active !== 0) {
@@ -384,6 +393,8 @@ export default {
             // 调用回调函数处理数据
             const result = res.data.records
             if (res.code === 200 && result.length !== 0) {
+              this.$xToast.hideLoading()
+              this.num = 2
               if (res.data.pageNumber === 1) {
                 this.list = []
               }
@@ -411,11 +422,13 @@ export default {
               this.loading = false
               if (result.length < 10) this.finished = true
             } else {
+              this.$xToast.hideLoading()
               this.loading = false
               this.finished = true
             }
           })
           .catch((err) => {
+            this.$xToast.hideLoading()
             this.loading = false
             this.finished = true
             this.error = true
@@ -434,16 +447,19 @@ export default {
           })
           .then((res) => {
             if (res.code === 200) {
+              this.$xToast.hideLoading()
               res.data.records.forEach((item, index) => {
                 item.imageUrl = item.img
                 this.oddList.push(item)
               })
               this.finished = true
             } else {
+              this.$xToast.hideLoading()
               this.finished = true
             }
           })
           .catch((err) => {
+            this.$xToast.hideLoading()
             this.finished = true
             console.log(err)
           })
@@ -597,8 +613,12 @@ export default {
   }
   .list-box {
     min-height: calc(100vh - 88px);
+    .loding-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
     .product-box {
-      margin-top: 32px;
       width: 100%;
     }
   }

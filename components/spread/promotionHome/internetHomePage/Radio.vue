@@ -22,10 +22,11 @@
       </sp-swipe>
     </div>
     <div class="jump-box">
-      <img
-        src="https://cdn.shupian.cn/sp-pt/wap/images/adfky9869k80000.png"
-        alt=""
-      />
+      <my-icon
+        name="order_ic_listnext"
+        size="0.24rem"
+        color="#cccccc"
+      ></my-icon>
     </div>
   </div>
 </template>
@@ -126,11 +127,12 @@ export default {
   width: 710px;
   height: 80px;
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  padding: 18px 25px 18px 20px;
+  padding: 18px 0 18px 20px;
   margin-bottom: 20px;
+
   .img-box {
     width: 126px;
     height: 33px;
@@ -151,7 +153,7 @@ export default {
     // line-height: 36px;
     display: inline-block;
     padding-top: 3px;
-    margin: 0 32px 0 16px;
+    margin: 0 32px 0 0;
     .my-swipe .sp-swipe-item {
       height: 100%;
       width: 100%;
@@ -170,6 +172,8 @@ export default {
   }
   .jump-box {
     margin-left: auto;
+    margin-right: 24px;
+    display: flex;
     .img-box;
     width: 8px;
     height: 14px;
