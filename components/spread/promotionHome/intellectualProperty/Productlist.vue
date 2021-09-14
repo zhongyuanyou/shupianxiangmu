@@ -444,6 +444,7 @@ export default {
             sceneId: 'app-zscqjhy-W-01',
             formatIdOnes: 'FL20210425164438#FL20210425164496', // 商品一级分类集合，#作为分隔，知识产权分为版权，专利(FL20210425164496)和商标(FL20210425164438)
             productType: 'PRO_CLASS_TYPE_SALES',
+            classCode: this.titleName[0].type,
           })
           .then((res) => {
             if (res.code === 200) {
@@ -472,7 +473,7 @@ export default {
 <style lang="less" scoped>
 .recommended {
   width: 100%;
-  margin-top: 27px;
+  margin-top: 32px;
   position: relative;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
@@ -480,6 +481,10 @@ export default {
 
   ::v-deep.sp-tabs__nav--line {
     padding-left: 20px;
+  }
+  ::v-deep.sp-tabs__wrap {
+    height: 33px;
+    margin-bottom: 20px;
   }
   ::v-deep.sp-tab {
     padding: 0;
@@ -514,9 +519,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    span {
+      z-index: 3;
+    }
     .title_tag {
       position: absolute;
-      bottom: 24px;
+      bottom: 0px;
       right: 0;
       width: 60px;
       height: 12px;
@@ -551,11 +559,14 @@ export default {
         height: 56px;
         background: #ffffff;
         border-radius: 8px;
-        line-height: 56px;
+        // line-height: 56px;
         padding: 0 19px;
         margin-right: 10px;
         font-size: 24px;
         color: #555555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }

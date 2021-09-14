@@ -83,7 +83,35 @@ export default {
       DGG_SERVER_ENV === 'production' && (base = '')
 
       if (type === 'more') {
-        window.location.href = `https://${base}m.shupian.cn/list/transactionList`
+        if (this.isInApp) {
+          const iOSRouter = {
+            path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+            parameter: {
+              type: 1,
+              classCode: '',
+            },
+          }
+          const androidRouter = {
+            path: '/reform/flutter/classify_result',
+            parameter: {
+              trade: false,
+              classCode: '',
+            },
+          }
+          const iOSRouterStr = JSON.stringify(iOSRouter)
+          const androidRouterStr = JSON.stringify(androidRouter)
+          this.$appFn.dggJumpRoute(
+            {
+              iOSRouter: iOSRouterStr,
+              androidRouter: androidRouterStr,
+            },
+            (res) => {
+              console.log(res)
+            }
+          )
+        } else {
+          window.location.href = `https://${base}m.shupian.cn/list/transactionList`
+        }
       } else if (type === 'top') {
         if (url && this.isInApp) {
           const iOSRouter = {

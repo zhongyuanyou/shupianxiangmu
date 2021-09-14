@@ -2,13 +2,14 @@
   <div class="gift-bag">
     <h1>知识产权新人大礼包</h1>
     <div class="box">
-      <img
-        v-if="gift && gift.length > 0"
-        :src="gift[0].img"
-        alt=""
-        @click="jump(gift[0].url)"
-      />
       <div class="right">
+        <img
+          v-if="gift && gift.length > 0"
+          class="first-img"
+          :src="gift[0].img"
+          alt=""
+          @click="jump(gift[0].url)"
+        />
         <div v-for="(item, index) in list" :key="index" class="div-box">
           <img :src="item.img" alt="" @click="jumpLink(item.url)" />
         </div>
@@ -71,7 +72,7 @@ export default {
     }
     > .right {
       margin-left: 15px;
-      width: calc(100% - 185px);
+      // width: calc(100% - 185px);
       overflow-x: auto;
       height: 120px;
       display: flex;
@@ -85,6 +86,9 @@ export default {
           width: 100%;
           height: 100%;
         }
+      }
+      .first-img {
+        margin-right: 15px;
       }
     }
   }

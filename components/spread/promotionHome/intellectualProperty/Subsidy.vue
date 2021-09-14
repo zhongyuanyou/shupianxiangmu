@@ -51,7 +51,7 @@ export default {
   margin: 0 20px;
   background: #feefd6;
   border-radius: 24px;
-  padding: 18px 20px 0 20px;
+  padding: 28px 20px 0 20px;
   > h1 {
     text-align: center;
     font-size: 32px;
@@ -79,7 +79,8 @@ export default {
   > .box {
     background-image: linear-gradient(180deg, #fdfcf8 0%, #feefd6 100%);
     padding: 28px 25px 40px 25px;
-    margin: 20px 20px 0 20px;
+    // margin: 20px 20px 0 20px;
+    margin-top: 20px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     > .btn {
@@ -91,6 +92,7 @@ export default {
       letter-spacing: 0;
       text-align: center;
       line-height: 96px;
+      font-weight: bold;
     }
     > .tit {
       margin-top: 32px;

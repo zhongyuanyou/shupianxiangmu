@@ -45,30 +45,31 @@
           </div>
         </div>
         <!-- </sp-sticky> -->
-
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          :error.sync="error"
-          finished-text="没有更多了"
-          error-text=""
-          @load="onLoad"
-        >
-          <template #loading>
-            <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
-              <sp-loading size="12px" />加载中...
+        <div class="list-box">
+          <sp-list
+            v-model="loading"
+            :finished="finished"
+            :error.sync="error"
+            finished-text="没有更多了"
+            error-text=""
+            @load="onLoad"
+          >
+            <template #loading>
+              <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+                <sp-loading size="12px" />加载中...
+              </div>
+            </template>
+            <div class="product-box">
+              <div v-if="list.length > 0" class="product-item">
+                <product
+                  v-for="(proItem, proKey) of list"
+                  :key="proKey"
+                  :product="proItem"
+                />
+              </div>
             </div>
-          </template>
-          <div class="product-box">
-            <div v-if="list.length > 0" class="product-item">
-              <product
-                v-for="(proItem, proKey) of list"
-                :key="proKey"
-                :product="proItem"
-              />
-            </div>
-          </div>
-        </sp-list>
+          </sp-list>
+        </div>
       </sp-tab>
     </sp-tabs>
   </div>
@@ -288,6 +289,7 @@ export default {
             sceneId: 'app-dkjhy-W-01',
             formatIdOne: 'FL20210425164558',
             productType: 'PRO_CLASS_TYPE_SALES',
+            classCode: this.titleName[0].type,
           })
           .then((res) => {
             if (res.code === 200) {
@@ -402,6 +404,9 @@ export default {
         text-align: center;
       }
     }
+  }
+  .list-box {
+    min-height: calc(100vh - 88px);
   }
   .secondary-label {
     > ul {

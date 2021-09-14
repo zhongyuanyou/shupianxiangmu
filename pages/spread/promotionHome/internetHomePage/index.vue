@@ -249,7 +249,6 @@ export default {
     },
     // 金刚区数据处
     navDetail(data) {
-      console.log(data)
       if (data.length !== 0) {
         const navList = []
         data.forEach((item, index) => {
@@ -280,6 +279,7 @@ export default {
       // this.titleName = classArr
     },
     getData(data) {
+      console.log(data)
       data.forEach((item, idx) => {
         // 头部banner
         if (item.locationCode === 'ad100086') {
@@ -331,7 +331,6 @@ export default {
         if (item.locationCode === (this.isInApp ? 'ad100111' : 'ad100109')) {
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
-            console.log(resObj)
             const obj = {
               code: index,
               img: resObj.materialUrl,
@@ -407,7 +406,6 @@ export default {
             }
           )
           .then((res) => {
-            console.log(res, '调用规划师')
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
@@ -529,7 +527,6 @@ export default {
             execution.split(':')[1] || ''
           }":"${description}"}}`
           const jsonObj = JSON.parse(lastObj)
-          console.log(lastObj, execution.split(':')[0])
           this.$appFn.dggProperty(jsonObj, (res) => {})
           return
         }

@@ -9,7 +9,7 @@
       >
         <div class="title-box">
           <div class="title">{{ item.title }}</div>
-          <div v-if="item.tag !== ''" class="live-label">
+          <!-- <div v-if="item.tag !== ''" class="live-label">
             <span class="living-icon">
               <span class="living-bar living-bar1"></span>
               <span class="living-bar living-bar2"></span>
@@ -17,7 +17,7 @@
             </span>
             {{ item.tag }}
           </div>
-          <!-- <div
+          <div
             class="tags"
             :style="{
               color: item.tag === '千万补贴' ? '#EC5330' : '',
@@ -92,13 +92,16 @@ export default {
   margin: 20px 0;
   .advertising-box {
     width: 100%;
-    background: #ffffff;
-    border-radius: 24px;
+    // background: #ffffff;
+
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+
     .ad-msg {
-      width: 355px;
-      height: 308px;
+      width: 347px;
+      //   height: 300px;
+      border-radius: 24px;
+      background: #ffffff;
       .title-box {
         display: flex;
         align-items: center;
@@ -172,7 +175,7 @@ export default {
       .slogan {
         font-size: 26px;
         color: #999999;
-        margin-top: 16px;
+        margin-top: 8px;
       }
       .img-box {
         width: 315px;
@@ -188,20 +191,10 @@ export default {
       }
     }
     > div:first-child {
-      border-right: 1px solid #f5f5f5;
-      border-bottom: 1px solid #f5f5f5;
+      padding: 24px 11px 24px 21px;
     }
     > div:nth-child(2) {
-      border-bottom: 1px solid #f5f5f5;
-    }
-    > div:nth-child(3) {
-      border-right: 1px solid #f5f5f5;
-    }
-    > div:nth-child(odd) {
-      padding: 20px 29px 22px 20px;
-    }
-    > div:nth-child(even) {
-      padding: 20px 20px 22px 29px;
+      padding: 24px 20px 24px 12px;
     }
   }
 }

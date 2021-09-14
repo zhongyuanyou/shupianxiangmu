@@ -121,7 +121,7 @@ export default {
     height: 100%;
     background: #ffffff;
     border-radius: 24px;
-    padding: 24px 20px;
+    padding: 24px 20px 24px 20px;
     position: relative;
     .title-box {
       display: flex;
@@ -181,13 +181,16 @@ export default {
         width: 100%;
         position: relative;
         z-index: 1;
+        .img-box:nth-child(1) {
+          margin-bottom: 12px;
+        }
         .img-box {
           width: 222px;
           height: 116px;
           border-radius: 12px;
           display: flex;
-          margin-bottom: 12px;
           > img {
+            display: block;
             width: 100%;
             height: 100%;
             border-radius: 12px;
