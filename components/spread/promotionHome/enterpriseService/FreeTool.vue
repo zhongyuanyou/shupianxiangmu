@@ -73,7 +73,7 @@ export default {
   padding: 0 20px;
   margin-bottom: 20px;
   .content {
-    padding: 18px 0px 20px 20px;
+    padding: 18px 0px 32px 20px;
     background: #fff;
     border-radius: 24px;
     .title {
@@ -86,7 +86,7 @@ export default {
       display: none;
     }
     .tool-box {
-      margin-top: 33px;
+      margin-top: 24px;
       display: flex;
       width: 100%;
       overflow-x: scroll;
