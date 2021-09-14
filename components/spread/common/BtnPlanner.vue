@@ -94,7 +94,7 @@ export default {
   position: fixed;
   bottom: 148px;
   right: 32px;
-  z-index: 6;
+  z-index: 10000;
   &_item {
     position: relative;
     width: 100%;

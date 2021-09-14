@@ -61,7 +61,7 @@ export default {
   padding: 0 20px;
   margin-top: 20px;
   .content {
-    padding: 18px 20px 32px;
+    padding: 12px 20px 32px;
     background: #fff;
     border-radius: 24px;
     .title {

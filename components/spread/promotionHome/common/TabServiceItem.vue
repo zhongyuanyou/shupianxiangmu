@@ -47,6 +47,7 @@
         <!-- </sp-sticky> -->
         <div class="enterprise-list">
           <sp-list
+            ref="list"
             v-model="loading"
             :finished="finished"
             :error.sync="error"
@@ -55,6 +56,11 @@
             offset="100"
             @load="onLoad"
           >
+            <template #loading>
+              <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+                <sp-loading size="12px" />加载中...
+              </div>
+            </template>
             <div class="content">
               <div
                 v-for="(item, itemKey) of list"
@@ -96,7 +102,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Toast, Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
+import { Toast, Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/spread/promotionHome/enterpriseService/ProductCard.vue'
 // import EnterpriseList from '@/components/spread/promotionHome/common/EnterpriseList'
 import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
@@ -112,6 +118,7 @@ export default {
     [List.name]: List,
     ProductCard,
     [Sticky.name]: Sticky,
+    [Loading.name]: Loading,
     // EnterpriseList,
   },
   props: {
@@ -133,6 +140,12 @@ export default {
         return []
       },
     },
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
 
   data() {
@@ -162,14 +175,10 @@ export default {
       classArr: '',
       classCode: '',
       activeCode: '',
+      num: 1,
     }
   },
-  computed: {
-    ...mapState({
-      isInApp: (state) => state.app.isInApp,
-      appInfo: (state) => state.app.appInfo, // app信息
-    }),
-  },
+
   mounted() {
     if (this.isInApp) {
       this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
@@ -183,6 +192,7 @@ export default {
     // 获取三级分类
 
     chooes(idx) {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.list = []
       this.calssActive = idx
       this.activeCode = this.titleName[this.active].children[idx].ext1
@@ -200,6 +210,7 @@ export default {
       }
     },
     onClick() {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.activeCode = this.titleName[this.active].type
       this.initialize()
       this.calssActive = -1
@@ -319,7 +330,9 @@ export default {
           // 调用回调函数处理数据
           const result = res.data.records
           if (res.code === 200 && result !== 0) {
+            this.$xToast.hideLoading()
             this.pageNumber++
+            this.num = 2
             result.forEach((elem, index) => {
               this.list.push({
                 code: index + 1,
@@ -349,11 +362,13 @@ export default {
               this.finished = true
             }
           } else {
+            this.$xToast.hideLoading()
             this.loading = false
             this.finished = true
           }
         })
         .catch((err) => {
+          this.$xToast.hideLoading()
           this.loading = false
           this.finished = true
           this.error = true
@@ -366,6 +381,9 @@ export default {
 
 <style lang="less" scoped>
 .tab-service-item {
+  ::v-deer.sp-loading__circular {
+    color: red;
+  }
   .secondary-label {
     width: 100%;
     padding: 0 20px;
@@ -399,6 +417,11 @@ export default {
   }
   .enterprise-list {
     min-height: calc(100vh - 88px);
+    .loding-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
     .content {
       .content-list {
         .advertising-box {
