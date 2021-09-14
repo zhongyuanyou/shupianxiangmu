@@ -9,15 +9,15 @@
       >
         <div class="title-box">
           <div class="title">{{ item.title }}</div>
-          <!-- <div v-if="item.tag !== ''" class="live-label">
-            <span class="living-icon">
+          <div v-if="item.tag !== ''" class="live-label">
+            <span v-if="isInApp" class="living-icon">
               <span class="living-bar living-bar1"></span>
               <span class="living-bar living-bar2"></span>
               <span class="living-bar living-bar3"></span>
             </span>
             {{ item.tag }}
           </div>
-          <div
+          <!-- <div
             class="tags"
             :style="{
               color: item.tag === '千万补贴' ? '#EC5330' : '',

@@ -29,7 +29,7 @@
           class="secondary-label"
           :style="{
             paddingTop: isFixed ? '10px' : '',
-            top: isFixed ? top + 'px' : '',
+            top: isFixed ? top - 3 + 'px' : '',
           }"
         >
           <div class="class-box">
