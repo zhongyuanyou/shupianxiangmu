@@ -10,7 +10,7 @@
         <div class="title-box">
           <div class="title">{{ item.title }}</div>
           <div v-if="item.tag !== ''" class="live-label">
-            <span v-if="isInApp" class="living-icon">
+            <span v-if="item.tag === '直播中'" class="living-icon">
               <span class="living-bar living-bar1"></span>
               <span class="living-bar living-bar2"></span>
               <span class="living-bar living-bar3"></span>
