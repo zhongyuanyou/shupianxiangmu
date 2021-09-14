@@ -472,7 +472,7 @@ export default {
 <style lang="less" scoped>
 .recommended {
   width: 100%;
-  margin-top: 27px;
+  margin-top: 32px;
   position: relative;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
@@ -480,6 +480,10 @@ export default {
 
   ::v-deep.sp-tabs__nav--line {
     padding-left: 20px;
+  }
+  ::v-deep.sp-tabs__wrap {
+    height: 33px;
+    margin-bottom: 20px;
   }
   ::v-deep.sp-tab {
     padding: 0;
@@ -514,9 +518,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    span {
+      z-index: 3;
+    }
     .title_tag {
       position: absolute;
-      bottom: 24px;
+      bottom: 0px;
       right: 0;
       width: 60px;
       height: 12px;
@@ -551,11 +558,14 @@ export default {
         height: 56px;
         background: #ffffff;
         border-radius: 8px;
-        line-height: 56px;
+        // line-height: 56px;
         padding: 0 19px;
         margin-right: 10px;
         font-size: 24px;
         color: #555555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
