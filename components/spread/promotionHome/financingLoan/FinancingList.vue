@@ -289,6 +289,7 @@ export default {
             sceneId: 'app-dkjhy-W-01',
             formatIdOne: 'FL20210425164558',
             productType: 'PRO_CLASS_TYPE_SALES',
+            classCode: this.titleName[0].type,
           })
           .then((res) => {
             if (res.code === 200) {

@@ -174,6 +174,8 @@ export default {
     margin-left: auto;
     margin-right: 24px;
     display: flex;
+    align-items: center;
+    justify-content: center;
     .img-box;
     width: 8px;
     height: 14px;

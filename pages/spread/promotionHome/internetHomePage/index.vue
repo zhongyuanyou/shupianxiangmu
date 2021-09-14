@@ -279,6 +279,7 @@ export default {
       // this.titleName = classArr
     },
     getData(data) {
+      console.log(data)
       data.forEach((item, idx) => {
         // 头部banner
         if (item.locationCode === 'ad100086') {
@@ -328,7 +329,6 @@ export default {
           })
         }
         if (item.locationCode === (this.isInApp ? 'ad100111' : 'ad100109')) {
-          console.log(item.sortMaterialList, 1141458)
           item.sortMaterialList.forEach((elem, index) => {
             const resObj = elem.materialList[0]
             const obj = {

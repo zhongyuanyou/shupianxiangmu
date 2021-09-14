@@ -14,7 +14,11 @@
       <sp-tab v-for="(item, itemKey) of titleName" :key="itemKey">
         <template #title>
           <div class="title">
-            <span>{{ item.name }}</span>
+            <span
+              class="title-name"
+              :style="{ color: active === itemKey ? '#222222' : '' }"
+              >{{ item.name }}</span
+            >
             <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
@@ -110,7 +114,15 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List, Sticky, Swipe, SwipeItem } from '@chipspc/vant-dgg'
+import {
+  Tab,
+  Tabs,
+  List,
+  Sticky,
+  Swipe,
+  SwipeItem,
+  Loading,
+} from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 // import product from '@/components/spread/promotionHome/internetHomePage/Product.vue'
 import ProductItem from '@/components/spread/promotionHome/internetHomePage/ProductItem.vue'
@@ -126,6 +138,7 @@ export default {
     [SwipeItem.name]: SwipeItem,
     // product,
     ProductItem,
+    [Loading.name]: Loading,
     // Waterfall,
   },
   props: {
@@ -496,6 +509,7 @@ export default {
             sceneId: 'app-itnetjhy-W-01',
             formatIdOne: 'FL20210425164016',
             productType: 'PRO_CLASS_TYPE_SALES',
+            classCode: this.titleName[0].type,
           })
           .then((res) => {
             if (res.code === 200) {
@@ -570,6 +584,11 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    .title-name {
+      position: relative;
+      z-index: 999;
+      color: #555555;
+    }
     .title_tag {
       position: absolute;
       bottom: 24px;
@@ -578,7 +597,7 @@ export default {
       height: 12px;
       background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
       border-radius: 6px;
-      z-index: 2;
+      z-index: 1;
       opacity: 0.8;
     }
   }
