@@ -48,6 +48,7 @@ export default {
             classCodes: this.classCode,
             start: this.start,
             limit: 15,
+            configFlg: 1,
           },
         })
         .then((res) => {

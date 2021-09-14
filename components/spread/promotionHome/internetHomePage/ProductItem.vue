@@ -195,8 +195,9 @@ export default {
         }
       }
       .price-box {
-        position: absolute;
-        bottom: 0;
+        // position: absolute;
+        // bottom: 0;
+        margin-top: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
