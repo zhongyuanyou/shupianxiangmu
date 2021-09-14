@@ -71,7 +71,7 @@ export default {
       -ms-overflow-style: none; /* IE 10+ */
     }
     > .right {
-      margin-left: 15px;
+      // margin-left: 15px;
       // width: calc(100% - 185px);
       overflow-x: auto;
       height: 120px;
@@ -86,6 +86,10 @@ export default {
           width: 100%;
           height: 100%;
         }
+      }
+      > img {
+        width: 168px;
+        height: 120px;
       }
       .first-img {
         margin-right: 15px;

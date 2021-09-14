@@ -393,6 +393,7 @@ export default {
             label: '',
             imageUrl: elem.navigationImageUrl,
             code: elem.description,
+            type: elem.executionParameters,
           }
         })
         this.rollNav.reverse()

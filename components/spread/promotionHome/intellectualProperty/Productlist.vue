@@ -25,7 +25,7 @@
           class="secondary-label"
           :style="{
             paddingTop: isFixed ? '10px' : '',
-            top: isFixed ? top + 'px' : '',
+            top: isFixed ? top - 6 + 'px' : '',
           }"
         >
           <div class="class-box">
@@ -473,7 +473,7 @@ export default {
 <style lang="less" scoped>
 .recommended {
   width: 100%;
-  margin-top: 32px;
+  margin-top: 8px;
   position: relative;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
@@ -483,8 +483,8 @@ export default {
     padding-left: 20px;
   }
   ::v-deep.sp-tabs__wrap {
-    height: 33px;
-    margin-bottom: 20px;
+    height: 80px;
+    // margin-bottom: 20px;
   }
   ::v-deep.sp-tab {
     padding: 0;
@@ -524,7 +524,7 @@ export default {
     }
     .title_tag {
       position: absolute;
-      bottom: 0px;
+      bottom: 20px;
       right: 0;
       width: 60px;
       height: 12px;
@@ -539,7 +539,7 @@ export default {
     width: 100%;
 
     padding: 0 20px;
-    padding-bottom: 20px;
+    padding-bottom: 24px;
     background: #f5f5f5;
     position: -webkit-sticky;
     position: sticky;
