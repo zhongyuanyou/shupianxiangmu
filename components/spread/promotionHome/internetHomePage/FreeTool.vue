@@ -92,7 +92,8 @@ export default {
           font-size: 24px;
           color: #222222;
           text-align: center;
-          line-height: 32px;
+          line-height: 33px;
+          height: 33px;
           margin-top: 17px;
         }
       }
