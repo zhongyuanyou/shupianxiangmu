@@ -382,7 +382,6 @@ export default {
     // 金刚区导航栏
     navList(data) {
       if (data.length !== 0) {
-        console.log(data)
         this.rollNav = data.map((elem, index) => {
           return {
             codes: elem.sort,
@@ -411,10 +410,13 @@ export default {
           })
         }
         if (code === 'ad100082') {
-          this.bannerBottom = data.map((elem, index) => {
-            return {
-              img: elem.materialList[0].materialUrl,
-              url: elem.materialList[0].materialLink,
+          data.forEach((elem, index) => {
+            if (elem.materialList[0] && elem.materialList[0].materialUrl) {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                url: elem.materialList[0].materialLink,
+              }
+              this.bannerBottom.push(obj)
             }
           })
         }

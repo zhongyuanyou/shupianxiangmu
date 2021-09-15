@@ -25,7 +25,7 @@
         </template>
         <!-- <sp-sticky :offset-top="top"> -->
         <div
-          v-show="itemKey !== 0 && classList.length"
+          v-show="itemKey !== 0 && classList && classList.length"
           class="labels"
           :style="{
             paddingTop: isFixed ? '10px' : '',
@@ -77,7 +77,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
+import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 import product from '@/components/spread/promotionHome/financingLoan/ProductItem.vue'
 import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
@@ -88,6 +88,7 @@ export default {
     [Tabs.name]: Tabs,
     [List.name]: List,
     [Sticky.name]: Sticky,
+    [Loading.name]: Loading,
     product,
     // Waterfall,
   },
@@ -119,17 +120,17 @@ export default {
         ]
       },
     },
-    classList: {
-      type: Array,
-      default: () => {
-        return [
-          { name: '人气产品', code: '' },
-          { name: '低息好借', code: '' },
-          { name: '随借随还', code: '' },
-          { name: '大额面签', code: '' },
-        ]
-      },
-    },
+    // classList: {
+    //   type: Array,
+    //   default: () => {
+    //     return [
+    //       { name: '人气产品', code: '' },
+    //       { name: '低息好借', code: '' },
+    //       { name: '随借随还', code: '' },
+    //       { name: '大额面签', code: '' },
+    //     ]
+    //   },
+    // },
   },
   data() {
     return {
@@ -151,6 +152,7 @@ export default {
       classCode: '',
       activeCode: '',
       num: 1,
+      classList: '',
     }
   },
   computed: {

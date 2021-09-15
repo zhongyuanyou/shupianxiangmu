@@ -1,6 +1,8 @@
+const BASE = require('~/config/index.js')
 const SPPTMDCONFIG = {
   platform_type: 'Web', // 类型
-  app_name: 'web薯推广页', // 名称
+  app_name:
+    BASE.env === 'P' || BASE.env === 'T' ? 'web薯推广页' : 'web薯推广页-P', // 名称
   server_url: window.location.origin.match('https://mtg.shupian.cn')
     ? 'https://shence.dgg.cn:6443/sa?project=production' // 正式项目地址
     : 'https://shence.dgg.cn:6443/sa?project=default', // 测试项目地址 project=default
