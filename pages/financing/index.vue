@@ -207,10 +207,10 @@ export default {
   methods: {
     mdAppViewScreen(info) {
       // 处理埋点逻辑
-      window.spptMd.spptTrackRow('$AppViewScreen', {
-        track_code: 'SPP001133',
-        content_type: '其他',
-      })
+      //   window.spptMd.spptTrackRow('$AppViewScreen', {
+      //     track_code: 'SPP001133',
+      //     content_type: '其他',
+      //   })
     },
     // 搜索
     clickInputHandle(e) {
