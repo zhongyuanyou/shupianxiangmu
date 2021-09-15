@@ -59,7 +59,7 @@ import FreeTool from '@/components/spread/promotionHome/enterpriseService/FreeTo
 import ManagementMust from '@/components/spread/promotionHome/enterpriseService/ManagementMust.vue'
 // import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
 import openappChips from '@/mixins/openappChips'
 export default {
   name: 'Index',
@@ -288,6 +288,7 @@ export default {
     //   track_code: 'SPTG000002',
     // })
     // // @--神策埋点-浏览事件-只执行一次
+    // @--神策埋点-浏览事件-只执行一次
     // window.spptMd.spptTrackRow('p_plannerBoothVisit', {
     //   name: `推荐规划师浏览`,
     //   track_code: 'SPTG000006',
