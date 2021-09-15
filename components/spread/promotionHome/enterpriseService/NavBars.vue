@@ -54,7 +54,7 @@
               </span>
             </div>
             <img
-              src="https://cdn.shupian.cn/sp-pt/wap/images/dtcx1vonuxk0000.png?x-oss-process=image/resize,m_fill,w_141,h_28,limit_0"
+              src="https://cdn.shupian.cn/sp-pt/wap/images/7t9ubksqi5s0000.png"
               alt=""
               class="img-second"
             />
@@ -412,16 +412,16 @@ export default {
 }
 .live-box {
   width: 100%;
-  height: 72px;
-
+  // height: 72px;
   margin-top: 20px;
   padding: 0 20px;
   .live {
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 72px;
     background: #f8f8f8;
     border-radius: 12px;
-    padding: 22px 24px;
+    padding: 26px 24px 18px 24px;
     display: flex;
     align-items: center;
     .left {
@@ -483,24 +483,29 @@ export default {
         width: 141px;
         height: 28px;
         margin-left: 9px;
+        display: inline-block;
       }
     }
     .content {
       width: 377px;
+      height: 100%;
+      line-height: 100%;
       font-size: 26px;
       color: #555555;
       text-align: right;
       margin-left: 34px;
-      height: 37px;
+      line-height: 26px;
       background: #f8f8f8;
     }
     .right {
       width: 8px;
-      height: 14px;
+      // height: 14px;
       margin-left: auto;
       display: flex;
       > img {
+        display: inline-block;
         width: 100%;
+        margin-bottom: 6px;
       }
     }
   }

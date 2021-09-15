@@ -46,9 +46,10 @@ export default {
   },
   methods: {
     jump(url) {
-      console.log(url)
       if (url.indexOf('http') !== -1) {
         window.location.href = url
+      } else {
+        this.$parent.$refs.plannerIM.onlineConsult()
       }
     },
   },

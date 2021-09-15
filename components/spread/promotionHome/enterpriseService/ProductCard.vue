@@ -167,6 +167,7 @@ export default {
           color: #222222;
           line-height: 42px;
           font-weight: bold;
+          margin-bottom: 12px;
           .textOverflow(2);
           .tag {
             margin-right: 8px;
@@ -185,7 +186,7 @@ export default {
       }
 
       .tab-list {
-        margin-top: 12px;
+        margin-bottom: 16px;
         height: 28px;
         display: flex;
         flex-wrap: wrap;
@@ -204,7 +205,7 @@ export default {
       .cycle {
         font-size: 22px;
         color: #222222;
-        margin-top: 16px;
+        // margin-top: 16px;
       }
       .price-box {
         position: absolute;

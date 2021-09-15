@@ -287,6 +287,7 @@ export default {
     //   name: `推广企业服务聚合页浏览`,
     //   track_code: 'SPTG000002',
     // })
+    // // @--神策埋点-浏览事件-只执行一次
     // @--神策埋点-浏览事件-只执行一次
     // window.spptMd.spptTrackRow('p_plannerBoothVisit', {
     //   name: `推荐规划师浏览`,
