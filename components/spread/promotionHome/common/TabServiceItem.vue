@@ -110,7 +110,6 @@ import imHandle from '@/mixins/imHandle'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'TabServiceItem',
-  mixins: [imHandle],
   components: {
     [Toast.name]: Toast,
     [Tab.name]: Tab,
@@ -121,6 +120,7 @@ export default {
     [Loading.name]: Loading,
     // EnterpriseList,
   },
+  mixins: [imHandle],
   props: {
     planner: {
       type: Object,
