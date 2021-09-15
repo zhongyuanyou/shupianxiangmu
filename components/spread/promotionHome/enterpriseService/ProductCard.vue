@@ -205,6 +205,7 @@ export default {
       .cycle {
         font-size: 22px;
         color: #222222;
+        line-height: 22px;
         // margin-top: 16px;
       }
       .price-box {

@@ -13,7 +13,7 @@
             {{ product.title }}
           </div>
         </div>
-        <div v-show="product.desc" class="desc">{{ product.desc }}</div>
+        <div class="desc">{{ product.desc }}</div>
         <div class="tab-list">
           <div v-for="(item, index) in product.labels" :key="index">
             {{ item }}
@@ -174,7 +174,7 @@ export default {
         letter-spacing: 0;
         line-height: 22px;
         margin-top: 9px;
-        min-height: 22px;
+        height: 22px;
         .textOverflow(1);
       }
       .tab-list {
