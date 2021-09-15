@@ -323,13 +323,14 @@ export default {
 <style lang="less" scoped>
 .finacing-list {
   width: 100%;
-  margin-top: 16px;
+  margin-top: 7px;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
 
   ::v-deep.sp-tabs__nav--line {
     padding-left: 20px;
+    padding-bottom: 0;
   }
   ::v-deep.sp-tab {
     padding: 0;

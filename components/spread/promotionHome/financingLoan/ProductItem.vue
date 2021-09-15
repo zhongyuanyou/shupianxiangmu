@@ -151,8 +151,8 @@ export default {
       font-size: 32px;
       font-weight: bold;
       color: #222222;
-      line-height: 34px;
-      margin-bottom: 10px;
+      line-height: 42px;
+      margin-bottom: 12px;
       width: 418px;
       .textOverflow(2);
     }
@@ -172,7 +172,8 @@ export default {
       display: flex;
       align-items: center;
       overflow: hidden;
-      width: 418px;
+      //   width: 418px;
+      height: 28px;
       .item-label {
         flex: none;
         background: #f0f2f5;
@@ -186,8 +187,9 @@ export default {
     }
 
     .item-price {
-      position: absolute;
-      bottom: -5px;
+      //   position: absolute;
+      //   bottom: -5px;
+      margin-top: 29px;
       display: flex;
       justify-content: space-between;
       align-items: center;
