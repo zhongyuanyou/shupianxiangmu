@@ -71,7 +71,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
+import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 // import product from '@/components/spread/promotionHome/internetHomePage/Product.vue'
 import ProductItem from '@/components/spread/promotionHome/internetHomePage/ProductItem.vue'
@@ -84,6 +84,7 @@ export default {
     [Tabs.name]: Tabs,
     [List.name]: List,
     [Sticky.name]: Sticky,
+    [Loading.name]: Loading,
     // product,
     ProductItem,
     // Waterfall,
