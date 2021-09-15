@@ -56,6 +56,7 @@ export default {
       font-size: 32px;
       color: #222222;
       font-weight: 700;
+      height: 45px;
       line-height: 45px;
     }
     .content-box {
