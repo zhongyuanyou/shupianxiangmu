@@ -437,7 +437,7 @@ export default {
         this.rollNav = data.map((elem, index) => {
           return {
             sort: elem.sort,
-            code: index,
+            codes: index,
             name: elem.name,
             url: elem.url,
             size: 'small',
@@ -445,6 +445,8 @@ export default {
             imageUrl: elem.navigationImageUrl,
             description: elem.description || '',
             execution: elem.executionParameters || '',
+            code: elem.description,
+            type: elem.executionParameters,
           }
         })
 
