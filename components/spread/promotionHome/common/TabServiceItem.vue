@@ -29,7 +29,7 @@
           class="secondary-label"
           :style="{
             paddingTop: isFixed ? '10px' : '',
-            top: isFixed ? top - 3 + 'px' : '',
+            top: isFixed ? top - 6 + 'px' : '',
           }"
         >
           <div class="class-box">
@@ -480,6 +480,7 @@ export default {
       // width: @spread-page-width;
       width: 100%;
       margin: 0 auto;
+      height: 80px;
     }
   }
   .sp-tabs__wrap1 {
