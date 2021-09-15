@@ -114,7 +114,7 @@ export default {
 <style lang="less" scoped>
 .hot-sales {
   width: 100%;
-  height: 356px;
+  //   height: 356px;
   padding: 0 20px;
   .content-box {
     width: 100%;

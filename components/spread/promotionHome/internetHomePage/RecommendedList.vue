@@ -590,15 +590,16 @@ export default {
       color: #555555;
     }
     .title_tag {
+      display: block;
       position: absolute;
-      bottom: 24px;
+      bottom: 22px;
       right: 0;
-      width: 60px;
+      width: 62px;
       height: 12px;
       background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
       border-radius: 6px;
       z-index: 1;
-      opacity: 0.8;
+      //   opacity: 0.8;
     }
   }
 
