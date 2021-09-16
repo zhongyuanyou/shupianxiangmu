@@ -80,10 +80,12 @@ export default {
         msgParam: {},
         templateIds: '',
       }
-      if (this.isInApp) {
-        this.uPIM(planner)
-      } else {
-        this.uPIM(planner)
+      if (planner.mchUserId) {
+        if (this.isInApp) {
+          this.uPIM(planner)
+        } else {
+          this.uPIM(planner)
+        }
       }
     },
   },
