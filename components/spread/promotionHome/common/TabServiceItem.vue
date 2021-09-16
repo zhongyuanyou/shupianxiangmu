@@ -503,7 +503,7 @@ export default {
     }
     &_tag {
       position: absolute;
-      bottom: 0;
+      bottom: 4px;
       right: 0;
       width: 60px;
       height: 12px;
