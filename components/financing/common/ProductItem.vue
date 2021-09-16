@@ -21,7 +21,7 @@
         </div>
         <div class="price-box">
           <div v-if="item.priceType === 'PRO_FLOATING_PRICE'" class="price">
-            <div class="num1">{{ item.price }}%</div>
+            <div class="num1">{{ parseFloat(item.price) }}%</div>
             <div class="unit">服务费</div>
           </div>
           <div v-else class="price">

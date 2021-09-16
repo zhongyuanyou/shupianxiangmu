@@ -24,7 +24,7 @@
         <div class="cycle">办理周期：{{ product.cycle || '--' }}天</div>
         <div class="price-box">
           <div v-if="product.priceType === 'PRO_FLOATING_PRICE'" class="price">
-            <div class="num1">{{ product.currentPrice }}%</div>
+            <div class="num1">{{ parseFloat(product.currentPrice) }}%</div>
             <div class="unit">服务费</div>
           </div>
           <div v-else class="price">
