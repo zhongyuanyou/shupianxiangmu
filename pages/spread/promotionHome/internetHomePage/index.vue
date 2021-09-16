@@ -256,8 +256,8 @@ export default {
             title: item.name,
             url: item.url,
             icon: item.navigationImageUrl,
-            code: elem.description,
-            type: elem.executionParameters,
+            code: item.description,
+            type: item.executionParameters,
           }
           navList.push(obj)
         })
