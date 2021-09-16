@@ -14,12 +14,14 @@
       <sp-tab v-for="(item, itemKey) of titleName" :key="itemKey">
         <template #title>
           <div class="title">
-            <span
+            <div
               class="title-name"
               :style="{ color: active === itemKey ? '#222222' : '' }"
-              >{{ item.name }}</span
             >
-            <span v-show="active === itemKey" class="title_tag"></span>
+              <span class="name"> {{ item.name }}</span>
+
+              <span v-show="active === itemKey" class="title_tag"></span>
+            </div>
           </div>
         </template>
         <!-- 二级分类 -->
@@ -586,20 +588,25 @@ export default {
     align-items: center;
     .title-name {
       position: relative;
-      z-index: 999;
+      //   z-index: 999;
       color: #555555;
-    }
-    .title_tag {
-      display: block;
-      position: absolute;
-      bottom: 22px;
-      right: 0;
-      width: 62px;
-      height: 12px;
-      background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
-      border-radius: 6px;
-      z-index: 1;
-      //   opacity: 0.8;
+      height: 42px;
+      .name {
+        position: relative;
+        z-index: 999;
+      }
+      .title_tag {
+        display: block;
+        position: absolute;
+        bottom: 6px;
+        right: 0;
+        width: 62px;
+        height: 12px;
+        background: linear-gradient(90deg, #4974f5 0%, #dbe4fc 100%);
+        border-radius: 6px;
+        z-index: 1;
+        //   opacity: 0.8;
+      }
     }
   }
 
