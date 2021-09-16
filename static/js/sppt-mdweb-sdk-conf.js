@@ -3,7 +3,8 @@ var env = window.document.getElementsByName('DGG_ENV').length
   : ''
 const SPPTMDCONFIG = {
   platform_type: 'Web', // 类型
-  app_name: env === 'beta' ? 'web薯推广页-P' : 'web薯推广页',
+  // app_name: env === 'beta' ? 'web薯推广页-P' : 'web薯推广页',
+  app_name: 'web薯推广页',
   server_url: window.location.origin.match('https://mtg.shupian.cn')
     ? 'https://shence.dgg.cn:6443/sa?project=production' // 正式项目地址
     : 'https://shence.dgg.cn:6443/sa?project=default', // 测试项目地址 project=default
