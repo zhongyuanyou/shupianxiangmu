@@ -188,12 +188,14 @@ export default {
 <style lang="less">
 .search {
   .nav-top {
-    width: @spread-page-width;
+    // width: @spread-page-width;
+    width: 100%;
     margin: 0 auto;
     position: relative;
     display: block;
     .search-content {
-      width: @spread-page-width;
+      // width: @spread-page-width;
+      width: 100%;
       // padding: 20px 20px 28px 28px;
       // height: 112px;
       display: flex;

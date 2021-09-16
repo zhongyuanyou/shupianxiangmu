@@ -15,7 +15,7 @@
             :data-name="`${item.name}`"
           >
             <div v-if="item.label">{{ item.label }}</div>
-            <a @click="onHerf(item.url, item.description, item.execution)">
+            <a @click="onHerf(item.url, item.code, item.type)">
               <img
                 v-if="item.size === 'small'"
                 v-lazy="item.imageUrl + $ossImgSet(48, 48)"
@@ -40,16 +40,21 @@
       <div v-if="rollNavHandle.length > 10" class="scroll-box">
         <span><i :style="{ left: scroLeft + '%' }"></i></span>
       </div>
-      <div class="live-box">
+      <div
+        class="live-box"
+        :style="{ marginTop: rollNavHandle.length > 10 ? '10px' : '0' }"
+      >
         <div class="live">
           <div class="left">
+            <div class="img-first">
+              <span class="living-icon">
+                <span class="living-bar living-bar1"></span>
+                <span class="living-bar living-bar2"></span>
+                <span class="living-bar living-bar3"></span>
+              </span>
+            </div>
             <img
-              src="https://cdn.shupian.cn/sp-pt/wap/images/3fxdy1o7bso0000.png?x-oss-process=image/resize,m_fill,w_28,h_28,limit_0"
-              alt=""
-              class="img-first"
-            />
-            <img
-              src="https://cdn.shupian.cn/sp-pt/wap/images/dtcx1vonuxk0000.png?x-oss-process=image/resize,m_fill,w_141,h_28,limit_0"
+              src="https://cdn.shupian.cn/sp-pt/wap/images/7t9ubksqi5s0000.png"
               alt=""
               class="img-second"
             />
@@ -71,7 +76,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import imHandle from '@/mixins/imHandle'
 export default {
+  mixins: [imHandle],
   props: {
     // 滚动导航
     rollNav: {
@@ -80,12 +88,6 @@ export default {
         return []
       },
     },
-  },
-  data() {
-    return {
-      canScrollWidth: 0,
-      scroLeft: 0,
-    }
   },
   computed: {
     // 滚共导航数处理；个数小于等于10，横向排列；个数大于10，前10个横向排列，后面上下排列
@@ -121,7 +123,18 @@ export default {
       })
       return arr
     },
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
+  data() {
+    return {
+      canScrollWidth: 0,
+      scroLeft: 0,
+    }
+  },
+
   mounted() {
     const scrollWidth = this.$refs.refScroll.scrollWidth // 容器文档总宽
     const clientWidth = this.$refs.refScroll.clientWidth // 容器可视宽度
@@ -133,14 +146,56 @@ export default {
       const scroLeft = Math.floor((scrollLeft / this.canScrollWidth) * 100) // 计算导航容器滚动百分比
       this.scroLeft = scroLeft / 2
     },
-    onHerf(url, description, execution) {
+    onHerf(url, code, type) {
       // if (url) {
       //   if (url.indexOf('http') > -1) {
       //     window.location.href = url
       //     // return
       //   }
       // }
-      this.$parent.jumpLink(url, description, execution)
+      if (url && type !== 'tool' && this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+          parameter: {
+            type: 1,
+            classCode: code,
+          },
+        }
+        const androidRouter = {
+          path: '/reform/flutter/classify_result',
+          parameter: {
+            trade: false,
+            classCode: code,
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+      } else if (url === '/') {
+        const planner = {
+          mchUserId: this.planner.id,
+          userName: this.planner.name,
+          type: this.planner.type,
+          msgParam: {},
+          templateIds: '',
+        }
+        if (this.isInApp) {
+          this.uPIM(planner)
+        } else {
+          this.uPIM(planner)
+        }
+      } else {
+        window.location.href = url
+      }
+      //   this.$parent.jumpLink(url, description, execution)
     },
     jumpHandle(item) {
       let url = ''
@@ -254,6 +309,7 @@ export default {
               margin-top: 13px;
               white-space: nowrap;
               .textOverflow(1);
+              width: 100%;
             }
           }
         }
@@ -261,7 +317,8 @@ export default {
     }
     .left-and-right {
       overflow: hidden;
-      width: 710px;
+      // width: 710px;
+      width: 100%;
       margin: 0 auto;
       background: #ffffff;
       border-radius: 24px;
@@ -355,50 +412,100 @@ export default {
 }
 .live-box {
   width: 100%;
-  height: 72px;
-
+  // height: 72px;
   margin-top: 20px;
   padding: 0 20px;
   .live {
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 72px;
     background: #f8f8f8;
     border-radius: 12px;
-    padding: 22px 24px;
+    padding: 26px 24px 18px 24px;
     display: flex;
     align-items: center;
     .left {
       display: flex;
+      .img-first {
+        border-radius: 4px;
+        font-size: 20px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: bold;
+        color: #4974f5;
+        width: 28px;
+        height: 28px;
+        line-height: 32px;
+        display: flex;
+        margin-bottom: 6px;
+        // 直播动态图标
+        .living-icon {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          width: 28px;
+          height: 28px;
+          margin-right: 4px;
+
+          .living-bar {
+            padding: 0 3px;
+            background-color: #4974f5;
+            animation-name: living-bar;
+            animation-duration: 0.5s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate-reverse;
+            animation-timing-function: linear;
+          }
+          .living-bar1 {
+            animation-delay: 0.2s;
+          }
+          .living-bar2 {
+            animation-delay: 0s;
+          }
+          .living-bar3 {
+            animation-delay: 0.4s;
+          }
+          @keyframes living-bar {
+            from {
+              height: 28px;
+            }
+            to {
+              height: 16px;
+            }
+          }
+        }
+      }
       > img {
         display: block;
         width: 100%;
       }
-      .img-first {
-        width: 28px;
-        height: 28px;
-      }
+
       .img-second {
         width: 141px;
         height: 28px;
         margin-left: 9px;
+        display: inline-block;
       }
     }
     .content {
       width: 377px;
+      height: 100%;
+      line-height: 100%;
       font-size: 26px;
       color: #555555;
       text-align: right;
       margin-left: 34px;
-      height: 37px;
+      line-height: 26px;
       background: #f8f8f8;
     }
     .right {
       width: 8px;
-      height: 14px;
+      // height: 14px;
       margin-left: auto;
       display: flex;
       > img {
+        display: inline-block;
         width: 100%;
+        margin-bottom: 6px;
       }
     }
   }

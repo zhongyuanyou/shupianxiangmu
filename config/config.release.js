@@ -1,6 +1,7 @@
 /* 预发布配置文件 */
 
 module.exports = {
+  env: 'T',
   baseURL: 'https://tspmicrouag.shupian.cn',
   mchMerchantSgin: '63E4A4CB44669BAA672EB2DE2528CCEA',
   mchCoding: '20190620000111',

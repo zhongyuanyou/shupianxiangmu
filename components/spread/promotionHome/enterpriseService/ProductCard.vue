@@ -13,16 +13,39 @@
             {{ product.title }}
           </div>
         </div>
-        <div v-show="product.label.length" class="tab-list">
+        <div
+          v-if="product.label && product.label.length !== 0"
+          class="tab-list"
+        >
           <div v-for="(item, index) in product.label" :key="index">
             {{ item }}
           </div>
         </div>
         <div class="cycle">办理周期：{{ product.cycle || '--' }}天</div>
         <div class="price-box">
-          <div class="price">
-            <div class="num">{{ product.currentPrice }}</div>
-            <div class="unit">元</div>
+          <div v-if="product.priceType === 'PRO_FLOATING_PRICE'" class="price">
+            <div class="num1">{{ parseFloat(product.currentPrice) }}%</div>
+            <div class="unit">服务费</div>
+          </div>
+          <div v-else class="price">
+            <div class="num">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? product.currentPrice
+                  : ''
+              }}
+            </div>
+            <div class="unit">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? '元'
+                  : '面议'
+              }}
+            </div>
           </div>
           <!-- <div class="sales">销量 {{ product.sales }}</div> -->
         </div>
@@ -32,6 +55,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
@@ -53,6 +77,12 @@ export default {
         }
       },
     },
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
   methods: {
     onMore(id) {
@@ -132,13 +162,15 @@ export default {
         align-items: flex-start;
 
         .title {
-          margin-left: 8px;
+          //   margin-left: 8px;
           font-size: 32px;
           color: #222222;
           line-height: 42px;
           font-weight: bold;
+          margin-bottom: 12px;
           .textOverflow(2);
           .tag {
+            margin-right: 8px;
             height: 32px;
             background: #ec5330;
             border-radius: 4px;
@@ -154,7 +186,7 @@ export default {
       }
 
       .tab-list {
-        margin-top: 12px;
+        margin-bottom: 16px;
         height: 28px;
         display: flex;
         flex-wrap: wrap;
@@ -173,7 +205,8 @@ export default {
       .cycle {
         font-size: 22px;
         color: #222222;
-        margin-top: 16px;
+        line-height: 22px;
+        // margin-top: 16px;
       }
       .price-box {
         position: absolute;
@@ -190,6 +223,13 @@ export default {
             color: #ec5330;
             line-height: 36px;
             font-weight: bold;
+          }
+          .num1 {
+            font-size: 36px;
+            color: #ec5330;
+            line-height: 36px;
+            font-weight: bold;
+            margin-right: 15px;
           }
           .unit {
             margin-left: 2px;

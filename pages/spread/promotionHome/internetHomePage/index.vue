@@ -34,7 +34,7 @@
     <FreeTool :tool-list="freeTool"></FreeTool>
     <!-- 免费工具 E -->
     <!-- 规划师立即咨询 S -->
-    <Planner :planner="pagePlanner"></Planner>
+    <!-- <Planner :planner="pagePlanner"></Planner> -->
     <!-- 规划师立即质询 E -->
     <!-- 新人红包 -->
     <!-- <GiftBag
@@ -66,7 +66,7 @@ import Radio from '@/components/spread/promotionHome/internetHomePage/Radio.vue'
 import HotSales from '@/components/spread/promotionHome/internetHomePage/HotSales.vue'
 import Activity from '@/components/spread/promotionHome/internetHomePage/Activity.vue'
 import FreeTool from '@/components/spread/promotionHome/internetHomePage/FreeTool.vue'
-import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.vue'
+// import Planner from '@/components/spread/promotionHome/internetHomePage/Planner.vue'
 // import GiftBag from '@/components/spread/promotionHome/internetHomePage/GiftBag.vue'
 // import Advertising from '@/components/spread/promotionHome/internetHomePage/Advertising.vue'
 import Recommended from '~/components/spread/promotionHome/internetHomePage/RecommendedList.vue'
@@ -83,7 +83,7 @@ export default {
     HotSales,
     Activity,
     FreeTool,
-    Planner,
+    // Planner,
     // Nav,
     // GiftBag,
     // Advertising,
@@ -249,7 +249,6 @@ export default {
     },
     // 金刚区数据处
     navDetail(data) {
-      console.log(data)
       if (data.length !== 0) {
         const navList = []
         data.forEach((item, index) => {
@@ -257,6 +256,8 @@ export default {
             title: item.name,
             url: item.url,
             icon: item.navigationImageUrl,
+            code: item.description,
+            type: item.executionParameters,
           }
           navList.push(obj)
         })
@@ -296,74 +297,85 @@ export default {
         // 活动专区1
         if (item.locationCode === 'ad100087') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: index,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.activityList.push(obj)
             }
-            this.activityList.push(obj)
           })
         }
         // 热销商品
         if (item.locationCode === 'ad100088') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: resObj.materialDescription,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: resObj.materialDescription,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.images = obj
             }
-            this.images = obj
           })
         }
         if (item.locationCode === 'ad100089') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: resObj.materialDescription,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: resObj.materialDescription,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.hotSales.push(obj)
             }
-            this.hotSales.push(obj)
           })
         }
         if (item.locationCode === (this.isInApp ? 'ad100111' : 'ad100109')) {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            console.log(resObj)
-            const obj = {
-              code: index,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
-              title: resObj.materialName.split('-')[2],
-              slogan: resObj.materialDescription,
-              tag: resObj.materialName.split('-')[3] || '',
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+                title: resObj.materialName.split('-')[2],
+                slogan: resObj.materialDescription,
+                tag: resObj.materialName.split('-')[3] || '',
+              }
+              this.activities.push(obj)
             }
-            this.activities.push(obj)
           })
         }
         if (item.locationCode === 'ad100091') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: index,
-              name: resObj.materialName.split('-')[2],
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                name: resObj.materialName.split('-')[2],
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.freeTool.push(obj)
             }
-            this.freeTool.push(obj)
           })
         }
         if (item.locationCode === 'ad100107') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: index,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.recommendedBanner.push(obj)
             }
-            this.recommendedBanner.push(obj)
           })
         }
       })
@@ -407,7 +419,6 @@ export default {
             }
           )
           .then((res) => {
-            console.log(res, '调用规划师')
             if (res.code === 200 && res.data.length > 0) {
               this.pagePlanner = {
                 id: res.data[0].mchUserId,
@@ -420,7 +431,7 @@ export default {
               // @--神策埋点-浏览事件-只执行一次
               window.spptMd.spptTrackRow('p_plannerBoothVisit', {
                 name: `IT服务页规划师展位曝光`,
-                track_code: this.isInApp ? 'SPP001126' : 'SPP001125',
+                track_code: this.isInApp ? 'SPP001126' : 'SPW000125',
                 recommend_number: '',
                 planner_number: this.pagePlanner.jobNum,
                 planner_name: this.pagePlanner.name,
@@ -529,14 +540,13 @@ export default {
             execution.split(':')[1] || ''
           }":"${description}"}}`
           const jsonObj = JSON.parse(lastObj)
-          console.log(lastObj, execution.split(':')[0])
           this.$appFn.dggProperty(jsonObj, (res) => {})
           return
         }
       } catch (error) {
         console.log(error)
       }
-      if (url) {
+      if (url !== '/') {
         if (url.indexOf('/spread/') > -1) {
           this.$router.push(url)
           return

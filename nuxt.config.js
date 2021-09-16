@@ -59,6 +59,10 @@ module.exports = {
         name: '360-fullscreen',
         content: 'true',
       },
+      {
+        name: 'DGG_ENV',
+        content: process.env.DGG_SERVER_ENV,
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     script: [

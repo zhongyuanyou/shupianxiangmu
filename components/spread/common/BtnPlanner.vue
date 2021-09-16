@@ -81,11 +81,7 @@ export default {
         templateIds: '',
       }
       if (planner.mchUserId) {
-        if (this.isInApp) {
-          this.uPIM(planner)
-        } else {
-          this.uPIM(planner)
-        }
+        this.uPIM(planner)
       }
     },
   },
@@ -100,7 +96,7 @@ export default {
   position: fixed;
   bottom: 148px;
   right: 32px;
-  z-index: 6;
+  z-index: 10000;
   &_item {
     position: relative;
     width: 100%;

@@ -17,12 +17,31 @@
           >
         </div>
         <div class="item-price">
-          <span class="item-price-num">
-            {{ price(product.price) }}
-          </span>
-          <span v-if="product.price > 10000" class="item-price-unit">万元</span>
-          <span v-else class="item-price-unit">元</span>
-          <span class="item-price-note">最高可借</span>
+          <div v-if="product.priceType === 'PRO_FLOATING_PRICE'" class="price">
+            <div class="num1">{{ parseFloat(product.price) }}%</div>
+            <div class="unit">服务费</div>
+          </div>
+          <div v-else class="price">
+            <div class="num">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? product.price
+                  : ''
+              }}
+            </div>
+            <div class="unit">
+              {{
+                product.salesPrice !== '0.00' &&
+                product.refConfig &&
+                product.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? '元'
+                  : '面议'
+              }}
+            </div>
+          </div>
+          <!-- <span class="item-price-note">最高可借</span> -->
         </div>
       </div>
     </div>
@@ -132,8 +151,8 @@ export default {
       font-size: 32px;
       font-weight: bold;
       color: #222222;
-      line-height: 34px;
-      margin-bottom: 10px;
+      line-height: 42px;
+      margin-bottom: 12px;
       width: 418px;
       .textOverflow(2);
     }
@@ -147,13 +166,14 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       height: 26px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .item-labels {
       display: flex;
       align-items: center;
       overflow: hidden;
-      width: 418px;
+      //   width: 418px;
+      height: 28px;
       .item-label {
         flex: none;
         background: #f0f2f5;
@@ -167,34 +187,40 @@ export default {
     }
 
     .item-price {
-      // margin-top: 33px;
-      position: absolute;
-      bottom: 0px;
+      //   position: absolute;
+      //   bottom: -5px;
+      margin-top: 29px;
       display: flex;
-      align-items: baseline;
-      .item-price-num {
-        font-size: 36px;
-        font-weight: bold;
-        color: #ec5330;
-        line-height: 36px;
+      justify-content: space-between;
+      align-items: center;
+      .price {
+        display: flex;
+        .num1 {
+          font-size: 36px;
+          color: #ec5330;
+          line-height: 36px;
+          font-weight: bold;
+          margin-right: 15px;
+        }
+        .num {
+          font-size: 36px;
+          color: #ec5330;
+          line-height: 36px;
+          font-weight: bold;
+        }
+        .unit {
+          margin-left: 2px;
+          font-size: 22px;
+          color: #ec5330;
+          font-weight: bold;
+          margin-top: 3px;
+        }
       }
-      .item-price-unit {
-        margin-left: 2px;
+      .sales {
         font-size: 22px;
-        height: 22px;
-        font-weight: bold;
-        color: #ec5330;
-        line-height: 22px;
-      }
-      .item-price-note {
-        margin-left: 8px;
-        background: rgba(236, 83, 48, 0.08);
-        border-radius: 4px;
-        padding: 4px 6px;
-        font-size: 20px;
-        font-weight: bold;
-        color: #ec5330;
-        line-height: 20px;
+        color: #999999;
+        letter-spacing: 0;
+        text-align: right;
       }
     }
   }

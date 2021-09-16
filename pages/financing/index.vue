@@ -207,10 +207,10 @@ export default {
   methods: {
     mdAppViewScreen(info) {
       // 处理埋点逻辑
-      window.spptMd.spptTrackRow('$AppViewScreen', {
-        track_code: 'SPP001133',
-        content_type: '其他',
-      })
+      //   window.spptMd.spptTrackRow('$AppViewScreen', {
+      //     track_code: 'SPP001133',
+      //     content_type: '其他',
+      //   })
     },
     // 搜索
     clickInputHandle(e) {
@@ -488,18 +488,20 @@ export default {
   .header-inapp-bg {
     width: 100%;
     background-color: #4974f5;
-    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/a8b3bpu4bmo0000.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 500px;
     background-position: 0 48px;
+    // background-position-y: -20px;
   }
   .header-bg {
     width: 100%;
     height: 500px;
-    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/ejkedv574qw0000.png');
+    background-image: url('https://cdn.shupian.cn/sp-pt/wap/images/a8b3bpu4bmo0000.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    // background-position-y: -20px;
     .header-content {
       margin-left: 38px;
       margin-top: 90px;

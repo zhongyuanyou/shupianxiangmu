@@ -215,6 +215,7 @@ export default {
         params = Object.assign(params, data)
         this.imExample.createSession(params, (res) => {
           if (res.code === 200) {
+            this.$xToast.hideLoading()
             const myInfo = localStorage.getItem('myInfo')
               ? JSON.parse(localStorage.getItem('myInfo'))
               : {}
@@ -230,8 +231,11 @@ export default {
               this.$cookies.get('userType', { path: '/' }) ||
               this.userType ||
               'VISITOR'
-            window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}`
+            setTimeout(() => {
+              window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}`
+            }, 450)
           } else if (res.code === 5223) {
+            this.$xToast.hideLoading()
             this.clearUserInfoAndJumpLoging()
           } else {
             this.$xToast.warning(res.msg)

@@ -493,11 +493,11 @@ export default {
               user_id: '',
               productType: 'PRO_CLASS_TYPE_TRANSACTION', // 产品类型
               sceneId: scene, // 场景id
-              level_2_ID: '', // 二级code
+              level_2_ID: 'FL20201224136319', // 二级code
               platform: 'app',
               productId: '', //
               thirdTypeCodes: '', // 三级code
-              firstTypeCode: 'FL20201224136319', // 一级code
+              firstTypeCode: 'FL20210809166627', // 一级code
             },
             {
               headers: {

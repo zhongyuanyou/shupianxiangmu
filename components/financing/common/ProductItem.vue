@@ -20,9 +20,31 @@
           </span>
         </div>
         <div class="price-box">
-          <span class="price">{{ item.price }}</span>
-          <span class="unit">元</span>
-          <span class="high">最高可借</span>
+          <div v-if="item.priceType === 'PRO_FLOATING_PRICE'" class="price">
+            <div class="num1">{{ parseFloat(item.price) }}%</div>
+            <div class="unit">服务费</div>
+          </div>
+          <div v-else class="price">
+            <div class="num">
+              {{
+                item.salesPrice !== '0.00' &&
+                item.refConfig &&
+                item.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? item.price
+                  : ''
+              }}
+            </div>
+            <div class="unit">
+              {{
+                item.salesPrice !== '0.00' &&
+                item.refConfig &&
+                item.refConfig.taskType != 'PRO_WANT_ORDER_DIGEST'
+                  ? '元'
+                  : '面议'
+              }}
+            </div>
+          </div>
+          <!-- <span class="high">最高可借</span> -->
         </div>
       </div>
     </div>
@@ -160,39 +182,39 @@ export default {
         }
       }
       .price-box {
-        font-size: 0;
         position: absolute;
-        bottom: -16px;
+        bottom: -5px;
+        display: flex;
+        justify-content: space-between;
         align-items: center;
         .price {
-          font-size: 36px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: 700;
-          color: #ec5330;
-          line-height: 50px;
+          display: flex;
+          .num1 {
+            font-size: 36px;
+            color: #ec5330;
+            line-height: 36px;
+            font-weight: bold;
+            margin-right: 15px;
+          }
+          .num {
+            font-size: 36px;
+            color: #ec5330;
+            line-height: 36px;
+            font-weight: bold;
+          }
+          .unit {
+            margin-left: 2px;
+            font-size: 22px;
+            color: #ec5330;
+            font-weight: bold;
+            margin-top: 3px;
+          }
         }
-        .unit {
+        .sales {
           font-size: 22px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: 700;
-          color: #ec5330;
-          line-height: 30px;
-          margin-left: 2px;
-          margin-top: -6px;
-          vertical-align: baseline;
-        }
-        .high {
-          width: 92px;
-          height: 28px;
-          background: rgba(236, 83, 48, 0.08);
-          border-radius: 4px;
-          font-size: 20px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #ec5330;
-          line-height: 28px;
-          padding: 0 6px;
-          margin-left: 8px;
+          color: #999999;
+          letter-spacing: 0;
+          text-align: right;
         }
       }
     }

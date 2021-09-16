@@ -23,27 +23,31 @@
           </div>
         </template>
         <!-- 二级分类 -->
-        <sp-sticky :offset-top="top">
-          <div
-            v-show="proKey !== 0 && titleName[active].children.length"
-            class="secondary-label"
-            :style="{ paddingTop: isFixed ? '10px' : '' }"
-          >
-            <div class="class-box">
-              <div
-                v-for="(className, index) in titleName[active].children"
-                :key="index"
-                class="class-name"
-                :style="{ color: calssActive === index ? '#4974F5' : '' }"
-                @click="chooes(index)"
-              >
-                {{ className.name }}
-              </div>
+        <!-- <sp-sticky :offset-top="top"> -->
+        <div
+          v-show="proKey !== 0 && titleName[active].children.length"
+          class="secondary-label"
+          :style="{
+            paddingTop: isFixed ? '10px' : '',
+            top: isFixed ? top - 6 + 'px' : '',
+          }"
+        >
+          <div class="class-box">
+            <div
+              v-for="(className, index) in titleName[active].children"
+              :key="index"
+              class="class-name"
+              :style="{ color: calssActive === index ? '#4974F5' : '' }"
+              @click="chooes(index)"
+            >
+              {{ className.name }}
             </div>
           </div>
-        </sp-sticky>
+        </div>
+        <!-- </sp-sticky> -->
         <div class="enterprise-list">
           <sp-list
+            ref="list"
             v-model="loading"
             :finished="finished"
             :error.sync="error"
@@ -52,6 +56,11 @@
             offset="100"
             @load="onLoad"
           >
+            <template #loading>
+              <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+                <sp-loading size="12px" />加载中...
+              </div>
+            </template>
             <div class="content">
               <div
                 v-for="(item, itemKey) of list"
@@ -93,10 +102,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Toast, Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
+import { Toast, Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/spread/promotionHome/enterpriseService/ProductCard.vue'
 // import EnterpriseList from '@/components/spread/promotionHome/common/EnterpriseList'
 import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
+import imHandle from '@/mixins/imHandle'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'TabServiceItem',
@@ -107,9 +117,17 @@ export default {
     [List.name]: List,
     ProductCard,
     [Sticky.name]: Sticky,
+    [Loading.name]: Loading,
     // EnterpriseList,
   },
+  mixins: [imHandle],
   props: {
+    planner: {
+      type: Object,
+      default: () => {
+        return {}
+      },
+    },
     titleName: {
       type: Array,
       default: () => {
@@ -122,6 +140,12 @@ export default {
         return []
       },
     },
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
 
   data() {
@@ -151,14 +175,10 @@ export default {
       classArr: '',
       classCode: '',
       activeCode: '',
+      num: 1,
     }
   },
-  computed: {
-    ...mapState({
-      isInApp: (state) => state.app.isInApp,
-      appInfo: (state) => state.app.appInfo, // app信息
-    }),
-  },
+
   mounted() {
     if (this.isInApp) {
       this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
@@ -172,13 +192,14 @@ export default {
     // 获取三级分类
 
     chooes(idx) {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.list = []
       this.calssActive = idx
       this.activeCode = this.titleName[this.active].children[idx].ext1
       this.pageNumber = 1
       this.finished = false
       this.loading = true
-      scrollTo(0, 800)
+      //   scrollTo(0, 800)
       this.selectTab()
     },
     price(price) {
@@ -189,6 +210,7 @@ export default {
       }
     },
     onClick() {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.activeCode = this.titleName[this.active].type
       this.initialize()
       this.calssActive = -1
@@ -216,7 +238,7 @@ export default {
     // 分类选择
     demandChooes(index, url, code) {
       this.demandActive = index
-      if (url && this.isInApp) {
+      if (url && url !== '/' && this.isInApp) {
         const iOSRouter = {
           path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
           parameter: {
@@ -242,6 +264,19 @@ export default {
             console.log(res)
           }
         )
+      } else if (url === '/') {
+        const planner = {
+          mchUserId: this.planner.id,
+          userName: this.planner.name,
+          type: this.planner.type,
+          msgParam: {},
+          templateIds: '',
+        }
+        if (this.isInApp) {
+          this.uPIM(planner)
+        } else {
+          this.uPIM(planner)
+        }
       } else {
         window.location.href = url
       }
@@ -294,8 +329,10 @@ export default {
         .then((res) => {
           // 调用回调函数处理数据
           const result = res.data.records
-          if (res.code === 200 && result.length !== 0) {
+          if (res.code === 200 && result !== 0) {
+            this.$xToast.hideLoading()
             this.pageNumber++
+            this.num = 2
             result.forEach((elem, index) => {
               this.list.push({
                 code: index + 1,
@@ -311,9 +348,12 @@ export default {
                 id: elem.id,
                 sales: elem.saleNum,
                 cycle: elem.handleCycleNumber,
+                priceType: elem.priceType,
+                salesPrice: elem.salesPrice,
+                refConfig: elem.refConfig,
               })
             })
-            if (this.recommendedList) {
+            if (this.recommendedList && this.pageNumber === 1) {
               this.list.splice(4, 0, {})
             }
 
@@ -322,11 +362,13 @@ export default {
               this.finished = true
             }
           } else {
+            this.$xToast.hideLoading()
             this.loading = false
             this.finished = true
           }
         })
         .catch((err) => {
+          this.$xToast.hideLoading()
           this.loading = false
           this.finished = true
           this.error = true
@@ -339,11 +381,18 @@ export default {
 
 <style lang="less" scoped>
 .tab-service-item {
+  ::v-deer.sp-loading__circular {
+    color: red;
+  }
   .secondary-label {
     width: 100%;
     padding: 0 20px;
     padding-bottom: 20px;
     background: #f5f5f5;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 99;
     .class-box::-webkit-scrollbar {
       display: none;
     }
@@ -367,8 +416,12 @@ export default {
     }
   }
   .enterprise-list {
-    min-height: 1224px;
-
+    min-height: calc(100vh - 88px);
+    .loding-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
     .content {
       .content-list {
         .advertising-box {
@@ -424,20 +477,33 @@ export default {
   ::v-deep.sp-tabs {
     // 最外层宽度
     .sp-tabs__wrap {
-      width: @spread-page-width;
+      // width: @spread-page-width;
+      width: 100%;
       margin: 0 auto;
-      // padding-left: 20px;
+      height: 80px;
     }
+  }
+  .sp-tabs__wrap1 {
+    background: transparent;
+  }
+  .sp-tabs__wrap2 {
+    background: #fff;
+  }
+  ::v-deep.sp-tab {
+    padding: 0;
+    flex: none;
+    margin-right: 40px;
   }
   .title {
     position: relative;
     &_name {
       position: relative;
       z-index: 2;
+      line-height: 40px;
     }
     &_tag {
       position: absolute;
-      bottom: 0;
+      bottom: 4px;
       right: 0;
       width: 60px;
       height: 12px;

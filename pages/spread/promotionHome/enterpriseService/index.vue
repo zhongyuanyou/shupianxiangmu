@@ -27,11 +27,13 @@
       v-show="bottomList.length"
       :top-list="topList"
       :bottom-list="bottomList"
+      class="management-must"
     />
     <!-- S 列表 -->
     <TabServiceItem
       :title-name="titleName"
       :recommended-list="recommendedList"
+      :planner="pagePlanner"
       @change="onChange"
     >
     </TabServiceItem>
@@ -57,11 +59,10 @@ import FreeTool from '@/components/spread/promotionHome/enterpriseService/FreeTo
 import ManagementMust from '@/components/spread/promotionHome/enterpriseService/ManagementMust.vue'
 // import Advertising from '@/components/spread/promotionHome/enterpriseService/Advertising.vue'
 import TabServiceItem from '@/components/spread/promotionHome/common/TabServiceItem.vue'
-import BtnPlanner from '@/components/spread/common/BtnPlanner'
+import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
 import openappChips from '@/mixins/openappChips'
 export default {
   name: 'Index',
-  mixins: [openappChips],
   components: {
     NavTop,
     Banner,
@@ -75,6 +76,7 @@ export default {
     TabServiceItem,
     BtnPlanner,
   },
+  mixins: [openappChips],
   async asyncData({ $axios }) {
     const locations =
       'ad100080,ad100081,ad100082,ad100083,ad100084,ad100085,ad100108'
@@ -281,18 +283,19 @@ export default {
     this.fixedMd.code = this.isInApp ? 'SPP001120' : 'SPW000119'
     this.isInApp && this.mdAppViewScreen()
     // @--神策埋点-浏览事件-只执行一次
-    window.spptMd.spptTrackRow('pageview', {
-      name: `推广企业服务聚合页浏览`,
-      track_code: 'SPTG000002',
-    })
+    // window.spptMd.spptTrackRow('pageview', {
+    //   name: `推广企业服务聚合页浏览`,
+    //   track_code: 'SPTG000002',
+    // })
+    // // @--神策埋点-浏览事件-只执行一次
     // @--神策埋点-浏览事件-只执行一次
-    window.spptMd.spptTrackRow('p_plannerBoothVisit', {
-      name: `推荐规划师浏览`,
-      track_code: 'SPTG000006',
-      recommend_number: '',
-      planner_number: this.pagePlanner.jobNum,
-      planner_name: this.pagePlanner.name,
-    })
+    // window.spptMd.spptTrackRow('p_plannerBoothVisit', {
+    //   name: `推荐规划师浏览`,
+    //   track_code: 'SPTG000006',
+    //   recommend_number: '',
+    //   planner_number: this.pagePlanner.jobNum,
+    //   planner_name: this.pagePlanner.name,
+    // })
     // 初始化数据
     // this.onChange({ type: 1 })
     // 处理后台数据
@@ -382,13 +385,15 @@ export default {
       if (data.length !== 0) {
         this.rollNav = data.map((elem, index) => {
           return {
-            code: elem.sort,
+            codes: elem.sort,
             name: elem.name,
             url: elem.url,
             // url: '',
             size: 'small',
             label: '',
             imageUrl: elem.navigationImageUrl,
+            code: elem.description,
+            type: elem.executionParameters,
           }
         })
         this.rollNav.reverse()
@@ -406,10 +411,13 @@ export default {
           })
         }
         if (code === 'ad100082') {
-          this.bannerBottom = data.map((elem, index) => {
-            return {
-              img: elem.materialList[0].materialUrl,
-              url: elem.materialList[0].materialLink,
+          data.forEach((elem, index) => {
+            if (elem.materialList[0] && elem.materialList[0].materialUrl) {
+              const obj = {
+                img: elem.materialList[0].materialUrl,
+                url: elem.materialList[0].materialLink,
+              }
+              this.bannerBottom.push(obj)
             }
           })
         }
@@ -702,6 +710,9 @@ export default {
   }
   .navs {
     position: relative;
+  }
+  .management-must {
+    margin-bottom: 0;
   }
 }
 </style>
