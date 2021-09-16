@@ -279,7 +279,6 @@ export default {
       // this.titleName = classArr
     },
     getData(data) {
-      console.log(data)
       data.forEach((item, idx) => {
         // 头部banner
         if (item.locationCode === 'ad100086') {
@@ -296,73 +295,85 @@ export default {
         // 活动专区1
         if (item.locationCode === 'ad100087') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: index,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.activityList.push(obj)
             }
-            this.activityList.push(obj)
           })
         }
         // 热销商品
         if (item.locationCode === 'ad100088') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: resObj.materialDescription,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: resObj.materialDescription,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.images = obj
             }
-            this.images = obj
           })
         }
         if (item.locationCode === 'ad100089') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: resObj.materialDescription,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: resObj.materialDescription,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.hotSales.push(obj)
             }
-            this.hotSales.push(obj)
           })
         }
         if (item.locationCode === (this.isInApp ? 'ad100111' : 'ad100109')) {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: index,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
-              title: resObj.materialName.split('-')[2],
-              slogan: resObj.materialDescription,
-              tag: resObj.materialName.split('-')[3] || '',
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+                title: resObj.materialName.split('-')[2],
+                slogan: resObj.materialDescription,
+                tag: resObj.materialName.split('-')[3] || '',
+              }
+              this.activities.push(obj)
             }
-            this.activities.push(obj)
           })
         }
         if (item.locationCode === 'ad100091') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: index,
-              name: resObj.materialName.split('-')[2],
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                name: resObj.materialName.split('-')[2],
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.freeTool.push(obj)
             }
-            this.freeTool.push(obj)
           })
         }
         if (item.locationCode === 'ad100107') {
           item.sortMaterialList.forEach((elem, index) => {
-            const resObj = elem.materialList[0]
-            const obj = {
-              code: index,
-              img: resObj.materialUrl,
-              url: resObj.materialLink,
+            if (elem.materialList[0]) {
+              const resObj = elem.materialList[0]
+              const obj = {
+                code: index,
+                img: resObj.materialUrl,
+                url: resObj.materialLink,
+              }
+              this.recommendedBanner.push(obj)
             }
-            this.recommendedBanner.push(obj)
           })
         }
       })
