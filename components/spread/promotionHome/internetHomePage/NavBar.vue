@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     navList: {
@@ -61,6 +62,13 @@ export default {
   },
   data() {
     return {}
+  },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
   },
   methods: {
     jump(url, code, type) {
