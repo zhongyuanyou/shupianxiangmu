@@ -452,6 +452,7 @@ export default {
               this.$xToast.hideLoading()
               res.data.records.forEach((item, index) => {
                 item.imageUrl = item.img
+                item.labels = item.tabs
                 this.oddList.push(item)
               })
               this.finished = true

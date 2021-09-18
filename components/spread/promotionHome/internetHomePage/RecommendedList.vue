@@ -70,7 +70,11 @@
                     :product="proItem"
                   />
                   <div
-                    v-if="proKey === 3 && item.name === '推荐'"
+                    v-if="
+                      proKey === 3 &&
+                      item.name === '推荐' &&
+                      recommendedBanner.length
+                    "
                     class="content"
                   >
                     <div v-show="recommendedBanner.length" class="content-box">

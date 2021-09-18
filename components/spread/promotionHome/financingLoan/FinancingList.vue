@@ -298,6 +298,7 @@ export default {
               this.$xToast.hideLoading()
               res.data.records.forEach((item, index) => {
                 item.imageUrl = item.img
+                item.labels = item.tabs
                 this.list.push(item)
               })
               this.loading = false
