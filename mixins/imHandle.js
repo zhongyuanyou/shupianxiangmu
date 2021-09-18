@@ -133,8 +133,9 @@ export default {
         const imUserType = type || 'MERCHANT_B' // 用户类型: ORDINARY_B 启大顺 ;MERCHANT_S 启大包
         const operUserType =
           this.userType ||
-          this.$cookies.get('userType', { path: '/' }) ||
-          'VISITOR'
+          this.$cookies.get('userType', { path: '/' }) === 'undefined'
+            ? 'VISITOR'
+            : this.$cookies.get('userType', { path: '/' })
         this.creatImSessionMixin({
           imUserId: mchUserId,
           imUserType,
