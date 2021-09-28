@@ -35,8 +35,12 @@ export default {
   margin: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+
   .advertising-list {
     margin-left: 13px;
+    height: 120px;
+    display: flex;
   }
   .advertising-list:first-child {
     margin-left: 0;

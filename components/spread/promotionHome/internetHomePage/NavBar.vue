@@ -10,7 +10,7 @@
           :key="index"
           class="navs"
           :style="{ marginRight: navList.length > 5 ? '16px' : '' }"
-          @click="jump(nav.url)"
+          @click="jump(nav.url, nav.code, nav.type)"
         >
           <img
             :src="`${nav.icon}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     navList: {
@@ -62,11 +63,64 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      currentCity: (state) => state.city.currentCity,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   methods: {
-    jump(url) {
-      if (url.indexOf('http') !== -1) {
+    jump(url, code, type) {
+      // if (url) {
+      //   if (url.indexOf('http') > -1) {
+      //     window.location.href = url
+      //     // return
+      //   }
+      // }
+      if (url && type !== 'tool' && this.isInApp) {
+        const iOSRouter = {
+          path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
+          parameter: {
+            type: 1,
+            classCode: code,
+          },
+        }
+        const androidRouter = {
+          path: '/reform/flutter/classify_result',
+          parameter: {
+            trade: false,
+            classCode: code,
+          },
+        }
+        const iOSRouterStr = JSON.stringify(iOSRouter)
+        const androidRouterStr = JSON.stringify(androidRouter)
+        this.$appFn.dggJumpRoute(
+          {
+            iOSRouter: iOSRouterStr,
+            androidRouter: androidRouterStr,
+          },
+          (res) => {
+            console.log(res)
+          }
+        )
+      } else if (url === '/') {
+        const planner = {
+          mchUserId: this.planner.id,
+          userName: this.planner.name,
+          type: this.planner.type,
+          msgParam: {},
+          templateIds: '',
+        }
+        if (this.isInApp) {
+          this.uPIM(planner)
+        } else {
+          this.uPIM(planner)
+        }
+      } else {
         window.location.href = url
       }
+      //   this.$parent.jumpLink(url, description, execution)
     },
   },
 }

@@ -46,9 +46,10 @@ export default {
   },
   methods: {
     jump(url) {
-      console.log(url)
       if (url.indexOf('http') !== -1) {
         window.location.href = url
+      } else {
+        this.$parent.$refs.plannerIM.onlineConsult()
       }
     },
   },
@@ -92,7 +93,8 @@ export default {
           font-size: 24px;
           color: #222222;
           text-align: center;
-          line-height: 32px;
+          line-height: 33px;
+          height: 33px;
           margin-top: 17px;
         }
       }

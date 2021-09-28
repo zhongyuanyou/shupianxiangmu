@@ -23,43 +23,53 @@
             <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
-        <sp-sticky :offset-top="top">
-          <div
-            v-show="itemKey !== 0 && classList.length"
-            class="labels"
-            :style="{ paddingTop: isFixed ? '10px' : '' }"
+        <!-- <sp-sticky :offset-top="top"> -->
+        <div
+          v-show="itemKey !== 0 && classList && classList.length"
+          class="labels"
+          :style="{
+            paddingTop: isFixed ? '10px' : '',
+            top: isFixed ? top - 1 + 'px' : '',
+          }"
+        >
+          <div class="lab-box">
+            <div
+              v-for="(classItem, classIndex) in classList"
+              :key="classIndex"
+              class="lab"
+              :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
+              @click="chooesClass(classIndex)"
+            >
+              {{ classItem.name }}
+            </div>
+          </div>
+        </div>
+        <!-- </sp-sticky> -->
+        <div class="list-box">
+          <sp-list
+            v-model="loading"
+            :finished="finished"
+            :error.sync="error"
+            finished-text="没有更多了"
+            error-text=""
+            @load="onLoad"
           >
-            <div class="lab-box">
-              <div
-                v-for="(classItem, classIndex) in classList"
-                :key="classIndex"
-                class="lab"
-                :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
-                @click="chooesClass(classIndex)"
-              >
-                {{ classItem.name }}
+            <template #loading>
+              <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+                <sp-loading size="12px" />加载中...
+              </div>
+            </template>
+            <div class="product-box">
+              <div v-if="list.length > 0" class="product-item">
+                <product
+                  v-for="(proItem, proKey) of list"
+                  :key="proKey"
+                  :product="proItem"
+                />
               </div>
             </div>
-          </div>
-        </sp-sticky>
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          :error.sync="error"
-          finished-text="没有更多了"
-          error-text=""
-          @load="onLoad"
-        >
-          <div class="product-box">
-            <div v-if="list.length > 0" class="product-item">
-              <product
-                v-for="(proItem, proKey) of list"
-                :key="proKey"
-                :product="proItem"
-              />
-            </div>
-          </div>
-        </sp-list>
+          </sp-list>
+        </div>
       </sp-tab>
     </sp-tabs>
   </div>
@@ -67,7 +77,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
+import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 import product from '@/components/spread/promotionHome/financingLoan/ProductItem.vue'
 import { newSpreadApi, financingApi, spreadApi } from '@/api/spread'
@@ -78,6 +88,7 @@ export default {
     [Tabs.name]: Tabs,
     [List.name]: List,
     [Sticky.name]: Sticky,
+    [Loading.name]: Loading,
     product,
     // Waterfall,
   },
@@ -109,17 +120,17 @@ export default {
         ]
       },
     },
-    classList: {
-      type: Array,
-      default: () => {
-        return [
-          { name: '人气产品', code: '' },
-          { name: '低息好借', code: '' },
-          { name: '随借随还', code: '' },
-          { name: '大额面签', code: '' },
-        ]
-      },
-    },
+    // classList: {
+    //   type: Array,
+    //   default: () => {
+    //     return [
+    //       { name: '人气产品', code: '' },
+    //       { name: '低息好借', code: '' },
+    //       { name: '随借随还', code: '' },
+    //       { name: '大额面签', code: '' },
+    //     ]
+    //   },
+    // },
   },
   data() {
     return {
@@ -140,6 +151,8 @@ export default {
       classArr: '',
       classCode: '',
       activeCode: '',
+      num: 1,
+      classList: '',
     }
   },
   computed: {
@@ -165,6 +178,7 @@ export default {
   methods: {
     // 选择二级分类
     chooesClass(i) {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.activeCode = this.titleName[this.active].children[i].ext1
       this.pageNumber = 1
       this.classActive = i
@@ -178,6 +192,7 @@ export default {
       })
     },
     onClick() {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.pageNumber = 1
       this.classActive = -1
       this.classList = this.titleName[this.active].children
@@ -217,15 +232,18 @@ export default {
               start: this.pageNumber,
               limit: '14',
               classCodes: this.activeCode,
+              configFlg: 1,
             },
           })
           .then((res) => {
             // 调用回调函数处理数据
             const result = res.data.records
             if (res.code === 200 && result.length !== 0) {
+              this.$xToast.hideLoading()
               if (res.data.pageNumber === 1) {
                 this.list = []
               }
+              this.num = 2
               ++this.pageNumber
               result.forEach((elem, index) => {
                 const obj = {
@@ -241,18 +259,23 @@ export default {
                   url: '',
                   desc: elem.desc, // 说明
                   id: elem.id,
+                  cycle: elem.handleCycleNumber,
+                  priceType: elem.priceType,
+                  salesPrice: elem.salesPrice,
+                  refConfig: elem.refConfig,
                 }
                 this.list.push(obj)
               })
               this.loading = false
               if (result.length < 14) this.finished = true
-
-              return
+            } else {
+              this.$xToast.hideLoading()
+              this.loading = false
+              this.finished = true
             }
-            this.loading = false
-            this.finished = true
           })
           .catch((err) => {
+            this.$xToast.hideLoading()
             this.loading = false
             this.finished = true
             this.error = true
@@ -268,20 +291,28 @@ export default {
             sceneId: 'app-dkjhy-W-01',
             formatIdOne: 'FL20210425164558',
             productType: 'PRO_CLASS_TYPE_SALES',
+            classCode: this.titleName[0].type,
           })
           .then((res) => {
             if (res.code === 200) {
+              this.$xToast.hideLoading()
               res.data.records.forEach((item, index) => {
                 item.imageUrl = item.img
+                item.labels = item.tabs
                 this.list.push(item)
               })
+              this.loading = false
               this.finished = true
             } else {
+              this.loading = false
               this.finished = true
+              this.$xToast.hideLoading()
             }
           })
           .catch((err) => {
+            this.loading = false
             this.finished = true
+            this.$xToast.hideLoading()
             console.log(err)
           })
       }
@@ -293,13 +324,14 @@ export default {
 <style lang="less" scoped>
 .finacing-list {
   width: 100%;
-  margin-top: 16px;
+  margin-top: 7px;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
 
   ::v-deep.sp-tabs__nav--line {
     padding-left: 20px;
+    padding-bottom: 0;
   }
   ::v-deep.sp-tab {
     padding: 0;
@@ -349,7 +381,10 @@ export default {
   .labels {
     padding: 0 20px 20px;
     background: #f5f5f5;
-
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 99;
     .lab-box::-webkit-scrollbar {
       display: none; /* Chrome Safari */
     }
@@ -373,6 +408,9 @@ export default {
         text-align: center;
       }
     }
+  }
+  .list-box {
+    min-height: calc(100vh - 88px);
   }
   .secondary-label {
     > ul {

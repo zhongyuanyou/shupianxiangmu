@@ -131,6 +131,7 @@ export default {
         }
       }
       console.log('请求失败')
+      console.log(res)
       return {
         // resultData: dataRes.data,
       }
@@ -436,7 +437,7 @@ export default {
         this.rollNav = data.map((elem, index) => {
           return {
             sort: elem.sort,
-            code: index,
+            codes: index,
             name: elem.name,
             url: elem.url,
             size: 'small',
@@ -444,6 +445,8 @@ export default {
             imageUrl: elem.navigationImageUrl,
             description: elem.description || '',
             execution: elem.executionParameters || '',
+            code: elem.description,
+            type: elem.executionParameters,
           }
         })
 
@@ -552,6 +555,13 @@ export default {
         areaCode = this.currentCity.code
       }
       try {
+        // 资产随机code
+        const arry = [
+          'FL20210425164307',
+          'FL20210425164438',
+          'FL20210425164496',
+        ]
+        const randomCode = arry[Math.floor(Math.random() * arry.length)]
         this.$axios
           .post(
             plannerApi.plannerReferrals,
@@ -566,7 +576,7 @@ export default {
               platform: 'app',
               productId: '', //
               thirdTypeCodes: '', // 三级code
-              firstTypeCode: 'FL20210425164319', // 一级code
+              firstTypeCode: randomCode || 'FL20210425164496', // 一级code
             },
             {
               headers: {

@@ -19,41 +19,51 @@
           </div>
         </template>
         <!-- 二级分类 -->
-        <sp-sticky :offset-top="top">
-          <div
-            v-show="itemKey !== 0 && secondaryLabel.length"
-            class="secondary-label"
-            :style="{ paddingTop: isFixed ? '10px' : '' }"
-          >
-            <div class="class-box">
-              <div
-                v-for="(className, index) in secondaryLabel"
-                :key="index"
-                class="class-name"
-                :style="{ color: calssActive === index ? '#4974F5' : '' }"
-                @click="chooes(index)"
-              >
-                {{ className.name }}
-              </div>
-            </div>
-          </div>
-        </sp-sticky>
-        <sp-list
-          v-model="loading"
-          :finished="finished"
-          :error.sync="error"
-          finished-text="没有更多了"
-          error-text=""
-          @load="onLoad"
+        <!-- <sp-sticky ref="sticky" :offset-top="top"> -->
+        <div
+          v-if="itemKey !== 0 && secondaryLabel.length"
+          class="secondary-label"
+          :style="{
+            paddingTop: isFixed ? '10px' : '',
+            top: isFixed ? top - 6 + 'px' : '',
+          }"
         >
-          <div class="product-box">
-            <div v-if="oddList.length > 0" class="product-odd">
-              <div v-for="(proItem, proKey) of oddList" :key="proKey">
-                <ProductItem class="product-item" :product="proItem" />
-              </div>
+          <div class="class-box">
+            <div
+              v-for="(className, index) in secondaryLabel"
+              :key="index"
+              class="class-name"
+              :style="{ color: calssActive === index ? '#4974F5' : '' }"
+              @click="chooes(index)"
+            >
+              {{ className.name }}
             </div>
           </div>
-        </sp-list>
+        </div>
+        <!-- </sp-sticky> -->
+        <div class="list-box">
+          <sp-list
+            v-model="loading"
+            :finished="finished"
+            :error.sync="error"
+            finished-text="没有更多了"
+            error-text=""
+            @load="onLoad"
+          >
+            <template #loading>
+              <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+                <sp-loading size="12px" />加载中...
+              </div>
+            </template>
+            <div class="product-box">
+              <div v-if="oddList.length > 0" class="product-odd">
+                <div v-for="(proItem, proKey) of oddList" :key="proKey">
+                  <ProductItem class="product-item" :product="proItem" />
+                </div>
+              </div>
+            </div>
+          </sp-list>
+        </div>
       </sp-tab>
     </sp-tabs>
   </div>
@@ -61,7 +71,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Tab, Tabs, List, Sticky } from '@chipspc/vant-dgg'
+import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 // import Waterfall from 'vue-waterfall2'
 // import product from '@/components/spread/promotionHome/internetHomePage/Product.vue'
 import ProductItem from '@/components/spread/promotionHome/internetHomePage/ProductItem.vue'
@@ -74,6 +84,7 @@ export default {
     [Tabs.name]: Tabs,
     [List.name]: List,
     [Sticky.name]: Sticky,
+    [Loading.name]: Loading,
     // product,
     ProductItem,
     // Waterfall,
@@ -298,6 +309,7 @@ export default {
       classCode: '',
       labs: ['规划', '开发', '一站式服务'],
       activeCode: '',
+      num: 1,
     }
   },
   computed: {
@@ -317,12 +329,13 @@ export default {
       this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
       this.top = this.appInfo.statusBarHeight + 57 + 44
     } else {
-      this.offsetTop = 57 + 'px'
       this.top = 101
+      this.offsetTop = 57 + 'px'
     }
   },
   methods: {
     chooes(idx) {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.calssActive = idx
       this.activeCode = this.titleName[this.active].children[idx].ext1
       this.pageNumber = 1
@@ -333,6 +346,7 @@ export default {
       this.isFixed = e.isFixed
     },
     onClick() {
+      this.$xToast.showLoading({ message: '加载中...' })
       this.calssActive = -1
       this.secondaryLabel = []
       this.oddList = []
@@ -364,6 +378,7 @@ export default {
       })
 
       if (this.finished && !this.loading) return
+
       this.loading = true
       // 2、调用接口
       if (this.active !== 0) {
@@ -379,6 +394,8 @@ export default {
             // 调用回调函数处理数据
             const result = res.data.records
             if (res.code === 200 && result.length !== 0) {
+              this.$xToast.hideLoading()
+              this.num = 2
               if (res.data.pageNumber === 1) {
                 this.list = []
               }
@@ -397,17 +414,22 @@ export default {
                   url: '',
                   desc: elem.desc, // 说明
                   id: elem.id,
+                  priceType: elem.priceType,
+                  salesPrice: elem.salesPrice,
+                  refConfig: elem.refConfig,
                 }
                 this.oddList.push(obj)
               })
               this.loading = false
               if (result.length < 10) this.finished = true
             } else {
+              this.$xToast.hideLoading()
               this.loading = false
               this.finished = true
             }
           })
           .catch((err) => {
+            this.$xToast.hideLoading()
             this.loading = false
             this.finished = true
             this.error = true
@@ -423,19 +445,24 @@ export default {
             sceneId: 'app-zscqjhy-W-01',
             formatIdOnes: 'FL20210425164438#FL20210425164496', // 商品一级分类集合，#作为分隔，知识产权分为版权，专利(FL20210425164496)和商标(FL20210425164438)
             productType: 'PRO_CLASS_TYPE_SALES',
+            classCode: this.titleName[0].type,
           })
           .then((res) => {
             if (res.code === 200) {
+              this.$xToast.hideLoading()
               res.data.records.forEach((item, index) => {
                 item.imageUrl = item.img
+                item.labels = item.tabs
                 this.oddList.push(item)
               })
               this.finished = true
             } else {
+              this.$xToast.hideLoading()
               this.finished = true
             }
           })
           .catch((err) => {
+            this.$xToast.hideLoading()
             this.finished = true
             console.log(err)
           })
@@ -448,14 +475,17 @@ export default {
 <style lang="less" scoped>
 .recommended {
   width: 100%;
-  margin-top: 27px;
-
+  margin-top: 8px;
+  position: relative;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
 
   ::v-deep.sp-tabs__nav--line {
     padding-left: 20px;
+  }
+  ::v-deep.sp-tabs__wrap {
+    height: 80px;
   }
   ::v-deep.sp-tab {
     padding: 0;
@@ -490,9 +520,12 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    span {
+      z-index: 3;
+    }
     .title_tag {
       position: absolute;
-      bottom: 24px;
+      bottom: 20px;
       right: 0;
       width: 60px;
       height: 12px;
@@ -509,6 +542,10 @@ export default {
     padding: 0 20px;
     padding-bottom: 20px;
     background: #f5f5f5;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 999;
     .class-box::-webkit-scrollbar {
       display: none;
     }
@@ -523,11 +560,14 @@ export default {
         height: 56px;
         background: #ffffff;
         border-radius: 8px;
-        line-height: 56px;
+        // line-height: 56px;
         padding: 0 19px;
         margin-right: 10px;
         font-size: 24px;
         color: #555555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
@@ -583,9 +623,16 @@ export default {
       }
     }
   }
-  .product-box {
-    margin-top: 32px;
-    width: 100%;
+  .list-box {
+    min-height: calc(100vh - 88px);
+    .loding-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .product-box {
+      width: 100%;
+    }
   }
 }
 </style>

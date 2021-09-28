@@ -133,8 +133,9 @@ export default {
         const imUserType = type || 'MERCHANT_B' // 用户类型: ORDINARY_B 启大顺 ;MERCHANT_S 启大包
         const operUserType =
           this.userType ||
-          this.$cookies.get('userType', { path: '/' }) ||
-          'VISITOR'
+          this.$cookies.get('userType', { path: '/' }) === 'undefined'
+            ? 'VISITOR'
+            : this.$cookies.get('userType', { path: '/' })
         this.creatImSessionMixin({
           imUserId: mchUserId,
           imUserType,
@@ -215,6 +216,7 @@ export default {
         params = Object.assign(params, data)
         this.imExample.createSession(params, (res) => {
           if (res.code === 200) {
+            this.$xToast.hideLoading()
             const myInfo = localStorage.getItem('myInfo')
               ? JSON.parse(localStorage.getItem('myInfo'))
               : {}
@@ -230,8 +232,11 @@ export default {
               this.$cookies.get('userType', { path: '/' }) ||
               this.userType ||
               'VISITOR'
-            window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}`
+            setTimeout(() => {
+              window.location.href = `${config.imBaseUrl}/chat?token=${token}&userId=${userId}&userType=${userType}&id=${res.data.groupId}`
+            }, 450)
           } else if (res.code === 5223) {
+            this.$xToast.hideLoading()
             this.clearUserInfoAndJumpLoging()
           } else {
             this.$xToast.warning(res.msg)

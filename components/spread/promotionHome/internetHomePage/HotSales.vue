@@ -114,14 +114,14 @@ export default {
 <style lang="less" scoped>
 .hot-sales {
   width: 100%;
-  height: 356px;
+  //   height: 356px;
   padding: 0 20px;
   .content-box {
     width: 100%;
     height: 100%;
     background: #ffffff;
     border-radius: 24px;
-    padding: 24px 20px;
+    padding: 24px 20px 24px 20px;
     position: relative;
     .title-box {
       display: flex;
@@ -141,6 +141,7 @@ export default {
         font-size: 20px;
         color: #ec5330;
         margin-left: 8px;
+        font-weight: bold;
       }
     }
     .hot-img {
@@ -149,13 +150,14 @@ export default {
       position: absolute;
       top: 10px;
       right: 20px;
+      z-index: 0;
       > img {
         width: 100%;
         height: 100%;
       }
     }
     .content-msg {
-      margin-top: 32px;
+      margin-top: 24px;
       display: flex;
       .content-left {
         flex-shrink: 0;
@@ -177,13 +179,18 @@ export default {
         justify-content: space-between;
         flex-wrap: wrap;
         width: 100%;
+        position: relative;
+        z-index: 1;
+        .img-box:nth-child(1) {
+          margin-bottom: 12px;
+        }
         .img-box {
           width: 222px;
           height: 116px;
           border-radius: 12px;
           display: flex;
-          margin-bottom: 12px;
           > img {
+            display: block;
             width: 100%;
             height: 100%;
             border-radius: 12px;
