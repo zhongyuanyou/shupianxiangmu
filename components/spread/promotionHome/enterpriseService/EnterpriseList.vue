@@ -14,7 +14,7 @@
           v-for="(item, proKey) of list"
           :key="proKey"
           class="content-list"
-          @click="onMore(item.id)"
+          @click="onMore(item)"
         >
           <div class="imge"><img :src="item.img" alt="" /></div>
           <div class="region">
@@ -174,12 +174,16 @@ export default {
       // this.list.length === 0 && (this.pageNumber = 1)
       this.selectTab()
     },
-    onMore(id) {
+    onMore(product) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+      let code = this.product.classCodeLevel
+        ? this.product.classCodeLevel.split(',')
+        : []
+      code = code.length > 0 ? code[0] : ''
+      window.location.href = `https://${base}m.shupian.cn/detail?productId=${product.id}&classCodeOne=${code}`
     },
     // 请求数据
     selectTab(item) {

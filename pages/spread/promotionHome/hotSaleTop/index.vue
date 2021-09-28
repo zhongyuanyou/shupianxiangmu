@@ -109,7 +109,7 @@
                 itemItem
               }}</span>
             </div>
-            <div class="desc" @click="goDetail(item.id)">{{ item.desc }}</div>
+            <div class="desc" @click="goDetail(item)">{{ item.desc }}</div>
             <div class="bottom">
               <div class="price">{{ item.price }}<span>元</span></div>
               <div class="sales_num">销量 {{ item.saleNum }}</div>
@@ -249,20 +249,20 @@ export default {
       }
     },
     // 跳详情
-    goDetail(id) {
+    goDetail(product) {
       if (this.isInApp) {
         const iOSRouters = {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const androidRouters = {
           path: '/flutter/main',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const iOSRouterStr = JSON.stringify(iOSRouters)
@@ -276,7 +276,11 @@ export default {
         DGG_SERVER_ENV === 'development' && (base = 'd')
         DGG_SERVER_ENV === 'release' && (base = 't')
         DGG_SERVER_ENV === 'production' && (base = '')
-        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+        let code = this.product.classCodeLevel
+          ? this.product.classCodeLevel.split(',')
+          : []
+        code = code.length > 0 ? code[0] : ''
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${product.id}&classCodeOne=${code}`
       }
     },
     // 返回 上一级

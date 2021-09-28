@@ -55,7 +55,7 @@
         </div>
         <span class="sales">月销量 {{ product.sales }}</span>
       </div>
-      <a class="btn" @click="onMore(product.id)">在线咨询</a>
+      <a class="btn" @click="onMore(product)">在线咨询</a>
     </div>
   </div>
 </template>
@@ -80,7 +80,7 @@ export default {
     }),
   },
   methods: {
-    onMore(id) {
+    onMore(product) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
@@ -90,14 +90,14 @@ export default {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const androidRouters = {
           path: '/flutter/main',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const iOSRouterStr = JSON.stringify(iOSRouters)
@@ -107,7 +107,11 @@ export default {
           androidRouter: androidRouterStr,
         })
       } else {
-        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+         let code = this.product.classCodeLevel
+          ? this.product.classCodeLevel.split(',')
+          : []
+        code = code.length > 0 ? code[0] : ''
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${product.id}&classCodeOne=${code}`
       }
     },
     price(price) {

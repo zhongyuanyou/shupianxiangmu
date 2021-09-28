@@ -1,6 +1,6 @@
 <template>
   <div class="product-card">
-    <div class="item" @click="onMore(product.id)">
+    <div class="item" @click="onMore(product)">
       <div class="item-left">
         <img :src="product.img" alt="" />
       </div>
@@ -55,8 +55,8 @@ export default {
     },
   },
   methods: {
-    onMore(id) {
-      if (!id) return
+    onMore(product) {
+      if (!product.id) return
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
@@ -66,14 +66,14 @@ export default {
           path: 'CPSCustomer:CPSCustomer/CPSFlutterRouterViewController///push/animation',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const androidRouters = {
           path: '/flutter/main',
           parameter: {
             routerPath: 'cpsc/goods/details/service',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const iOSRouterStr = JSON.stringify(iOSRouters)
@@ -83,7 +83,11 @@ export default {
           androidRouter: androidRouterStr,
         })
       } else {
-        window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
+        let code = this.product.classCodeLevel
+          ? this.product.classCodeLevel.split(',')
+          : []
+        code = code.length > 0 ? code[0] : ''
+        window.location.href = `https://${base}m.shupian.cn/detail?productId=${product.id}&classCodeOne=${code}`
       }
     },
     price(price) {

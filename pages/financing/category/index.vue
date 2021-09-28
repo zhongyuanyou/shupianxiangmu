@@ -84,7 +84,7 @@
                 :class="
                   item.title === '大家都在用' ? 'icon-box' : 'item_con_child'
                 "
-                @click="handleItem(cItem.id, item.title, item.url)"
+                @click="handleItem(cItem, item.title, item.url)"
               >
                 <div v-if="item.title === '大家都在用'">
                   <div class="icon-img">
@@ -251,7 +251,7 @@ export default {
         this.loading = false
       }
     },
-    handleItem(id, title, url) {
+    handleItem(product, title, url) {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
@@ -264,7 +264,7 @@ export default {
               title !== '大家都在用'
                 ? 'cpsc/goods/details/service'
                 : 'cpsc/goods/service/list',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const androidRouters = {
@@ -274,7 +274,7 @@ export default {
               title !== '大家都在用'
                 ? 'cpsc/goods/details/service'
                 : 'cpsc/goods/service/list',
-            parameter: { productId: id },
+            parameter: { productId: product.id },
           },
         }
         const iOSRouterStr = JSON.stringify(iOSRouters)
@@ -284,9 +284,13 @@ export default {
           androidRouter: androidRouterStr,
         })
       } else {
+        let code = this.product.classCodeLevel
+          ? this.product.classCodeLevel.split(',')
+          : []
+        code = code.length > 0 ? code[0] : ''
         window.location.href =
           title !== '大家都在用'
-            ? `https://${base}m.shupian.cn/detail?productId=${id}`
+            ? `https://${base}m.shupian.cn/detail?productId=${product.id}&classCodeOne=${code}`
             : `https://${base}m.shupian.cn/search/searchgoods`
       }
     },
