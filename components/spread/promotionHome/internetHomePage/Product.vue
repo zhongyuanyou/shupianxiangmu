@@ -107,7 +107,7 @@ export default {
           androidRouter: androidRouterStr,
         })
       } else {
-         let code = this.product.classCodeLevel
+        let code = this.product.classCodeLevel
           ? this.product.classCodeLevel.split(',')
           : []
         code = code.length > 0 ? code[0] : ''

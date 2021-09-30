@@ -417,6 +417,7 @@ export default {
                   priceType: elem.priceType,
                   salesPrice: elem.salesPrice,
                   refConfig: elem.refConfig,
+                  classCodeLevel: elem.classCodeLevel,
                 }
                 this.oddList.push(obj)
               })

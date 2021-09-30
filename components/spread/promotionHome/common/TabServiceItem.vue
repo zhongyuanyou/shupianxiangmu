@@ -141,13 +141,6 @@ export default {
       },
     },
   },
-  computed: {
-    ...mapState({
-      isInApp: (state) => state.app.isInApp,
-      appInfo: (state) => state.app.appInfo, // app信息
-    }),
-  },
-
   data() {
     return {
       active: 0,
@@ -178,7 +171,12 @@ export default {
       num: 1,
     }
   },
-
+  computed: {
+    ...mapState({
+      isInApp: (state) => state.app.isInApp,
+      appInfo: (state) => state.app.appInfo, // app信息
+    }),
+  },
   mounted() {
     if (this.isInApp) {
       this.offsetTop = this.appInfo.statusBarHeight + 57 + 'px'
@@ -351,6 +349,7 @@ export default {
                 priceType: elem.priceType,
                 salesPrice: elem.salesPrice,
                 refConfig: elem.refConfig,
+                classCodeLevel: elem.classCodeLevel,
               })
             })
             if (this.recommendedList && this.pageNumber === 1) {

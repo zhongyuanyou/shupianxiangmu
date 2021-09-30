@@ -89,6 +89,12 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      canScrollWidth: 0,
+      scroLeft: 0,
+    }
+  },
   computed: {
     // 滚共导航数处理；个数小于等于10，横向排列；个数大于10，前10个横向排列，后面上下排列
     rollNavHandle() {
@@ -128,13 +134,6 @@ export default {
       appInfo: (state) => state.app.appInfo, // app信息
     }),
   },
-  data() {
-    return {
-      canScrollWidth: 0,
-      scroLeft: 0,
-    }
-  },
-
   mounted() {
     const scrollWidth = this.$refs.refScroll.scrollWidth // 容器文档总宽
     const clientWidth = this.$refs.refScroll.clientWidth // 容器可视宽度
