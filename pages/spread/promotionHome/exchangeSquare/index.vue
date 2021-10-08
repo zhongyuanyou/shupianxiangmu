@@ -291,14 +291,13 @@ export default {
         const navList = []
         data.forEach((item, index) => {
           const obj = {
-            code: index + 1,
             name: item.name,
             url: item.url,
             size: 'small',
             label: '',
             imageUrl: item.navigationImageUrl,
-            code: elem.description,
-            type: elem.executionParameters,
+            code: item.description,
+            type: item.executionParameters,
           }
           navList.push(obj)
         })

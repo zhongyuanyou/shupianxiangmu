@@ -1,9 +1,16 @@
 <template>
-  <div class="找专利"></div>
+  <div class="">
+    <NavTop></NavTop>
+  </div>
 </template>
 
 <script>
-export default {}
+import NavTop from '@/components/spread/common/NavTop.vue'
+export default {
+  components: {
+    NavTop,
+  },
+}
 </script>
 
 <style></style>
