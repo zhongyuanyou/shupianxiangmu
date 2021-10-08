@@ -265,7 +265,7 @@ export default {
               if (!this.isInApp) {
                 this.uPIM(planner, sessionParams, msgParams)
               } else {
-                this.uPIM(planner)
+                this.uPIM(planner, sessionParams, msgParams)
               }
               // 在APP中
               // if (this.isInApp && this.phoneNum === '') {

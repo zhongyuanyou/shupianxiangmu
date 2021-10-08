@@ -297,6 +297,8 @@ export default {
             size: 'small',
             label: '',
             imageUrl: item.navigationImageUrl,
+            code: elem.description,
+            type: elem.executionParameters,
           }
           navList.push(obj)
         })
