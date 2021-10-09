@@ -3,7 +3,12 @@
     <div class="list">
       <div class="navs" v-for="(item, index) in navList" :key="index">
         <div class="nav" @click="jump(item)">
-          <div class="icon"><img :src="item.icon" alt="" /></div>
+          <div class="icon">
+            <img
+              :src="`${item.icon}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
+              alt=""
+            />
+          </div>
           <div class="title">{{ item.title }}</div>
         </div>
       </div>
