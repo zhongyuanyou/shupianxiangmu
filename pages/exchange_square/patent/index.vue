@@ -12,6 +12,7 @@
     <!-- 广告区 S -->
     <Advertising></Advertising>
     <!-- 广告区 E -->
+    <ProductCard type="patent"></ProductCard>
   </div>
 </template>
 
@@ -20,8 +21,9 @@ import Header from '@/components/exchange_square/common/Header.vue'
 import Banner from '@/components/exchange_square/common/Banner.vue'
 import NavList from '@/components/exchange_square/common/NavList.vue'
 import Advertising from '@/components/exchange_square/common/Advertising.vue'
+import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
 export default {
-  components: { Header, Banner, NavList, Advertising },
+  components: { Header, Banner, NavList, Advertising, ProductCard },
 }
 </script>
 
