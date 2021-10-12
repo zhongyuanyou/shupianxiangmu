@@ -45,7 +45,6 @@
 <script>
 export default {
   props: {
-    // 滚动导航
     list: {
       type: Array,
       default: () => {
@@ -63,6 +62,7 @@ export default {
     background: #fff;
     padding: 24px 20px 34px 20px;
     border-radius: 24px;
+    margin-bottom: 20px;
     > .name {
       display: flex;
       align-items: center;

@@ -21,7 +21,7 @@
         </template>
         <!-- <sp-sticky :offset-top="top"> -->
         <div
-          v-show="itemKey !== 0 && classList && classList.length"
+          v-show="classList && classList.length"
           class="labels"
           :style="{
             paddingTop: isFixed ? '10px' : '',
@@ -55,7 +55,11 @@
                 <sp-loading size="12px" />加载中...
               </div>
             </template>
-            <GoodsList :list="list"></GoodsList>
+            <TrademarkGood v-show="active == 1" :list="list"></TrademarkGood>
+            <GoodsList
+              v-show="active == 0 || active == 2 || active == 3"
+              :list="list"
+            ></GoodsList>
 
             <!-- <div class="product-box">
               <div v-if="list.length > 0" class="product-item">
@@ -76,6 +80,7 @@
 <script>
 import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 import GoodsList from '@/components/exchange_square/CompanyGood.vue'
+import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 export default {
   components: {
     [Tab.name]: Tab,
@@ -84,6 +89,7 @@ export default {
     [Sticky.name]: Sticky,
     [Loading.name]: Loading,
     GoodsList,
+    TrademarkGood,
     // Waterfall,
   },
   props: {
@@ -107,6 +113,32 @@ export default {
           type: '小规模纳税',
           capital: '500万以上',
           industry: '电子贸易',
+          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
+          slogan: '餐饮｜已下证',
+        },
+        {
+          name: '大庆****建',
+          address: '黑龙江',
+          tag: ['安全交易', '1对1服务'],
+          price: '123321',
+          time: '五年以上',
+          type: '小规模纳税',
+          capital: '500万以上',
+          industry: '电子贸易',
+          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
+          slogan: '餐饮｜已下证',
+        },
+        {
+          name: '大庆****',
+          address: '黑龙江',
+          tag: ['安全交易', '1对1服务'],
+          price: '123321',
+          time: '五年以上',
+          type: '小规模纳税',
+          capital: '500万以上',
+          industry: '电子贸易',
+          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
+          slogan: '餐饮｜已下证',
         },
       ], // 商品数据
       active: 0,
@@ -126,7 +158,7 @@ export default {
       classCode: '',
       activeCode: '',
       num: 1,
-      classList: '',
+      classList: [{ name: '推荐' }],
     }
   },
   methods: {
