@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'advertising',
+  name: 'Advertising',
 }
 </script>
 <style lang="less" scoped>

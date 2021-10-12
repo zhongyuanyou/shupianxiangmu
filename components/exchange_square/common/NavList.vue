@@ -1,7 +1,7 @@
 <template>
   <div class="nav-list">
     <div class="list">
-      <div class="navs" v-for="(item, index) in navList" :key="index">
+      <div v-for="(item, index) in navList" :key="index" class="navs">
         <div class="nav" @click="jump(item)">
           <div class="icon"><img :src="item.icon" alt="" /></div>
           <div class="title">{{ item.title }}</div>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'nav-list',
+  name: 'NavList',
   props: {
     navList: {
       type: Array,
