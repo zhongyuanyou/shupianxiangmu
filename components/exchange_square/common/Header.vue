@@ -20,6 +20,7 @@
         color="#CCCCCC"
       ></my-icon>
       <input
+        :style="{ background: searchColor }"
         :placeholder="placeholder"
         class="search-input"
         @focus="searchFocus"

@@ -877,7 +877,6 @@ input:-webkit-autofill {
           font-size: 28px;
           color: #222222;
           text-align: center;
-          line-height: 28px;
           font-weight: 700;
           margin: 34px 0 24px;
           .textoverflow(1);

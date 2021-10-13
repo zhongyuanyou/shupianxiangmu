@@ -231,21 +231,19 @@ export default {
       }
     },
     price() {
-      if (this.amount) {
-        if (this.amount >= 280) {
-          const num = 50000 + (this.amount - 280) * 575
-          return num > 10000000 ? '10000000.00' : num.toFixed(2)
-        } else {
-          const num = 0
-          return num > 10000000 ? '10000000.00' : num.toFixed(2)
-        }
-      } else if (this.insuranceNum) {
-        const num = this.insuranceNum * 10000 * 25
+      if (
+        this.amount &&
+        this.amount >= 280 &&
+        this.insuranceNum &&
+        this.reimbursementNum
+      ) {
+        const num =
+          50000 +
+          (this.amount - 280) * 575 +
+          this.insuranceNum * 10000 * 25 +
+          this.reimbursementNum * this.timeLimit
         return num > 10000000 ? '10000000.00' : num.toFixed(2)
-      } else if (this.reimbursementNum) {
-        const num = this.reimbursementNum * this.timeLimit
-        return num > 10000000 ? '10000000.00' : num.toFixed(2)
-      } else if (this.amount && this.insuranceNum) {
+      } else if (this.amount && this.amount >= 280 && this.insuranceNum) {
         const num =
           50000 + (this.amount - 280) * 575 + this.insuranceNum * 10000 * 25
         return num > 10000000 ? '10000000.00' : num.toFixed(2)
@@ -255,19 +253,26 @@ export default {
           this.insuranceNum * 10000 * 25 +
           this.reimbursementNum * this.timeLimit
         return num > 10000000 ? '10000000.00' : num.toFixed(2)
-      } else if (this.amount && this.reimbursementNum) {
+      } else if (this.amount && this.amount >= 280 && this.reimbursementNum) {
         const num =
           50000 +
           (this.amount - 280) * 575 +
           this.reimbursementNum * this.timeLimit
         return num > 10000000 ? '10000000.00' : num.toFixed(2)
-      } else if (this.amount && this.insuranceNum && this.reimbursementNum) {
-        const num =
-          50000 +
-          (this.amount - 280) * 575 +
-          this.insuranceNum * 10000 * 25 +
-          this.reimbursementNum * this.timeLimit
+      } else if (this.insuranceNum) {
+        const num = this.insuranceNum * 10000 * 25
         return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.reimbursementNum) {
+        const num = this.reimbursementNum * this.timeLimit
+        return num > 10000000 ? '10000000.00' : num.toFixed(2)
+      } else if (this.amount) {
+        if (this.amount >= 280) {
+          const num = 50000 + (this.amount - 280) * 575
+          return num > 10000000 ? '10000000.00' : num.toFixed(2)
+        } else {
+          const num = 0
+          return num > 10000000 ? '10000000.00' : num.toFixed(2)
+        }
       } else {
         return '0.00'
       }

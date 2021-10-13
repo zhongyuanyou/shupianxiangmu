@@ -3,7 +3,7 @@
     <div class="swipe-box">
       <sp-swipe
         class="my-swipe"
-        :autoplay="3000"
+        :autoplay="5000"
         :show-indicators="bannerList.length > 1"
         indicator-color="white"
       >

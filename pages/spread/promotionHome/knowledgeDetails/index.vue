@@ -82,7 +82,7 @@ export default {
       font-family: PingFangSC-Medium;
       font-size: 44px;
       line-height: 62px;
-      color: #333333;
+      color: #222222;
       font-weight: 700;
       .textOverflow(3);
     }
@@ -111,8 +111,11 @@ export default {
       > p {
         display: block;
         width: 100%;
+        word-wrap: break-word;
+        word-break: break-all;
         > img {
           width: 100%;
+          height: auto;
         }
       }
     }

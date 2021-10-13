@@ -1,25 +1,26 @@
 <template>
-  <div class="patent">
-    <!-- 头部s -->
+  <div class="qualification">
     <sp-sticky>
+      <!-- 头部S -->
       <Header
+        title="找资质"
         :bgColor="isFixed ? '#ffffff' : '#f5f5f5'"
         :searchColor="isFixed ? '#f5f5f5' : '#ffffff'"
       ></Header>
+      <!-- 头部E -->
     </sp-sticky>
-    <!-- 头部E -->
     <!-- banner S -->
     <Banner></Banner>
     <!-- banner E -->
-    <!-- 导航区 S -->
+    <!-- 金刚区 S -->
     <NavList></NavList>
-    <!-- 导航区 E -->
-    <!-- 广告区 S -->
-    <Advertising></Advertising>
-    <!-- 广告区 E -->
+    <!-- 金刚区 E -->
+    <!-- 瓷片区 S-->
+    <Ceramics></Ceramics>
+    <!-- 瓷片区 E -->
     <!-- 资源列表 S -->
     <ProductList @scroll="scroll"></ProductList>
-    <!-- 资源列表 E -->
+    <!-- 资源列表 S -->
   </div>
 </template>
 
@@ -28,16 +29,17 @@ import { Sticky } from '@chipspc/vant-dgg'
 import Header from '@/components/exchange_square/common/Header.vue'
 import Banner from '@/components/exchange_square/common/Banner.vue'
 import NavList from '@/components/exchange_square/common/NavList.vue'
-import Advertising from '@/components/exchange_square/common/Advertising.vue'
-import ProductList from '@/components/exchange_square/patent/ProductList.vue'
+import Ceramics from '@/components/exchange_square/qualification/Ceramics.vue'
+import ProductList from '@/components/exchange_square/qualification/ProductList.vue'
 export default {
+  name: 'qualification',
   components: {
     Header,
+    [Sticky.name]: Sticky,
     Banner,
     NavList,
-    Advertising,
+    Ceramics,
     ProductList,
-    [Sticky.name]: Sticky,
   },
   data() {
     return {
@@ -54,10 +56,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.patent {
+.qualification {
   width: 100vw;
   min-height: 100vh;
-  background-color: #f5f5f5;
-  position: relative;
+  background: #f5f5f5;
 }
 </style>
