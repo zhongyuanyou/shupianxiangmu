@@ -1,7 +1,7 @@
 <template>
   <div class="consulting-list">
     <div class="title-box">
-      <div class="title">{{ consulting.name }}</div>
+      <div class="title">{{ consulting.titles }}</div>
       <div class="show-more" @click="showMore">
         <div class="btn">查看更多</div>
         <div class="icon">
@@ -40,32 +40,22 @@ export default {
       default: () => {
         return {
           name: '公司交易',
-          list: [
-            {
-              title:
-                '山西房产科技有限公司房产科技有限公司山西房产科技有限公司房产科技有限公司山西房…',
-              author: '吴镇宇 · 2021-06-24',
-            },
-            {
-              title: '山西房产科技有限公司房产科技有限公司',
-              author: '吴镇宇 · 2021-06-24',
-            },
-          ],
+          list: [],
         }
       },
     },
   },
   methods: {
-    jump() {
+    jump(item) {
       this.$router.push({
         path: '/exchange_square/transactionProcess/consultingDetail',
-        query: { id: '111', code: '11111' },
+        query: { id: item.id, code: item.categoryCode },
       })
     },
     showMore() {
       this.$router.push({
         path: '/exchange_square/transactionProcess/consulting',
-        query: { title: this.consulting.name, code: '11111' },
+        query: { title: this.consulting.titles, code: this.consulting.code },
       })
     },
   },
@@ -107,11 +97,12 @@ export default {
     }
   }
   .list {
-    .content:first-child {
-      border-bottom: 1px solid #f5f5f5;
+    .content:last-child {
+      border-bottom: none;
     }
     .content {
       padding: 28px 0;
+      border-bottom: 1px solid #f5f5f5;
       .content-title {
         text-overflow: -o-ellipsis-lastline;
         overflow: hidden;

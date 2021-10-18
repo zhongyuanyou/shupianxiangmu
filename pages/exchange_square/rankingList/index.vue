@@ -88,7 +88,6 @@ import Header from '@/components/common/head/header.vue'
 import Monthly from '@/components/exchange_square/rankingList/Monthly.vue'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
 export default {
-  name: 'rankingList',
   components: {
     Header,
     Monthly,

@@ -24,6 +24,7 @@
 import { List } from '@chipspc/vant-dgg'
 import Header from '@/components/common/head/header.vue'
 import ConsultingItem from '@/components/exchange_square/transactionProcess/ConsultingItem.vue'
+import { spreadApi } from '@/api/spread'
 export default {
   name: 'Consulting',
   components: {
@@ -37,34 +38,50 @@ export default {
       loading: false,
       finished: false,
       info: '',
-      consultingList: [
-        {
-          title:
-            '山西房产科技有限公司房产科技有限公司山西房产科技有限公司房产科技有限公司山西房…',
-          author: '吴镇宇 · 2021-06-24',
-        },
-        {
-          title: '山西房产科技有限公司房产科技有限公司山西',
-          author: '吴镇宇 · 2021-06-24',
-        },
-        {
-          title:
-            '山西房产科技有限公司房产科技有限公司山西房产科技有限公司房产科技有限公司山西房…',
-          author: '吴镇宇 · 2021-06-24',
-        },
-        {
-          title: '山西房产科技有限公司房产科技有限公司山西',
-          author: '吴镇宇 · 2021-06-24',
-        },
-      ],
+      consultingList: [],
+      pageNumber: 1,
     }
   },
   created() {
     this.info = this.$route.query
     this.title = this.info.title
   },
+  mounted() {},
   methods: {
-    onLoad() {},
+    onLoad() {
+      this.getList()
+    },
+    getList() {
+      if (this.finished) return
+      this.$axios
+        .get(spreadApi.knowledge_list, {
+          params: {
+            limit: 10,
+            categoryCode: this.info.code,
+            page: this.pageNumber,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.pageNumber++
+            if (res.data.rows && res.data.rows.length > 0) {
+              if (this.page === 1) {
+                this.consultingList = res.data.rows
+              } else {
+                res.data.rows.forEach((item) => {
+                  this.consultingList.push(item)
+                })
+              }
+              if (res.data.rows.length < 10) {
+                this.finished = true
+              }
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
   },
 }
 </script>
@@ -77,6 +94,9 @@ export default {
   padding-bottom: 36px;
   ::v-deep.my-head {
     box-shadow: none;
+  }
+  .list {
+    height: calc(100vh - 88px - 36px);
   }
 }
 </style>
