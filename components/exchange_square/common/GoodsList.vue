@@ -19,7 +19,6 @@
             <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
-        <!-- <sp-sticky :offset-top="top"> -->
         <div
           v-show="classList && classList.length"
           class="labels"
@@ -56,21 +55,11 @@
               </div>
             </template>
             <TrademarkGood v-show="active == 1" :list="list"></TrademarkGood>
-            <GoodsList
+            <CompanyGood
               v-show="active == 0 || active == 2 || active == 3"
               :list="list"
               :active="active"
-            ></GoodsList>
-
-            <!-- <div class="product-box">
-              <div v-if="list.length > 0" class="product-item">
-                <product
-                  v-for="(proItem, proKey) of list"
-                  :key="proKey"
-                  :product="proItem"
-                />
-              </div>
-            </div> -->
+            ></CompanyGood>
           </sp-list>
         </div>
       </sp-tab>
@@ -80,7 +69,7 @@
 
 <script>
 import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
-import GoodsList from '@/components/exchange_square/CompanyGood.vue'
+import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
 import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 export default {
   components: {
@@ -89,7 +78,7 @@ export default {
     [List.name]: List,
     [Sticky.name]: Sticky,
     [Loading.name]: Loading,
-    GoodsList,
+    CompanyGood,
     TrademarkGood,
     // Waterfall,
   },
