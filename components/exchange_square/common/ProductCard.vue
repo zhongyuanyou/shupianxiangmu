@@ -2,7 +2,9 @@
   <div class="product-card">
     <div class="card">
       <div class="title-box">
-        <div class="title-tag">外观专利</div>
+        <div v-if="type === 'monthly'" class="title-tag">黑龙江</div>
+        <div v-else class="title-tag">外观专利</div>
+
         <div class="title">一种刹车片制作用自动化刷胶装置自…</div>
       </div>
       <div class="label-box">
@@ -59,6 +61,24 @@
         </div>
         <div>
           <div class="msg-title">地区</div>
+          <div class="msg-content">四川</div>
+        </div>
+      </div>
+      <div v-if="type === 'monthly'" class="msg-box">
+        <div>
+          <div class="msg-title">经营时间</div>
+          <div class="msg-content">5年以上</div>
+        </div>
+        <div>
+          <div class="msg-title">纳税类型</div>
+          <div class="msg-content">小规模…</div>
+        </div>
+        <div>
+          <div class="msg-title">注册资本</div>
+          <div class="msg-content">1000万...</div>
+        </div>
+        <div>
+          <div class="msg-title">所属行业</div>
           <div class="msg-content">四川</div>
         </div>
       </div>

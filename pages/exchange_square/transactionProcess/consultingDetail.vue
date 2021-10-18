@@ -59,6 +59,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #f4f4f4;
       .information_class {
         font-size: 24px;
         color: #999999;
@@ -71,6 +72,7 @@ export default {
       }
     }
     ::v-deep.msg {
+      margin-top: 40px;
       font-size: 32px;
       color: #333333;
       line-height: 52px;
