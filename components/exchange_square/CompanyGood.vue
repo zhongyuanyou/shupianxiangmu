@@ -20,7 +20,7 @@
           <my-icon name="list_ic_next" size="0.22rem" color="#4974f5"></my-icon>
         </div>
       </div>
-      <div class="foot">
+      <div v-show="active === 0" class="foot">
         <div class="list">
           <p>经营时间</p>
           <p>{{ item.time }}</p>
@@ -38,6 +38,42 @@
           <p>{{ item.industry }}</p>
         </div>
       </div>
+      <div v-show="active === 2" class="foot">
+        <div class="list">
+          <p>行业</p>
+          <p>{{ item.time }}</p>
+        </div>
+        <div class="list">
+          <p>申请日期</p>
+          <p>{{ item.type }}</p>
+        </div>
+        <div class="list">
+          <p>有效期至</p>
+          <p>{{ item.capital }}</p>
+        </div>
+        <div class="list">
+          <p>专利状态</p>
+          <p>{{ item.industry }}</p>
+        </div>
+      </div>
+      <div v-show="active === 3" class="foot">
+        <div class="list">
+          <p>转让方式</p>
+          <p>{{ item.time }}</p>
+        </div>
+        <div class="list">
+          <p>到期日期</p>
+          <p>{{ item.type }}</p>
+        </div>
+        <div class="list">
+          <p>注册资本</p>
+          <p>{{ item.capital }}</p>
+        </div>
+        <div class="list">
+          <p>安全许可证</p>
+          <p>{{ item.industry }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +81,10 @@
 <script>
 export default {
   props: {
+    active: {
+      type: Number,
+      default: 0,
+    },
     list: {
       type: Array,
       default: () => {

@@ -3,8 +3,8 @@
     <!-- 头部s -->
     <sp-sticky>
       <Header
-        :bgColor="isFixed ? '#ffffff' : '#f5f5f5'"
-        :searchColor="isFixed ? '#f5f5f5' : '#ffffff'"
+        :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
+        :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
       ></Header>
     </sp-sticky>
     <!-- 头部E -->

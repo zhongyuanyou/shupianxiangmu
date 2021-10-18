@@ -32,7 +32,7 @@ import NavList from '@/components/exchange_square/common/NavList.vue'
 import Ceramics from '@/components/exchange_square/qualification/Ceramics.vue'
 import ProductList from '@/components/exchange_square/qualification/ProductList.vue'
 export default {
-  name: 'qualification',
+  name: 'Qualification',
   components: {
     Header,
     [Sticky.name]: Sticky,

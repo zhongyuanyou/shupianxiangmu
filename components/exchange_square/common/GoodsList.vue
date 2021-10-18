@@ -59,6 +59,7 @@
             <GoodsList
               v-show="active == 0 || active == 2 || active == 3"
               :list="list"
+              :active="active"
             ></GoodsList>
 
             <!-- <div class="product-box">
