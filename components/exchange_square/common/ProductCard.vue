@@ -79,7 +79,7 @@
         </div>
         <div>
           <div class="msg-title">所属行业</div>
-          <div class="msg-content">四川</div>
+          <div class="msg-content">电子贸易</div>
         </div>
       </div>
     </div>

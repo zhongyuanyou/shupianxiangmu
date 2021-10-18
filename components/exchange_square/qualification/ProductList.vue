@@ -109,17 +109,19 @@
                   <div class="area-title">
                     <div class="area">地区</div>
                     <div class="all" @click="allChooes">
-                      <div
-                        class="all-title"
-                        :style="{ color: isAll ? '#4974F5' : '#1a1a1a' }"
-                      >
-                        全部
-                      </div>
-                      <div class="icon">
+                      <div class="all-title" style="color: #4974f5">全部</div>
+                      <div v-if="!isShow" class="icon">
                         <my-icon
-                          name="duoxuankuangjihuo"
+                          name="xiala"
                           size="0.28rem"
-                          :color="isAll ? '#4974F5' : '#1a1a1a'"
+                          color="#4974F5"
+                        ></my-icon>
+                      </div>
+                      <div v-else class="icon">
+                        <my-icon
+                          name="shangla"
+                          size="0.28rem"
+                          color="#4974F5"
                         ></my-icon>
                       </div>
                     </div>
@@ -128,8 +130,9 @@
                     <div
                       v-for="(area, areaIdx) in areaList"
                       :key="areaIdx"
+                      v-show="isShow ? areaIdx < 999 : areaIdx < 16"
                       :class="[
-                        areaActive.indexOf(areaIdx) !== -1
+                        areaActives === areaIdx
                           ? 'area-item-active'
                           : 'area-item',
                       ]"
@@ -141,7 +144,7 @@
                 </div>
               </div>
               <div class="btn-box">
-                <div class="reset">
+                <div class="reset" @click="moreReset">
                   <div class="icon-box">
                     <my-icon
                       name="icon_chongzhi"
@@ -210,6 +213,7 @@ export default {
       finished: false,
       isFixed: false,
       tabList: ['类别', '等级', '价格', '更多', '排序'],
+      showNum: 16,
       typeList: [
         '不限',
         '总包资质',
@@ -237,6 +241,31 @@ export default {
         '广东',
         '广西',
         '贵州',
+        '不限',
+        '北京',
+        '安徽',
+        '福建',
+        '甘肃',
+        '广东',
+        '广西',
+        '贵州',
+        '不限',
+        '北京',
+        '安徽',
+        '福建',
+        '甘肃',
+        '广东',
+        '广西',
+        '贵州',
+        '福建',
+        '甘肃',
+        '广东',
+        '广西',
+        '贵州',
+        '不限',
+        '北京',
+        '安徽',
+        '福建',
       ],
       sortList: ['综合', '最新发布', '价格从低到高', '价格从高到低'],
       sortActive: 0, // 排序选中下标
@@ -244,11 +273,13 @@ export default {
       typeActive: -1, // 类别选中下标
       levelActive: -1, // 等级选中下标
       priceActive: -1, // 价格下标
-      securityActive: -1,
+      securityActive: 0,
       areaActive: [],
       isAll: false, // 地区全选
       minPrice: '',
       maxPrice: '',
+      areaActives: 0,
+      isShow: false,
     }
   },
   watch: {
@@ -293,19 +324,7 @@ export default {
     },
     // 城市选择
     areaChooes(idx) {
-      if (idx === 0) {
-        this.areaActive = []
-        this.areaActive.push(idx)
-        this.isAll = false
-      } else if (idx !== 0) {
-        if (this.areaActive.indexOf(idx) === -1) {
-          this.areaActive.indexOf(0) !== -1 &&
-            this.areaActive.splice(this.areaActive.indexOf(0), 1)
-          this.areaActive.push(idx)
-        } else {
-          this.areaActive.splice(this.areaActive.indexOf(idx), 1)
-        }
-      }
+      this.areaActives = idx
       // 排序选择
     },
     // 排序选择
@@ -314,18 +333,17 @@ export default {
       this.$emit('chooseSort')
       this.tabList[this.tabActive] = this.sortList[index]
     },
+    securityChooes(idx) {
+      this.securityActive = idx
+    },
     // 全选
     allChooes() {
-      if (!this.isAll) {
-        this.isAll = true
-        this.areaActive = []
-        this.areaList.forEach((item, index) => {
-          index !== 0 && this.areaActive.push(index)
-        })
-      } else {
-        this.isAll = false
-        this.areaActive = []
-      }
+      this.isShow = !this.isShow
+    },
+    // 更多重置
+    moreReset() {
+      this.securityActive = 0
+      this.areaActives = 0
     },
   },
 }
@@ -481,7 +499,10 @@ export default {
     }
   }
   .more-list {
+    height: 100%;
     .more-content {
+      height: calc(100% - 96px);
+      overflow: hidden;
       padding: 56px 40px;
       .security {
         width: 100%;
@@ -579,6 +600,7 @@ export default {
       display: flex;
       align-items: center;
       border-top: 1px solid #f5f5f5;
+      background: #fff;
       .reset {
         display: flex;
         flex-direction: column;

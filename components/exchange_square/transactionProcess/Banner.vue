@@ -6,8 +6,8 @@
       :show-indicators="bannerList.length > 1"
       indicator-color="white"
     >
-      <sp-swipe-item>
-        <div class="img-box" @click="jump"><img src="" alt="" /></div>
+      <sp-swipe-item v-for="(item, index) in bannerList" :key="index">
+        <div class="img-box" @click="jump"><img :src="item.img" alt="" /></div>
       </sp-swipe-item>
     </sp-swipe>
   </div>
@@ -24,7 +24,11 @@ export default {
     bannerList: {
       type: Array,
       default: () => {
-        return []
+        return [
+          {
+            img: 'https://cdn.shupian.cn/sp-pt/wap/images/4mjyjc1ofo80000.png',
+          },
+        ]
       },
     },
   },
@@ -41,9 +45,13 @@ export default {
     width: 100%;
     height: 100%;
     .img-box {
-      background: #4974f5;
       width: 100%;
       height: 100%;
+      font-size: 0;
+      > img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }

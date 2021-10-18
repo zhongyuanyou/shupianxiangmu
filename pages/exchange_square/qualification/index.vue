@@ -13,7 +13,7 @@
     <Banner></Banner>
     <!-- banner E -->
     <!-- 金刚区 S -->
-    <NavList></NavList>
+    <NavList :nav-list="navList"></NavList>
     <!-- 金刚区 E -->
     <!-- 瓷片区 S-->
     <Ceramics></Ceramics>
@@ -31,6 +31,7 @@ import Banner from '@/components/exchange_square/common/Banner.vue'
 import NavList from '@/components/exchange_square/common/NavList.vue'
 import Ceramics from '@/components/exchange_square/qualification/Ceramics.vue'
 import ProductList from '@/components/exchange_square/qualification/ProductList.vue'
+
 export default {
   name: 'Qualification',
   components: {
@@ -44,6 +45,48 @@ export default {
   data() {
     return {
       isFixed: false,
+      navList: [
+        {
+          title: '施工总承包',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/g0u00rgzma80000.png',
+        },
+        {
+          title: '专业承包',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/8f1bi7paqzs0000.png',
+        },
+        {
+          title: '设计资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/envralac4o00000.png',
+        },
+        {
+          title: '监理资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/12yda3usuaa8000.png',
+        },
+        {
+          title: '劳务资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/6t43nz0bvg80000.png',
+        },
+        {
+          title: '招标代理资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/25oge5yvryio000.png',
+        },
+        {
+          title: '造价资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/7vxtwj2bb7g0000.png',
+        },
+        {
+          title: '测绘资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/38jdivuhmo60000.png',
+        },
+        {
+          title: '勘察资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/57afax73unk0000.png',
+        },
+        {
+          title: '房地产资质',
+          icon: 'https://cdn.shupian.cn/sp-pt/wap/images/1fwy5sojo5og000.png',
+        },
+      ],
     }
   },
   methods: {

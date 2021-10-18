@@ -8,7 +8,8 @@ const newSpreadApi = {
   list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/list.do`,
   service_product_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/service_product_list.do`,
   trade_product_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/newChipSpread/v1/trade_product_list.do`,
-
+  ranking_list: `${CHIPS_WAP_SPREAD_BASE_URL}/nk/goodslist/v2/get_details.do`,
+  type_list: `${CHIPS_WAP_BASE_URL}/nk/dict/v1/cms_code.do`,
   // trade_product_list: `http://172.16.132.116:7001/service/nk/newChipSpread/v1/trade_product_list.do`,
 }
 // 融资贷款
