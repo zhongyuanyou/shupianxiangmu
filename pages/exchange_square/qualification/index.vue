@@ -4,8 +4,8 @@
       <!-- 头部S -->
       <Header
         title="找资质"
-        :bgColor="isFixed ? '#ffffff' : '#f5f5f5'"
-        :searchColor="isFixed ? '#f5f5f5' : '#ffffff'"
+        :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
+        :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
       ></Header>
       <!-- 头部E -->
     </sp-sticky>
@@ -32,7 +32,7 @@ import NavList from '@/components/exchange_square/common/NavList.vue'
 import Ceramics from '@/components/exchange_square/qualification/Ceramics.vue'
 import ProductList from '@/components/exchange_square/qualification/ProductList.vue'
 export default {
-  name: 'qualification',
+  name: 'Qualification',
   components: {
     Header,
     [Sticky.name]: Sticky,

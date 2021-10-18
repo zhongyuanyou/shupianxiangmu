@@ -1,14 +1,16 @@
 <template>
   <div class="exchange-square">
-    <Header title="交易广场" />
-    <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
-      <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
-        <img :src="item.bg" alt="" />
-      </sp-swipe-item>
-    </sp-swipe>
-    <NavBar></NavBar>
-    <ScrollNav :roll-nav="scrollNavList"></ScrollNav>
-    <GoodsList :nav="goodNavlist"></GoodsList>
+    <Header title="交易广场" placeholder="公司转让" />
+    <div style="overflow-y: auto">
+      <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
+        <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
+          <img :src="item.bg" alt="" />
+        </sp-swipe-item>
+      </sp-swipe>
+      <NavBar></NavBar>
+      <ScrollNav :roll-nav="scrollNavList"></ScrollNav>
+      <GoodsList :nav="goodNavlist"></GoodsList>
+    </div>
   </div>
 </template>
 
@@ -136,7 +138,11 @@ export default {
 .exchange-square {
   width: 750px;
   margin: 0 auto;
+  height: 100vh;
   background: #f5f5f5;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   .banner {
     margin: 10px 20px 0 20px;
     img {

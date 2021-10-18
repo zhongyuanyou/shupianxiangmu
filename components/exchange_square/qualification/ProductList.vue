@@ -41,7 +41,7 @@
 import { DropdownMenu, DropdownItem, List, Sticky } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
 export default {
-  name: 'product-list',
+  name: 'ProductList',
   components: {
     ProductCard,
     [DropdownMenu.name]: DropdownMenu,

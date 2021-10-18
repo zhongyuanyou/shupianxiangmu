@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'ceramics',
+  name: 'Ceramics',
   methods: {
     jump(i) {
       console.log(i)

@@ -20,7 +20,6 @@ import Header from '@/components/common/head/header.vue'
 import Banner from '@/components/exchange_square/transactionProcess/Banner.vue'
 import ConsultingList from '@/components/exchange_square/transactionProcess/ConsultingList.vue'
 export default {
-  name: 'transaction-process',
   components: {
     Header,
     Banner,
