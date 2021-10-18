@@ -2,7 +2,9 @@
   <div class="consulting-item">
     <div class="item" @click="jump()">
       <div class="title">{{ consulting.title }}</div>
-      <div class="content-author">{{ consulting.author }}</div>
+      <div class="content-author">
+        {{ consulting.createrName }}·{{ consulting.updateTime.split(' ')[0] }}
+      </div>
     </div>
   </div>
 </template>
@@ -26,7 +28,7 @@ export default {
     jump() {
       this.$router.push({
         path: '/exchange_square/transactionProcess/consultingDetail',
-        query: { id: '111', code: '11111' },
+        query: { id: this.consulting.id, code: this.consulting.categoryCode },
       })
     },
   },

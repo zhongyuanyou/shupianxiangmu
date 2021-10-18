@@ -7,10 +7,22 @@
     <Banner></Banner>
     <!-- banner E -->
     <!-- 买卖流程列表  s-->
-    <ConsultingList :consulting="company"></ConsultingList>
-    <ConsultingList :consulting="trademark"></ConsultingList>
-    <ConsultingList :consulting="patent"></ConsultingList>
-    <ConsultingList :consulting="qualification"></ConsultingList>
+    <ConsultingList
+      v-if="company && company.list && company.list.length"
+      :consulting="company"
+    ></ConsultingList>
+    <ConsultingList
+      v-if="trademark && trademark.list && trademark.list.length"
+      :consulting="trademark"
+    ></ConsultingList>
+    <ConsultingList
+      v-if="patent && patent.list && patent.list.length"
+      :consulting="patent"
+    ></ConsultingList>
+    <ConsultingList
+      v-if="qualification && qualification.list && qualification.list.length"
+      :consulting="qualification"
+    ></ConsultingList>
     <!-- 买卖流程列表  e-->
   </div>
 </template>
@@ -19,6 +31,7 @@
 import Header from '@/components/common/head/header.vue'
 import Banner from '@/components/exchange_square/transactionProcess/Banner.vue'
 import ConsultingList from '@/components/exchange_square/transactionProcess/ConsultingList.vue'
+import { spreadApi } from '@/api/spread'
 export default {
   components: {
     Header,
@@ -27,63 +40,63 @@ export default {
   },
   data() {
     return {
-      company: {
-        name: '公司交易',
-        list: [
-          {
-            title:
-              '山西房产科技有限公司房产科技有限公司山西房产科技有限公司房产科技有限公司山西房…',
-            author: '吴镇宇 · 2021-06-24',
-          },
-          {
-            title: '山西房产科技有限公司房产科技有限公司',
-            author: '吴镇宇 · 2021-06-24',
-          },
-        ],
-      },
-      trademark: {
-        name: '商标交易',
-        list: [
-          {
-            title:
-              '山西房产科技有限公司房产科技有限公司山西房产科技有限公司房产科技有限公司山西房…',
-            author: '吴镇宇 · 2021-06-24',
-          },
-          {
-            title: '山西房产科技有限公司房产科技有限公司',
-            author: '吴镇宇 · 2021-06-24',
-          },
-        ],
-      },
-      patent: {
-        name: '专利交易',
-        list: [
-          {
-            title:
-              '山西房产科技有限公司房产科技有限公司山西房产科技有限公司房产科技有限公司山西房…',
-            author: '吴镇宇 · 2021-06-24',
-          },
-          {
-            title: '山西房产科技有限公司房产科技有限公司',
-            author: '吴镇宇 · 2021-06-24',
-          },
-        ],
-      },
-      qualification: {
-        name: '资质并购',
-        list: [
-          {
-            title:
-              '山西房产科技有限公司房产科技有限公司山西房产科技有限公司房产科技有限公司山西房…',
-            author: '吴镇宇 · 2021-06-24',
-          },
-          {
-            title: '山西房产科技有限公司房产科技有限公司',
-            author: '吴镇宇 · 2021-06-24',
-          },
-        ],
-      },
+      company: {},
+      trademark: {},
+      patent: {},
+      qualification: {},
     }
+  },
+  mounted() {
+    this.classifyList()
+  },
+  methods: {
+    async classifyList() {
+      this.qualification = await this.articleQuery('ConditionJyZzbg') // 资质并购
+      this.patent = await this.articleQuery('ConditionJyZl') // 专利交易
+      this.trademark = await this.articleQuery('ConditionJySb') // 商标交易
+      this.company = await this.articleQuery('ConditionJyGs') // 公司交易
+    },
+    articleQuery(code) {
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .get(spreadApi.knowledge_list, {
+            params: {
+              limit: 2,
+              categoryCode: code,
+              page: 1,
+            },
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              if (res.data.rows && res.data.rows.length > 0) {
+                resolve(this.manageList(res.data.rows, code))
+              }
+              return
+            }
+            resolve([])
+          })
+      }).catch((res) => {})
+    },
+    // 处理不同类型数据
+    manageList(Arr, codes) {
+      let title = ''
+      if (codes === 'ConditionJyZzbg') {
+        title = '资质并购'
+      } else if (codes === 'ConditionJyZl') {
+        title = '专利交易'
+      } else if (codes === 'ConditionJySb') {
+        title = '商标交易'
+      } else if (codes === 'ConditionJyGs') {
+        title = '公司交易'
+      }
+      const listObj = {
+        titles: title,
+        code: codes,
+        list: Arr,
+      }
+      // this.typeList.push(listObj)
+      return listObj
+    },
   },
 }
 </script>

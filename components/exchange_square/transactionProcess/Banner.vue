@@ -28,6 +28,9 @@ export default {
       },
     },
   },
+  methods: {
+    jump() {},
+  },
 }
 </script>
 <style lang="less" scoped>

@@ -3,9 +3,9 @@
     <sp-sticky>
       <!-- 头部S -->
       <Header
-        title="找资质"
         :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
         :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
+        title="找资质"
       ></Header>
       <!-- 头部E -->
     </sp-sticky>
