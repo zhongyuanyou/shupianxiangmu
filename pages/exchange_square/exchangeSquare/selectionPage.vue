@@ -11,7 +11,7 @@
           :title="item"
           :name="index"
         >
-          <CompanyMenu :list="['Industry', 'Region', 'Price', 'Sortord']" />
+          <CompanyMenu :list="companyList" />
         </sp-tab>
       </sp-tabs>
     </div>
@@ -96,9 +96,18 @@ export default {
       ], // 商品数据
       loading: false,
       finished: false,
+      companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,
       tabList: ['公司交易', '商标交易', '专利交易', '资质并购'],
     }
+  },
+  watch: {
+    active() {
+      console.log(this.active)
+      if (this.active === 1) {
+        this.companyList = ['Category', 'Classify', 'Price', 'State', 'Sortord']
+      }
+    },
   },
   methods: {
     onLoad() {

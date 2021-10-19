@@ -1,6 +1,11 @@
 <template>
   <div class="exchange-square">
-    <Header title="交易广场" placeholder="公司转让" />
+    <Header
+      title="交易广场"
+      placeholder="公司转让"
+      disabled="true"
+      path="/exchange_square/exchangeSquare/selectionPage"
+    />
     <div style="overflow-y: auto">
       <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
         <sp-swipe-item v-for="(item, index) in swipeList" :key="index">

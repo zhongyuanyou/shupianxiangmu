@@ -2,12 +2,12 @@
   <sp-dropdown-item ref="item" :title="title">
     <div class="box">
       <div
-        v-for="(item, index) in list"
+        v-for="(item, index) in typeList"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
         @click="activeItem(index)"
       >
-        {{ item }}
+        {{ item.name }}
       </div>
     </div>
   </sp-dropdown-item>
@@ -18,6 +18,12 @@ import { DropdownItem } from '@chipspc/vant-dgg'
 export default {
   components: {
     [DropdownItem.name]: DropdownItem,
+  },
+  props: {
+    typeList: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -36,7 +42,7 @@ export default {
   methods: {
     activeItem(index) {
       this.active = index
-      this.title = this.list[index]
+      this.title = this.typeList[index]
       this.$refs.item.toggle()
     },
   },

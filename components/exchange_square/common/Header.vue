@@ -12,7 +12,11 @@
       </slot>
     </div>
     <div class="title">{{ title }}</div>
-    <div class="search-box" :style="{ backgroundColor: searchColor }">
+    <div
+      class="search-box"
+      :style="{ backgroundColor: searchColor }"
+      @click="$router.push($attrs.path)"
+    >
       <my-icon
         class="search-icon"
         name="sousuo3"
@@ -22,6 +26,7 @@
       <input
         :placeholder="placeholder"
         class="search-input"
+        v-bind="$attrs"
         @focus="searchFocus"
       />
     </div>

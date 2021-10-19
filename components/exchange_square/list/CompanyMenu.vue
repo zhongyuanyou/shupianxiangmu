@@ -4,6 +4,7 @@
       :is="item"
       v-for="item in list"
       :key="item.id"
+      :type-list="typeList"
       @activeItem="getFilterHandle"
     />
   </sp-dropdown-menu>
@@ -11,6 +12,7 @@
 
 <script>
 import { DropdownMenu, DropdownItem } from '@chipspc/vant-dgg'
+import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
     Industry: () => import('./Industry.vue'), // 行业
@@ -31,11 +33,94 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      classCode: '',
+      pageNum: 1,
+      stateList: [], // 状态
+      classList: [], // 行业
+      priceList: [], // 价格
+      typeList: [], // 类型
+      sortList: [], // 排序
+    }
+  },
+  mounted() {
+    this.getType()
   },
   methods: {
     getFilterHandle(data, name) {
       console.log(data, name)
+    },
+    getType() {
+      this.$axios
+        .get(newSpreadApi.type_list, {
+          params: {
+            code: 'CONDITION-JY',
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data.forEach((element) => {
+              console.log(element)
+              if (element.name === '专利') {
+                this.classCode = element
+                this.getProductList()
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    // 获取产品列表
+    getProductList() {
+      this.$axios
+        .post(newSpreadApi.product_list, {
+          classCode: this.classCode.ext4,
+          dictCode: this.classCode.code,
+          fieldList: [],
+          limit: 10,
+          needTypes: 1,
+          searchKey: '',
+          start: this.pageNum,
+          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            if (this.pageNum === 1) {
+              res.data.filters.forEach((item, index) => {
+                console.error(item)
+                if (item.name === '状态') {
+                  this.stateList = item.children
+                } else if (item.name === '行业') {
+                  this.classList = item.children
+                } else if (item.name === '价格') {
+                  this.priceList = item.children
+                } else if (item.name === '类型') {
+                  console.error(this.typeList)
+                  this.typeList = item.children
+                } else if (item.name === '排序') {
+                  this.sortList = item.children
+                }
+              })
+              this.productList = res.data.goods.records
+            } else {
+              res.data.goods.records.forEach((ele) => {
+                this.productList.push(ele)
+              })
+            }
+            if (res.data.goodes.records.length < 10) {
+              this.finished = true
+            }
+            this.pageNum++
+          } else {
+            this.finished = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.finished = true
+        })
     },
   },
 }
