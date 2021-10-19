@@ -11,18 +11,16 @@
 
 <script>
 import { DropdownMenu, DropdownItem } from '@chipspc/vant-dgg'
-import Industry from './Industry.vue' // 行业
-import Region from './Region.vue' // 地区
-import Price from './Price.vue' // 价格
-import More from './More.vue' // 更多
-import Sortord from './Sortord.vue' // 排序
 export default {
   components: {
-    Industry,
-    Region,
-    Price,
-    Sortord,
-    More,
+    Industry: () => import('./Industry.vue'), // 行业
+    Region: () => import('./Region.vue'), // 地区
+    Price: () => import('./Price.vue'), // 价格
+    Sortord: () => import('./Sortord.vue'), // 排序
+    More: () => import('./More.vue'), //  更多
+    Category: () => import('./Category.vue'), //  类别
+    Classify: () => import('./Classify.vue'), //  类型
+    State: () => import('./State.vue'), //  状态
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
   },
