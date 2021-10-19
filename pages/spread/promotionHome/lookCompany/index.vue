@@ -1,6 +1,13 @@
 <template>
   <div class="exchange-square">
-    <Header title="找公司" placeholder="请输入关键词" />
+    <sp-sticky>
+      <Header
+        title="找公司"
+        placeholder="请输入关键词"
+        :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
+        :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
+      />
+    </sp-sticky>
     <div style="overflow-y: auto">
       <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
         <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
@@ -8,7 +15,7 @@
         </sp-swipe-item>
       </sp-swipe>
       <!-- 金刚区 -->
-      <NavBar></NavBar>
+      <NavBar />
       <!-- 服务 -->
       <div class="serve">
         <div class="left">
@@ -29,29 +36,37 @@
         </div>
       </div>
       <div class="resource">全部资源</div>
-      <DropdownMenus />
+      <sp-sticky :offset-top="56" @scroll="scrollEvent">
+        <CompanyMenu
+          :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
+          :style="{ background: isFixed ? '#ffffff' : 'none' }"
+        />
+      </sp-sticky>
+
       <sp-list
         v-model="loading"
         :finished="finished"
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <CompanyGood :list="list" :active="2" />
+        <CompanyGood :list="list" :active="0" />
       </sp-list>
     </div>
   </div>
 </template>
 
 <script>
-import { Swipe, SwipeItem } from '@chipspc/vant-dgg'
+import { Swipe, SwipeItem, List, Sticky } from '@chipspc/vant-dgg'
 import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
 import Header from '@/components/exchange_square/common/Header.vue'
 import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
-import DropdownMenus from '@/components/exchange_square/list/DropdownMenus.vue'
+import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
 export default {
   components: {
-    DropdownMenus,
+    CompanyMenu,
     [Swipe.name]: Swipe,
+    [Sticky.name]: Sticky,
+    [List.name]: List,
     [SwipeItem.name]: SwipeItem,
     Header,
     NavBar,
@@ -69,6 +84,9 @@ export default {
           title: '',
         },
       ],
+      bgColor: '',
+      isFixed: false,
+      searchColor: '',
       loading: false,
       finished: false,
       // 滚动金刚区
@@ -234,10 +252,15 @@ export default {
     // 监听接受的state值
   },
   created() {},
-  mounted() {},
+  mounted() {
+    window.addEventListener('scroll', this.windowScroll)
+  },
   methods: {
     onLoad() {
       this.finished = true
+    },
+    scrollEvent(e) {
+      this.isFixed = e.isFixed
     },
   },
 }
@@ -252,7 +275,6 @@ export default {
   margin: 0 auto;
   height: 100vh;
   background: #f5f5f5;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   .banner {

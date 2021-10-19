@@ -20,7 +20,6 @@
         color="#CCCCCC"
       ></my-icon>
       <input
-        :style="{ background: searchColor }"
         :placeholder="placeholder"
         class="search-input"
         @focus="searchFocus"
@@ -101,6 +100,7 @@ export default {
       height: 100%;
       display: block;
       border: none;
+      background: none;
       font-size: 28px;
       font-weight: 700;
     }

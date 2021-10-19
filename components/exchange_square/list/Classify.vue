@@ -19,28 +19,25 @@ export default {
   components: {
     [DropdownItem.name]: DropdownItem,
   },
-
   data() {
     return {
-      title: '行业',
+      title: '分类',
       active: '',
       list: [
         '不限',
-        '发明专利',
-        '广告传媒',
-        '实用新型',
-        '外观专利',
-        '外观专利',
+        '01-化工原料',
+        '02-颜料油漆',
+        '03-日化用品',
+        '04-燃料油脂',
+        '05-医药用品',
       ],
     }
   },
-
   methods: {
     activeItem(index) {
       this.active = index
       this.title = this.list[index]
       this.$refs.item.toggle()
-      this.$emit('activeItem', index, 'Industry')
     },
   },
 }
@@ -52,12 +49,12 @@ export default {
   display: flex;
   flex-wrap: wrap;
   .item {
+    width: 206px;
     margin: 12px;
-    min-width: 149px;
     padding: 20px 0;
+    text-align: center;
     background: #f8f8f8;
     font-size: 24px;
-    text-align: center;
     color: #222222;
     border-radius: 4px;
   }

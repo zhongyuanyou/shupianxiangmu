@@ -2,7 +2,7 @@
   <div class="good-list">
     <sp-tabs
       v-model="active"
-      sticky
+      class="labels"
       :animated="false"
       title-active-color="#222222"
       :swipe-threshold="nav.length - 1"

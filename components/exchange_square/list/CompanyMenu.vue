@@ -11,23 +11,29 @@
 
 <script>
 import { DropdownMenu, DropdownItem } from '@chipspc/vant-dgg'
-import Industry from './Industry.vue'
-import Region from './Region.vue'
-import Price from './Price.vue'
-import Sortord from './Sortord.vue'
+import Industry from './Industry.vue' // 行业
+import Region from './Region.vue' // 地区
+import Price from './Price.vue' // 价格
+import More from './More.vue' // 更多
+import Sortord from './Sortord.vue' // 排序
 export default {
   components: {
     Industry,
     Region,
     Price,
     Sortord,
+    More,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
   },
+  props: {
+    list: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
-    return {
-      list: ['Industry', 'Region', 'Price', 'Sortord'],
-    }
+    return {}
   },
   methods: {
     getFilterHandle(data, name) {

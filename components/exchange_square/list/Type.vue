@@ -19,7 +19,6 @@ export default {
   components: {
     [DropdownItem.name]: DropdownItem,
   },
-
   data() {
     return {
       title: '行业',
@@ -34,13 +33,15 @@ export default {
       ],
     }
   },
-
+  mounted() {
+    this.title = this.$attrs.title1
+  },
   methods: {
     activeItem(index) {
       this.active = index
       this.title = this.list[index]
       this.$refs.item.toggle()
-      this.$emit('activeItem', index, 'Industry')
+      this.$emit('activeItem', index, 'Type')
     },
   },
 }

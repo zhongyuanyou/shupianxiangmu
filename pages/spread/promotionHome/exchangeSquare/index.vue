@@ -140,9 +140,6 @@ export default {
   margin: 0 auto;
   height: 100vh;
   background: #f5f5f5;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
   .banner {
     margin: 10px 20px 0 20px;
     img {

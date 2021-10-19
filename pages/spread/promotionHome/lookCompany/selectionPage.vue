@@ -2,19 +2,8 @@
   <div class="selection-page">
     <!-- 搜索 -->
     <headerSearch />
-    <!-- tabs -->
-    <div class="tabs">
-      <sp-tabs v-model="active">
-        <sp-tab
-          v-for="(item, index) in tabList"
-          :key="index"
-          :title="item"
-          :name="index"
-        >
-          <CompanyMenu :list="['Industry', 'Region', 'Price', 'Sortord']" />
-        </sp-tab>
-      </sp-tabs>
-    </div>
+    <!-- 筛选 -->
+    <CompanyMenu :list="['Industry', 'Region', 'Price', 'More', 'Sortord']" />
     <div class="lable-list">
       <sp-list
         v-model="loading"
@@ -23,12 +12,7 @@
         @load="onLoad"
       >
         <div v-if="list.length !== 0">
-          <TrademarkGood v-show="active == 1" :list="list"></TrademarkGood>
-          <CompanyGood
-            v-show="active == 0 || active == 2 || active == 3"
-            :list="list"
-            :active="active"
-          ></CompanyGood>
+          <CompanyGood :list="list" :active="0"></CompanyGood>
         </div>
         <DefaultImg v-else />
       </sp-list>
@@ -40,19 +24,17 @@
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
 import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
 import DefaultImg from '@/components/common/DefaultImg.vue'
-import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
-import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
 import headerSearch from '@/components/common/head/headerSearch.vue'
+import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
 export default {
   components: {
     CompanyGood,
+    CompanyMenu,
     headerSearch,
     DefaultImg,
-    TrademarkGood,
     [Tab.name]: Tab,
     [List.name]: List,
     [Tabs.name]: Tabs,
-    CompanyMenu,
   },
   data() {
     return {
@@ -96,8 +78,6 @@ export default {
       ], // 商品数据
       loading: false,
       finished: false,
-      active: 0,
-      tabList: ['公司交易', '商标交易', '专利交易', '资质并购'],
     }
   },
   methods: {

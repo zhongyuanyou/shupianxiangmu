@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       value: '',
-      title: '筛选',
+      title: '排序',
       option: [
         { text: '综合', value: 0 },
         { text: '最新发布', value: 1 },
