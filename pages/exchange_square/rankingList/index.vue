@@ -26,7 +26,7 @@
         <ProductCard v-for="i in 3" :key="i" type="monthly"></ProductCard>
       </div>
       <div class="title-box">
-        <div class="title">底价捡漏</div>
+        <div class="title">低价捡漏</div>
         <div class="more-box">
           <div class="btn" @click="goMore('底价捡漏')">查看更多</div>
           <div class="icon">
@@ -87,11 +87,23 @@
 import Header from '@/components/common/head/header.vue'
 import Monthly from '@/components/exchange_square/rankingList/Monthly.vue'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
+import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
     Header,
     Monthly,
     ProductCard,
+  },
+  data() {
+    return {
+      typeList: [],
+      productList: '',
+      type: '',
+    }
+  },
+  created() {},
+  mounted() {
+    this.getTypeList()
   },
   methods: {
     goMore(type) {
@@ -99,6 +111,54 @@ export default {
         path: '/exchange_square/rankingList/list',
         query: { title: type, code: '1111' },
       })
+    },
+    getTypeList() {
+      this.$axios
+        .get(newSpreadApi.list, {
+          params: {
+            locationCodes: '',
+            navCodes: '',
+            code: 'CRISPS-C-JYPHB',
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data.classList.forEach((item) => {
+              const obj = {
+                title: item.ext1,
+                code: item.code,
+                ids: item.ext2 && item.ext2.split(','),
+                children: item.children,
+              }
+              this.typeList.push(obj)
+            })
+            this.getProductList()
+            console.log(this.typeList)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getProductList() {
+      this.$axios
+        .post(newSpreadApi.ranking_list, {
+          ids: {
+            hot: this.typeList[0].ids,
+            price: this.typeList[1].ids,
+            collection: this.typeList[2].ids,
+            goods: this.typeList[3].ids,
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.productList = res.data
+            console.log(this.productList)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
   },
 }

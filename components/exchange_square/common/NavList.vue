@@ -111,6 +111,7 @@ export default {
           color: #222222;
           font-weight: 700;
           line-height: 34px;
+          .textOverflow(1);
         }
       }
     }
