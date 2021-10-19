@@ -6,16 +6,44 @@
         selected-icon
         :items="regionList"
         :main-active-index.sync="provinceIndex"
-        @click.native="provinceClick"
+        @click-nav="provinceClick"
       >
-        <!-- regionList[provinceIndex].children -->
         <template slot="content">
           <sp-tree-select
+            selected-icon
             class="second"
             :items="cityList"
-            :active-id.sync="activeIds"
-            :main-active-index.sync="active"
-          />
+            :main-active-index.sync="cityIndex"
+            @click-nav="second"
+          >
+            <template #content>
+              <div
+                v-for="item in areaList"
+                :key="item.id"
+                class="list"
+                @click.stop="third(item)"
+              >
+                <div class="item">
+                  <div
+                    :style="{
+                      color: item.show ? '#4974F5' : '',
+                      fontWeight: item.show ? 'bold' : 400,
+                    }"
+                  >
+                    {{ item.text }}
+                  </div>
+                  <my-icon
+                    size="0.28rem"
+                    :color="item.show ? '#4974F5' : '#DDDDDD'"
+                    :name="
+                      item.show ? 'tab_ic_checkbox_s' : 'tab_ic_checkbox_n'
+                    "
+                  >
+                  </my-icon>
+                </div>
+              </div>
+            </template>
+          </sp-tree-select>
         </template>
       </sp-tree-select>
     </div>
@@ -49,18 +77,68 @@ export default {
     return {
       title: '地区',
       provinceIndex: 0,
-      active: 0,
+      cityIndex: 0,
+      id: '',
       activeIds: [],
       cityList: [], // 市
+      areaList: [], // 区
+      areaId: [], // 已选的区域
+      cityId: '', // 城市id
+      province: '', // 省id
     }
   },
   computed: {},
   methods: {
     reset() {},
-    custom() {},
-    provinceClick() {
-      console.log(this.provinceIndex)
+    // 确定
+    custom() {
+      // 获取区id
+      this.areaId = []
+      this.areaList.forEach((item) => {
+        if (item.show) {
+          this.areaId.push(item.id)
+        }
+      })
+      console.log('已选的区域ID', this.areaId)
+      console.log('已选的区域ID', this.cityId)
+      console.log('已选的省ID', this.province)
+    },
+    provinceClick(index) {
+      this.provinceIndex = index
       this.cityList = this.regionList[this.provinceIndex].children
+      this.province = this.regionList[this.provinceIndex].id
+      // 每次切换是重置城市
+
+      this.cityId = ''
+      this.areaId = []
+      this.cityIndex = 0
+    },
+    // 区选择
+    second() {
+      this.areaList =
+        this.regionList[this.provinceIndex].children[this.cityIndex].children
+      // 每次切换是清空数据
+      // this.areaList.forEach((item) =>
+      //   item.text === '不限' ? (item.show = true) : (item.show = false)
+      // )
+      this.areaId = []
+      // 城市id
+      this.cityId = this.cityList[this.cityIndex].id
+    },
+    third(item) {
+      item.show = !item.show
+      if (item.text === '不限') {
+        this.areaList.forEach((data) => {
+          if (data.text !== item.text) {
+            data.show = false
+
+            this.areaId = []
+          }
+        })
+      } else {
+        this.areaList[0].show = false
+      }
+      console.log(this.areaId)
     },
   },
 }
@@ -150,6 +228,17 @@ export default {
     line-height: 96px;
     height: 96px;
     cursor: pointer;
+  }
+}
+.list {
+  min-height: 87px;
+  font-size: 28px;
+  padding: 24px 40px;
+  color: #222222;
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 </style>

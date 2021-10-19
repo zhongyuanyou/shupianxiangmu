@@ -127,7 +127,6 @@ export default {
                 } else if (item.name === '更多') {
                   this.moreList = item.children
                 } else if (item.name === '地区') {
-                  // this.regionList = item.children
                   this.setRegionList(item.children)
                 }
               })
@@ -164,11 +163,16 @@ export default {
               obj.children.forEach((data) => {
                 data.text = data.name
                 data.id = data.code
+                data.show = false
               })
-              obj.children.unshift({ text: '不限', id: 0 })
+              obj.children.unshift({ text: '不限', id: 0, show: true })
             }
           })
-          item.children.unshift({ text: '不限', id: 0 })
+          item.children.unshift({
+            text: '不限',
+            id: 0,
+            children: [{ text: '不限', id: 0, show: false }],
+          })
         }
       })
       this.regionList = list
