@@ -2,12 +2,12 @@
   <sp-dropdown-item ref="item" :title="title">
     <div class="box">
       <div
-        v-for="(item, index) in list"
+        v-for="(item, index) in priceList"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
         @click="activeItem(index)"
       >
-        {{ item }}
+        {{ item.name }}
       </div>
     </div>
   </sp-dropdown-item>
@@ -19,24 +19,22 @@ export default {
   components: {
     [DropdownItem.name]: DropdownItem,
   },
+  props: {
+    priceList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       title: '价格',
       active: '',
-      list: [
-        '不限',
-        '3000元以下',
-        '3000元-1万',
-        '1万-3万',
-        '3万-5万',
-        '5万以上',
-      ],
     }
   },
   methods: {
     activeItem(index) {
       this.active = index
-      this.title = this.list[index]
+      this.title = this.priceList[index].name
       this.$refs.item.toggle()
     },
   },

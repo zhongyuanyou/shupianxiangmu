@@ -10,9 +10,8 @@
           :key="index"
           :title="item"
           :name="index"
-        >
-          <CompanyMenu :list="companyList" />
-        </sp-tab>
+        />
+        <CompanyMenu :active="active" :list="companyList" />
       </sp-tabs>
     </div>
     <div class="lable-list">
@@ -103,9 +102,14 @@ export default {
   },
   watch: {
     active() {
-      console.log(this.active)
+      if (this.active === 0) {
+        this.companyList = ['Industry', 'Region', 'Price', 'More', 'Sortord']
+      }
       if (this.active === 1) {
         this.companyList = ['Category', 'Classify', 'Price', 'State', 'Sortord']
+      }
+      if (this.active === 2) {
+        this.companyList = ['Classify', 'Industry', 'Price', 'State', 'Sortord']
       }
     },
   },

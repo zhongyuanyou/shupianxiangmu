@@ -5,6 +5,12 @@
       v-for="item in list"
       :key="item.id"
       :type-list="typeList"
+      :class-list="classList"
+      :price-list="priceList"
+      :state-list="stateList"
+      :sort-list="sortList"
+      :more-list="moreList"
+      :region-list="regionList"
       @activeItem="getFilterHandle"
     />
   </sp-dropdown-menu>
@@ -13,6 +19,7 @@
 <script>
 import { DropdownMenu, DropdownItem } from '@chipspc/vant-dgg'
 import { newSpreadApi } from '@/api/spread'
+import { isArray } from '~/utils/check-types'
 export default {
   components: {
     Industry: () => import('./Industry.vue'), // 行业
@@ -31,6 +38,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    active: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -41,7 +52,15 @@ export default {
       priceList: [], // 价格
       typeList: [], // 类型
       sortList: [], // 排序
+      moreList: [], // 更多
+      regionList: [], // 地区
+      productList: [], // 商品列表
     }
+  },
+  watch: {
+    active() {
+      this.getType()
+    },
   },
   mounted() {
     this.getType()
@@ -60,8 +79,13 @@ export default {
         .then((res) => {
           if (res.code === 200) {
             res.data.forEach((element) => {
-              console.log(element)
-              if (element.name === '专利') {
+              console.log('element', element)
+
+              if (element.name === '公司' && this.active === 0) {
+                this.classCode = element
+                this.getProductList()
+              }
+              if (element.name === '专利' && this.active === 2) {
                 this.classCode = element
                 this.getProductList()
               }
@@ -89,7 +113,6 @@ export default {
           if (res.code === 200) {
             if (this.pageNum === 1) {
               res.data.filters.forEach((item, index) => {
-                console.error(item)
                 if (item.name === '状态') {
                   this.stateList = item.children
                 } else if (item.name === '行业') {
@@ -101,6 +124,11 @@ export default {
                   this.typeList = item.children
                 } else if (item.name === '排序') {
                   this.sortList = item.children
+                } else if (item.name === '更多') {
+                  this.moreList = item.children
+                } else if (item.name === '地区') {
+                  // this.regionList = item.children
+                  this.setRegionList(item.children)
                 }
               })
               this.productList = res.data.goods.records
@@ -121,6 +149,29 @@ export default {
           console.log(err)
           this.finished = true
         })
+    },
+    // 处理地区
+    setRegionList(list) {
+      console.log(list)
+      list.forEach((item) => {
+        item.text = item.name
+        item.id = item.code
+        if (isArray(item.children)) {
+          item.children.forEach((obj) => {
+            obj.text = obj.name
+            obj.id = obj.code
+            if (isArray(obj.children)) {
+              obj.children.forEach((data) => {
+                data.text = data.name
+                data.id = data.code
+              })
+              obj.children.unshift({ text: '不限', id: 0 })
+            }
+          })
+          item.children.unshift({ text: '不限', id: 0 })
+        }
+      })
+      this.regionList = list
     },
   },
 }

@@ -2,12 +2,12 @@
   <sp-dropdown-item ref="item" :title="title">
     <div class="box">
       <div
-        v-for="(item, index) in list"
+        v-for="(item, index) in classList"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
         @click="activeItem(index)"
       >
-        {{ item }}
+        {{ item.name }}
       </div>
     </div>
   </sp-dropdown-item>
@@ -19,28 +19,25 @@ export default {
   components: {
     [DropdownItem.name]: DropdownItem,
   },
-
+  props: {
+    classList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       title: '行业',
       active: '',
-      list: [
-        '不限',
-        '发明专利',
-        '广告传媒',
-        '实用新型',
-        '外观专利',
-        '外观专利',
-      ],
     }
   },
 
   methods: {
     activeItem(index) {
       this.active = index
-      this.title = this.list[index]
+      this.title = this.classList[index].name
       this.$refs.item.toggle()
-      this.$emit('activeItem', index, 'Industry')
+      this.$emit('activeItem', this.classList[index], 'Industry')
     },
   },
 }
@@ -53,13 +50,16 @@ export default {
   flex-wrap: wrap;
   .item {
     margin: 12px;
-    min-width: 149px;
-    padding: 20px 0;
+    width: 149px;
+    padding: 20px 5px;
     background: #f8f8f8;
     font-size: 24px;
     text-align: center;
     color: #222222;
     border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .active {
     background: rgb(236, 241, 254);

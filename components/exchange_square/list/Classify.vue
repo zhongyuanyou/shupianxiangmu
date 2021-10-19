@@ -29,20 +29,12 @@ export default {
     return {
       title: '类型',
       active: '',
-      list: [
-        '不限',
-        '01-化工原料',
-        '02-颜料油漆',
-        '03-日化用品',
-        '04-燃料油脂',
-        '05-医药用品',
-      ],
     }
   },
   methods: {
     activeItem(index) {
       this.active = index
-      this.title = this.typeList[index]
+      this.title = this.typeList[index].name
       this.$refs.item.toggle()
     },
   },

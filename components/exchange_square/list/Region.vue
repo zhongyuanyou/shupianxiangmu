@@ -4,15 +4,17 @@
       <sp-tree-select
         class="first"
         selected-icon
-        :items="items"
-        :main-active-index.sync="activeIndex"
+        :items="regionList"
+        :main-active-index.sync="provinceIndex"
+        @click.native="provinceClick"
       >
+        <!-- regionList[provinceIndex].children -->
         <template slot="content">
           <sp-tree-select
             class="second"
-            :items="items"
+            :items="cityList"
             :active-id.sync="activeIds"
-            :main-active-index.sync="activeIndex"
+            :main-active-index.sync="active"
           />
         </template>
       </sp-tree-select>
@@ -37,43 +39,29 @@ export default {
     [DropdownItem.name]: DropdownItem,
     [TreeSelect.name]: TreeSelect,
   },
+  props: {
+    regionList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       title: '地区',
-      activeIndex: 0,
+      provinceIndex: 0,
+      active: 0,
       activeIds: [],
-      items: [
-        {
-          text: '浙江',
-          children: [
-            { text: '绵阳', id: 0 },
-            { text: '成都', id: 1 },
-            { text: '浙江', id: 2 },
-          ],
-        },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-        { text: '江苏', children: [] },
-      ],
+      cityList: [], // 市
     }
   },
+  computed: {},
   methods: {
     reset() {},
     custom() {},
+    provinceClick() {
+      console.log(this.provinceIndex)
+      this.cityList = this.regionList[this.provinceIndex].children
+    },
   },
 }
 </script>
