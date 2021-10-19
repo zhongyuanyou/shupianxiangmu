@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      title: '类型',
+      title: '类别',
       active: '',
       list: [
         '不限',

@@ -129,8 +129,8 @@
                   <div class="area-box">
                     <div
                       v-for="(area, areaIdx) in areaList"
-                      :key="areaIdx"
                       v-show="isShow ? areaIdx < 999 : areaIdx < 16"
+                      :key="areaIdx"
                       :class="[
                         areaActives === areaIdx
                           ? 'area-item-active'
