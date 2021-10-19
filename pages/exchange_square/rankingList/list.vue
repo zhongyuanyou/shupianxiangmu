@@ -81,10 +81,10 @@ export default {
   created() {
     this.info = this.$route.query
     this.title = this.info.title
-    if (this.title === '热门上新') {
-      this.code = 'CRISPS-C-JYPHB-RMSX'
-      this.getType()
-    }
+    console.log(this.info)
+  },
+  mounted() {
+    this.getType()
   },
   methods: {
     onLoad() {},
@@ -99,7 +99,7 @@ export default {
           params: {
             locationCodes: '',
             navCodes: '',
-            code: this.code,
+            code: this.info.code,
           },
         })
         .then((res) => {

@@ -5,14 +5,20 @@
         <div v-if="type === 'monthly'" class="title-tag">黑龙江</div>
         <div v-else class="title-tag">外观专利</div>
 
-        <div class="title">一种刹车片制作用自动化刷胶装置自…</div>
+        <div class="title">{{ product.name }}</div>
       </div>
       <div class="label-box">
-        <div v-for="i in 6" :key="i" class="label">精英专业团队</div>
+        <div
+          v-for="(tag, tagIdx) in product.salesGoodsTags"
+          :key="tagIdx"
+          class="label"
+        >
+          精英专业团队
+        </div>
       </div>
       <div class="price-box">
         <div class="price">
-          <div class="num">6982.55</div>
+          <div class="num">{{ product.referencePrice }}</div>
           <div class="unit">元</div>
         </div>
         <div class="details" @click="jump">
@@ -92,7 +98,13 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'ualification',
+      default: 'patent',
+    },
+    product: {
+      type: Object,
+      default: () => {
+        return {}
+      },
     },
   },
   methods: {

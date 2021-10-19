@@ -11,22 +11,25 @@
       >
         <sp-dropdown-menu>
           <sp-dropdown-item
-            v-for="(item, index) in tabList"
-            :key="index"
-            :title="item"
-            @open="tabChoose(index)"
+            :title="tabList[0]"
+            active-color="#4974F5"
+            :title-class="
+              tabList[0] !== '类型' ? 'sp-dropdown-menu__title--active' : ''
+            "
           >
-            <div v-if="index === 0" class="type-list">
+            <div class="type-list">
               <div
                 v-for="(type, idx) in typeList"
                 :key="idx"
                 :class="[typeActive === idx ? 'type_item-active' : 'type_item']"
                 @click="chooseType(idx)"
               >
-                {{ type }}
+                {{ type.name }}
               </div>
             </div>
-            <div v-if="index === 1" class="class-list">
+          </sp-dropdown-item>
+          <sp-dropdown-item :title="tabList[1]">
+            <div class="class-list">
               <div
                 v-for="(classItem, classIdx) in classList"
                 :key="classIdx"
@@ -35,10 +38,12 @@
                 ]"
                 @click="chooseClass(classIdx)"
               >
-                {{ classItem }}
+                {{ classItem.name }}
               </div>
             </div>
-            <div v-if="index === 2" class="class-list">
+          </sp-dropdown-item>
+          <sp-dropdown-item :title="tabList[2]">
+            <div class="class-list">
               <div
                 v-for="(priceItem, priceIdx) in priceList"
                 :key="priceIdx"
@@ -47,10 +52,35 @@
                 ]"
                 @click="choosePrice(priceIdx)"
               >
-                {{ priceItem }}
+                {{ priceItem.name }}
               </div>
             </div>
-            <div v-if="index === 3" class="sorting-list">
+          </sp-dropdown-item>
+          <sp-dropdown-item :title="tabList[3]">
+            <div class="sorting-list">
+              <div
+                v-for="(stateItem, stateIdx) in stateList"
+                :key="stateIdx"
+                @click="chooseState(stateIdx)"
+              >
+                <div
+                  :class="[stateActive === stateIdx ? 'sort-active ' : 'sort']"
+                >
+                  {{ stateItem.name }}
+                </div>
+                <div v-show="stateActive === stateIdx" class="check-icon">
+                  <my-icon
+                    class="icon"
+                    name="tab_ic_check"
+                    size="0.32rem"
+                    color="#4974F5"
+                  ></my-icon>
+                </div>
+              </div>
+            </div>
+          </sp-dropdown-item>
+          <sp-dropdown-item :title="tabList[4]">
+            <div class="sorting-list">
               <div
                 v-for="(sortItem, sortIdx) in sortList"
                 :key="sortIdx"
@@ -59,7 +89,7 @@
                 <div
                   :class="[sortActive === sortIdx ? 'sort-active ' : 'sort']"
                 >
-                  {{ sortItem }}
+                  {{ sortItem.name }}
                 </div>
                 <div v-show="sortActive === sortIdx" class="check-icon">
                   <my-icon
@@ -82,7 +112,12 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <ProductCard v-for="i in 10" :key="i" type="patent"></ProductCard>
+        <ProductCard
+          v-for="(pro, proIdx) in productList"
+          :key="proIdx"
+          :product="pro"
+          type="patent"
+        ></ProductCard>
       </sp-list>
     </div>
   </div>
@@ -91,6 +126,7 @@
 <script>
 import { DropdownMenu, DropdownItem, List, Sticky } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
+import { newSpreadApi } from '@/api/spread'
 export default {
   name: 'PatentProductList',
   components: {
@@ -104,82 +140,152 @@ export default {
     return {
       loading: false,
       finished: false,
-      tabList: ['类型', '分类', '价格', '排序'],
-      typeList: [
-        '不限',
-        '发明专利',
-        '实用新型',
-        '发明专利',
-        '实用新型',
-        '发明专利',
-        '实用新型',
-        '发明专利',
-        '实用新型',
-        '发明专利',
-        '实用新型实用新型实用新型',
-      ],
-      classList: [
-        '不限',
-        '01-化工原料',
-        '02-颜料油漆',
-        '01-化工原料',
-        '02-颜料油漆',
-        '01-化工原料',
-        '02-颜料油漆',
-        '01-化工原料',
-        '02-颜料油漆',
-        '01-化工原料',
-        '02-颜料油漆',
-      ],
-      priceList: [
-        '不限',
-        '3000元以下',
-        '3000元-1万',
-        '1万-3万',
-        '3万-5万',
-        '5万以上',
-      ],
-      sortList: ['综合', '最新发布', '价格从低到高', '价格从高到低'],
-      tabActive: -1,
-      typeActive: -1, // 类型选中下标
-      classActive: -1, // 分类选中下标
-      priceActive: -1, // 价格选择下标
+      tabList: ['类型', '分类', '价格', '状态', '排序'],
+      typeList: [], // 类型分类
+      classList: [], // 分类列表
+      priceList: [], // 价格列表
+      stateList: [], // 状态列表
+      sortList: [], // 排序列表
+      tabActive: 0, // 筛选栏选中下标
+      typeActive: 0, // 类型选中下标
+      classActive: 0, // 分类选中下标
+      priceActive: 0, // 价格选择下标
       sortActive: 0, // 排序选中下标
+      stateActive: 0, // 状态选中下标
       isFixed: false, // 是否吸顶
+      pageNum: 1, // 请求页数
+      productList: [], // 商品列表
     }
+  },
+  created() {
+    this.getType()
   },
   methods: {
     onLoad() {},
-    tabChoose(idx) {
-      this.tabActive = idx
+    // 获取筛选分类
+    getType() {
+      this.$axios
+        .get(newSpreadApi.type_list, {
+          params: {
+            code: 'CONDITION-JY',
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data.forEach((element) => {
+              if (element.name === '专利') {
+                this.classCode = element
+                this.getProductList()
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
-    close() {
-      console.log(51414)
+    // 获取产品列表
+    getProductList() {
+      if (this.finished) return
+      this.$axios
+        .post(newSpreadApi.product_list, {
+          classCode: this.classCode.ext4,
+          dictCode: this.classCode.code,
+          fieldList: [],
+          limit: 10,
+          needTypes: 1,
+          searchKey: '',
+          start: this.pageNum,
+          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            if (this.pageNum === 1) {
+              res.data.filters.forEach((item, index) => {
+                if (item.name === '状态') {
+                  this.stateList = item.children
+                } else if (item.name === '行业') {
+                  this.classList = item.children
+                } else if (item.name === '价格') {
+                  this.priceList = item.children
+                } else if (item.name === '类型') {
+                  this.typeList = item.children
+                } else if (item.name === '排序') {
+                  this.sortList = item.children
+                }
+              })
+              this.productList = res.data.goods.records
+            } else {
+              res.data.goods.records.forEach((ele) => {
+                this.productList.push(ele)
+              })
+            }
+            if (res.data.goodes.records.length < 10) {
+              this.finished = true
+            }
+            this.pageNum++
+          } else {
+            this.finished = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.finished = true
+        })
     },
+
     // 类型选择
     chooseType(idx) {
       this.$emit('chooseType')
       this.typeActive = idx
-      this.tabList[this.tabActive] = this.typeList[idx]
+      if (idx !== 0) {
+        this.tabList[this.tabActive] = this.typeList[idx].name
+      } else {
+        this.tabList[this.tabActive] = '类型'
+      }
     },
 
     // 分类选项
     chooseClass(idx) {
       this.$emit('chooseClass')
       this.classActive = idx
-      this.tabList[this.tabActive] = this.classList[idx]
+      if (idx !== 0) {
+        this.tabList[this.tabActive] = this.classList[idx].name
+      } else {
+        this.tabList[this.tabActive] = '分类'
+      }
     },
     // 价格选择
     choosePrice(idx) {
       this.$emit('choosePrice')
       this.priceActive = idx
-      this.tabList[this.tabActive] = this.priceList[idx]
+      if (idx !== 0) {
+        this.tabList[this.tabActive] = this.priceList[idx].name
+      } else {
+        this.tabList[this.tabActive] = '价格'
+      }
+    },
+    // 排序选择
+    chooseState(index) {
+      this.stateActive = index
+      this.$emit('chooseState')
+      console.log(index)
+      if (index !== 0) {
+        this.tabList[this.tabActive] = this.stateList[index].name
+      } else {
+        this.tabList[this.tabActive] = '状态'
+      }
     },
     // 排序选择
     chooseSort(index) {
       this.sortActive = index
       this.$emit('chooseSort')
-      this.tabList[this.tabActive] = this.sortList[index]
+
+      if (index !== 0) {
+        this.tabList[this.tabActive] = this.sortList[index].name
+      } else {
+        this.tabList[this.tabActive] = '排序'
+      }
     },
     // 判断是否吸顶
     scroll(e) {
@@ -200,22 +306,27 @@ export default {
     margin-bottom: 6px;
     padding: 0 20px;
   }
+  .sp-dropdown-menu__title--active {
+    color: #4974f5;
+    font-weight: 700;
+  }
   ::v-deep.sp-dropdown-menu__bar {
     box-shadow: none;
     height: 88px;
     background: transparent;
-    padding: 0 40px;
+    // padding: 0 40px;
+    padding: 0 18px;
     .sp-dropdown-menu__item {
       flex-shrink: 0;
       flex: none;
-      width: 145px;
-      margin-right: 25px;
+      width: 140px;
+      //   margin-right: 25px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
     .sp-dropdown-menu__title {
-      max-width: 128px;
+      max-width: 120px;
     }
     .sp-ellipsis {
       font-size: 28px;

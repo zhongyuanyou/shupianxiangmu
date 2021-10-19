@@ -23,34 +23,45 @@ export default {
       list: [
         {
           title: '热门上新榜',
+          titles: '热门上新',
           desc: '新上品源 先睹为快',
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/5qpy8gejixo0000.png',
-          url: '',
+          url: '/exchange_square/rankingList/list',
+          code: 'CRISPS-C-JYPHB-RMSX',
         },
         {
           title: '低价捡漏榜',
+          titles: '低价捡漏',
           desc: '超低价格更优惠',
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/f5j3e15h3zk0000.png',
-          url: '',
+          url: '/exchange_square/rankingList/list',
+          code: 'CRISPS-C-DJJLB',
         },
         {
           title: '收藏人气榜',
+          titles: '收藏人气',
           desc: '高人气必看商品',
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/d9vq0bd4igw0000.png',
-          url: '',
+          url: '/exchange_square/rankingList/list',
+          code: 'CRISPS-C-SCRQB',
         },
         {
           title: '商品热搜榜',
+          titles: '高热搜',
           desc: '超多商品大家都在搜',
           img: 'https://cdn.shupian.cn/sp-pt/wap/images/4ywvt0wepzw0000.png',
-          url: '',
+          url: '/exchange_square/rankingList/list',
+          code: 'CRISPS-C-SPRSB',
         },
       ],
     }
   },
   methods: {
     jump(item) {
-      console.log(item.url)
+      this.$router.push({
+        path: '/exchange_square/rankingList/list',
+        query: { title: item.titles, code: item.code },
+      })
     },
   },
 }

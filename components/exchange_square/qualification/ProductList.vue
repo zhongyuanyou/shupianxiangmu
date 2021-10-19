@@ -24,9 +24,9 @@
                 :class="[
                   typeActive === typeIdx ? 'type-item-active' : 'type-item',
                 ]"
-                @click="typeChooes(typeIdx)"
+                @click="typeChooes(typeIdx, typeItem)"
               >
-                {{ typeItem }}
+                {{ typeItem.name }}
               </div>
             </div>
             <div v-else-if="tabActive === 1" class="type-list">
@@ -38,7 +38,7 @@
                 ]"
                 @click="levelChooes(levelIdx)"
               >
-                {{ levelItem }}
+                {{ levelItem.name }}
               </div>
             </div>
             <div v-else-if="tabActive === 2" class="price-list">
@@ -70,7 +70,7 @@
                     :class="[priceActive === priceIdx ? 'item-active' : 'item']"
                     @click="priceChooes(priceIdx)"
                   >
-                    {{ priceItem }}
+                    {{ priceItem.name }}
                   </div>
                 </div>
               </div>
@@ -83,7 +83,7 @@
                       color="#1A1A1A"
                     ></my-icon>
                   </div>
-                  <div class="name">重置</div>
+                  <div class="name" @click="priceReset">重置</div>
                 </div>
                 <div class="confirm" @click="confirm(2)">确认</div>
               </div>
@@ -101,7 +101,7 @@
                       ]"
                       @click="securityChooes(securityIdx)"
                     >
-                      {{ security }}
+                      {{ security.name }}
                     </div>
                   </div>
                 </div>
@@ -129,8 +129,8 @@
                   <div class="area-box">
                     <div
                       v-for="(area, areaIdx) in areaList"
-                      :key="areaIdx"
                       v-show="isShow ? areaIdx < 999 : areaIdx < 16"
+                      :key="areaIdx"
                       :class="[
                         areaActives === areaIdx
                           ? 'area-item-active'
@@ -138,7 +138,7 @@
                       ]"
                       @click="areaChooes(areaIdx)"
                     >
-                      {{ area }}
+                      {{ area.name }}
                     </div>
                   </div>
                 </div>
@@ -166,7 +166,7 @@
                 <div
                   :class="[sortActive === sortIdx ? 'sort-active ' : 'sort']"
                 >
-                  {{ sortItem }}
+                  {{ sortItem.name }}
                 </div>
                 <div v-show="sortActive === sortIdx" class="check-icon">
                   <my-icon
@@ -198,6 +198,7 @@
 <script>
 import { DropdownMenu, DropdownItem, List, Sticky } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
+import { newSpreadApi } from '@/api/spread'
 export default {
   name: 'ProductList',
   components: {
@@ -211,91 +212,39 @@ export default {
     return {
       loading: false,
       finished: false,
-      isFixed: false,
+      isFixed: false, // 是否吸頂
       tabList: ['类别', '等级', '价格', '更多', '排序'],
-      showNum: 16,
-      typeList: [
-        '不限',
-        '总包资质',
-        '专包资质',
-        '设计资质',
-        '监理资质',
-        '劳务资质',
-      ],
-      prictList: [
-        '不限',
-        '5万以下',
-        '5-10万',
-        '10-15万',
-        '20-50万',
-        '50万以上',
-      ],
-      levelList: ['不限', '特级', '一级', '二级', '三级', '四级'],
-      securityList: ['不限', '有', '无'],
-      areaList: [
-        '不限',
-        '北京',
-        '安徽',
-        '福建',
-        '甘肃',
-        '广东',
-        '广西',
-        '贵州',
-        '不限',
-        '北京',
-        '安徽',
-        '福建',
-        '甘肃',
-        '广东',
-        '广西',
-        '贵州',
-        '不限',
-        '北京',
-        '安徽',
-        '福建',
-        '甘肃',
-        '广东',
-        '广西',
-        '贵州',
-        '福建',
-        '甘肃',
-        '广东',
-        '广西',
-        '贵州',
-        '不限',
-        '北京',
-        '安徽',
-        '福建',
-      ],
-      sortList: ['综合', '最新发布', '价格从低到高', '价格从高到低'],
+      typeList: [], // 类别数据
+      prictList: [], // 价格数据
+      levelList: [], // 等级数据
+      securityList: [], // 安全是否有许可证
+      areaList: [], // 更多城市列表
+      sortList: [], // 排序列表
       sortActive: 0, // 排序选中下标
-      tabActive: 0,
-      typeActive: -1, // 类别选中下标
-      levelActive: -1, // 等级选中下标
-      priceActive: -1, // 价格下标
-      securityActive: 0,
-      areaActive: [],
+      tabActive: 0, // tab 选中下标
+      typeActive: 0, // 类别选中下标
+      levelActive: 0, // 等级选中下标
+      priceActive: 0, // 价格下标
+      securityActive: 0, // 更多是否含有安全許可證code
       isAll: false, // 地区全选
-      minPrice: '',
-      maxPrice: '',
-      areaActives: 0,
-      isShow: false,
+      minPrice: '', // 输入最小价格
+      maxPrice: '', // 输入最大价格
+      areaActives: 0, // 更多筛选 城市选择下标
+      isShow: false, // 是否显示更多城市
+      classCode: '', // 分类type Code
+      productList: [], // 产品数据列表
+      pageNum: 1,
     }
   },
-  watch: {
-    areaActive(newVal) {
-      if (
-        (newVal.length !== this.areaList.length - 1) &
-        (newVal.indexOf(0) === -1)
-      ) {
-        this.isAll = false
-      } else if (newVal.indexOf(0) === -1) {
-        this.isAll = true
-      }
-    },
+  created() {
+    this.getType()
   },
   methods: {
-    onLoad() {},
+    onLoad() {
+      if (this.pageNum !== 1) {
+        this.getProductList()
+      }
+    },
     // 判断是否吸顶
     scroll(e) {
       this.isFixed = e.isFixed
@@ -322,6 +271,12 @@ export default {
       console.log(this.$refs.drop)
       this.$refs.drop[num].toggle()
     },
+    // 价格重置
+    priceReset() {
+      this.minPrice = ''
+      this.maxPrice = ''
+      this.priceActive = 0
+    },
     // 城市选择
     areaChooes(idx) {
       this.areaActives = idx
@@ -345,12 +300,85 @@ export default {
       this.securityActive = 0
       this.areaActives = 0
     },
+    // 获取筛选分类
+    getType() {
+      this.$axios
+        .get(newSpreadApi.type_list, {
+          params: {
+            code: 'CONDITION-JY',
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            res.data.forEach((element) => {
+              if (element.name === '资质') {
+                this.classCode = element
+                this.getProductList()
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    // 获取产品列表
+    getProductList() {
+      if (this.finished) return
+      this.$axios
+        .post(newSpreadApi.product_list, {
+          classCode: this.classCode.ext4,
+          dictCode: this.classCode.code,
+          fieldList: [],
+          limit: 10,
+          needTypes: 1,
+          searchKey: '',
+          start: this.pageNum,
+          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            if (this.pageNum === 1) {
+              res.data.filters.forEach((item, index) => {
+                if (item.name === '类别') {
+                  this.typeList = item.children
+                } else if (item.name === '等级') {
+                  this.levelList = item.children
+                } else if (item.name === '价格') {
+                  this.prictList = item.children
+                } else if (item.name === '更多') {
+                  this.securityList = item.children[0].children
+                  this.areaList = item.children[1].children
+                } else if (item.name === '排序') {
+                  this.sortList = item.children
+                }
+              })
+              this.productList = res.data.goodes.records
+            } else {
+              res.data.goodes.records.forEach((ele) => {
+                this.productList.push(ele)
+              })
+            }
+            if (res.data.goodes.records.length < 10) {
+              this.finished = true
+            }
+            this.pageNum++
+          } else {
+            this.finished = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.finished = true
+        })
+    },
   },
 }
 </script>
 <style lang="less" scoped>
 .product-list {
   width: 100vw;
+  min-height: 500px;
   .title {
     width: 100%;
     padding: 0 20px;
@@ -498,11 +526,15 @@ export default {
       }
     }
   }
+  ::v-deep.sp-dropdown-item__content {
+    max-height: 100%;
+  }
   .more-list {
     height: 100%;
     .more-content {
-      height: calc(100% - 96px);
-      overflow: hidden;
+      max-height: calc(100vh - 360px);
+      overflow-x: hidden;
+      overflow-y: scroll;
       padding: 56px 40px;
       .security {
         width: 100%;
@@ -601,6 +633,7 @@ export default {
       align-items: center;
       border-top: 1px solid #f5f5f5;
       background: #fff;
+      height: 160px;
       .reset {
         display: flex;
         flex-direction: column;

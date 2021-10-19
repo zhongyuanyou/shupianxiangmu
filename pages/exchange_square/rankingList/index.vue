@@ -10,74 +10,93 @@
       <div class="title-box">
         <div class="title">热门上新</div>
         <div class="more-box">
-          <div class="btn" @click="goMore('热门上新')">查看更多</div>
+          <div class="btn" @click="goMore('热门上新', 'CRISPS-C-JYPHB-RMSX')">
+            查看更多
+          </div>
           <div class="icon">
             <my-icon
               class="back-icon"
               name="youce"
               size="0.14rem"
               color="#999999"
-              @click.native="goMore('热门上新')"
+              @click.native="goMore('热门上新', 'CRISPS-C-JYPHB-RMSX')"
             ></my-icon>
           </div>
         </div>
       </div>
       <div class="list-box">
-        <ProductCard v-for="i in 3" :key="i" type="monthly"></ProductCard>
+        <ProductCard
+          v-for="(hot, index) in productList.hot"
+          :key="index"
+          :product="hot"
+          :type="
+            hot.className === 资质交易
+              ? 'ualification'
+              : hot.className === '商标交易'
+              ? ''
+              : ''
+          "
+        ></ProductCard>
       </div>
       <div class="title-box">
         <div class="title">低价捡漏</div>
         <div class="more-box">
-          <div class="btn" @click="goMore('底价捡漏')">查看更多</div>
+          <div class="btn" @click="goMore('底价捡漏', 'CRISPS-C-DJJLB')">
+            查看更多
+          </div>
           <div class="icon">
             <my-icon
               class="back-icon"
               name="youce"
               size="0.14rem"
               color="#999999"
-              @click.native="goMore('底价捡漏')"
+              @click.native="goMore('底价捡漏', 'CRISPS-C-DJJLB')"
             ></my-icon>
           </div>
         </div>
       </div>
       <div class="list-box">
-        <ProductCard v-for="i in 3" :key="i" type="monthly"></ProductCard>
+        <ProductCard v-for="i in 3" :key="i"></ProductCard>
       </div>
       <div class="title-box">
         <div class="title">高人气</div>
         <div class="more-box">
-          <div class="btn" @click="goMore('高人气')">查看更多</div>
+          <div class="btn" @click="goMore('高人气', 'CRISPS-C-SCRQB')">
+            查看更多
+          </div>
           <div class="icon">
             <my-icon
               class="back-icon"
               name="youce"
               size="0.14rem"
               color="#999999"
-              @click.native="goMore('高人气')"
+              @click.native="goMore('高人气', 'CRISPS-C-SCRQB')"
             ></my-icon>
           </div>
         </div>
       </div>
       <div class="list-box">
-        <ProductCard v-for="i in 3" :key="i" type="monthly"></ProductCard>
+        <ProductCard v-for="i in 3" :key="i"></ProductCard>
       </div>
       <div class="title-box">
         <div class="title">高热搜</div>
         <div class="more-box">
-          <div class="btn" @click="goMore('高热搜')">查看更多</div>
+          <div class="btn" @click="goMore('高热搜', 'CRISPS-C-SPRSB')">
+            查看更多
+          </div>
           <div class="icon">
             <my-icon
               class="back-icon"
               name="youce"
               size="0.14rem"
               color="#999999"
-              @click.native="goMore('高热搜')"
+              @click.native="goMore('高热搜', 'CRISPS-C-SPRSB')"
             ></my-icon>
           </div>
         </div>
       </div>
       <div class="list-box">
-        <ProductCard v-for="i in 3" :key="i" type="monthly"></ProductCard>
+        <ProductCard v-for="i in 3" :key="i"></ProductCard>
       </div>
     </div>
   </div>
@@ -106,10 +125,10 @@ export default {
     this.getTypeList()
   },
   methods: {
-    goMore(type) {
+    goMore(type, codes) {
       this.$router.push({
         path: '/exchange_square/rankingList/list',
-        query: { title: type, code: '1111' },
+        query: { title: type, code: codes },
       })
     },
     getTypeList() {
