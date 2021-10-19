@@ -9,11 +9,11 @@
       </div>
       <div class="label-box">
         <div
-          v-for="(tag, tagIdx) in product.salesGoodsTags"
+          v-for="(tag, tagIdx) in product.sellLabel"
           :key="tagIdx"
           class="label"
         >
-          精英专业团队
+          {{ tag }}
         </div>
       </div>
       <div class="price-box">
@@ -37,19 +37,19 @@
       <div v-if="type === 'patent'" class="msg-box">
         <div>
           <div class="msg-title">行业分类</div>
-          <div class="msg-content">交通运输</div>
+          <div class="msg-content">{{ product.industryValue || '-' }}</div>
         </div>
         <div>
           <div class="msg-title">申请日期</div>
-          <div class="msg-content">2017-05</div>
+          <div class="msg-content">{{ product.applicationValue || '-' }}</div>
         </div>
         <div>
           <div class="msg-title">有限期至</div>
-          <div class="msg-content">2037-05</div>
+          <div class="msg-content">{{ product.certificateValue || '-' }}</div>
         </div>
         <div>
           <div class="msg-title">专利状态</div>
-          <div class="msg-content">授权未是是</div>
+          <div class="msg-content">{{ product.statusValue || '-' }}</div>
         </div>
       </div>
       <div v-if="type === 'ualification'" class="msg-box">
