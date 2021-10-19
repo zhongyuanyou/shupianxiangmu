@@ -5,7 +5,7 @@
       <headerSearch />
     </sp-sticky>
 
-    <ProductList />
+    <ProductList :show-title="false" fiexd-height="44" />
   </div>
 </template>
 
@@ -92,27 +92,5 @@ export default {
   background: #f5f5f5;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  .lable-list {
-    overflow-y: auto;
-    flex: 1;
-  }
-}
-.tabs {
-  margin-top: 10px;
-  ::v-deep .sp-tabs__line {
-    width: 28px;
-    height: 6px;
-    background: #4974f5;
-    border-radius: 3px;
-  }
-  ::v-deep .sp-tab--active {
-    font-weight: bold;
-    color: #222222 !important;
-  }
-  ::v-deep .sp-tab {
-    color: #999999;
-    font-size: 30px;
-  }
 }
 </style>
