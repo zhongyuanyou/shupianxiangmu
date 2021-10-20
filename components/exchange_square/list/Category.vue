@@ -36,7 +36,12 @@ export default {
       this.active = index
       this.title = this.categoryList[index].name
       this.$refs.item.toggle()
-      this.$emit('activeItem', this.categoryList[index], 'Csategory')
+      const params = {
+        fieldCode: 'trademark_portfolio',
+        fieldValue: [this.categoryList[index].code],
+        matchType: 'MATCH_TYPE_MULTI',
+      }
+      this.$emit('activeItem', params, 'Csategory')
     },
   },
 }

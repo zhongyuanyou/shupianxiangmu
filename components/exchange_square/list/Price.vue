@@ -36,6 +36,11 @@ export default {
       this.active = index
       this.title = this.priceList[index].name
       this.$refs.item.toggle()
+      const params = {
+        platformPriceEnd: this.priceList[index].ext2.split('-')[1] * 1,
+        platformPriceStart: this.priceList[index].ext2.split('-')[0] * 1,
+      }
+      this.$emit('activeItem', params, 'Price')
     },
   },
 }

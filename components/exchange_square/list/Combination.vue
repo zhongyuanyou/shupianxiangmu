@@ -36,6 +36,13 @@ export default {
       this.active = index
       this.title = this.combinationList[index].name
       this.$refs.item.toggle()
+
+      const params = {
+        fieldCode: 'trademark_portfolio',
+        fieldValue: [this.combinationList[index].name],
+        matchType: 'MATCH_TYPE_MULTI',
+      }
+      this.$emit('activeItem', params, 'Combination')
     },
   },
 }

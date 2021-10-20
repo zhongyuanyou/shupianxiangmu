@@ -41,23 +41,25 @@
         </div>
       </div>
       <div class="resource">全部资源</div>
-      <sp-sticky :offset-top="56" @scroll="scrollEvent">
-        <CompanyMenu
-          :active="1"
-          :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
-          :style="{ background: isFixed ? '#ffffff' : 'none' }"
-          @getList="getList"
-        />
-      </sp-sticky>
-
-      <sp-list
+      <!-- <sp-sticky :offset-top="56" @scroll="scrollEvent"> -->
+      <CompanyMenu
+        ref="CompanyMenu"
+        :active="1"
+        :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
+        :on-load="onLoad"
+        :background="isFixed ? '#ffffff' : 'none'"
+        @getList="getList"
+        @scrollEvent="scrollEvent"
+      />
+      <!-- </sp-sticky> -->
+      <!-- <sp-list
         v-model="loading"
         :finished="finished"
         finished-text="没有更多了"
         @load="onLoad"
       >
         <TrademarkGood :list="list" />
-      </sp-list>
+      </sp-list> -->
     </div>
   </div>
 </template>
@@ -67,7 +69,7 @@ import { Swipe, SwipeItem, List, Sticky } from '@chipspc/vant-dgg'
 import Header from '@/components/exchange_square/common/Header.vue'
 import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
-import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
+// import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 export default {
   components: {
     CompanyMenu,
@@ -77,7 +79,7 @@ export default {
     [SwipeItem.name]: SwipeItem,
     Header,
     NavBar,
-    TrademarkGood,
+    // TrademarkGood,
   },
   async asyncData({ $axios }) {},
   data() {
@@ -94,6 +96,7 @@ export default {
       bgColor: '',
       isFixed: false,
       searchColor: '',
+      pageNum: 0,
       loading: false,
       finished: false,
       // 滚动金刚区
@@ -181,20 +184,13 @@ export default {
       list: [], // 商品数据
     }
   },
-  computed: {
-    // 将接受的state混合进组件局部计算属性
-    // 监听接受的state值
-  },
-  created() {},
-  mounted() {
-    window.addEventListener('scroll', this.windowScroll)
-  },
   methods: {
     onLoad() {
-      this.finished = true
+      console.log('触底了')
+      this.loading = false
     },
     scrollEvent(e) {
-      this.isFixed = e.isFixed
+      this.isFixed = e
     },
     getList(list) {
       console.error(list)

@@ -1,11 +1,11 @@
 <template>
   <div class="trademark-good">
-    <div v-for="(item, i) of list" :key="i" class="list">
+    <div v-for="(item, i) in list" :key="i" class="list">
       <img :src="item.goodsImg" alt="" class="photo" />
       <div class="title">
         <div class="name">{{ classify(item.fieldList) }}{{ item.name }}</div>
         <div class="tag">
-          <span v-for="(tagItem, tagKey) of item.sellLabel" :key="tagKey">
+          <span v-for="(tagItem, tagKey) in item.sellLabel" :key="tagKey">
             {{ tagItem }}
           </span>
         </div>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { isArray } from '~/utils/check-types'
 export default {
   props: {
     list: {
@@ -36,11 +37,14 @@ export default {
     getState() {
       return (list, text) => {
         let str = ''
-        list.forEach((item) => {
-          if (item.fieldCode === text) {
-            str = item.fieldValue
-          }
-        })
+        if (isArray(list)) {
+          list.forEach((item) => {
+            if (item.fieldCode === text) {
+              str = item.fieldValue
+            }
+          })
+        }
+
         return str || ''
       }
     },
@@ -48,11 +52,14 @@ export default {
     classify() {
       return (list) => {
         let str = ''
-        list.forEach((item) => {
-          if (item.fieldCode === 'trademark_category') {
-            str = item.fieldValueList[0]
-          }
-        })
+        if (isArray(list)) {
+          list.forEach((item) => {
+            if (item.fieldCode === 'trademark_category') {
+              str = item.fieldValueList[0]
+            }
+          })
+        }
+
         return '[' + str + ']'
       }
     },

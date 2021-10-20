@@ -1,29 +1,47 @@
 <template>
-  <sp-dropdown-menu v-if="isAlive">
-    <component
-      :is="item"
-      v-for="item in list"
-      :key="item.id"
-      :type-list="typeList"
-      :class-list="classList"
-      :price-list="priceList"
-      :state-list="stateList"
-      :sort-list="sortList"
-      :more-list="moreList"
-      :region-list="regionList"
-      :category-list="categoryList"
-      :combination-list="combinationList"
-      @activeItem="getFilterHandle"
-    />
-  </sp-dropdown-menu>
+  <div>
+    <sp-sticky :offset-top="top" @scroll="scrollEvent">
+      <sp-dropdown-menu v-if="isAlive" :style="{ background: background }">
+        <component
+          :is="item"
+          v-for="item in list"
+          :key="item.id"
+          :type-list="typeList"
+          :class-list="classList"
+          :price-list="priceList"
+          :state-list="stateList"
+          :sort-list="sortList"
+          :more-list="moreList"
+          :region-list="regionList"
+          :category-list="categoryList"
+          :combination-list="combinationList"
+          @activeItem="getFilterHandle"
+        />
+      </sp-dropdown-menu>
+    </sp-sticky>
+
+    <!-- 列表 -->
+    <sp-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+    >
+      <TrademarkGood :list="productList" />
+      <DefaultImg v-if="productList.length === 0"></DefaultImg>
+    </sp-list>
+  </div>
 </template>
 
 <script>
-import { DropdownMenu, DropdownItem } from '@chipspc/vant-dgg'
+import { DropdownMenu, DropdownItem, List, Sticky } from '@chipspc/vant-dgg'
 import { newSpreadApi } from '@/api/spread'
 import { isArray } from '~/utils/check-types'
+import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
+import DefaultImg from '@/components/common/DefaultImg.vue'
 export default {
   components: {
+    DefaultImg,
     Industry: () => import('./Industry.vue'), // 行业
     Region: () => import('./Region.vue'), // 地区
     Price: () => import('./Price.vue'), // 价格
@@ -33,8 +51,11 @@ export default {
     Classify: () => import('./Classify.vue'), //  类型
     State: () => import('./State.vue'), //  状态
     Combination: () => import('./Combination.vue'), // 组合
+    [List.name]: List,
+    [Sticky.name]: Sticky,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
+    TrademarkGood,
   },
   props: {
     list: {
@@ -45,9 +66,19 @@ export default {
       type: Number,
       default: 0,
     },
+    background: {
+      type: String,
+      default: 'none',
+    },
+    top: {
+      type: Number,
+      default: 56,
+    },
   },
   data() {
     return {
+      loading: false,
+      finished: false,
       isAlive: true,
       classCode: '',
       pageNum: 1,
@@ -73,9 +104,20 @@ export default {
   mounted() {
     this.getType()
   },
+
   methods: {
+    onLoad() {
+      console.log('触底了.........')
+      if (this.finished && !this.loading) return
+      if (this.pageNum !== 1) {
+        this.getProductList()
+      }
+    },
     getFilterHandle(data, name) {
       console.log(data, name)
+    },
+    scrollEvent(e) {
+      this.$emit('scrollEvent', e.isFixed)
     },
     getType() {
       this.$axios
@@ -88,20 +130,17 @@ export default {
           if (res.code === 200) {
             res.data.forEach((element) => {
               console.log('element', element)
-
               if (element.name === '公司' && this.active === 0) {
                 this.classCode = element
-                this.getProductList()
               }
               if (element.name === '商标' && this.active === 1) {
                 this.classCode = element
-                this.getProductList()
               }
               if (element.name === '专利' && this.active === 2) {
                 this.classCode = element
-                this.getProductList()
               }
             })
+            this.getProductList()
           }
         })
         .catch((err) => {
@@ -110,6 +149,7 @@ export default {
     },
     // 获取产品列表
     getProductList() {
+      this.loading = true
       this.$axios
         .post(newSpreadApi.product_list, {
           classCode: this.classCode.ext4,
@@ -123,6 +163,8 @@ export default {
         })
         .then((res) => {
           if (res.code === 200) {
+            this.pageNum++
+            this.loading = false
             if (this.pageNum === 1) {
               res.data.filters.forEach((item, index) => {
                 if (item.name === '状态') {
@@ -148,22 +190,17 @@ export default {
               })
               this.productList = res.data.goods.records
             } else {
-              res.data.goods.records.forEach((ele) => {
-                this.productList.push(ele)
-              })
+              this.productList.push(...res.data.goods.records)
             }
-            this.$emit('getList', this.productList)
+            // this.$emit('getList', this.productList)
             if (res.data.goodes.records.length < 10) {
+              this.loading = false
               this.finished = true
             }
-            this.pageNum++
           } else {
+            this.loading = false
             this.finished = true
           }
-        })
-        .catch((err) => {
-          console.log(err)
-          this.finished = true
         })
     },
     // 处理地区
