@@ -163,10 +163,10 @@ export default {
         })
         .then((res) => {
           if (res.code === 200) {
-            this.pageNum++
             this.loading = false
             if (this.pageNum === 1) {
               res.data.filters.forEach((item, index) => {
+                console.log(1212313123)
                 if (item.name === '状态') {
                   this.stateList = item.children
                 } else if (item.name === '行业') {
@@ -192,7 +192,7 @@ export default {
             } else {
               this.productList.push(...res.data.goods.records)
             }
-            // this.$emit('getList', this.productList)
+            this.pageNum++
             if (res.data.goodes.records.length < 10) {
               this.loading = false
               this.finished = true
