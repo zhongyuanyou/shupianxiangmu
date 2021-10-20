@@ -29,13 +29,7 @@
           v-for="(hot, index) in productList.hot"
           :key="index"
           :product="hot"
-          :type="
-            hot.className === 资质交易
-              ? 'ualification'
-              : hot.className === '商标交易'
-              ? ''
-              : ''
-          "
+          type="monthly"
         ></ProductCard>
       </div>
       <div class="title-box">
@@ -56,7 +50,12 @@
         </div>
       </div>
       <div class="list-box">
-        <ProductCard v-for="i in 3" :key="i"></ProductCard>
+        <ProductCard
+          v-for="(price, index) in productList.price"
+          :key="index"
+          :product="price"
+          type="monthly"
+        ></ProductCard>
       </div>
       <div class="title-box">
         <div class="title">高人气</div>
@@ -76,7 +75,12 @@
         </div>
       </div>
       <div class="list-box">
-        <ProductCard v-for="i in 3" :key="i"></ProductCard>
+        <ProductCard
+          v-for="(collection, index) in productList.collection"
+          :key="index"
+          :product="collection"
+          type="monthly"
+        ></ProductCard>
       </div>
       <div class="title-box">
         <div class="title">高热搜</div>
@@ -96,7 +100,12 @@
         </div>
       </div>
       <div class="list-box">
-        <ProductCard v-for="i in 3" :key="i"></ProductCard>
+        <ProductCard
+          v-for="(goods, index) in productList.goods"
+          :key="index"
+          :product="goods"
+          type="monthly"
+        ></ProductCard>
       </div>
     </div>
   </div>
@@ -159,6 +168,29 @@ export default {
           console.log(err)
         })
     },
+    getField(item, type) {
+      let key = ''
+      item.forEach((ele) => {
+        if (ele.fieldCode === type) {
+          key = ele.fieldValueCn
+        }
+      })
+      if (type === 'registered_capital') {
+        if (key < 500000) {
+          return '50万以下'
+        } else if (key < 1000000) {
+          return '50-100万'
+        } else if (key < 5000000) {
+          return '100-500万'
+        } else if (key < 10000000) {
+          return '500-1000万'
+        } else {
+          return '1000万以上'
+        }
+      } else {
+        return key
+      }
+    },
     getProductList() {
       this.$axios
         .post(newSpreadApi.ranking_list, {
@@ -171,6 +203,94 @@ export default {
         })
         .then((res) => {
           if (res.code === 200) {
+            res.data.hot.forEach((item, index) => {
+              item.areaValue = this.getField(
+                item.fieldList,
+                'registration_area'
+              ) // 注册区域
+              item.ageLimitValue = this.getField(
+                item.fieldList,
+                'business_age_limit'
+              ) // 经营时间
+              item.taxpayerTypeValue = this.getField(
+                item.fieldList,
+                'taxpayer_type'
+              ) // 纳税类型
+              item.capitalValue = this.getField(
+                item.fieldList,
+                'registered_capital'
+              ) // 注册资本
+              item.industryValue = this.getField(
+                item.fieldList,
+                'company_industry'
+              ) // 所属行业
+            })
+            res.data.price.forEach((item, index) => {
+              item.areaValue = this.getField(
+                item.fieldList,
+                'registration_area'
+              ) // 注册区域
+              item.ageLimitValue = this.getField(
+                item.fieldList,
+                'business_age_limit'
+              ) //
+              item.taxpayerTypeValue = this.getField(
+                item.fieldList,
+                'taxpayer_type'
+              )
+              item.capitalValue = this.getField(
+                item.fieldList,
+                'registered_capital'
+              )
+              item.industryValue = this.getField(
+                item.fieldList,
+                'company_industry'
+              )
+            })
+            res.data.collection.forEach((item, index) => {
+              item.areaValue = this.getField(
+                item.fieldList,
+                'registration_area'
+              ) // 注册区域
+              item.ageLimitValue = this.getField(
+                item.fieldList,
+                'business_age_limit'
+              ) //
+              item.taxpayerTypeValue = this.getField(
+                item.fieldList,
+                'taxpayer_type'
+              )
+              item.capitalValue = this.getField(
+                item.fieldList,
+                'registered_capital'
+              )
+              item.industryValue = this.getField(
+                item.fieldList,
+                'company_industry'
+              )
+            })
+            res.data.goods.forEach((item, index) => {
+              item.areaValue = this.getField(
+                item.fieldList,
+                'registration_area'
+              ) // 注册区域
+              item.ageLimitValue = this.getField(
+                item.fieldList,
+                'business_age_limit'
+              ) //
+              item.taxpayerTypeValue = this.getField(
+                item.fieldList,
+                'taxpayer_type'
+              )
+              item.capitalValue = this.getField(
+                item.fieldList,
+                'registered_capital'
+              )
+              item.industryValue = this.getField(
+                item.fieldList,
+                'company_industry'
+              )
+            })
             this.productList = res.data
             console.log(this.productList)
           }

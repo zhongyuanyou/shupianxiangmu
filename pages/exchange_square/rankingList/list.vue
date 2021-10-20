@@ -42,11 +42,17 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <ProductCard
-          v-for="(pro, proIdx) in productList.list"
-          :key="proIdx"
-          :type="cardType"
-        ></ProductCard>
+        <div v-if="cardType !== 'trademark'">
+          <ProductCard
+            v-for="(pro, proIdx) in productList"
+            :key="proIdx"
+            :product="pro"
+            :type="cardType"
+          ></ProductCard>
+        </div>
+        <div v-else>
+          <TrademarkGood :list="list"></TrademarkGood>
+        </div>
       </sp-list>
     </div>
     <!-- 商品列表 E -->
@@ -58,12 +64,14 @@ import { List, Sticky } from '@chipspc/vant-dgg'
 import Header from '@/components/common/head/header.vue'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
 import { newSpreadApi } from '@/api/spread'
+import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 export default {
   components: {
     Header,
     [List.name]: List,
     [Sticky.name]: Sticky,
     ProductCard,
+    TrademarkGood,
   },
   data() {
     return {
@@ -75,13 +83,62 @@ export default {
       info: '',
       code: '',
       productList: [],
-      cardType: 'patent',
+      cardType: 'monthly',
+      list: [
+        {
+          name: '大庆****建筑装饰工程有限责任公司',
+          address: '黑龙江',
+          tag: ['安全交易', '1对1服务'],
+          price: '123321',
+          time: '五年以上',
+          type: '小规模纳税',
+          capital: '500万以上',
+          industry: '电子贸易',
+          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
+          slogan: '餐饮｜已下证',
+        },
+        {
+          name: '大庆****建',
+          address: '黑龙江',
+          tag: ['安全交易', '1对1服务'],
+          price: '123321',
+          time: '五年以上',
+          type: '小规模纳税',
+          capital: '500万以上',
+          industry: '电子贸易',
+          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
+          slogan: '餐饮｜已下证',
+        },
+        {
+          name: '大庆****',
+          address: '黑龙江',
+          tag: ['安全交易', '1对1服务'],
+          price: '123321',
+          time: '五年以上',
+          type: '小规模纳税',
+          capital: '500万以上',
+          industry: '电子贸易',
+          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
+          slogan: '餐饮｜已下证',
+        },
+        {
+          name: '大庆****',
+          address: '黑龙江',
+          tag: ['安全交易', '1对1服务'],
+          price: '123321',
+          time: '五年以上',
+          type: '小规模纳税',
+          capital: '500万以上',
+          industry: '电子贸易',
+          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
+          slogan: '餐饮｜已下证',
+        },
+      ],
     }
   },
   created() {
     this.info = this.$route.query
     this.title = this.info.title
-    console.log(this.info)
   },
   mounted() {
     this.getType()
@@ -91,6 +148,14 @@ export default {
     tabChooes(item, idx) {
       this.tabActve = idx
       this.finished = false
+      window.scrollTo(0, 0)
+      if (idx === 0) {
+        this.cardType = 'monthly'
+      } else if (idx === 1) {
+        this.cardType = 'patent'
+      } else if (idx === 2) {
+        this.cardType = 'trademark'
+      }
       this.getProductList(item.ids)
     },
     getType() {
@@ -120,6 +185,29 @@ export default {
           console.log(err)
         })
     },
+    getField(item, type) {
+      let key = ''
+      item.forEach((ele) => {
+        if (ele.fieldCode === type) {
+          key = ele.fieldValueCn
+        }
+      })
+      if (type === 'registered_capital') {
+        if (key < 500000) {
+          return '50万以下'
+        } else if (key < 1000000) {
+          return '50-100万'
+        } else if (key < 5000000) {
+          return '100-500万'
+        } else if (key < 10000000) {
+          return '500-1000万'
+        } else {
+          return '1000万以上'
+        }
+      } else {
+        return key
+      }
+    },
     getProductList(code) {
       if (this.finished) return
       this.$axios
@@ -128,9 +216,61 @@ export default {
         })
         .then((res) => {
           if (res.code === 200) {
+            this.loading = false
             this.finished = true
-            this.productList = res.data
-            console.log(this.productList)
+            if (this.cardType !== 'trademark') {
+              res.data.list.forEach((item, index) => {
+                item.areaValue = this.getField(
+                  item.fieldList,
+                  'registration_area'
+                ) // 公司交易注册区域
+                item.ageLimitValue = this.getField(
+                  item.fieldList,
+                  'business_age_limit'
+                ) // 公司交易经营时间
+                item.taxpayerTypeValue = this.getField(
+                  item.fieldList,
+                  'taxpayer_type'
+                ) // 公司交易纳税类型
+                item.capitalValue = this.getField(
+                  item.fieldList,
+                  'registered_capital'
+                ) // 公司交易注册资本
+                item.industryValue = this.getField(
+                  item.fieldList,
+                  'company_industry'
+                ) // 公司交易所属行业
+                item.patentIndustryValue = this.getField(
+                  item.fieldList,
+                  'patent_industry'
+                ) // 专利行业分类
+                item.applicationValue = this.getField(
+                  item.fieldList,
+                  'patent_date_of_application'
+                ) // 专利申请日期
+                item.certificateValue = this.getField(
+                  item.fieldList,
+                  'validity_of_certificate'
+                ) // 专利有效期
+                item.statusValue = this.getField(
+                  item.fieldList,
+                  'patent_status'
+                ) // 专利状态
+                item.typeValue = this.getField(item.fieldList, 'patent_type') // 专利类别
+              })
+
+              this.productList = res.data.list
+            } else {
+              res.data.list.forEach((item, index) => {
+                const image = this.getField(item.fieldList, 'logo_image')
+                item.tag = item.sellLabel
+                item.price = item.referencePrice
+                item.img =
+                  image ||
+                  'https://cdn.shupian.cn/1621252424000_%E5%95%86%E6%A0%87%403x.png'
+              })
+              this.productList = res.data.list
+            }
           }
         })
         .catch((err) => {
@@ -205,6 +345,7 @@ export default {
       .tabs {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
         .tab {
           font-size: 32px;
@@ -230,10 +371,10 @@ export default {
         left: 106px;
       }
       .line2 {
-        left: 272px;
+        left: 356px;
       }
       .line3 {
-        left: 434px;
+        left: 610px;
       }
       .line4 {
         left: 598px;

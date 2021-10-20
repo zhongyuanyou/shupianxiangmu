@@ -33,6 +33,7 @@
             class="input"
             type="text"
             :maxlength="maxlength"
+            @keyup.enter="search"
           />
           <my-icon
             name="guanbi_mian"
@@ -130,6 +131,9 @@ export default {
         if (this.isInApp) safeTop = this.appInfo.statusBarHeight
         this.safeTop = safeTop
       }
+    },
+    search() {
+      this.$emit('searchValue', this.value)
     },
   },
 }
