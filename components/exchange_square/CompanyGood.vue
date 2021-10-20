@@ -12,7 +12,7 @@
       </div>
       <div class="price">
         <div class="left">
-          <b>{{ item.price }}</b
+          <b>{{ item.referencePrice }}</b
           ><span>元</span>
         </div>
         <div class="right">
