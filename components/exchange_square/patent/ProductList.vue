@@ -5,8 +5,9 @@
       <div
         class="tabs"
         :style="{
-          background: isFixed ? '#fff' : '',
+          background: isFixed || fixed ? '#fff' : '',
           borderTop: isFixed ? '0.5px solid #f5f5f5' : '',
+          borderTop: fixed ? '' : '',
         }"
       >
         <sp-dropdown-menu>
@@ -129,7 +130,7 @@
         </sp-dropdown-menu>
       </div>
     </sp-sticky>
-    <div class="list">
+    <div class="list" :style="{ marginTop: fixed ? '10px' : '' }">
       <sp-list
         v-model="loading"
         :finished="finished"
@@ -176,6 +177,14 @@ export default {
       type: Number,
       default: 56,
     },
+    searchVal: {
+      type: [String, Number],
+      default: '',
+    },
+    fixed: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -208,6 +217,17 @@ export default {
         statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
       },
     }
+  },
+  watch: {
+    searchVal(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.params.start = 1
+        this.productList = []
+        this.finished = false
+        this.params.searchKey = newVal
+        this.getProductList()
+      }
+    },
   },
   created() {
     this.getType()
@@ -269,6 +289,7 @@ export default {
               let application = ''
               let certificate = ''
               let status = ''
+              let type = ''
               ele.fieldList.forEach((field) => {
                 if (field.fieldCode === 'patent_industry') {
                   industry = field.fieldValue
@@ -284,13 +305,16 @@ export default {
                 if (field.fieldCode === 'patent_status') {
                   status = field.fieldValue
                 }
+                if (field.fieldCode === 'patent_type') {
+                  type = field.fieldValue
+                }
               })
-              ele.industryValue = industry
+              ele.patentIndustryValue = industry
               ele.applicationValue = application
               ele.certificateValue = certificate
               ele.statusValue = status
+              ele.typeValue = type
               this.productList.push(ele)
-              console.log(this.productList)
             })
             if (res.data.goods.records.length < 10) {
               this.finished = true

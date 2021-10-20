@@ -5,6 +5,7 @@
       <Header
         :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
         :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
+        path="/exchange_square/patent/selectionPage"
       ></Header>
     </sp-sticky>
     <!-- 头部E -->
@@ -48,6 +49,9 @@ export default {
     // 判断筛选框是否吸顶
     scroll(e) {
       this.isFixed = e.isFixed
+    },
+    searchFocus(e) {
+      console.log(111)
     },
   },
 }

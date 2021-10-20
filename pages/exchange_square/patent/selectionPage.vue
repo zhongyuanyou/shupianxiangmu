@@ -2,10 +2,15 @@
   <div class="selection-page">
     <!-- 搜索 -->
     <sp-sticky>
-      <headerSearch />
+      <headerSearch @searchValue="search" />
     </sp-sticky>
 
-    <ProductList :show-title="false" fiexd-height="44" />
+    <ProductList
+      :show-title="false"
+      fiexd-height="44"
+      :search-val="searchVal"
+      :fixed="true"
+    />
   </div>
 </template>
 
@@ -24,63 +29,17 @@ export default {
   },
   data() {
     return {
-      list: [
-        {
-          name: '大庆****建筑装饰工程有限责任公司',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****建',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-      ], // 商品数据
       loading: false,
       finished: false,
+      searchVal: '',
     }
   },
   methods: {
     onLoad() {
       this.finished = true
+    },
+    search(val) {
+      this.searchVal = val
     },
   },
 }
@@ -88,7 +47,7 @@ export default {
 
 <style lang="less" scoped>
 .selection-page {
-  height: 100vh;
+  min-height: 100vh;
   background: #f5f5f5;
   display: flex;
   flex-direction: column;

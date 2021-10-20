@@ -117,6 +117,10 @@ export default {
     onLoad() {
       this.finished = true
     },
+    search(value) {
+      console.log(25555)
+      console.log(value)
+    },
   },
 }
 </script>
