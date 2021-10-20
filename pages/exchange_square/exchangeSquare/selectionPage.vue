@@ -10,7 +10,8 @@
           :key="index"
           :title="item"
           :name="index"
-        />
+        >
+        </sp-tab>
         <CompanyMenu :active="active" :list="companyList" />
       </sp-tabs>
     </div>
@@ -97,7 +98,7 @@ export default {
       finished: false,
       companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,
-      tabList: ['公司交易', '商标交易', '专利交易', '资质并购'],
+      tabList: ['公司交易', '商标交易', '专利交易'],
     }
   },
   watch: {
@@ -106,7 +107,13 @@ export default {
         this.companyList = ['Industry', 'Region', 'Price', 'More', 'Sortord']
       }
       if (this.active === 1) {
-        this.companyList = ['Category', 'Classify', 'Price', 'State', 'Sortord']
+        this.companyList = [
+          'Category',
+          'Combination',
+          'Price',
+          'More',
+          'Sortord',
+        ]
       }
       if (this.active === 2) {
         this.companyList = ['Classify', 'Industry', 'Price', 'State', 'Sortord']
@@ -125,6 +132,7 @@ export default {
 .selection-page {
   height: 100vh;
   display: flex;
+  background: #f5f5f5;
   flex-direction: column;
   overflow: hidden;
   .lable-list {

@@ -1,5 +1,5 @@
 <template>
-  <sp-dropdown-menu>
+  <sp-dropdown-menu v-if="isAlive">
     <component
       :is="item"
       v-for="item in list"
@@ -11,6 +11,8 @@
       :sort-list="sortList"
       :more-list="moreList"
       :region-list="regionList"
+      :category-list="categoryList"
+      :combination-list="combinationList"
       @activeItem="getFilterHandle"
     />
   </sp-dropdown-menu>
@@ -27,9 +29,10 @@ export default {
     Price: () => import('./Price.vue'), // 价格
     Sortord: () => import('./Sortord.vue'), // 排序
     More: () => import('./More.vue'), //  更多
-    Category: () => import('./Category.vue'), //  类别
+    Category: () => import('./Category.vue'), //  分类
     Classify: () => import('./Classify.vue'), //  类型
     State: () => import('./State.vue'), //  状态
+    Combination: () => import('./Combination.vue'), // 组合
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
   },
@@ -45,6 +48,7 @@ export default {
   },
   data() {
     return {
+      isAlive: true,
       classCode: '',
       pageNum: 1,
       stateList: [], // 状态
@@ -54,12 +58,16 @@ export default {
       sortList: [], // 排序
       moreList: [], // 更多
       regionList: [], // 地区
+      categoryList: [], // 分类
+      combinationList: [], // 组合
       productList: [], // 商品列表
     }
   },
   watch: {
     active() {
       this.getType()
+      this.isAlive = false
+      this.$nextTick(() => (this.isAlive = true))
     },
   },
   mounted() {
@@ -82,6 +90,10 @@ export default {
               console.log('element', element)
 
               if (element.name === '公司' && this.active === 0) {
+                this.classCode = element
+                this.getProductList()
+              }
+              if (element.name === '商标' && this.active === 1) {
                 this.classCode = element
                 this.getProductList()
               }
@@ -128,6 +140,10 @@ export default {
                   this.moreList = item.children
                 } else if (item.name === '地区') {
                   this.setRegionList(item.children)
+                } else if (item.name === '分类') {
+                  this.categoryList = item.children
+                } else if (item.name === '组合') {
+                  this.combinationList = item.children
                 }
               })
               this.productList = res.data.goods.records
@@ -136,6 +152,7 @@ export default {
                 this.productList.push(ele)
               })
             }
+            this.$emit('getList', this.productList)
             if (res.data.goodes.records.length < 10) {
               this.finished = true
             }
@@ -171,7 +188,13 @@ export default {
           item.children.unshift({
             text: '不限',
             id: 0,
-            children: [{ text: '不限', id: 0, show: false }],
+            children: [
+              {
+                text: '不限',
+                id: 0,
+                show: true,
+              },
+            ],
           })
         }
       })

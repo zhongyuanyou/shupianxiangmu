@@ -15,7 +15,7 @@
     <div
       class="search-box"
       :style="{ backgroundColor: searchColor }"
-      @click="$router.push($attrs.path)"
+      @click="$router.push($attrs.path || '')"
     >
       <my-icon
         class="search-icon"
