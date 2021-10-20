@@ -6,6 +6,7 @@
         placeholder="请输入关键词"
         :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
         :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
+        path="/exchange_square/lookRrand/selectionPage"
       />
     </sp-sticky>
     <div style="overflow-y: auto">
@@ -42,8 +43,10 @@
       <div class="resource">全部资源</div>
       <sp-sticky :offset-top="56" @scroll="scrollEvent">
         <CompanyMenu
-          :list="['Category', 'Classify', 'Price', 'State', 'Sortord']"
+          :active="1"
+          :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
           :style="{ background: isFixed ? '#ffffff' : 'none' }"
+          @getList="getList"
         />
       </sp-sticky>
 
@@ -175,80 +178,7 @@ export default {
         { name: '专利交易', code: 1, type: 1 },
         { name: '资质并购', code: 1, type: 1 },
       ],
-      list: [
-        {
-          name: '大庆****建筑装饰工程有限责任公司',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****建',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-      ], // 商品数据
+      list: [], // 商品数据
     }
   },
   computed: {
@@ -265,6 +195,10 @@ export default {
     },
     scrollEvent(e) {
       this.isFixed = e.isFixed
+    },
+    getList(list) {
+      console.error(list)
+      this.list = list
     },
   },
 }
