@@ -1,11 +1,13 @@
 <template>
   <div class="exchange-square">
-    <Header
-      title="交易广场"
-      placeholder="公司转让"
-      disabled="true"
-      path="/exchange_square/exchangeSquare/selectionPage"
-    />
+    <sp-sticky>
+      <Header
+        title="交易广场"
+        placeholder="公司转让"
+        disabled="true"
+        path="/exchange_square/exchangeSquare/selectionPage"
+      />
+    </sp-sticky>
     <div style="overflow-y: auto">
       <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
         <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
@@ -20,15 +22,17 @@
 </template>
 
 <script>
-import { Swipe, SwipeItem } from '@chipspc/vant-dgg'
+import { Swipe, SwipeItem, Sticky } from '@chipspc/vant-dgg'
 import Header from '@/components/exchange_square/common/Header.vue'
 import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
 import ScrollNav from '@/components/spread/common/Nav.vue'
 import GoodsList from '@/components/exchange_square/common/GoodsList.vue'
+import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
+    [Sticky.name]: Sticky,
     Header,
     NavBar,
     ScrollNav,
@@ -126,7 +130,6 @@ export default {
         { name: '公司交易', code: 1, type: 1 },
         { name: '商标交易', code: 1, type: 1 },
         { name: '专利交易', code: 1, type: 1 },
-        { name: '资质并购', code: 1, type: 1 },
       ],
     }
   },
@@ -134,8 +137,61 @@ export default {
     // 将接受的state混合进组件局部计算属性
     // 监听接受的state值
   },
-  created() {},
+  created() {
+    // this.getProductList()
+  },
   mounted() {},
+  methods: {
+    getProductList() {
+      if (this.finished) return
+      this.$axios
+        .post(newSpreadApi.product_list, {
+          classCode: this.classCode.ext4,
+          dictCode: this.classCode.code,
+          fieldList: [],
+          limit: 10,
+          needTypes: 1,
+          searchKey: '',
+          start: this.pageNum,
+          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            if (this.pageNum === 1) {
+              res.data.filters.forEach((item, index) => {
+                if (item.name === '类别') {
+                  this.typeList = item.children
+                } else if (item.name === '等级') {
+                  this.levelList = item.children
+                } else if (item.name === '价格') {
+                  this.prictList = item.children
+                } else if (item.name === '更多') {
+                  this.securityList = item.children[0].children
+                  this.areaList = item.children[1].children
+                } else if (item.name === '排序') {
+                  this.sortList = item.children
+                }
+              })
+              this.productList = res.data.goodes.records
+            } else {
+              res.data.goodes.records.forEach((ele) => {
+                this.productList.push(ele)
+              })
+            }
+            if (res.data.goodes.records.length < 10) {
+              this.finished = true
+            }
+            this.pageNum++
+          } else {
+            this.finished = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.finished = true
+        })
+    },
+  },
 }
 </script>
 

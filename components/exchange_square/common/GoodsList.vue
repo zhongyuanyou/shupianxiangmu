@@ -19,27 +19,28 @@
             <span v-show="active === itemKey" class="title_tag"></span>
           </div>
         </template>
-        <div
-          v-show="classList && classList.length"
-          class="labels"
-          :style="{
-            paddingTop: isFixed ? '10px' : '',
-            top: isFixed ? top - 1 + 'px' : '',
-          }"
-        >
-          <div class="lab-box">
-            <div
-              v-for="(classItem, classIndex) in classList"
-              :key="classIndex"
-              class="lab"
-              :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
-              @click="chooesClass(classIndex)"
-            >
-              {{ classItem.name }}
+        <sp-sticky :offset-top="56" @scroll="scroll">
+          <div
+            v-show="classList && classList.length"
+            class="labels"
+            :style="{
+              paddingTop: isFixed ? '10px' : '',
+              top: isFixed ? top - 1 + 'px' : '',
+            }"
+          >
+            <div class="lab-box">
+              <div
+                v-for="(classItem, classIndex) in classList"
+                :key="classIndex"
+                class="lab"
+                :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
+                @click="chooesClass(classIndex)"
+              >
+                {{ classItem.name }}
+              </div>
             </div>
           </div>
-        </div>
-        <!-- </sp-sticky> -->
+        </sp-sticky>
         <div class="list-box">
           <sp-list
             v-model="loading"
@@ -71,6 +72,7 @@
 import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
 import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
 import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
+import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
     [Tab.name]: Tab,
@@ -149,9 +151,85 @@ export default {
       activeCode: '',
       num: 1,
       classList: [{ name: '推荐' }],
+      typeList: [],
+      typeName: {
+        0: '公司',
+        1: '商标',
+        2: '专利',
+      },
     }
   },
+  created() {
+    this.getType()
+  },
   methods: {
+    getType() {
+      this.$axios
+        .get(newSpreadApi.type_list, {
+          params: {
+            code: 'CONDITION-JY',
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.typeList = res.data
+            this.typeChange()
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getProductList() {
+      if (this.finished) return
+      this.$axios
+        .post(newSpreadApi.product_list, {
+          classCode: this.classCode.ext4,
+          dictCode: this.classCode.code,
+          fieldList: [],
+          limit: 10,
+          needTypes: 1,
+          searchKey: '',
+          start: this.pageNum,
+          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            console.log(res.data.goods.records)
+            this.list = res.data.goods.records
+            // if (this.pageNum === 1) {
+            //   res.data.filters.forEach((item, index) => {
+            //     if (item.name === '状态') {
+            //       this.stateList = item.children
+            //     } else if (item.name === '行业') {
+            //       this.classList = item.children
+            //     } else if (item.name === '价格') {
+            //       this.priceList = item.children
+            //     } else if (item.name === '类型') {
+            //       this.typeList = item.children
+            //     } else if (item.name === '排序') {
+            //       this.sortList = item.children
+            //     }
+            //   })
+            //   this.productList = res.data.goods.records
+            // } else {
+            //   res.data.goods.records.forEach((ele) => {
+            //     this.productList.push(ele)
+            //   })
+            // }
+            // if (res.data.goodes.records.length < 10) {
+            //   this.finished = true
+            // }
+            // this.pageNum++
+          } else {
+            this.finished = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.finished = true
+        })
+    },
     scroll(e) {
       this.$nextTick(() => {
         this.isFixed = e.isFixed
@@ -166,13 +244,24 @@ export default {
       this.list = []
       this.selectTab()
     },
+    typeChange() {
+      this.typeList.forEach((element) => {
+        if (element.name === this.typeName[this.active]) {
+          this.classCode = element
+          // this.params.classCode = this.classCode.ext4
+          // this.params.dictCode = this.classCode.code
+          this.getProductList()
+        }
+      })
+    },
     onClick() {
-      //   this.$xToast.showLoading({ message: '加载中...' })
-      //   this.pageNumber = 1
-      //   this.classActive = -1
-      //   this.classList = this.titleName[this.active].children
-      //   this.activeCode = this.titleName[this.active].type
-      //   this.initialize()
+      this.$xToast.showLoading({ message: '加载中...' })
+      this.pageNumber = 1
+      // this.classActive = -1
+      // this.classList = this.titleName[this.active].children
+      // this.activeCode = this.titleName[this.active].type
+      // this.initialize()
+      this.typeChange()
     },
     initialize(changeObj) {
       this.pageNumber = 1
