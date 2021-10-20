@@ -7,7 +7,14 @@
       indicator-color="white"
     >
       <sp-swipe-item v-for="(item, index) in bannerList" :key="index">
-        <div class="img-box" @click="jump"><img :src="item.img" alt="" /></div>
+        <div class="img-box" @click="jump(item)">
+          <img
+            :src="`${
+              item && item.materialUrl
+            }?x-oss-process=image/resize,m_fill,w_750,h_326,limit_0`"
+            alt=""
+          />
+        </div>
       </sp-swipe-item>
     </sp-swipe>
   </div>
@@ -15,24 +22,53 @@
 
 <script>
 import { Swipe, SwipeItem } from '@chipspc/vant-dgg'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 export default {
   components: {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
   },
-  props: {
-    bannerList: {
-      type: Array,
-      default: () => {
-        return [
-          {
-            img: 'https://cdn.shupian.cn/sp-pt/wap/images/4mjyjc1ofo80000.png',
-          },
-        ]
-      },
-    },
+  props: {},
+  data() {
+    return {
+      bannerList: [],
+    }
+  },
+  mounted() {
+    this.getList()
   },
   methods: {
+    getList() {
+      this.$axios
+        .get(newSpreadApi.list, {
+          params: {
+            locationCodes: 'jygcMmlc',
+            navCodes: '',
+            code: 'jy-sb',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.code === 200) {
+            res.data.adList.forEach((item) => {
+              if (item.locationCode === 'jygcMmlc') {
+                this.bannerList = this.getData(item.sortMaterialList)
+                console.log(this.bannerList)
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getData(item) {
+      const arr = []
+      item.forEach((ele) => {
+        arr.push(ele.materialList[0])
+      })
+      return arr
+    },
     jump() {},
   },
 }

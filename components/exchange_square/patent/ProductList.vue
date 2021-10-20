@@ -292,21 +292,19 @@ export default {
               let type = ''
               ele.fieldList.forEach((field) => {
                 if (field.fieldCode === 'patent_industry') {
-                  industry = field.fieldValue
+                  industry = field.fieldValueCn
                 }
                 if (field.fieldCode === 'patent_date_of_application') {
-                  const time = new Date(parseInt(field.fieldValue * 1000))
-                  const m = time.getMonth() * 1 + 1
-                  application = `${time.getFullYear()}-${m < 10 ? '0' + m : m}`
+                  application = field.fieldValueCn
                 }
                 if (field.fieldCode === 'validity_of_certificate') {
-                  certificate = field.fieldValue
+                  certificate = field.fieldValueCn
                 }
                 if (field.fieldCode === 'patent_status') {
-                  status = field.fieldValue
+                  status = field.fieldValueCn
                 }
                 if (field.fieldCode === 'patent_type') {
-                  type = field.fieldValue
+                  type = field.fieldValueCn
                 }
               })
               ele.patentIndustryValue = industry

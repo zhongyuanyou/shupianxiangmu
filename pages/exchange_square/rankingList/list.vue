@@ -51,7 +51,7 @@
           ></ProductCard>
         </div>
         <div v-else>
-          <TrademarkGood :list="list"></TrademarkGood>
+          <TrademarkGood :list="productList"></TrademarkGood>
         </div>
       </sp-list>
     </div>
@@ -77,63 +77,12 @@ export default {
     return {
       title: '热门上新',
       tabList: [],
-      tabActve: 0,
+      tabActve: 0, // tab选中下标
       loading: false,
       finished: false,
-      info: '',
-      code: '',
-      productList: [],
-      cardType: 'monthly',
-      list: [
-        {
-          name: '大庆****建筑装饰工程有限责任公司',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****建',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-      ],
+      info: '', // 传入参数
+      productList: [], // 产品列表
+      cardType: 'monthly', // 商品card分类
     }
   },
   created() {
@@ -265,7 +214,7 @@ export default {
                 const image = this.getField(item.fieldList, 'logo_image')
                 item.tag = item.sellLabel
                 item.price = item.referencePrice
-                item.img =
+                item.goodsImg =
                   image ||
                   'https://cdn.shupian.cn/1621252424000_%E5%95%86%E6%A0%87%403x.png'
               })
