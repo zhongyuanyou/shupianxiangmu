@@ -1,20 +1,20 @@
 <template>
   <div class="trademark-good">
     <div v-for="(item, i) of list" :key="i" class="list">
-      <img :src="item.img" alt="" class="photo" />
+      <img :src="item.goodsImg" alt="" class="photo" />
       <div class="title">
         <div class="name">
           {{ item.name }}
         </div>
         <div class="tag">
-          <span v-for="(tagItem, tagKey) of item.tag" :key="tagKey">
+          <span v-for="(tagItem, tagKey) of item.salesGoodsTags" :key="tagKey">
             {{ tagItem }}
           </span>
         </div>
         <div class="slogan">
           {{ item.slogan }}
         </div>
-        <div class="price">{{ item.price }}<span>万</span></div>
+        <div class="price">{{ item.referencePrice }}<span>万</span></div>
       </div>
     </div>
   </div>

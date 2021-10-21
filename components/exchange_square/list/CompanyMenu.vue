@@ -136,7 +136,7 @@ export default {
                 this.productList.push(ele)
               })
             }
-            if (res.data.goodes.records.length < 10) {
+            if (res.data.goods.records.length < 10) {
               this.finished = true
             }
             this.pageNum++
