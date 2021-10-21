@@ -51,7 +51,7 @@
           ></ProductCard>
         </div>
         <div v-else>
-          <TrademarkGood :list="productList"></TrademarkGood>
+          <TrademarkGood :list="productListPatent"></TrademarkGood>
         </div>
       </sp-list>
     </div>
@@ -83,6 +83,7 @@ export default {
       info: '', // 传入参数
       productList: [], // 产品列表
       cardType: 'monthly', // 商品card分类
+      productListPatent: [], // 商标产品列表
     }
   },
   created() {
@@ -210,6 +211,7 @@ export default {
 
               this.productList = res.data.list
             } else {
+              this.productListPatent = []
               res.data.list.forEach((item, index) => {
                 const image = this.getField(item.fieldList, 'logo_image')
                 item.tag = item.sellLabel
@@ -218,13 +220,35 @@ export default {
                   image ||
                   'https://cdn.shupian.cn/1621252424000_%E5%95%86%E6%A0%87%403x.png'
               })
-              this.productList = res.data.list
+              //   this.productList = res.data.list
+              this.productListPatent = this.getWaterfall(
+                this.productListPatent,
+                res.data.list
+              )
             }
           }
         })
         .catch((err) => {
           console.log(err)
         })
+    },
+    getWaterfall(originalData = [], newData = []) {
+      // originalData 原有数据 newData 需要新增数据
+      let data
+      const odata = originalData
+      const ndata = newData
+      if (originalData.length === 0) {
+        data = ndata
+      } else {
+        const olength = odata.length
+        const nlength = ndata.length
+        const obefore = odata.slice(0, Math.ceil(olength / 2))
+        const oafter = odata.slice(Math.ceil(olength / 2), olength)
+        const nbefore = ndata.slice(0, Math.ceil(nlength / 2))
+        const nafter = ndata.slice(Math.ceil(nlength / 2), nlength)
+        data = [...obefore, ...nbefore, ...oafter, ...nafter]
+      }
+      return data
     },
   },
 }
