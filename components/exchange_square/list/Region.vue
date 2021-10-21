@@ -112,13 +112,26 @@ export default {
           this.areaId.push(item.id)
         }
       })
-      console.log('已选的区域ID', this.areaId)
-      console.log('已选的区域ID', this.cityId)
+      console.log('已选的区ID', this.areaId)
+      console.log('已选的城市ID', this.cityId)
       console.log('已选的省ID', this.province)
+      let ids = []
+      console.log(this.areaId[0] !== 0)
+      if (this.areaId[0] !== 0) {
+        ids = this.areaId
+      } else if (this.cityId) {
+        ids.push(this.cityId)
+      } else {
+        ids.push(this.province)
+      }
       this.$refs.item.toggle()
       this.$emit(
         'activeItem',
-        { areaId: this.areaId, cityId: this.cityId, province: this.province },
+        {
+          fieldCode: 'registration_area',
+          fieldValue: ids,
+          matchType: 'MATCH_TYPE_MULTI',
+        },
         'Region'
       )
     },
