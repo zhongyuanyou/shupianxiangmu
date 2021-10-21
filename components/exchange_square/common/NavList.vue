@@ -5,11 +5,11 @@
         <div class="nav" @click="jump(item)">
           <div class="icon">
             <img
-              :src="`${item.icon}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
+              :src="`${item.navigationImageUrl}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
               alt=""
             />
           </div>
-          <div class="title">{{ item.title }}</div>
+          <div class="title">{{ item.name }}</div>
         </div>
       </div>
     </div>
@@ -23,48 +23,7 @@ export default {
     navList: {
       type: Array,
       default: () => {
-        return [
-          {
-            title: '发明专利',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/crxovpbfeso0000.png',
-          },
-          {
-            title: '外观专利',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/82b03c9sph80000.png',
-          },
-          {
-            title: '实用新型',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/f05rb0xedk00000.png',
-          },
-          {
-            title: '农业牧业',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/5xj3zqps83w0000.png',
-          },
-          {
-            title: '食品饮料',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/amn0c1w6lc80000.png',
-          },
-          {
-            title: '家具用品',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/87gt0cdv4qs0000.png',
-          },
-          {
-            title: '医药医疗',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/cg8ase5dhag0000.png',
-          },
-          {
-            title: '化学化工',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/dx72abwnuw00000.png',
-          },
-          {
-            title: '仪器仪表',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/axx3mxp3psk0000.png',
-          },
-          {
-            title: '全部分类',
-            icon: 'https://cdn.shupian.cn/sp-pt/wap/images/22t08qymu1q8000.png',
-          },
-        ]
+        return []
       },
     },
   },

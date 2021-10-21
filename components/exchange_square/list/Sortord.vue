@@ -47,7 +47,10 @@ export default {
       this.active = index
       this.title = this.sortList[index].name
       this.$refs.item.toggle()
-      this.$emit('activeItem', this.sortList[index], 'Sortrd')
+      const params = {
+        sortBy: index + 1,
+      }
+      this.$emit('activeItem', params, 'Sortrd')
     },
   },
 }

@@ -1,26 +1,28 @@
 <template>
   <div class="trademark-good">
-    <div v-for="(item, i) of list" :key="i" class="list">
+    <div v-for="(item, i) in list" :key="i" class="list">
       <img :src="item.goodsImg" alt="" class="photo" />
       <div class="title">
-        <div class="name">
-          {{ item.name }}
-        </div>
+        <div class="name">{{ classify(item.fieldList) }}{{ item.name }}</div>
         <div class="tag">
-          <span v-for="(tagItem, tagKey) of item.salesGoodsTags" :key="tagKey">
+          <span v-for="(tagItem, tagKey) in item.sellLabel" :key="tagKey">
             {{ tagItem }}
           </span>
         </div>
         <div class="slogan">
-          {{ item.slogan }}
+          <span v-if="getState(item.fieldList, 'trademark_type')"
+            >{{ getState(item.fieldList, 'trademark_type') }} |
+          </span>
+          {{ getState(item.fieldList, 'trademark_status') }}
         </div>
-        <div class="price">{{ item.referencePrice }}<span>万</span></div>
+        <div class="price">{{ item.referencePrice }}<span>元</span></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { isArray } from '~/utils/check-types'
 export default {
   props: {
     list: {
@@ -28,6 +30,38 @@ export default {
       default: () => {
         return []
       },
+    },
+  },
+  computed: {
+    // 状态
+    getState() {
+      return (list, text) => {
+        let str = ''
+        if (isArray(list)) {
+          list.forEach((item) => {
+            if (item.fieldCode === text) {
+              str = item.fieldValue
+            }
+          })
+        }
+
+        return str || ''
+      }
+    },
+    // 分类
+    classify() {
+      return (list) => {
+        let str = ''
+        if (isArray(list)) {
+          list.forEach((item) => {
+            if (item.fieldCode === 'trademark_category') {
+              str = item.fieldValueList[0]
+            }
+          })
+        }
+
+        return '[' + str + ']'
+      }
     },
   },
 }

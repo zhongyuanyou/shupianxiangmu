@@ -87,9 +87,22 @@ export default {
       province: '', // 省id
     }
   },
-  computed: {},
+  watch: {
+    regionList: {
+      handler() {
+        console.error(this.regionList)
+        this.cityList = this.regionList[0].children
+        this.areaList = this.regionList[0].children[0].children
+      },
+    },
+  },
+  mounted() {},
   methods: {
-    reset() {},
+    reset() {
+      this.cityList = this.regionList[0]?.children
+      this.provinceIndex = 0
+      this.cityIndex = 0
+    },
     // 确定
     custom() {
       // 获取区id
@@ -102,6 +115,12 @@ export default {
       console.log('已选的区域ID', this.areaId)
       console.log('已选的区域ID', this.cityId)
       console.log('已选的省ID', this.province)
+      this.$refs.item.toggle()
+      this.$emit(
+        'activeItem',
+        { areaId: this.areaId, cityId: this.cityId, province: this.province },
+        'Region'
+      )
     },
     provinceClick(index) {
       this.provinceIndex = index
@@ -118,9 +137,9 @@ export default {
       this.areaList =
         this.regionList[this.provinceIndex].children[this.cityIndex].children
       // 每次切换是清空数据
-      // this.areaList.forEach((item) =>
-      //   item.text === '不限' ? (item.show = true) : (item.show = false)
-      // )
+      this.areaList.forEach((item) =>
+        item.text === '不限' ? (item.show = true) : (item.show = false)
+      )
       this.areaId = []
       // 城市id
       this.cityId = this.cityList[this.cityIndex].id

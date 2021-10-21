@@ -6,6 +6,7 @@
         placeholder="请输入关键词"
         :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
         :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
+        path="/exchange_square/lookRrand/selectionPage"
       />
     </sp-sticky>
     <div style="overflow-y: auto">
@@ -40,21 +41,25 @@
         </div>
       </div>
       <div class="resource">全部资源</div>
-      <sp-sticky :offset-top="56" @scroll="scrollEvent">
-        <CompanyMenu
-          :list="['Category', 'Classify', 'Price', 'State', 'Sortord']"
-          :style="{ background: isFixed ? '#ffffff' : 'none' }"
-        />
-      </sp-sticky>
-
-      <sp-list
+      <!-- <sp-sticky :offset-top="56" @scroll="scrollEvent"> -->
+      <CompanyMenu
+        ref="CompanyMenu"
+        :active="1"
+        :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
+        :on-load="onLoad"
+        :background="isFixed ? '#ffffff' : 'none'"
+        @getList="getList"
+        @scrollEvent="scrollEvent"
+      />
+      <!-- </sp-sticky> -->
+      <!-- <sp-list
         v-model="loading"
         :finished="finished"
         finished-text="没有更多了"
         @load="onLoad"
       >
         <TrademarkGood :list="list" />
-      </sp-list>
+      </sp-list> -->
     </div>
   </div>
 </template>
@@ -64,7 +69,7 @@ import { Swipe, SwipeItem, List, Sticky } from '@chipspc/vant-dgg'
 import Header from '@/components/exchange_square/common/Header.vue'
 import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
-import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
+// import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 export default {
   components: {
     CompanyMenu,
@@ -74,7 +79,7 @@ export default {
     [SwipeItem.name]: SwipeItem,
     Header,
     NavBar,
-    TrademarkGood,
+    // TrademarkGood,
   },
   async asyncData({ $axios }) {},
   data() {
@@ -91,6 +96,7 @@ export default {
       bgColor: '',
       isFixed: false,
       searchColor: '',
+      pageNum: 0,
       loading: false,
       finished: false,
       // 滚动金刚区
@@ -175,96 +181,20 @@ export default {
         { name: '专利交易', code: 1, type: 1 },
         { name: '资质并购', code: 1, type: 1 },
       ],
-      list: [
-        {
-          name: '大庆****建筑装饰工程有限责任公司',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****建',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-      ], // 商品数据
+      list: [], // 商品数据
     }
-  },
-  computed: {
-    // 将接受的state混合进组件局部计算属性
-    // 监听接受的state值
-  },
-  created() {},
-  mounted() {
-    window.addEventListener('scroll', this.windowScroll)
   },
   methods: {
     onLoad() {
-      this.finished = true
+      console.log('触底了')
+      this.loading = false
     },
     scrollEvent(e) {
-      this.isFixed = e.isFixed
+      this.isFixed = e
+    },
+    getList(list) {
+      console.error(list)
+      this.list = list
     },
   },
 }

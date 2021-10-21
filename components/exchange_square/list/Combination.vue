@@ -2,7 +2,7 @@
   <sp-dropdown-item ref="item" :title="title">
     <div class="box">
       <div
-        v-for="(item, index) in priceList"
+        v-for="(item, index) in combinationList"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
         @click="activeItem(index)"
@@ -20,27 +20,29 @@ export default {
     [DropdownItem.name]: DropdownItem,
   },
   props: {
-    priceList: {
+    combinationList: {
       type: Array,
       default: () => [],
     },
   },
   data() {
     return {
-      title: '价格',
+      title: '组合',
       active: '',
     }
   },
   methods: {
     activeItem(index) {
       this.active = index
-      this.title = this.priceList[index].name
+      this.title = this.combinationList[index].name
       this.$refs.item.toggle()
+
       const params = {
-        platformPriceEnd: this.priceList[index].ext2.split('-')[1] * 1,
-        platformPriceStart: this.priceList[index].ext2.split('-')[0] * 1,
+        fieldCode: 'trademark_portfolio',
+        fieldValue: [this.combinationList[index].name],
+        matchType: 'MATCH_TYPE_MULTI',
       }
-      this.$emit('activeItem', params, 'Price')
+      this.$emit('activeItem', params, 'Combination')
     },
   },
 }
@@ -52,14 +54,17 @@ export default {
   display: flex;
   flex-wrap: wrap;
   .item {
-    width: 206px;
+    width: 149px;
     margin: 12px;
-    padding: 20px 0;
+    padding: 20px 10px;
     text-align: center;
     background: #f8f8f8;
     font-size: 24px;
     color: #222222;
     border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .active {
     background: rgb(236, 241, 254);

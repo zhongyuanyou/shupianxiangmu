@@ -2,8 +2,12 @@
   <div class="product-card">
     <div class="card">
       <div class="title-box">
-        <div v-if="type === 'monthly'" class="title-tag">黑龙江</div>
-        <div v-else class="title-tag">外观专利</div>
+        <div v-if="type === 'monthly' && product.areaValue" class="title-tag">
+          {{ product.areaValue && product.areaValue.split(',')[0] }}
+        </div>
+        <div v-if="type === 'patent' && product.typeValue" class="title-tag">
+          {{ product.typeValue }}
+        </div>
 
         <div class="title">{{ product.name }}</div>
       </div>
@@ -37,7 +41,9 @@
       <div v-if="type === 'patent'" class="msg-box">
         <div>
           <div class="msg-title">行业分类</div>
-          <div class="msg-content">{{ product.industryValue || '-' }}</div>
+          <div class="msg-content">
+            {{ product.patentIndustryValue || '-' }}
+          </div>
         </div>
         <div>
           <div class="msg-title">申请日期</div>
@@ -52,7 +58,7 @@
           <div class="msg-content">{{ product.statusValue || '-' }}</div>
         </div>
       </div>
-      <div v-if="type === 'ualification'" class="msg-box">
+      <!-- <div v-if="type === 'ualification'" class="msg-box">
         <div>
           <div class="msg-title">到期时间</div>
           <div class="msg-content">2025年</div>
@@ -69,23 +75,23 @@
           <div class="msg-title">地区</div>
           <div class="msg-content">四川</div>
         </div>
-      </div>
+      </div> -->
       <div v-if="type === 'monthly'" class="msg-box">
         <div>
           <div class="msg-title">经营时间</div>
-          <div class="msg-content">5年以上</div>
+          <div class="msg-content">{{ product.ageLimitValue || '-' }}</div>
         </div>
         <div>
           <div class="msg-title">纳税类型</div>
-          <div class="msg-content">小规模…</div>
+          <div class="msg-content">{{ product.taxpayerTypeValue || '-' }}</div>
         </div>
         <div>
           <div class="msg-title">注册资本</div>
-          <div class="msg-content">1000万...</div>
+          <div class="msg-content">{{ product.capitalValue || '-' }}</div>
         </div>
         <div>
           <div class="msg-title">所属行业</div>
-          <div class="msg-content">电子贸易</div>
+          <div class="msg-content">{{ product.industryValue || '-' }}</div>
         </div>
       </div>
     </div>
@@ -93,6 +99,7 @@
 </template>
 
 <script>
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'ProductCard',
   props: {
@@ -109,7 +116,11 @@ export default {
   },
   methods: {
     jump() {
-      console.log(111)
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.product.classCode}&productId=${this.product.id}`
     },
   },
 }

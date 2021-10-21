@@ -7,8 +7,15 @@
         :show-indicators="bannerList.length > 1"
         indicator-color="white"
       >
-        <sp-swipe-item>
-          <div class="img-box" @click="jump"><img src="" alt="" /></div>
+        <sp-swipe-item v-for="(item, index) in bannerList" :key="index">
+          <div class="img-box" @click="jump(item)">
+            <img
+              :src="`${
+                item && item.materialUrl
+              }?x-oss-process=image/resize,m_fill,w_710,h_240,limit_0`"
+              alt=""
+            />
+          </div>
         </sp-swipe-item>
       </sp-swipe>
     </div>
@@ -31,8 +38,8 @@ export default {
     },
   },
   methods: {
-    jump() {
-      console.log(111)
+    jump(item) {
+      console.log(item)
     },
   },
 }
