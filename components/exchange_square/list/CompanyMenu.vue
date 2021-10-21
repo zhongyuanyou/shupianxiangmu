@@ -166,8 +166,34 @@ export default {
         this.params.platformPriceEnd = data.platformPriceEnd
         this.params.platformPriceStart = data.platformPriceStart
       }
+      // 更多
+      if (name === 'More') {
+        // 字符
+        this.params.nameLengthStart = data.nameLengthEnd
+        this.params.nameLengthStart = data.nameLengthStart
+        // 年限
+        if (this.params.fieldList.length === 0) {
+          this.params.fieldList.push(data.emitData)
+        }
+        if (!data.emitData.fieldValue.end) {
+          this.params.fieldList.forEach((t, index) => {
+            if (t.fieldCode === data.emitData.fieldCode) {
+              this.params.fieldList.splice(index, 1)
+            }
+          })
+        } else {
+          this.params.fieldList.forEach((t, index) => {
+            if (t.fieldCode === data.emitData.fieldCode) {
+              this.params.fieldList[index] = data.emitData
+            } else {
+              this.params.fieldList.push(data.emitData)
+            }
+          })
+        }
+      }
       // 排序
       if (name === 'Sortrd') {
+        // 排序
         this.params.sortBy = data.sortBy
       }
       this.pageNum = 1
@@ -209,6 +235,7 @@ export default {
     // 获取产品列表
     getProductList() {
       this.loading = true
+      this.isEmpty = false
       this.params.classCode = this.classCode.ext4
       this.params.dictCode = this.classCode.code
       this.params.start = this.pageNum
