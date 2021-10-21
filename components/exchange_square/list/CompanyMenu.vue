@@ -160,13 +160,19 @@ export default {
           })
         }
       }
+      // 地区
+      if (name === 'Region') {
+        this.params.fieldList = this.params.fieldList.filter(
+          (item) => item.fieldCode !== 'registration_area'
+        )
+        if (data.fieldValue.length) this.params.fieldList.push(data)
+      }
       // 行业
       if (name === 'Industry') {
         this.params.fieldList = this.params.fieldList.filter(
           (item) => item.fieldCode !== 'company_industry'
         )
         if (data.fieldValue[0] !== '不限') {
-          console.log(111)
           this.params.fieldList.push(data)
         }
       }
