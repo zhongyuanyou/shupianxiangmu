@@ -140,33 +140,16 @@ export default {
     getFilterHandle(data, name) {
       // 分类 ， 组合
       console.log(data, name)
-      if (name === 'Csategory' || name === 'Combination') {
-        if (this.params.fieldList.length === 0) {
-          this.params.fieldList.push(data)
-        }
-        if (data.fieldValue[0] === '不限') {
-          this.params.fieldList.forEach((t, index) => {
-            if (t.fieldCode === data.fieldCode) {
-              this.params.fieldList.splice(index, 1)
-            }
-          })
-        } else {
-          this.params.fieldList.forEach((t, index) => {
-            if (t.fieldCode === data.fieldCode) {
-              this.params.fieldList[index] = data
-            } else {
-              this.params.fieldList.push(data)
-            }
-          })
-        }
-      }
-      // 行业
-      if (name === 'Industry') {
+      if (
+        name === 'Csategory' ||
+        name === 'Combination' ||
+        name === 'Industry'
+      ) {
+        // 清除
         this.params.fieldList = this.params.fieldList.filter(
-          (item) => item.fieldCode !== 'company_industry'
+          (item) => item.fieldCode !== data.fieldCode
         )
         if (data.fieldValue[0] !== '不限') {
-          console.log(111)
           this.params.fieldList.push(data)
         }
       }
@@ -180,24 +163,11 @@ export default {
         // 字符
         this.params.nameLengthStart = data.nameLengthEnd
         this.params.nameLengthStart = data.nameLengthStart
-        // 年限
-        if (this.params.fieldList.length === 0) {
+        this.params.fieldList = this.params.fieldList.filter(
+          (item) => item.fieldCode !== data.emitData.fieldCode
+        )
+        if (data.emitData.fieldValue.end) {
           this.params.fieldList.push(data.emitData)
-        }
-        if (!data.emitData.fieldValue.end) {
-          this.params.fieldList.forEach((t, index) => {
-            if (t.fieldCode === data.emitData.fieldCode) {
-              this.params.fieldList.splice(index, 1)
-            }
-          })
-        } else {
-          this.params.fieldList.forEach((t, index) => {
-            if (t.fieldCode === data.emitData.fieldCode) {
-              this.params.fieldList[index] = data.emitData
-            } else {
-              this.params.fieldList.push(data.emitData)
-            }
-          })
         }
       }
       // 排序
