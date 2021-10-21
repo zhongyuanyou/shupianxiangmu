@@ -118,6 +118,11 @@ export default {
       this.isAlive = false
       this.$nextTick(() => (this.isAlive = true))
     },
+    'params.searchKey': {
+      handler() {
+        this.getProductList()
+      },
+    },
   },
   mounted() {
     this.getType()
@@ -138,12 +143,13 @@ export default {
     },
     // 筛选
     getFilterHandle(data, name) {
-      // 分类 ， 组合
+      // 分类 ， 组合, 状态
       console.log(data, name)
       if (
         name === 'Csategory' ||
         name === 'Combination' ||
-        name === 'Industry'
+        name === 'Industry' ||
+        name === 'State'
       ) {
         // 清除
         this.params.fieldList = this.params.fieldList.filter(
@@ -170,12 +176,12 @@ export default {
         // 字符
         this.params.nameLengthStart = data.nameLengthEnd
         this.params.nameLengthStart = data.nameLengthStart
-        this.params.fieldList = this.params.fieldList.filter(
-          (item) => item.fieldCode !== data.emitData.fieldCode
-        )
-        if (data.emitData.fieldValue.end) {
-          this.params.fieldList.push(data.emitData)
-        }
+        data.emitArr.forEach((ele) => {
+          this.params.fieldList = this.params.fieldList.filter(
+            (item) => item.fieldCode === ele.fieldCode
+          )
+        })
+        this.params.fieldLis = this.params.fieldList.concat(data.emitArr)
       }
       // 排序
       if (name === 'Sortrd') {
@@ -183,6 +189,7 @@ export default {
         this.params.sortBy = data.sortBy
       }
       this.pageNum = 1
+      this.productList = []
       this.getProductList()
     },
     scrollEvent(e) {

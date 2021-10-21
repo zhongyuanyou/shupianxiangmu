@@ -1,9 +1,12 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch @searchValue="search" />
+    <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
     <!-- 筛选 -->
-    <CompanyMenu :list="['Industry', 'Region', 'Price', 'More', 'Sortord']" />
+    <CompanyMenu
+      ref="menu"
+      :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
+    />
     <div class="lable-list">
       <sp-list
         v-model="loading"

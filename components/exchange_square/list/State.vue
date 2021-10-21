@@ -47,7 +47,12 @@ export default {
       this.active = index
       this.title = this.stateList[index].name
       this.$refs.item.toggle()
-      this.$emit('activeItem', this.stateList[index], 'State')
+      const item = {
+        fieldCode: this.stateList[index].ext1,
+        fieldValue: this.stateList[index].ext2,
+        matchType: 'MATCH_TYPE_MULTI',
+      }
+      this.$emit('activeItem', item, 'State')
     },
   },
 }
