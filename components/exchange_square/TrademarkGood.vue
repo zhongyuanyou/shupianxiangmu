@@ -15,7 +15,10 @@
           </span>
           {{ getState(item.fieldList, 'trademark_status') }}
         </div>
-        <div class="price">{{ item.referencePrice }}<span>元</span></div>
+        <div class="price">
+          {{ setPrice(item.referencePrice)
+          }}<span>{{ item.referencePrice > 9999 ? '万' : '元' }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -23,6 +26,7 @@
 
 <script>
 import { isArray } from '~/utils/check-types'
+import { price } from '@/utils/spread/exchange-square'
 export default {
   props: {
     list: {
@@ -62,6 +66,11 @@ export default {
 
         return '[' + str + ']'
       }
+    },
+  },
+  methods: {
+    setPrice(data) {
+      return price(data)
     },
   },
 }
