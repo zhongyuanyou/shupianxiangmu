@@ -92,6 +92,16 @@ export default {
       categoryList: [], // 分类
       combinationList: [], // 组合
       productList: [], // 商品列表
+      params: {
+        classCode: '',
+        dictCode: '',
+        fieldList: [],
+        limit: 10,
+        needTypes: 1,
+        searchKey: '',
+        start: 1,
+        statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
+      },
     }
   },
   watch: {
@@ -113,7 +123,12 @@ export default {
         this.getProductList()
       }
     },
+    // 筛选
     getFilterHandle(data, name) {
+      if (name === 'Csategory') {
+        this.params.fieldList.push(data)
+        this.getProductList()
+      }
       console.log(data, name)
     },
     scrollEvent(e) {
@@ -149,59 +164,51 @@ export default {
     },
     // 获取产品列表
     getProductList() {
+      this.params.classCode = this.classCode.ext4
+      this.params.dictCode = this.classCode.code
+      this.params.start = this.pageNum
       this.loading = true
-      this.$axios
-        .post(newSpreadApi.product_list, {
-          classCode: this.classCode.ext4,
-          dictCode: this.classCode.code,
-          fieldList: [],
-          limit: 10,
-          needTypes: 1,
-          searchKey: '',
-          start: this.pageNum,
-          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            this.loading = false
-            if (this.pageNum === 1) {
-              res.data.filters.forEach((item, index) => {
-                console.log(1212313123)
-                if (item.name === '状态') {
-                  this.stateList = item.children
-                } else if (item.name === '行业') {
-                  this.classList = item.children
-                } else if (item.name === '价格') {
-                  this.priceList = item.children
-                } else if (item.name === '类型') {
-                  console.error(this.typeList)
-                  this.typeList = item.children
-                } else if (item.name === '排序') {
-                  this.sortList = item.children
-                } else if (item.name === '更多') {
-                  this.moreList = item.children
-                } else if (item.name === '地区') {
-                  this.setRegionList(item.children)
-                } else if (item.name === '分类') {
-                  this.categoryList = item.children
-                } else if (item.name === '组合') {
-                  this.combinationList = item.children
-                }
-              })
-              this.productList = res.data.goods.records
-            } else {
-              this.productList.push(...res.data.goods.records)
-            }
-            this.pageNum++
-            if (res.data.goodes.records.length < 10) {
-              this.loading = false
-              this.finished = true
-            }
+      this.$axios.post(newSpreadApi.product_list, this.params).then((res) => {
+        if (res.code === 200) {
+          this.loading = false
+          if (this.pageNum === 1) {
+            res.data.filters.forEach((item, index) => {
+              console.log(1212313123)
+              if (item.name === '状态') {
+                this.stateList = item.children
+              } else if (item.name === '行业') {
+                this.classList = item.children
+              } else if (item.name === '价格') {
+                this.priceList = item.children
+              } else if (item.name === '类型') {
+                console.error(this.typeList)
+                this.typeList = item.children
+              } else if (item.name === '排序') {
+                this.sortList = item.children
+              } else if (item.name === '更多') {
+                this.moreList = item.children
+              } else if (item.name === '地区') {
+                this.setRegionList(item.children)
+              } else if (item.name === '分类') {
+                this.categoryList = item.children
+              } else if (item.name === '组合') {
+                this.combinationList = item.children
+              }
+            })
+            this.productList = res.data.goods.records
           } else {
+            this.productList.push(...res.data.goods.records)
+          }
+          this.pageNum++
+          if (res.data.goodes.records.length < 10) {
             this.loading = false
             this.finished = true
           }
-        })
+        } else {
+          this.loading = false
+          this.finished = true
+        }
+      })
     },
     // 处理地区
     setRegionList(list) {

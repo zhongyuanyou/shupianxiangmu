@@ -4,11 +4,20 @@
       <div
         v-for="(item, index) in categoryList"
         :key="index"
-        :class="active === index ? 'item active' : 'item'"
-        @click="activeItem(index)"
+        :class="item.show ? 'item active' : 'item'"
+        @click="activeItem(item)"
       >
         {{ item.name }}
       </div>
+    </div>
+    <div class="filter-footer">
+      <div class="filter-footer-rest" @click="reset">
+        <div class="filter-footer-rest-icon">
+          <my-icon name="tab_ic_redu" color="#1A1A1A" size="0.4rem" />
+        </div>
+        <span class="filter-footer-rest-text">重置</span>
+      </div>
+      <div @click="custom">确定</div>
     </div>
   </sp-dropdown-item>
 </template>
@@ -32,15 +41,46 @@ export default {
     }
   },
   methods: {
-    activeItem(index) {
-      this.active = index
-      this.title = this.categoryList[index].name
-      this.$refs.item.toggle()
+    activeItem(item) {
+      this.$set(item, 'show', !item.show)
+      if (item.name === '不限') {
+        this.categoryList.forEach((obj) => {
+          if (obj.name !== '不限') {
+            this.$set(obj, 'show', false)
+          }
+        })
+      } else {
+        this.categoryList.forEach((obj) => {
+          if (obj.name === '不限') {
+            this.$set(obj, 'show', false)
+          }
+        })
+      }
+    },
+    reset() {
+      this.categoryList.forEach((obj) => {
+        this.$set(obj, 'show', false)
+      })
+    },
+    custom() {
+      const list = []
+      this.categoryList.forEach((item) => {
+        if (item.show === true) {
+          list.push(item.name)
+        }
+      })
       const params = {
         fieldCode: 'trademark_portfolio',
-        fieldValue: [this.categoryList[index].code],
+        fieldValue: list,
         matchType: 'MATCH_TYPE_MULTI',
       }
+      if (list.length > 1) {
+        this.title = '多选'
+      } else {
+        console.log(list)
+        this.title = list[0]
+      }
+      this.$refs.item.toggle()
       this.$emit('activeItem', params, 'Csategory')
     },
   },
@@ -48,7 +88,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+::v-deep .sp-popup {
+  display: flex;
+  flex-direction: column;
+}
 .box {
+  flex: 1;
+  overflow-y: auto;
   padding: 56px 28px;
   display: flex;
   flex-wrap: wrap;
@@ -65,6 +111,42 @@ export default {
   .active {
     background: rgb(236, 241, 254);
     color: #4974f5;
+  }
+}
+.filter-footer {
+  display: flex;
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid #f4f4f4;
+  height: 159px;
+  box-sizing: border-box;
+  padding: 31px 40px 32px 0;
+  font-size: 0px;
+
+  & > div:nth-child(1) {
+    text-align: center;
+    padding: 0px 44px;
+    .filter-footer-rest-icon {
+      padding: 10px 0;
+    }
+    .filter-footer-rest-text {
+      color: #1a1a1a;
+      letter-spacing: 0;
+      font-size: 24px;
+      line-height: 24px;
+    }
+  }
+  & > div:nth-child(2) {
+    flex: 1;
+    background: #4974f5;
+    border-radius: 8px;
+    font-family: PingFangSC-Medium;
+    font-size: 32px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 96px;
+    height: 96px;
+    cursor: pointer;
   }
 }
 </style>
