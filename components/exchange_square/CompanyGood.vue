@@ -2,11 +2,11 @@
   <div class="goods-list">
     <div v-for="(item, i) of list" :key="i" class="box">
       <div class="name">
-        <div class="address">{{ item.address }}</div>
+        <div class="address">{{ item.registration_area }}</div>
         <div class="title">{{ item.name }}</div>
       </div>
       <div class="tag">
-        <div v-for="(tagItem, tagIndex) of item.tag" :key="tagIndex">
+        <div v-for="(tagItem, tagIndex) of item.salesGoodsTags" :key="tagIndex">
           {{ tagItem }}
         </div>
       </div>
@@ -23,51 +23,51 @@
       <div v-show="active === 0" class="foot">
         <div class="list">
           <p>经营时间</p>
-          <p>{{ item.time }}</p>
+          <p>{{ item.business_age_limit || '-' }}</p>
         </div>
         <div class="list">
           <p>纳税类型</p>
-          <p>{{ item.type }}</p>
+          <p>{{ item.taxpayer_type || '-' }}</p>
         </div>
         <div class="list">
           <p>注册资本</p>
-          <p>{{ item.capital }}</p>
+          <p>{{ item.registered_capital || '-' }}</p>
         </div>
         <div class="list">
           <p>所属行业</p>
-          <p>{{ item.industry }}</p>
+          <p>{{ item.company_industry || '-' }}</p>
         </div>
       </div>
       <div v-show="active === 2" class="foot">
         <div class="list">
           <p>行业</p>
-          <p>{{ item.time }}</p>
+          <p>{{ item.company_industry }}</p>
         </div>
         <div class="list">
           <p>申请日期</p>
-          <p>{{ item.type }}</p>
+          <p>{{ item.date_of_application }}</p>
         </div>
         <div class="list">
           <p>有效期至</p>
-          <p>{{ item.capital }}</p>
+          <p>{{ item.validity_of_certificate }}</p>
         </div>
         <div class="list">
           <p>专利状态</p>
-          <p>{{ item.industry }}</p>
+          <p>{{ item.patent_status }}</p>
         </div>
       </div>
-      <div v-show="active === 3" class="foot">
+      <div v-show="active === 3" cdalass="foot">
         <div class="list">
           <p>转让方式</p>
           <p>{{ item.time }}</p>
         </div>
         <div class="list">
           <p>到期日期</p>
-          <p>{{ item.type }}</p>
+          <p>{{ item.expire_date }}</p>
         </div>
         <div class="list">
           <p>注册资本</p>
-          <p>{{ item.capital }}</p>
+          <p>{{ item.registered_capital }}</p>
         </div>
         <div class="list">
           <p>安全许可证</p>

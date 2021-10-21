@@ -95,44 +95,7 @@ export default {
   },
   data() {
     return {
-      list: [
-        {
-          name: '大庆****建筑装饰工程有限责任公司',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****建',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-        {
-          name: '大庆****',
-          address: '黑龙江',
-          tag: ['安全交易', '1对1服务'],
-          price: '123321',
-          time: '五年以上',
-          type: '小规模纳税',
-          capital: '500万以上',
-          industry: '电子贸易',
-          img: 'https://cdn.shupian.cn/1633671933000_eba8e1ec-2d40-4c90-9602-19dc5543bfef.jpg',
-          slogan: '餐饮｜已下证',
-        },
-      ], // 商品数据
+      list: [], // 商品数据
       active: 0,
       offsetTop: 0,
       isFixed: false,
@@ -150,7 +113,7 @@ export default {
       classCode: '',
       activeCode: '',
       num: 1,
-      classList: [{ name: '推荐' }],
+      classList: [],
       typeList: [],
       typeName: {
         0: '公司',
@@ -190,14 +153,57 @@ export default {
           limit: 10,
           needTypes: 1,
           searchKey: '',
-          start: this.pageNum,
+          start: this.pageNumber,
           statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
         })
         .then((res) => {
           if (res.code === 200) {
-            console.log(res.data.goods.records)
-            this.list = res.data.goods.records
-            // if (this.pageNum === 1) {
+            if (this.pageNumber === 1) {
+              this.list = res.data.goods?.records || []
+            } else {
+              res.data.goods.records.forEach((ele) => {
+                this.productList.push(ele)
+              })
+            }
+            this.list.forEach((item) => {
+              item.fieldList.forEach((ele) => {
+                // 注册区域
+                if (ele.fieldCode === 'registration_area')
+                  item.registration_area = ele.fieldValue
+                // 实缴资本
+                if (ele.fieldCode === 'paid_in_capital')
+                  item.paid_in_capital = ele.fieldValue
+                // 经营时间
+                if (ele.fieldCode === 'business_age_limit')
+                  item.business_age_limit = ele.fieldValue
+                // 纳税类型
+                if (ele.fieldCode === 'taxpayer_type')
+                  item.taxpayer_type = ele.fieldValue
+                // 注册资本
+                if (ele.fieldCode === 'registered_capital')
+                  item.registered_capital = ele.fieldValue
+                // 所属行业
+                if (ele.fieldCode === 'company_industry')
+                  item.company_industry = ele.fieldValue
+                // 申请日期
+                if (ele.fieldCode === 'date_of_application')
+                  item.date_of_application = ele.fieldValue
+                // 到期日期
+                if (ele.fieldCode === 'expire_date')
+                  item.expire_date = ele.fieldValue
+                // 专利状态
+                if (ele.fieldCode === 'patent_status')
+                  item.patent_status = ele.fieldValue
+                // 专利到期
+                if (ele.fieldCode === 'validity_of_certificate')
+                  item.validity_of_certificate = ele.fieldValue
+                // 专利类型
+                if (ele.fieldCode === 'patent_type')
+                  item.patent_type = ele.fieldValue
+              })
+            })
+            this.pageNumber++
+            // if (this.pageNumber === 1) {
             //   res.data.filters.forEach((item, index) => {
             //     if (item.name === '状态') {
             //       this.stateList = item.children
@@ -220,10 +226,11 @@ export default {
             // if (res.data.goodes.records.length < 10) {
             //   this.finished = true
             // }
-            // this.pageNum++
+            // this.pageNumber++
           } else {
             this.finished = true
           }
+          this.$xToast.hideLoading()
         })
         .catch((err) => {
           console.log(err)
@@ -270,11 +277,13 @@ export default {
       this.onLoad()
     },
     onLoad() {
+      console.log(111)
       // // 异步更新数据
       if (this.pageNumber === 1) {
-        // this.list = []
+        this.list = []
       }
       this.selectTab()
+      this.getProductList()
     },
     jumpLink(url) {
       this.$parent.jumpLink(url)

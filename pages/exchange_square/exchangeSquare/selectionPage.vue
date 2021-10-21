@@ -43,6 +43,7 @@ import DefaultImg from '@/components/common/DefaultImg.vue'
 import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
 import headerSearch from '@/components/common/head/headerSearch.vue'
+import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
     CompanyGood,
@@ -118,11 +119,115 @@ export default {
       if (this.active === 2) {
         this.companyList = ['Classify', 'Industry', 'Price', 'State', 'Sortord']
       }
+      this.typeChange()
     },
+  },
+  created() {
+    this.getType()
   },
   methods: {
     onLoad() {
-      this.finished = true
+      // this.finished = true
+    },
+    typeChange() {
+      this.typeList.forEach((element) => {
+        if (element.name === this.typeName[this.active]) {
+          this.classCode = element
+          // this.params.classCode = this.classCode.ext4
+          // this.params.dictCode = this.classCode.code
+          this.getProductList()
+        }
+      })
+    },
+    getProductList() {
+      if (this.finished) return
+      this.$axios
+        .post(newSpreadApi.product_list, {
+          classCode: this.classCode.ext4,
+          dictCode: this.classCode.code,
+          fieldList: [],
+          limit: 10,
+          needTypes: 1,
+          searchKey: '',
+          start: this.pageNum,
+          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            // console.log(res.data.goods.records)
+            this.list = res.data.goods?.records || []
+            this.list.forEach((item) => {
+              item.fieldList.forEach((ele) => {
+                // 注册区域
+                if (ele.fieldCode === 'registration_area')
+                  item.registration_area = ele.fieldValue
+                // 实缴资本
+                if (ele.fieldCode === 'paid_in_capital')
+                  item.paid_in_capital = ele.fieldValue
+                // 经营时间
+                if (ele.fieldCode === 'business_age_limit')
+                  item.business_age_limit = ele.fieldValue
+                // 纳税类型
+                if (ele.fieldCode === 'taxpayer_type')
+                  item.taxpayer_type = ele.fieldValue
+                // 注册资本
+                if (ele.fieldCode === 'registered_capital')
+                  item.registered_capital = ele.fieldValue
+                // 所属行业
+                if (ele.fieldCode === 'company_industry')
+                  item.company_industry = ele.fieldValue
+              })
+            })
+            // if (this.pageNum === 1) {
+            //   res.data.filters.forEach((item, index) => {
+            //     if (item.name === '状态') {
+            //       this.stateList = item.children
+            //     } else if (item.name === '行业') {
+            //       this.classList = item.children
+            //     } else if (item.name === '价格') {
+            //       this.priceList = item.children
+            //     } else if (item.name === '类型') {
+            //       this.typeList = item.children
+            //     } else if (item.name === '排序') {
+            //       this.sortList = item.children
+            //     }
+            //   })
+            //   this.productList = res.data.goods.records
+            // } else {
+            //   res.data.goods.records.forEach((ele) => {
+            //     this.productList.push(ele)
+            //   })
+            // }
+            // if (res.data.goodes.records.length < 10) {
+            //   this.finished = true
+            // }
+            // this.pageNum++
+          } else {
+            this.finished = true
+          }
+          this.$xToast.hideLoading()
+        })
+        .catch((err) => {
+          console.log(err)
+          this.finished = true
+        })
+    },
+    getType() {
+      this.$axios
+        .get(newSpreadApi.type_list, {
+          params: {
+            code: 'CONDITION-JY',
+          },
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            this.typeList = res.data
+            this.typeChange()
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     search(value) {
       console.log(25555)
