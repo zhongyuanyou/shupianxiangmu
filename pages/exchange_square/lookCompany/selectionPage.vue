@@ -1,7 +1,7 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch />
+    <headerSearch @searchValue="search" />
     <!-- 筛选 -->
     <CompanyMenu :list="['Industry', 'Region', 'Price', 'More', 'Sortord']" />
     <div class="lable-list">
