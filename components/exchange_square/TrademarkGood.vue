@@ -74,7 +74,6 @@ export default {
       return price(data)
     },
     jump(item) {
-      console.log(item.classCode)
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
