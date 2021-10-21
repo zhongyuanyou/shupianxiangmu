@@ -22,8 +22,10 @@
       </div>
       <div class="price-box">
         <div class="price">
-          <div class="num">{{ product.referencePrice }}</div>
-          <div class="unit">元</div>
+          <div class="num">{{ setPrice(product.referencePrice) }}</div>
+          <div class="unit">
+            {{ product.referencePrice > 9999 ? '万' : '元' }}
+          </div>
         </div>
         <div class="details" @click="jump">
           <div class="btn">查看详情</div>
@@ -99,6 +101,7 @@
 </template>
 
 <script>
+import { price } from '@/utils/spread/exchange-square'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   name: 'ProductCard',
@@ -115,6 +118,9 @@ export default {
     },
   },
   methods: {
+    setPrice(item) {
+      return price(item)
+    },
     jump() {
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')

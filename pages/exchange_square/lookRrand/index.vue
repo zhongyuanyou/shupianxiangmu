@@ -41,7 +41,6 @@
         </div>
       </div>
       <div class="resource">全部资源</div>
-      <!-- <sp-sticky :offset-top="56" @scroll="scrollEvent"> -->
       <CompanyMenu
         ref="CompanyMenu"
         :active="1"
@@ -51,15 +50,6 @@
         @getList="getList"
         @scrollEvent="scrollEvent"
       />
-      <!-- </sp-sticky> -->
-      <!-- <sp-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <TrademarkGood :list="list" />
-      </sp-list> -->
     </div>
   </div>
 </template>
@@ -69,7 +59,6 @@ import { Swipe, SwipeItem, List, Sticky } from '@chipspc/vant-dgg'
 import Header from '@/components/exchange_square/common/Header.vue'
 import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
-// import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 export default {
   components: {
     CompanyMenu,
@@ -79,7 +68,6 @@ export default {
     [SwipeItem.name]: SwipeItem,
     Header,
     NavBar,
-    // TrademarkGood,
   },
   async asyncData({ $axios }) {},
   data() {

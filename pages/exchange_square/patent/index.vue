@@ -20,6 +20,7 @@
     <!-- 广告区 E -->
     <!-- 资源列表 S -->
     <ProductList @scroll="scroll"></ProductList>
+
     <!-- 资源列表 E -->
     <!-- <BtnPlanner :planner="pagePlanner"></BtnPlanner> -->
   </div>
@@ -33,6 +34,7 @@ import Banner from '@/components/exchange_square/common/Banner.vue'
 import NavList from '@/components/exchange_square/common/NavList.vue'
 import Advertising from '@/components/exchange_square/common/Advertising.vue'
 import ProductList from '@/components/exchange_square/patent/ProductList.vue'
+
 // import BtnPlanner from '@/components/spread/common/BtnPlanner.vue'
 export default {
   components: {

@@ -172,7 +172,12 @@ export default {
       }
       // 价格
       if (name === 'Price') {
-        this.params = Object.assign(data)
+        this.params.platformPriceEnd = data.platformPriceEnd
+        this.params.platformPriceStart = data.platformPriceStart
+      }
+      // 排序
+      if (name === 'Sortrd') {
+        this.params.sortBy = data.sortBy
       }
       this.pageNum = 1
       this.getProductList()
