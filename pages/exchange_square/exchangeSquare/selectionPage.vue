@@ -99,19 +99,7 @@ export default {
       finished: false,
       companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,
-<<<<<<< HEAD
-      tabList: ['公司交易', '商标交易', '专利交易', '资质并购'],
-      typeList: [],
-      typeName: {
-        0: '公司',
-        1: '商标',
-        2: '专利',
-        3: '资质',
-      },
-      classCode: {},
-=======
       tabList: ['公司交易', '商标交易', '专利交易'],
->>>>>>> 5cbc21c7b560879b8cd1f2dfeeebabd857f04b33
     }
   },
   watch: {
