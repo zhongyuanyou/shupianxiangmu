@@ -27,14 +27,20 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <TrademarkGood :list="productList" />
-      <DefaultImg v-if="productList.length === 0"></DefaultImg>
+      <TrademarkGood v-show="active == 1" :list="productList" />
+      <CompanyGood
+        v-show="active == 0 || active == 2 || active == 3"
+        :list="list"
+        :active="0"
+      />
+      <DefaultImg v-if="productList && productList.length === 0"></DefaultImg>
     </sp-list>
   </div>
 </template>
 
 <script>
 import { DropdownMenu, DropdownItem, List, Sticky } from '@chipspc/vant-dgg'
+import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
 import { newSpreadApi } from '@/api/spread'
 import { isArray } from '~/utils/check-types'
 import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
@@ -56,6 +62,7 @@ export default {
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
     TrademarkGood,
+    CompanyGood,
   },
   props: {
     list: {
@@ -77,9 +84,10 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       finished: false,
       isAlive: true,
+      isEmpty: false,
       classCode: '',
       pageNum: 1,
       stateList: [], // 状态
@@ -116,20 +124,48 @@ export default {
   },
 
   methods: {
+    // 触底加载
     onLoad() {
       console.log('触底了.........')
       if (this.finished && !this.loading) return
+      if (this.isEmpty) {
+        this.loading = false
+        return
+      }
       if (this.pageNum !== 1) {
         this.getProductList()
       }
     },
     // 筛选
     getFilterHandle(data, name) {
-      if (name === 'Csategory') {
-        this.params.fieldList.push(data)
-        this.getProductList()
-      }
       console.log(data, name)
+      // 分类 ， 组合
+      if (name === 'Csategory' || name === 'Combination') {
+        if (this.params.fieldList.length === 0) {
+          this.params.fieldList.push(data)
+        }
+        if (data.fieldValue[0] === '不限') {
+          this.params.fieldList.forEach((t, index) => {
+            if (t.fieldCode === data.fieldCode) {
+              this.params.fieldList.splice(index, 1)
+            }
+          })
+        } else {
+          this.params.fieldList.forEach((t, index) => {
+            if (t.fieldCode === data.fieldCode) {
+              this.params.fieldList[index] = data
+            } else {
+              this.params.fieldList.push(data)
+            }
+          })
+        }
+      }
+      // 价格
+      if (name === 'Price') {
+        this.params = Object.assign(data)
+      }
+      this.pageNum = 1
+      this.getProductList()
     },
     scrollEvent(e) {
       this.$emit('scrollEvent', e.isFixed)
@@ -156,24 +192,25 @@ export default {
               }
             })
             this.getProductList()
+            this.loading = false
           }
         })
         .catch((err) => {
           console.log(err)
         })
     },
+
     // 获取产品列表
     getProductList() {
+      this.loading = true
       this.params.classCode = this.classCode.ext4
       this.params.dictCode = this.classCode.code
       this.params.start = this.pageNum
-      this.loading = true
       this.$axios.post(newSpreadApi.product_list, this.params).then((res) => {
         if (res.code === 200) {
           this.loading = false
           if (this.pageNum === 1) {
             res.data.filters.forEach((item, index) => {
-              console.log(1212313123)
               if (item.name === '状态') {
                 this.stateList = item.children
               } else if (item.name === '行业') {
@@ -195,15 +232,27 @@ export default {
                 this.combinationList = item.children
               }
             })
-            this.productList = res.data.goods?.records || []
+            this.productList = res.data.goods.records
+          } else if (this.params.dictCode === 'CONDITION-JY-SB') {
+            this.productList = this.getWaterfall(
+              this.productList,
+              res.data.goods.records
+            )
           } else {
             this.productList.push(...(res.data.goods?.records || []))
           }
-          this.pageNum++
-          if ((res.data.goodes?.records || []).length < 10) {
+          const list = res.data.goods.records || []
+          // 为空时
+          if (list.length === 0) {
+            this.isEmpty = true
+          }
+          // 数据不满足10条时
+          if (list.length !== 0 && list.length < 10) {
             this.loading = false
             this.finished = true
           }
+          // 自加
+          this.pageNum++
         } else {
           this.loading = false
           this.finished = true
@@ -243,6 +292,25 @@ export default {
         }
       })
       this.regionList = list
+    },
+    // 商标数据转换
+    getWaterfall(originalData = [], newData = []) {
+      // originalData 原有数据 newData 需要新增数据
+      let data
+      const odata = originalData
+      const ndata = newData
+      if (originalData.length === 0) {
+        data = ndata
+      } else {
+        const olength = odata.length
+        const nlength = ndata.length
+        const obefore = odata.slice(0, Math.ceil(olength / 2))
+        const oafter = odata.slice(Math.ceil(olength / 2), olength)
+        const nbefore = ndata.slice(0, Math.ceil(nlength / 2))
+        const nafter = ndata.slice(Math.ceil(nlength / 2), nlength)
+        data = [...obefore, ...nbefore, ...oafter, ...nafter]
+      }
+      return data
     },
   },
 }

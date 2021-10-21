@@ -70,17 +70,17 @@ export default {
         }
       })
       const params = {
-        fieldCode: 'trademark_portfolio',
+        fieldCode: 'trademark_type',
         fieldValue: list,
         matchType: 'MATCH_TYPE_MULTI',
       }
       if (list.length > 1) {
         this.title = '多选'
       } else {
-        console.log(list)
         this.title = list[0]
       }
       this.$refs.item.toggle()
+      console.log(params)
       this.$emit('activeItem', params, 'Csategory')
     },
   },
