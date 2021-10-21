@@ -1,5 +1,5 @@
 // 路由跳转
-function jump(data) {
+export function jump(data) {
   //   如果配置参数为mpass或者app_mpass页面路由取安卓链接里的配置内容
   if (
     data &&
@@ -16,11 +16,11 @@ function jump(data) {
   }
 }
 // 经额处理
-function price(data) {
-  let price
+export const price = (data) => {
   if (Number(data) > 9999) {
-    price = (price / 10000).toFixed(2)
+    return Math.floor((data / 10000) * 100) / 100
+  } else {
+    return data
   }
-  return price
 }
-export default { jump, price }
+// export default { jump, price }

@@ -16,7 +16,7 @@
           {{ getState(item.fieldList, 'trademark_status') }}
         </div>
         <div class="price">
-          {{ price(item.referencePrice)
+          {{ setPrice(item.referencePrice)
           }}<span>{{ item.referencePrice > 9999 ? '万' : '元' }}</span>
         </div>
       </div>
@@ -66,6 +66,11 @@ export default {
 
         return '[' + str + ']'
       }
+    },
+  },
+  methods: {
+    setPrice(data) {
+      return price(data)
     },
   },
 }
