@@ -1,6 +1,6 @@
 <template>
   <div class="trademark-good">
-    <div v-for="(item, i) in list" :key="i" class="list">
+    <div v-for="(item, i) in list" :key="i" class="list" @click="jump(item)">
       <img :src="item.goodsImg" alt="" class="photo" />
       <div class="title">
         <div class="name">{{ classify(item.fieldList) }}{{ item.name }}</div>
@@ -27,6 +27,7 @@
 <script>
 import { isArray } from '~/utils/check-types'
 import { price } from '@/utils/spread/exchange-square'
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
     list: {
@@ -71,6 +72,14 @@ export default {
   methods: {
     setPrice(data) {
       return price(data)
+    },
+    jump(item) {
+      console.log(item.classCode)
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${item.classCode}&productId=${item.id}`
     },
   },
 }

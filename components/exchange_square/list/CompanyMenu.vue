@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dropdown-list">
     <sp-sticky :offset-top="top" @scroll="scrollEvent">
       <sp-dropdown-menu v-if="isAlive" :style="{ background: background }">
         <component

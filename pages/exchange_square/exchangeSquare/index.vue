@@ -30,7 +30,6 @@ import GoodsList from '@/components/exchange_square/common/GoodsList.vue'
 import { newSpreadApi } from '@/api/spread'
 import jump from '@/mixins/jump'
 export default {
-  mixins: [jump],
   components: {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
@@ -40,6 +39,7 @@ export default {
     ScrollNav,
     GoodsList,
   },
+  mixins: [jump],
   data() {
     return {
       // 头部banner
