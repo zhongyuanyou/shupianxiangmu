@@ -121,13 +121,7 @@ export default {
     setPrice(item) {
       return price(item)
     },
-    jump() {
-      let base = ''
-      DGG_SERVER_ENV === 'development' && (base = 'd')
-      DGG_SERVER_ENV === 'release' && (base = 't')
-      DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.product.classCode}&productId=${this.product.id}`
-    },
+    jump() {},
   },
 }
 </script>

@@ -153,6 +153,13 @@ export default {
           this.params.fieldList.push(data)
         }
       }
+      // 地区
+      if (name === 'Region') {
+        this.params.fieldList = this.params.fieldList.filter(
+          (item) => item.fieldCode !== 'registration_area'
+        )
+        if (data.fieldValue.length) this.params.fieldList.push(data)
+      }
       // 价格
       if (name === 'Price') {
         this.params.platformPriceEnd = data.platformPriceEnd

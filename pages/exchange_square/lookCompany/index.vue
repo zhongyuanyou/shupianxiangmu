@@ -12,30 +12,16 @@
     <div style="overflow-y: auto">
       <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
         <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
-          <img :src="item.bg" alt="" />
+          <img :src="item.materialUrl" alt="" @click="jump(item)" />
         </sp-swipe-item>
       </sp-swipe>
       <!-- 金刚区 -->
-      <NavBar />
+      <NavList :nav-list="scrollNavList" />
       <!-- 服务 -->
-      <div class="serve">
-        <div class="left">
-          <img
-            src="https://cdn.shupian.cn/sp-pt/wap/9ehu61fsmhc0000.jpeg"
-            alt=""
-          />
-        </div>
-        <div class="right">
-          <img
-            src="https://cdn.shupian.cn/sp-pt/wap/578ax9goa0g0000.jpeg"
-            alt=""
-          />
-          <img
-            src="https://cdn.shupian.cn/sp-pt/wap/7cb5095apvs0000.jpeg"
-            alt=""
-          />
-        </div>
-      </div>
+      <Advertising
+        :ad-lf-list="adLfList[0]"
+        :ad-rg-list="adRgList"
+      ></Advertising>
       <div class="resource">全部资源</div>
       <sp-sticky :offset-top="56" @scroll="scrollEvent">
         <CompanyMenu
@@ -52,9 +38,12 @@
 <script>
 import { Swipe, SwipeItem, List, Sticky } from '@chipspc/vant-dgg'
 // import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 import Header from '@/components/exchange_square/common/Header.vue'
-import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
+import NavList from '@/components/exchange_square/common/NavList.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
+import Advertising from '@/components/exchange_square/common/Advertising.vue'
+import jump from '@/mixins/jump'
 export default {
   components: {
     CompanyMenu,
@@ -63,10 +52,11 @@ export default {
     [List.name]: List,
     [SwipeItem.name]: SwipeItem,
     Header,
-    NavBar,
+    NavList,
+    Advertising,
     // CompanyGood,
   },
-  async asyncData({ $axios }) {},
+  mixins: [jump],
   data() {
     return {
       // 头部banner
@@ -85,6 +75,8 @@ export default {
       finished: false,
       // 滚动金刚区
       scrollNavList: [],
+      adLfList: [],
+      adRgList: [],
       // 商品列表导航
       goodNavlist: [
         { name: '公司交易', code: 1, type: 1 },
@@ -102,6 +94,7 @@ export default {
   created() {},
   mounted() {
     window.addEventListener('scroll', this.windowScroll)
+    this.getList()
   },
   methods: {
     onLoad() {
@@ -110,6 +103,43 @@ export default {
     },
     scrollEvent(e) {
       this.isFixed = e.isFixed
+    },
+    getList() {
+      this.$axios
+        .get(newSpreadApi.list, {
+          params: {
+            locationCodes: 'zgsCpq1,zgsCpq2,gsBanner',
+            navCodes: 'navTygcZgs',
+            code: 'jy-sb',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.code === 200) {
+            this.scrollNavList = res.data.navs.navTygcZgs.reverse()
+
+            res.data.adList.forEach((item) => {
+              if (item.locationCode === 'zgsCpq1') {
+                this.adLfList = this.getData(item.sortMaterialList)
+                console.log(this.adLfList)
+              } else if (item.locationCode === 'zgsCpq2') {
+                this.adRgList = this.getData(item.sortMaterialList)
+              } else if (item.locationCode === 'gsBanner') {
+                this.swipeList = this.getData(item.sortMaterialList)
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getData(item) {
+      const arr = []
+      item.forEach((ele) => {
+        arr.push(ele.materialList[0])
+      })
+      return arr
     },
   },
 }
