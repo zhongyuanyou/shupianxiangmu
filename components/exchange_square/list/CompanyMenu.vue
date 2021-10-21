@@ -195,12 +195,12 @@ export default {
                 this.combinationList = item.children
               }
             })
-            this.productList = res.data.goods.records
+            this.productList = res.data.goods?.records || []
           } else {
-            this.productList.push(...res.data.goods.records)
+            this.productList.push(...(res.data.goods?.records || []))
           }
           this.pageNum++
-          if (res.data.goodes.records.length < 10) {
+          if ((res.data.goodes?.records || []).length < 10) {
             this.loading = false
             this.finished = true
           }
