@@ -42,17 +42,9 @@
           :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
           :style="{ background: isFixed ? '#ffffff' : 'none' }"
           :top="48"
+          :active="0"
         />
       </sp-sticky>
-
-      <!-- <sp-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <CompanyGood :list="list" :active="0" />
-      </sp-list> -->
     </div>
   </div>
 </template>
