@@ -8,7 +8,12 @@
       />
     </div>
     <div class="ad-right">
-      <div v-for="(item, index) in adRgList" :key="index" class="img-box">
+      <div
+        v-for="(item, index) in adRgList"
+        :key="index"
+        class="img-box"
+        @click="jump(item)"
+      >
         <img
           :src="`${
             item && item.materialUrl
@@ -20,7 +25,9 @@
 </template>
 
 <script>
+import jump from '@/mixins/jump'
 export default {
+  mixins: [jump],
   name: 'Advertising',
   props: {
     adLfList: {

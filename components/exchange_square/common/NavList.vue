@@ -2,7 +2,7 @@
   <div class="nav-list">
     <div class="list">
       <div v-for="(item, index) in navList" :key="index" class="navs">
-        <div class="nav" @click="jump(item)">
+        <div class="nav" @click="jumpUrl(item)">
           <div class="icon">
             <img
               :src="`${item.navigationImageUrl}?x-oss-process=image/resize,m_fill,w_104,h_72,limit_0`"
@@ -17,8 +17,10 @@
 </template>
 
 <script>
+import jump from '@/mixins/jump'
 export default {
   name: 'NavList',
+  mixins: [jump],
   props: {
     navList: {
       type: Array,
@@ -28,9 +30,9 @@ export default {
     },
   },
   methods: {
-    jump(item) {
-      this.$emit('jump', item)
-      console.log(11, item)
+    jumpUrl(item) {
+      this.$emit('jumpUrl', item)
+      this.jump(item)
     },
   },
 }

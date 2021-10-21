@@ -24,11 +24,13 @@
 
 <script>
 import { Swipe, SwipeItem } from '@chipspc/vant-dgg'
+import jump from '@/mixins/jump'
 export default {
   components: {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
   },
+  mixins: [jump],
   props: {
     bannerList: {
       type: Array,
@@ -37,11 +39,7 @@ export default {
       },
     },
   },
-  methods: {
-    jump(item) {
-      console.log(item)
-    },
-  },
+  methods: {},
 }
 </script>
 
