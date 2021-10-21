@@ -317,7 +317,6 @@ export default {
     },
     // 处理地区
     setRegionList(list) {
-      console.log(list)
       list.forEach((item) => {
         item.text = item.name
         item.id = item.code

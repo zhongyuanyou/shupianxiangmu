@@ -42,12 +42,9 @@
       </div>
       <div class="resource">全部资源</div>
       <CompanyMenu
-        ref="CompanyMenu"
         :active="1"
         :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
-        :on-load="onLoad"
         :background="isFixed ? '#ffffff' : 'none'"
-        @getList="getList"
         @scrollEvent="scrollEvent"
       />
     </div>

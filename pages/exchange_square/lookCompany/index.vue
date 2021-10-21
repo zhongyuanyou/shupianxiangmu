@@ -23,14 +23,12 @@
         :ad-rg-list="adRgList"
       ></Advertising>
       <div class="resource">全部资源</div>
-      <sp-sticky :offset-top="56" @scroll="scrollEvent">
-        <CompanyMenu
-          :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
-          :style="{ background: isFixed ? '#ffffff' : 'none' }"
-          :top="48"
-          :active="0"
-        />
-      </sp-sticky>
+      <CompanyMenu
+        :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
+        :background="isFixed ? '#ffffff' : 'none'"
+        :active="0"
+        @scrollEvent="scrollEvent"
+      />
     </div>
   </div>
 </template>
@@ -102,7 +100,7 @@ export default {
       this.loading = false
     },
     scrollEvent(e) {
-      this.isFixed = e.isFixed
+      this.isFixed = e
     },
     getList() {
       this.$axios
