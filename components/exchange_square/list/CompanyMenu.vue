@@ -30,7 +30,7 @@
       <TrademarkGood v-show="active == 1" :list="productList" />
       <CompanyGood
         v-show="active == 0 || active == 2 || active == 3"
-        :list="list"
+        :list="productList"
         :active="0"
       />
       <DefaultImg v-if="productList && productList.length === 0"></DefaultImg>
@@ -138,8 +138,8 @@ export default {
     },
     // 筛选
     getFilterHandle(data, name) {
-      console.log(data, name)
       // 分类 ， 组合
+      console.log(data, name)
       if (name === 'Csategory' || name === 'Combination') {
         if (this.params.fieldList.length === 0) {
           this.params.fieldList.push(data)
@@ -158,6 +158,16 @@ export default {
               this.params.fieldList.push(data)
             }
           })
+        }
+      }
+      // 行业
+      if (name === 'Industry') {
+        this.params.fieldList = this.params.fieldList.filter(
+          (item) => item.fieldCode !== 'company_industry'
+        )
+        if (data.fieldValue[0] !== '不限') {
+          console.log(111)
+          this.params.fieldList.push(data)
         }
       }
       // 价格
@@ -210,7 +220,7 @@ export default {
         if (res.code === 200) {
           this.loading = false
           if (this.pageNum === 1) {
-            res.data.filters.forEach((item, index) => {
+            ;(res.data?.filters || []).forEach((item, index) => {
               if (item.name === '状态') {
                 this.stateList = item.children
               } else if (item.name === '行业') {
@@ -232,7 +242,7 @@ export default {
                 this.combinationList = item.children
               }
             })
-            this.productList = res.data.goods.records
+            this.productList = res.data.goods.records || []
           } else if (this.params.dictCode === 'CONDITION-JY-SB') {
             this.productList = this.getWaterfall(
               this.productList,
@@ -251,6 +261,43 @@ export default {
             this.loading = false
             this.finished = true
           }
+          this.productList.forEach((item) => {
+            item.fieldList.forEach((ele) => {
+              // 注册区域
+              if (ele.fieldCode === 'registration_area')
+                item.registration_area = ele.fieldValue
+              // 实缴资本
+              if (ele.fieldCode === 'paid_in_capital')
+                item.paid_in_capital = ele.fieldValue
+              // 经营时间
+              if (ele.fieldCode === 'business_age_limit')
+                item.business_age_limit = ele.fieldValue
+              // 纳税类型
+              if (ele.fieldCode === 'taxpayer_type')
+                item.taxpayer_type = ele.fieldValue
+              // 注册资本
+              if (ele.fieldCode === 'registered_capital')
+                item.registered_capital = ele.fieldValue
+              // 所属行业
+              if (ele.fieldCode === 'company_industry')
+                item.company_industry = ele.fieldValue
+              // 申请日期
+              if (ele.fieldCode === 'date_of_application')
+                item.date_of_application = ele.fieldValue
+              // 到期日期
+              if (ele.fieldCode === 'expire_date')
+                item.expire_date = ele.fieldValue
+              // 专利状态
+              if (ele.fieldCode === 'patent_status')
+                item.patent_status = ele.fieldValue
+              // 专利到期
+              if (ele.fieldCode === 'validity_of_certificate')
+                item.validity_of_certificate = ele.fieldValue
+              // 专利类型
+              if (ele.fieldCode === 'patent_type')
+                item.patent_type = ele.fieldValue
+            })
+          })
           // 自加
           this.pageNum++
         } else {

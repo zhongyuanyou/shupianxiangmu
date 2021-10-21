@@ -37,7 +37,12 @@ export default {
       this.active = index
       this.title = this.classList[index].name
       this.$refs.item.toggle()
-      this.$emit('activeItem', this.classList[index], 'Industry')
+      const fileds = {
+        fieldCode: 'company_industry',
+        fieldValue: [this.title],
+        matchType: 'MATCH_TYPE_MULTI',
+      }
+      this.$emit('activeItem', fileds, 'Industry')
     },
   },
 }
