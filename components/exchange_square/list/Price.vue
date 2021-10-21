@@ -40,7 +40,11 @@ export default {
         platformPriceEnd: this.priceList[index].ext2.split('-')[1] * 1,
         platformPriceStart: this.priceList[index].ext2.split('-')[0] * 1,
       }
-      this.$emit('activeItem', params, 'Price')
+      if (this.priceList[index].name === '不限') {
+        this.$emit('activeItem', {}, 'Price')
+      } else {
+        this.$emit('activeItem', params, 'Price')
+      }
     },
   },
 }
