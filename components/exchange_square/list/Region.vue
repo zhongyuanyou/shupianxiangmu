@@ -90,7 +90,6 @@ export default {
   watch: {
     regionList: {
       handler() {
-        console.error(this.regionList)
         this.cityList = this.regionList[0].children
         this.areaList = this.regionList[0].children[0].children
       },

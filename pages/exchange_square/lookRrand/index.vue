@@ -12,42 +12,27 @@
     <div style="overflow-y: auto">
       <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
         <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
-          <img :src="item.bg" alt="" />
+          <img :src="item.materialUrl" alt="" @click="jump(item)" />
         </sp-swipe-item>
       </sp-swipe>
       <!-- 金刚区 -->
-      <NavBar />
+      <NavBar :nav-list="scrollNavList" />
       <!-- 服务 -->
       <div class="serve">
         <div class="right">
           <img
-            src="https://cdn.shupian.cn/sp-pt/wap/svu3tgeoxkw000.png"
-            alt=""
-          />
-          <img
-            src="https://cdn.shupian.cn/sp-pt/wap/4ajal03lzak0000.png"
-            alt=""
-          />
-        </div>
-        <div class="right">
-          <img
-            src="https://cdn.shupian.cn/sp-pt/wap/x6zgzayg4ww000.png"
-            alt=""
-          />
-          <img
-            src="https://cdn.shupian.cn/sp-pt/wap/1962ldbiukjk000.png"
-            alt=""
+            v-for="(img, index) in adLfList"
+            :key="index"
+            :src="img.materialUrl"
+            @click="jump(img)"
           />
         </div>
       </div>
       <div class="resource">全部资源</div>
       <CompanyMenu
-        ref="CompanyMenu"
         :active="1"
         :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
-        :on-load="onLoad"
         :background="isFixed ? '#ffffff' : 'none'"
-        @getList="getList"
         @scrollEvent="scrollEvent"
       />
     </div>
@@ -56,9 +41,11 @@
 
 <script>
 import { Swipe, SwipeItem, List, Sticky } from '@chipspc/vant-dgg'
+import { plannerApi, newSpreadApi } from '@/api/spread'
 import Header from '@/components/exchange_square/common/Header.vue'
-import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
+import NavBar from '@/components/exchange_square/common/NavList.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
+import jump from '@/mixins/jump'
 export default {
   components: {
     CompanyMenu,
@@ -69,7 +56,7 @@ export default {
     Header,
     NavBar,
   },
-  async asyncData({ $axios }) {},
+  mixins: [jump],
   data() {
     return {
       // 头部banner
@@ -88,80 +75,7 @@ export default {
       loading: false,
       finished: false,
       // 滚动金刚区
-      scrollNavList: [
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-        {
-          name: '我要出售',
-          imageUrl:
-            'https://cdn.shupian.cn/sp-pt/wap/images/6ml7ssha0nc0000.png',
-          size: 'small',
-        },
-      ],
+      scrollNavList: [],
       // 商品列表导航
       goodNavlist: [
         { name: '公司交易', code: 1, type: 1 },
@@ -171,6 +85,9 @@ export default {
       ],
       list: [], // 商品数据
     }
+  },
+  mounted() {
+    this.getAdList()
   },
   methods: {
     onLoad() {
@@ -183,6 +100,41 @@ export default {
     getList(list) {
       console.error(list)
       this.list = list
+    },
+    getAdList() {
+      this.$axios
+        .get(newSpreadApi.list, {
+          params: {
+            locationCodes: 'zsbCpq,sbBanner',
+            navCodes: 'navTygcZsb',
+            code: 'jy-sb',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.code === 200) {
+            this.scrollNavList = res.data.navs.navTygcZsb.reverse()
+
+            res.data.adList.forEach((item) => {
+              if (item.locationCode === 'zsbCpq') {
+                this.adLfList = this.getData(item.sortMaterialList)
+                console.log(this.adLfList)
+              } else if (item.locationCode === 'sbBanner') {
+                this.swipeList = this.getData(item.sortMaterialList)
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    getData(item) {
+      const arr = []
+      item.forEach((ele) => {
+        arr.push(ele.materialList[0])
+      })
+      return arr
     },
   },
 }
@@ -213,25 +165,24 @@ export default {
   }
   .serve {
     padding: 0 20px;
-    display: flex;
-    .left,
-    img {
-      width: 355px;
-      height: 290px;
-    }
     .right {
-      margin-left: 10px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
       img {
-        width: 335px;
+        width: 350px;
         height: 140px;
-        &:last-child {
-          margin-top: 10px;
-        }
+        display: block;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+      img:nth-child(2n) {
+        margin-right: 0;
       }
     }
   }
   .resource {
-    padding: 32px 20px;
+    padding: 22px 20px 32px;
     font-weight: bold;
     font-size: 32px;
     color: #222222;
