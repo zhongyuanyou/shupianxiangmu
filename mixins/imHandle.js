@@ -26,11 +26,11 @@ export default {
     uPIM(planner, sessionParams, msgParams) {
       const { mchUserId, userName, type, msgParam, templateIds } = planner
       const tepMsgParams = {
-        title: msgParam.title, // 客户名称
-        area: msgParam.area, // 客户地址
-        intention: msgParam.intention, // 客户意向
-        productName: msgParam.productName, // 产品名称
-        forwardAbstract: msgParam.forwardAbstract, // 摘要信息，可与显示内容保持一致
+        title: msgParam && msgParam.title, // 客户名称
+        area: msgParam && msgParam.area, // 客户地址
+        intention: msgParam && msgParam.intention, // 客户意向
+        productName: msgParam && msgParam.productName, // 产品名称
+        forwardAbstract: msgParam && msgParam.forwardAbstract, // 摘要信息，可与显示内容保持一致
       }
       // 如果当前页面在app中，则调用原生IM的方法
       if (this.isInApp) {

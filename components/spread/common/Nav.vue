@@ -14,18 +14,8 @@
           :data-name="`${item.name}`"
         >
           <div v-if="item.label">{{ item.label }}</div>
-          <a @click="onHerf(item.url, item.code, item.type)">
-            <img
-              v-if="item.size === 'small'"
-              v-lazy="item.imageUrl + $ossImgSet(48, 48)"
-              alt=""
-            />
-            <img
-              v-else-if="item.size === 'big'"
-              v-lazy="item.imageUrl + $ossImgSet(104, 72)"
-              :style="{ width: '52px', height: '36px' }"
-              alt=""
-            />
+          <a @click="jump(item)">
+            <img v-lazy="item.navigationImageUrl + $ossImgSet(48, 48)" alt="" />
             <span
               :style="{
                 fontWeight: `${item.size === 'small' ? '400' : 'bold'}`,
@@ -46,8 +36,9 @@
 <script>
 import { mapState } from 'vuex'
 import imHandle from '@/mixins/imHandle'
+import jump from '@/mixins/jump'
 export default {
-  mixins: [imHandle],
+  mixins: [imHandle, jump],
   props: {
     // 滚动导航
     rollNav: {
@@ -116,61 +107,6 @@ export default {
       const scrollLeft = this.$refs.refScroll.scrollLeft // 容器滚动距离
       const scroLeft = Math.floor((scrollLeft / this.canScrollWidth) * 100) // 计算导航容器滚动百分比
       this.scroLeft = scroLeft / 2
-    },
-    onHerf(url, code, type) {
-      // if (url) {
-      //   if (url.indexOf('http') > -1) {
-      //     window.location.href = url
-      //     // return
-      //   }
-      // }
-      if (url && type !== 'tool' && this.isInApp) {
-        if (url.indexOf('http') !== -1) {
-          const iOSRouter = {
-            path: 'CPSCustomer:CPSCustomer/CPSCAllCategoryResultViewController///push/animation',
-            parameter: {
-              type: 1,
-              classCode: code,
-            },
-          }
-          const androidRouter = {
-            path: '/reform/flutter/classify_result',
-            parameter: {
-              trade: false,
-              classCode: code,
-            },
-          }
-          const iOSRouterStr = JSON.stringify(iOSRouter)
-          const androidRouterStr = JSON.stringify(androidRouter)
-          this.$appFn.dggJumpRoute(
-            {
-              iOSRouter: iOSRouterStr,
-              androidRouter: androidRouterStr,
-            },
-            (res) => {
-              console.log(res)
-            }
-          )
-        } else {
-          window.location.href = url
-        }
-      } else if (url === '/') {
-        const planner = {
-          mchUserId: this.planner.id,
-          userName: this.planner.name,
-          type: this.planner.type,
-          msgParam: {},
-          templateIds: '',
-        }
-        if (this.isInApp) {
-          this.uPIM(planner)
-        } else {
-          this.uPIM(planner)
-        }
-      } else {
-        window.location.href = url
-      }
-      //   this.$parent.jumpLink(url, description, execution)
     },
     jumpHandle(item) {
       let url = ''
