@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { DropdownItem } from '@chipspc/vant-dgg'
 export default {
   components: {
@@ -49,7 +50,7 @@ export default {
     return {
       title: '更多',
       params: {
-        list: [],
+        emitData: {},
         nameLengthEnd: '',
         nameLengthStart: '',
       },
@@ -73,7 +74,89 @@ export default {
         list.push(this.moreList[index].children[item])
       })
       console.log(list)
-      // this.$refs.item.toggle()
+      const emitData = {
+        fieldCode: '',
+        fieldValue: {},
+        matchType: 'MATCH_TYPE_MULTI',
+      }
+      list.forEach((item) => {
+        // 字符长度
+        if (item.pcode === 'CONDITION-JY-SB-GD-ZFCD') {
+          if (item.ext2.indexOf('-') > -1) {
+            this.params.nameLengthStart = item.ext2.split('-')[0]
+            if (item.ext2.split('-')[1]) {
+              this.params.nameLengthEnd = item.ext2.split('-')[1]
+            }
+          } else {
+            this.params.nameLengthStart = item.ext2
+            this.params.nameLengthEnd = item.ext2
+          }
+        }
+        // 注册年限
+        if (item.pcode === 'CONDITION-JY-SB-GD-ZCNX') {
+          if (item.id !== 'all' && item.name !== '不限') {
+            emitData.fieldCode = item.ext1
+            const timeArr = moment().format('YYYY-MM-DD').split('-')
+            console.log(timeArr)
+            if (item.name.indexOf('-') > -1) {
+              const a = parseInt(item.name.split('-')[0])
+              const b = parseInt(item.name.split('-')[1])
+              const one = moment([
+                parseInt(timeArr[0]) - a,
+                timeArr[1],
+                timeArr[2],
+              ]).unix()
+              let two = ''
+              if (b) {
+                two = moment([
+                  parseInt(timeArr[0]) - b,
+                  timeArr[1],
+                  timeArr[2],
+                ]).unix()
+              }
+              emitData.fieldValue = {
+                start: two,
+                end: one,
+              }
+            } else if (
+              item.name.indexOf('以下') > -1 ||
+              item.name.indexOf('以内') > -1
+            ) {
+              // 年以下
+              const a = parseInt(item.name)
+              const one = moment([
+                parseInt(timeArr[0]) - a,
+                timeArr[1],
+                timeArr[2],
+              ]).unix()
+              const two = moment().unix()
+              emitData.fieldValue = {
+                start: one,
+                end: two,
+              }
+            } else if (item.name.indexOf('以上') > -1) {
+              // 年以上
+              const a = parseInt(item.name)
+              const one = moment([
+                parseInt(timeArr[0]) - a,
+                timeArr[1],
+                timeArr[2],
+              ]).unix()
+              const two = moment().unix()
+              emitData.fieldValue = {
+                // start: one,
+                end: one,
+              }
+            }
+            emitData.matchType = 'MATCH_TYPE_RANGE'
+          } else {
+            emitData.fieldCode = item.ext1
+          }
+        }
+      })
+      this.params.emitData = emitData
+      this.$refs.item.toggle()
+      this.$emit('activeItem', this.params, 'More')
     },
   },
 }

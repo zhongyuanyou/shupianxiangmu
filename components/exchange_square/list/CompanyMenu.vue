@@ -140,24 +140,17 @@ export default {
     getFilterHandle(data, name) {
       // 分类 ， 组合
       console.log(data, name)
-      if (name === 'Csategory' || name === 'Combination') {
-        if (this.params.fieldList.length === 0) {
+      if (
+        name === 'Csategory' ||
+        name === 'Combination' ||
+        name === 'Industry'
+      ) {
+        // 清除
+        this.params.fieldList = this.params.fieldList.filter(
+          (item) => item.fieldCode !== data.fieldCode
+        )
+        if (data.fieldValue[0] !== '不限') {
           this.params.fieldList.push(data)
-        }
-        if (data.fieldValue[0] === '不限') {
-          this.params.fieldList.forEach((t, index) => {
-            if (t.fieldCode === data.fieldCode) {
-              this.params.fieldList.splice(index, 1)
-            }
-          })
-        } else {
-          this.params.fieldList.forEach((t, index) => {
-            if (t.fieldCode === data.fieldCode) {
-              this.params.fieldList[index] = data
-            } else {
-              this.params.fieldList.push(data)
-            }
-          })
         }
       }
       // 地区
@@ -167,22 +160,26 @@ export default {
         )
         if (data.fieldValue.length) this.params.fieldList.push(data)
       }
-      // 行业
-      if (name === 'Industry') {
-        this.params.fieldList = this.params.fieldList.filter(
-          (item) => item.fieldCode !== 'company_industry'
-        )
-        if (data.fieldValue[0] !== '不限') {
-          this.params.fieldList.push(data)
-        }
-      }
       // 价格
       if (name === 'Price') {
         this.params.platformPriceEnd = data.platformPriceEnd
         this.params.platformPriceStart = data.platformPriceStart
       }
+      // 更多
+      if (name === 'More') {
+        // 字符
+        this.params.nameLengthStart = data.nameLengthEnd
+        this.params.nameLengthStart = data.nameLengthStart
+        this.params.fieldList = this.params.fieldList.filter(
+          (item) => item.fieldCode !== data.emitData.fieldCode
+        )
+        if (data.emitData.fieldValue.end) {
+          this.params.fieldList.push(data.emitData)
+        }
+      }
       // 排序
       if (name === 'Sortrd') {
+        // 排序
         this.params.sortBy = data.sortBy
       }
       this.pageNum = 1
@@ -224,6 +221,7 @@ export default {
     // 获取产品列表
     getProductList() {
       this.loading = true
+      this.isEmpty = false
       this.params.classCode = this.classCode.ext4
       this.params.dictCode = this.classCode.code
       this.params.start = this.pageNum
