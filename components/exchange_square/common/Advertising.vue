@@ -27,8 +27,8 @@
 <script>
 import jump from '@/mixins/jump'
 export default {
-  mixins: [jump],
   name: 'Advertising',
+  mixins: [jump],
   props: {
     adLfList: {
       type: Object,
