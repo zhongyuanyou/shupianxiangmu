@@ -36,6 +36,7 @@ export default {
       this.active = index
       this.title = this.priceList[index].name
       this.$refs.item.toggle()
+      this.$emit('activeItem', this.classList[index], 'Industry')
     },
   },
 }
