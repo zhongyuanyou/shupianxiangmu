@@ -113,7 +113,7 @@ export default {
       classCode: '',
       activeCode: '',
       num: 1,
-      classList: [{ name: '推荐' }],
+      classList: [],
       typeList: [],
       typeName: {
         0: '公司',
@@ -277,11 +277,13 @@ export default {
       this.onLoad()
     },
     onLoad() {
+      console.log(111)
       // // 异步更新数据
       if (this.pageNumber === 1) {
-        // this.list = []
+        this.list = []
       }
       this.selectTab()
+      this.getProductList()
     },
     jumpLink(url) {
       this.$parent.jumpLink(url)
