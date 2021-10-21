@@ -1,7 +1,7 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch @searchValue="search" />
+    <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
     <!-- 筛选 -->
     <CompanyMenu
       :top="44"

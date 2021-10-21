@@ -73,12 +73,13 @@ export default {
       this.active.forEach((item, index) => {
         list.push(this.moreList[index].children[item])
       })
-      console.log(list)
+      const emitArr = []
       const emitData = {
         fieldCode: '',
         fieldValue: {},
         matchType: 'MATCH_TYPE_MULTI',
       }
+      console.log(list)
       list.forEach((item) => {
         // 字符长度
         if (item.pcode === 'CONDITION-JY-SB-GD-ZFCD') {
@@ -93,7 +94,7 @@ export default {
           }
         }
         // 注册年限
-        if (item.pcode === 'CONDITION-JY-SB-GD-ZCNX') {
+        if (['CONDITION-JY-SB-GD-ZCNX', 'JY-GS-GD-JYSJ'].includes(item.pcode)) {
           if (item.id !== 'all' && item.name !== '不限') {
             emitData.fieldCode = item.ext1
             const timeArr = moment().format('YYYY-MM-DD').split('-')
@@ -152,9 +153,34 @@ export default {
           } else {
             emitData.fieldCode = item.ext1
           }
+          emitArr.push(emitData)
+        }
+        if (
+          [
+            'JY-GS-GD-FDZC',
+            'JY-GS-GD-NSLX',
+            'JY-GS-GD-QYLX',
+            'JY-GS-GD-SFKH',
+          ].includes(item.pcode)
+        ) {
+          emitArr.push({
+            fieldCode: item.ext1,
+            fieldValue: [item.ext2],
+            matchType: 'MATCH_TYPE_MULTI',
+          })
+        }
+        if (['JY-GS-GD-ZCZB'].includes(item.pcode)) {
+          emitArr.push({
+            fieldCode: 'taxpayer_type',
+            fieldValue: {
+              start: item.ext2.split('-')[0],
+              end: item.ext2.split('-')[1],
+            },
+            matchType: 'MATCH_TYPE_RANGE',
+          })
         }
       })
-      this.params.emitData = emitData
+      this.params.emitArr = emitArr
       this.$refs.item.toggle()
       this.$emit('activeItem', this.params, 'More')
     },

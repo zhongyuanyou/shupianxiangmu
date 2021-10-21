@@ -1,7 +1,7 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch />
+    <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
     <!-- tabs -->
     <!-- <sp-sticky offset-top="44"> -->
     <div class="tabs">
@@ -15,7 +15,7 @@
         </sp-tab>
       </sp-tabs>
     </div>
-    <CompanyMenu :top="93" :active="active" :list="companyList" />
+    <CompanyMenu ref="menu" :top="93" :active="active" :list="companyList" />
     <!-- </sp-sticky> -->
   </div>
 </template>
@@ -63,6 +63,16 @@ export default {
       }
       if (this.active === 2) {
         this.companyList = ['State', 'Industry', 'Classify', 'Price', 'Sortord']
+      }
+      this.$refs.menu.params = {
+        classCode: '',
+        dictCode: '',
+        fieldList: [],
+        limit: 10,
+        needTypes: 1,
+        searchKey: '',
+        start: 1,
+        statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
       }
     },
   },

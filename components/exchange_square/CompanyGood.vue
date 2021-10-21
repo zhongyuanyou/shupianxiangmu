@@ -2,7 +2,9 @@
   <div class="goods-list">
     <div v-for="(item, i) of list" :key="i" class="box">
       <div class="name">
-        <div class="address">{{ item.registration_area }}</div>
+        <div v-if="item.registration_area" class="address">
+          {{ item.registration_area.split(',')[0] }}
+        </div>
         <div class="title">{{ item.name }}</div>
       </div>
       <div class="tag">
@@ -16,7 +18,7 @@
           ><span>元</span>
         </div>
         <div class="right">
-          <span>查看详情</span>
+          <span @click="jump(item)">查看详情</span>
           <my-icon name="list_ic_next" size="0.22rem" color="#4974f5"></my-icon>
         </div>
       </div>
@@ -79,6 +81,7 @@
 </template>
 
 <script>
+const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   props: {
     active: {
@@ -90,6 +93,16 @@ export default {
       default: () => {
         return []
       },
+    },
+  },
+  methods: {
+    jump(item) {
+      console.log(item)
+      let base = ''
+      DGG_SERVER_ENV === 'development' && (base = 'd')
+      DGG_SERVER_ENV === 'release' && (base = 't')
+      DGG_SERVER_ENV === 'production' && (base = '')
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${item.classCode}&productId=${item.id}`
     },
   },
 }
