@@ -76,6 +76,7 @@ export default {
       finished: false,
       // 滚动金刚区
       scrollNavList: [],
+      adLfList: [],
       // 商品列表导航
       goodNavlist: [
         { name: '公司交易', code: 1, type: 1 },

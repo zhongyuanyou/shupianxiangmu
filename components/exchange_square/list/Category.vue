@@ -2,7 +2,7 @@
   <sp-dropdown-item ref="item" :title="title">
     <div class="box">
       <div
-        v-for="(item, index) in categoryList"
+        v-for="(item, index) in categoryObj.children"
         :key="index"
         :class="item.show ? 'item active' : 'item'"
         @click="activeItem(item)"
@@ -29,9 +29,9 @@ export default {
     [DropdownItem.name]: DropdownItem,
   },
   props: {
-    categoryList: {
-      type: Array,
-      default: () => [],
+    categoryObj: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -44,13 +44,13 @@ export default {
     activeItem(item) {
       this.$set(item, 'show', !item.show)
       if (item.name === '不限') {
-        this.categoryList.forEach((obj) => {
+        this.categoryObj.children.forEach((obj) => {
           if (obj.name !== '不限') {
             this.$set(obj, 'show', false)
           }
         })
       } else {
-        this.categoryList.forEach((obj) => {
+        this.categoryObj.children.forEach((obj) => {
           if (obj.name === '不限') {
             this.$set(obj, 'show', false)
           }
@@ -58,19 +58,19 @@ export default {
       }
     },
     reset() {
-      this.categoryList.forEach((obj) => {
+      this.categoryObj.children.forEach((obj) => {
         this.$set(obj, 'show', false)
       })
     },
     custom() {
       const list = []
-      this.categoryList.forEach((item) => {
+      this.categoryObj.children.forEach((item) => {
         if (item.show === true) {
           list.push(item.name)
         }
       })
       const params = {
-        fieldCode: 'trademark_type',
+        fieldCode: this.categoryObj.ext1,
         fieldValue: list,
         matchType: 'MATCH_TYPE_MULTI',
       }
