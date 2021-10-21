@@ -139,6 +139,7 @@ export default {
     // 筛选
     getFilterHandle(data, name) {
       console.log(data, name)
+      this.productList = []
       // 分类 ， 组合
       if (name === 'Csategory' || name === 'Combination') {
         if (this.params.fieldList.length === 0) {
@@ -162,7 +163,12 @@ export default {
       }
       // 价格
       if (name === 'Price') {
-        this.params = Object.assign(data)
+        this.params.platformPriceEnd = data.platformPriceEnd
+        this.params.platformPriceStart = data.platformPriceStart
+      }
+      // 排序
+      if (name === 'Sortrd') {
+        this.params.sortBy = data.sortBy
       }
       this.pageNum = 1
       this.getProductList()
