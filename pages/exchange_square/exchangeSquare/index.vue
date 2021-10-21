@@ -137,65 +137,8 @@ export default {
     // 将接受的state混合进组件局部计算属性
     // 监听接受的state值
   },
-  created() {
-    // this.getProductList()
-  },
   mounted() {},
-  methods: {
-    // getProductList() {
-    //   if (this.finished) return
-    //   this.$axios
-    //     .post(newSpreadApi.product_list, {
-    //       classCode: this.classCode.ext4,
-    //       dictCode: this.classCode.code,
-    //       fieldList: [],
-    //       limit: 10,
-    //       needTypes: 1,
-    //       searchKey: '',
-    //       start: this.pageNum,
-    //       statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
-    //     })
-    //     .then((res) => {
-    //       if (res.code === 200) {
-    //         if (this.pageNum === 1) {
-    //           // res.data.filters.forEach((item, index) => {
-    //           //   if (item.name === '类别') {
-    //           //     this.typeList = item.children
-    //           //   } else if (item.name === '等级') {
-    //           //     this.levelList = item.children
-    //           //   } else if (item.name === '价格') {
-    //           //     this.prictList = item.children
-    //           //   } else if (item.name === '更多') {
-    //           //     this.securityList = item.children[0].children
-    //           //     this.areaList = item.children[1].children
-    //           //   } else if (item.name === '排序') {
-    //           //     this.sortList = item.children
-    //           //   }
-    //           // })
-    //           this.productList = res.data.goodes.records
-    //         } else {
-    //           res.data.goodes.records.forEach((ele) => {
-    //             this.productList.push(ele)
-    //           })
-    //         }
-    //         // this.productList.forEach((item) => {
-    //         //   item.fieldList.forEach((ele) => {
-    //         //   })
-    //         // })
-    //         if (res.data.goodes.records.length < 10) {
-    //           this.finished = true
-    //         }
-    //         this.pageNum++
-    //       } else {
-    //         this.finished = true
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.log(err)
-    //       this.finished = true
-    //     })
-    // },
-  },
+  methods: {},
 }
 </script>
 

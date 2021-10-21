@@ -15,41 +15,17 @@
         <CompanyMenu :active="active" :list="companyList" />
       </sp-tabs>
     </div>
-    <div class="lable-list">
-      <sp-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <div v-if="list.length !== 0">
-          <TrademarkGood v-show="active == 1" :list="list"></TrademarkGood>
-          <CompanyGood
-            v-show="active == 0 || active == 2 || active == 3"
-            :list="list"
-            :active="active"
-          ></CompanyGood>
-        </div>
-        <DefaultImg v-else />
-      </sp-list>
-    </div>
   </div>
 </template>
 
 <script>
 import { Tab, Tabs, List } from '@chipspc/vant-dgg'
-import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
-import DefaultImg from '@/components/common/DefaultImg.vue'
-import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
 import headerSearch from '@/components/common/head/headerSearch.vue'
 import { newSpreadApi } from '@/api/spread'
 export default {
   components: {
-    CompanyGood,
     headerSearch,
-    DefaultImg,
-    TrademarkGood,
     [Tab.name]: Tab,
     [List.name]: List,
     [Tabs.name]: Tabs,

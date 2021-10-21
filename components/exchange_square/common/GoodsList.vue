@@ -202,7 +202,11 @@ export default {
                   item.patent_type = ele.fieldValue
               })
             })
+            if (res.data.goods.records.length < 10) {
+              this.finished = true
+            }
             this.pageNumber++
+            this.loading = false
             // if (this.pageNumber === 1) {
             //   res.data.filters.forEach((item, index) => {
             //     if (item.name === '状态') {
@@ -239,6 +243,7 @@ export default {
     },
     scroll(e) {
       this.$nextTick(() => {
+        console.log(e.isFixed)
         this.isFixed = e.isFixed
       })
     },
@@ -277,20 +282,20 @@ export default {
       this.onLoad()
     },
     onLoad() {
-      console.log(111)
       // // 异步更新数据
+      console.log(111)
       if (this.pageNumber === 1) {
         this.list = []
       }
-      this.selectTab()
-      this.getProductList()
+      // this.selectTab()
+      // this.getProductList()
     },
     jumpLink(url) {
       this.$parent.jumpLink(url)
     },
-    selectTab() {
-      //   this.list = this.list.concat(this.list)
-    },
+    // selectTab() {
+    //   this.list = this.list.concat(this.list)
+    // },
   },
 }
 </script>

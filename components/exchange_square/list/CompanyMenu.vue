@@ -245,7 +245,7 @@ export default {
               res.data.goods.records
             )
           } else {
-            this.productList.push(...res.data.goods.records)
+            this.productList.push(...(res.data.goods?.records || []))
           }
           const list = res.data.goods.records || []
           // 为空时

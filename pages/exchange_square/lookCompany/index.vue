@@ -6,6 +6,7 @@
         placeholder="请输入关键词"
         :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
         :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
+        path="/exchange_square/lookCompany/selectionPage"
       />
     </sp-sticky>
     <div style="overflow-y: auto">
@@ -40,24 +41,17 @@
         <CompanyMenu
           :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
           :style="{ background: isFixed ? '#ffffff' : 'none' }"
+          :top="48"
+          :active="0"
         />
       </sp-sticky>
-
-      <sp-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
-        <CompanyGood :list="list" :active="0" />
-      </sp-list>
     </div>
   </div>
 </template>
 
 <script>
 import { Swipe, SwipeItem, List, Sticky } from '@chipspc/vant-dgg'
-import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
+// import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
 import Header from '@/components/exchange_square/common/Header.vue'
 import NavBar from '@/components/spread/promotionHome/internetHomePage/NavBar.vue'
 import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
@@ -70,7 +64,7 @@ export default {
     [SwipeItem.name]: SwipeItem,
     Header,
     NavBar,
-    CompanyGood,
+    // CompanyGood,
   },
   async asyncData({ $axios }) {},
   data() {
@@ -258,6 +252,7 @@ export default {
   methods: {
     onLoad() {
       this.finished = true
+      this.loading = false
     },
     scrollEvent(e) {
       this.isFixed = e.isFixed
