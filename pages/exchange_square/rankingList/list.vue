@@ -207,6 +207,9 @@ export default {
                   'patent_status'
                 ) // 专利状态
                 item.typeValue = this.getField(item.fieldList, 'patent_type') // 专利类别
+                if (this.cardType === 'patent') {
+                  item.name = item.originalDataVO.name
+                }
               })
 
               this.productList = res.data.list
@@ -219,6 +222,7 @@ export default {
                 item.goodsImg =
                   image ||
                   'https://cdn.shupian.cn/1621252424000_%E5%95%86%E6%A0%87%403x.png'
+                item.name = item.originalDataVO.name
               })
               //   this.productList = res.data.list
               this.productListPatent = this.getWaterfall(

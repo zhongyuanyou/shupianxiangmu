@@ -137,7 +137,11 @@
         :finished-text="productList.length ? '没有更多了' : ''"
         @load="onLoad"
       >
-        <sp-skeleton :loading="productList.length === 0" title :row="8">
+        <sp-skeleton
+          :loading="productList.length === 0 && loading"
+          title
+          :row="8"
+        >
           <div>
             <ProductCard
               v-for="(pro, proIdx) in productList"
@@ -147,7 +151,10 @@
             ></ProductCard>
           </div>
         </sp-skeleton>
-        <div v-if="productList.length === 0 && !loading" class="default-img">
+        <div
+          v-if="productList.length === 0 && !loading && finished"
+          class="default-img"
+        >
           <DefaultImg info="没有相关内容"></DefaultImg>
         </div>
       </sp-list>
