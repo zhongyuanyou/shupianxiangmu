@@ -146,7 +146,7 @@ export default {
       display: flex;
       align-items: center;
       .title-tag {
-        width: 95px;
+        padding: 0 8px;
         height: 32px;
         background: #f2f5ff;
         border: 1px solid #4974f5;

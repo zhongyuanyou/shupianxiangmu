@@ -174,7 +174,7 @@ export default {
       default: true,
     },
     fiexdHeight: {
-      type: Number,
+      type: [String, Number],
       default: 56,
     },
     searchVal: {
