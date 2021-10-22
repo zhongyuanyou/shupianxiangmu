@@ -33,6 +33,7 @@
         :active="1"
         :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
+        info="暂无搜索结果"
         @scrollEvent="scrollEvent"
       />
     </div>

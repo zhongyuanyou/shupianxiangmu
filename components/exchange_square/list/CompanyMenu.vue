@@ -83,7 +83,7 @@ export default {
     },
     info: {
       type: String,
-      default: '',
+      default: '没有找到相关结果，换个关键词试试吧',
     },
     background: {
       type: String,
@@ -286,6 +286,7 @@ export default {
           // 为空时
           if (list.length === 0) {
             this.isEmpty = true
+            this.finished = false
           }
           // 数据不满足10条时
           if (list.length !== 0 && list.length < 10) {
