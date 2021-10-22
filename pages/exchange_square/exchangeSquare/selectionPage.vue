@@ -92,7 +92,6 @@ export default {
   overflow: hidden;
 }
 .tabs {
-  margin-top: 10px;
   ::v-deep .sp-tabs__line {
     width: 28px;
     height: 6px;

@@ -4,6 +4,7 @@
     <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
     <!-- 筛选 -->
     <CompanyMenu
+      ref="menu"
       :top="44"
       :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
     />

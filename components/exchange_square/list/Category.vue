@@ -6,13 +6,12 @@
   >
     <div class="box">
       <div
-        v-for="(item, index) in list(categoryObj.children)"
+        v-for="(item, index) in list"
         :key="index"
         :class="item.show ? 'item active' : 'item'"
         @click="activeItem(item)"
       >
-        {{ item.show }}
-        <!-- {{ item.name }} -->
+        {{ item.name }}
       </div>
     </div>
     <div class="filter-footer">
@@ -43,40 +42,43 @@ export default {
     return {
       title: '分类',
       active: '',
+      list: [],
     }
   },
-  computed: {
-    list() {
-      return (list) => {
-        return []
-      }
+  watch: {
+    'categoryObj.children'(value) {
+      if (this.list && this.list.length) return
+      value.forEach((item) => (item.show = false))
+      this.list = JSON.parse(JSON.stringify(value))
     },
   },
   methods: {
     activeItem(item) {
-      this.$set(item, 'show', !item.show)
+      console.log(item)
+      // this.$set(item, 'show', !item.show)
+      item.show = !item.show
       if (item.name === '不限') {
-        this.categoryObj.children.forEach((obj) => {
+        this.list.forEach((obj) => {
           if (obj.name !== '不限') {
-            this.$set(obj, 'show', false)
+            obj.show = false
           }
         })
       } else {
-        this.categoryObj.children.forEach((obj) => {
+        this.list.forEach((obj) => {
           if (obj.name === '不限') {
-            this.$set(obj, 'show', false)
+            obj.show = false
           }
         })
       }
     },
     reset() {
-      this.categoryObj.children.forEach((obj) => {
+      this.list.forEach((obj) => {
         this.$set(obj, 'show', false)
       })
     },
     custom() {
       const list = []
-      this.categoryObj.children.forEach((item) => {
+      this.list.forEach((item) => {
         if (item.show === true) {
           list.push(item.name)
         }
@@ -86,10 +88,11 @@ export default {
         fieldValue: list,
         matchType: 'MATCH_TYPE_MULTI',
       }
+      console.log(list)
       if (list.length > 1) {
         this.title = '多选'
       } else {
-        this.title = list[0]
+        this.title = list[0] || '分类'
       }
       this.$refs.item.toggle()
       console.log(params)
@@ -123,6 +126,7 @@ export default {
   .active {
     background: rgb(236, 241, 254);
     color: #4974f5;
+    font-weight: bold;
   }
 }
 .filter-footer {

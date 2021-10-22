@@ -54,7 +54,6 @@ export default {
 .nav-bar {
   width: 100%;
   height: 192px;
-  padding: 0 20px;
   .nav-content {
     width: 100%;
     height: 192px;
@@ -65,6 +64,7 @@ export default {
       display: none;
     }
     .content {
+      padding: 0 20px;
       width: 100%;
       display: flex;
       align-items: center;

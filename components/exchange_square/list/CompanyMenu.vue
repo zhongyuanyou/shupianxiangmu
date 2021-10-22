@@ -37,7 +37,7 @@
         :list="productList"
         :active="0"
       />
-      <DefaultImg v-if="productList && productList.length === 0"></DefaultImg>
+      <DefaultImg v-if="!loading && productList.length === 0"></DefaultImg>
     </sp-list>
   </div>
 </template>
@@ -123,8 +123,11 @@ export default {
       this.isAlive = false
       this.$nextTick(() => (this.isAlive = true))
     },
+    // 筛选
     'params.searchKey': {
       handler() {
+        this.pageNum = 1
+        this.productList = []
         this.getProductList()
       },
     },
@@ -249,7 +252,7 @@ export default {
                 this.classObj = item
               } else if (item.name === '价格') {
                 this.priceList = item.children
-              } else if (item.name === '类型') {
+              } else if (item.name === '组合') {
                 this.typeList = item.children
               } else if (item.name === '排序') {
                 this.sortList = item.children

@@ -1,5 +1,9 @@
 <template>
-  <sp-dropdown-item ref="item" :title="title">
+  <sp-dropdown-item
+    ref="item"
+    :title="title"
+    :title-class="title === '状态' ? '' : 'sp-dropdown-menu__title--active'"
+  >
     <div class="sorting-list">
       <div
         v-for="(stateItem, stateIdx) in stateList"
