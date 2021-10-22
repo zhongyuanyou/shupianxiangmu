@@ -165,7 +165,7 @@ import {
 } from '@chipspc/vant-dgg'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
 import { newSpreadApi } from '@/api/spread'
-// import DefaultImg from '@/components/common/DefaultImg.vue'
+import DefaultImg from '@/components/common/DefaultImg.vue'
 export default {
   name: 'PatentProductList',
   components: {
@@ -174,7 +174,7 @@ export default {
     [DropdownItem.name]: DropdownItem,
     [List.name]: List,
     [Sticky.name]: Sticky,
-    // DefaultImg,
+    DefaultImg,
     [Skeleton.name]: Skeleton,
   },
   props: {
