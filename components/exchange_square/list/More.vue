@@ -155,6 +155,7 @@ export default {
             emitData.matchType = 'MATCH_TYPE_RANGE'
           } else {
             emitData.fieldCode = item.ext1
+            emitData.fieldValue = null
           }
           emitArr.push(emitData)
         }
@@ -168,17 +169,19 @@ export default {
         ) {
           emitArr.push({
             fieldCode: item.ext1,
-            fieldValue: [item.ext2],
+            fieldValue: item.ext2 ? [item.ext2] : null,
             matchType: 'MATCH_TYPE_MULTI',
           })
         }
         if (['JY-GS-GD-ZCZB'].includes(item.pcode)) {
           emitArr.push({
             fieldCode: 'taxpayer_type',
-            fieldValue: {
-              start: item.ext2.split('-')[0],
-              end: item.ext2.split('-')[1],
-            },
+            fieldValue: item.ext2
+              ? {
+                  start: item.ext2.split('-')[0],
+                  end: item.ext2.split('-')[1],
+                }
+              : null,
             matchType: 'MATCH_TYPE_RANGE',
           })
         }

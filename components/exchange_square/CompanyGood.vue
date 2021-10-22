@@ -2,9 +2,16 @@
   <div class="goods-list">
     <div v-for="(item, i) of list" :key="i" class="box">
       <div class="name">
-        <div v-if="item.registration_area" class="address">
-          {{ item.registration_area.split(',')[0] }}
-        </div>
+        <template v-if="active === 0">
+          <div v-if="item.registration_area" class="address">
+            {{ item.registration_area.split(',')[0] }}
+          </div>
+        </template>
+        <template v-if="active === 2">
+          <div v-if="item.patent_type" class="address">
+            {{ item.patent_type }}
+          </div>
+        </template>
         <div class="title">{{ item.name }}</div>
       </div>
       <div class="tag">
@@ -33,7 +40,7 @@
         </div>
         <div class="list">
           <p>注册资本</p>
-          <p>{{ item.registered_capital || '-' }}</p>
+          <p>{{ Number(item.registered_capital) | filterMoney }}</p>
         </div>
         <div class="list">
           <p>所属行业</p>
@@ -43,19 +50,19 @@
       <div v-show="active === 2" class="foot">
         <div class="list">
           <p>行业</p>
-          <p>{{ item.company_industry }}</p>
+          <p>{{ item.company_industry || '-' }}</p>
         </div>
         <div class="list">
           <p>申请日期</p>
-          <p>{{ item.date_of_application }}</p>
+          <p>{{ item.date_of_application || '-' }}</p>
         </div>
         <div class="list">
           <p>有效期至</p>
-          <p>{{ item.validity_of_certificate }}</p>
+          <p>{{ item.validity_of_certificate || '-' }}</p>
         </div>
         <div class="list">
           <p>专利状态</p>
-          <p>{{ item.patent_status }}</p>
+          <p>{{ item.patent_status || '-' }}</p>
         </div>
       </div>
       <div v-show="active === 3" cdalass="foot">
@@ -65,15 +72,15 @@
         </div>
         <div class="list">
           <p>到期日期</p>
-          <p>{{ item.expire_date }}</p>
+          <p>{{ item.expire_date || '-' }}</p>
         </div>
         <div class="list">
           <p>注册资本</p>
-          <p>{{ item.registered_capital }}</p>
+          <p>{{ item.registered_capital || '-' }}</p>
         </div>
         <div class="list">
           <p>安全许可证</p>
-          <p>{{ item.industry }}</p>
+          <p>{{ item.industry || '-' }}</p>
         </div>
       </div>
     </div>
@@ -83,6 +90,25 @@
 <script>
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
+  filters: {
+    filterMoney(money) {
+      if (money) {
+        if (money < 500000) {
+          return '50万以下'
+        } else if (money < 1000000) {
+          return '50-100万'
+        } else if (money < 5000000) {
+          return '100-500万'
+        } else if (money < 10000000) {
+          return '500-1000万'
+        } else {
+          return '1000万以上'
+        }
+      } else {
+        return '-'
+      }
+    },
+  },
   props: {
     active: {
       type: Number,
@@ -130,6 +156,7 @@ export default {
         background: #f2f5ff;
         border: 1px solid #4974f5;
         border-radius: 4px;
+        flex-shrink: 0;
       }
       > .title {
         font-size: 32px;
@@ -137,6 +164,9 @@ export default {
         line-height: 44px;
         font-weight: bold;
         margin-left: 8px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
     > .tag {
