@@ -1,5 +1,9 @@
 <template>
-  <sp-dropdown-item ref="item" :title="title">
+  <sp-dropdown-item
+    ref="item"
+    :title="title"
+    :title-class="title === '地区' ? '' : 'sp-dropdown-menu__title--active'"
+  >
     <div class="box">
       <sp-tree-select
         class="first"
@@ -85,13 +89,13 @@ export default {
       areaId: [], // 已选的区域
       cityId: '', // 城市id
       province: '', // 省id
+      text: '',
     }
   },
   watch: {
     regionList: {
       handler() {
-        this.cityList = this.regionList[0].children
-        this.areaList = this.regionList[0].children[0].children
+        this.cityList = this.regionList[this.provinceIndex].children
       },
     },
   },
@@ -106,6 +110,7 @@ export default {
     custom() {
       // 获取区id
       this.areaId = []
+
       this.areaList.forEach((item) => {
         if (item.show) {
           this.areaId.push(item.id)
@@ -114,9 +119,16 @@ export default {
       console.log('已选的区ID', this.areaId)
       console.log('已选的城市ID', this.cityId)
       console.log('已选的省ID', this.province)
+      if (this.areaId.length >= 2) {
+        this.title = '多选'
+      } else {
+        const text = this.areaList.find((item) => item.show)?.name
+        const cityText = this.cityList[this.cityIndex].name
+        const provinceText = this.regionList[this.provinceIndex].name
+        this.title = text || cityText || provinceText
+      }
       let ids = []
-      console.log(this.areaId[0] !== 0)
-      if (this.areaId[0] !== 0) {
+      if (this.areaId[0] !== 0 && this.areaId[0]) {
         ids = this.areaId
       } else if (this.cityId) {
         ids.push(this.cityId)
@@ -124,6 +136,10 @@ export default {
         ids.push(this.province)
       }
       this.$refs.item.toggle()
+      if (this.title === '全国') {
+        this.$emit('activeItem', {}, 'Region')
+        return
+      }
       this.$emit(
         'activeItem',
         {
@@ -149,9 +165,10 @@ export default {
       this.areaList =
         this.regionList[this.provinceIndex].children[this.cityIndex].children
       // 每次切换是清空数据
-      this.areaList.forEach((item) =>
+      this.areaList.forEach((item) => {
         item.text === '不限' ? (item.show = true) : (item.show = false)
-      )
+      })
+
       this.areaId = []
       // 城市id
       this.cityId = this.cityList[this.cityIndex].id
@@ -169,7 +186,6 @@ export default {
       } else {
         this.areaList[0].show = false
       }
-      console.log(this.areaId)
     },
   },
 }
@@ -179,7 +195,20 @@ export default {
 ::v-deep .sp-sidebar-item--select::before {
   background: none;
 }
-
+.sp-dropdown-menu__title--active {
+  color: #4974f5;
+  font-weight: bold;
+}
+::v-deep .sp-tree-select__item--active {
+  color: #4974f5;
+  font-weight: bold;
+}
+::v-deep .sp-sidebar-item--select,
+.sp-sidebar-item--select:active {
+  color: #4974f5;
+  font-weight: bold;
+  background: #ffffff !important;
+}
 .first {
   ::v-deep .sp-sidebar {
     width: 162px;

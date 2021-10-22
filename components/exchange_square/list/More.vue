@@ -1,5 +1,9 @@
 <template>
-  <sp-dropdown-item ref="item" :title="title">
+  <sp-dropdown-item
+    ref="item"
+    :title="title"
+    :title-class="title === '更多' ? '' : 'sp-dropdown-menu__title--active'"
+  >
     <div class="dropdown">
       <div class="box">
         <div v-for="(item, index) in moreList" :key="index">
@@ -12,7 +16,7 @@
               :class="
                 active[index] === key ? 'active' : active[index] ? 'item' : ''
               "
-              @click="activeItem(data, item, index, key)"
+              @click="activeItem(item, index, key)"
             >
               {{ data.name }}
             </div>
@@ -53,14 +57,15 @@ export default {
         emitData: {},
         nameLengthEnd: '',
         nameLengthStart: '',
+        name: '',
       },
       active: [],
     }
   },
   methods: {
-    activeItem(data, item, index, key) {
+    activeItem(item, index, key) {
+      this.name = item.name
       this.$set(this.active, index, key)
-      console.log(this.active)
     },
     reset() {
       this.active = Object.values(this.active).map((key) => {
@@ -79,7 +84,6 @@ export default {
         fieldValue: {},
         matchType: 'MATCH_TYPE_MULTI',
       }
-      console.log(list)
       list.forEach((item) => {
         // 字符长度
         if (item.pcode === 'CONDITION-JY-SB-GD-ZFCD') {
@@ -98,7 +102,6 @@ export default {
           if (item.id !== 'all' && item.name !== '不限') {
             emitData.fieldCode = item.ext1
             const timeArr = moment().format('YYYY-MM-DD').split('-')
-            console.log(timeArr)
             if (item.name.indexOf('-') > -1) {
               const a = parseInt(item.name.split('-')[0])
               const b = parseInt(item.name.split('-')[1])
@@ -180,6 +183,11 @@ export default {
           })
         }
       })
+      if (emitArr.length >= 2) {
+        this.title = '多选'
+      } else {
+        this.title = this.name || '更多'
+      }
       this.params.emitArr = emitArr
       this.$refs.item.toggle()
       this.$emit('activeItem', this.params, 'More')

@@ -1,7 +1,11 @@
 <template>
   <div class="dropdown-list">
     <sp-sticky :offset-top="top" @scroll="scrollEvent">
-      <sp-dropdown-menu v-if="isAlive" :style="{ background: background }">
+      <sp-dropdown-menu
+        v-if="isAlive"
+        active-color="#4974f5"
+        :style="{ background: background }"
+      >
         <component
           :is="item"
           v-for="item in list"
@@ -165,7 +169,8 @@ export default {
         this.params.fieldList = this.params.fieldList.filter(
           (item) => item.fieldCode !== 'registration_area'
         )
-        if (data.fieldValue.length) this.params.fieldList.push(data)
+        if (data.fieldValue && data.fieldValue.length)
+          this.params.fieldList.push(data)
       }
       // 价格
       if (name === 'Price') {
@@ -379,6 +384,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.sp-dropdown-menu__title--active {
+  color: #4974f5;
+  font-weight: bold;
+}
 ::v-deep .sp-dropdown-menu__title {
   max-width: 160px;
 }
