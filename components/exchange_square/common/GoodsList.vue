@@ -1,25 +1,30 @@
 <template>
-  <div class="good-list">
-    <sp-tabs
-      v-model="active"
-      class="labels"
-      :animated="false"
-      title-active-color="#222222"
-      :swipe-threshold="nav.length - 1"
-      title-inactive-color="#555555"
-      :offset-top="offsetTop"
-      :background="isFixed ? fixedColor : bgColor"
-      @scroll="scroll"
-      @click="onClick()"
-    >
-      <sp-tab v-for="(item, itemKey) of nav" :key="itemKey" :title="item.name">
-        <template #title>
-          <div class="title">
-            <span class="title_name">{{ item.name }}</span>
-            <span v-show="active === itemKey" class="title_tag"></span>
-          </div>
-        </template>
-        <sp-sticky :offset-top="56" @scroll="scroll">
+  <sp-sticky :offset-top="56" @scroll="scroll">
+    <div class="good-list">
+      <sp-tabs
+        v-model="active"
+        class="labels"
+        :animated="false"
+        title-active-color="#222222"
+        :swipe-threshold="nav.length - 1"
+        title-inactive-color="#555555"
+        :offset-top="offsetTop"
+        :background="isFixed ? fixedColor : bgColor"
+        @scroll="scroll"
+        @click="onClick()"
+      >
+        <sp-tab
+          v-for="(item, itemKey) of nav"
+          :key="itemKey"
+          :title="item.name"
+        >
+          <template #title>
+            <div class="title">
+              <span class="title_name">{{ item.name }}</span>
+              <span v-show="active === itemKey" class="title_tag"></span>
+            </div>
+          </template>
+
           <div
             v-show="classList && classList.length"
             class="labels"
@@ -33,39 +38,42 @@
                 v-for="(classItem, classIndex) in classList"
                 :key="classIndex"
                 class="lab"
-                :style="{ color: classActive === classIndex ? '#4974F5' : '' }"
+                :style="{
+                  color: classActive === classIndex ? '#4974F5' : '',
+                }"
                 @click="chooesClass(classIndex)"
               >
                 {{ classItem.name }}
               </div>
             </div>
           </div>
-        </sp-sticky>
-        <div class="list-box">
-          <sp-list
-            v-model="loading"
-            :finished="finished"
-            :error.sync="error"
-            finished-text="没有更多了"
-            error-text=""
-            @load="onLoad"
-          >
-            <template #loading>
-              <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
-                <sp-loading size="12px" />加载中...
-              </div>
-            </template>
-            <TrademarkGood v-show="active == 1" :list="list"></TrademarkGood>
-            <CompanyGood
-              v-show="active == 0 || active == 2 || active == 3"
-              :list="list"
-              :active="active"
-            ></CompanyGood>
-          </sp-list>
-        </div>
-      </sp-tab>
-    </sp-tabs>
-  </div>
+
+          <div class="list-box">
+            <sp-list
+              v-model="loading"
+              :finished="finished"
+              :error.sync="error"
+              finished-text="没有更多了"
+              error-text=""
+              @load="onLoad"
+            >
+              <template #loading>
+                <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
+                  <sp-loading size="12px" />加载中...
+                </div>
+              </template>
+              <TrademarkGood v-show="active == 1" :list="list"></TrademarkGood>
+              <CompanyGood
+                v-show="active == 0 || active == 2 || active == 3"
+                :list="list"
+                :active="active"
+              ></CompanyGood>
+            </sp-list>
+          </div>
+        </sp-tab>
+      </sp-tabs>
+    </div>
+  </sp-sticky>
 </template>
 
 <script>
@@ -143,6 +151,7 @@ export default {
           console.log(err)
         })
     },
+    scrollEvent(e) {},
     getProductList() {
       if (this.finished) return
       this.$axios
@@ -243,7 +252,6 @@ export default {
     },
     scroll(e) {
       this.$nextTick(() => {
-        console.log(e.isFixed)
         this.isFixed = e.isFixed
       })
     },

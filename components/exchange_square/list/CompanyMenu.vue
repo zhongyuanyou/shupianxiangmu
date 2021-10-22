@@ -162,7 +162,7 @@ export default {
       // 地区
       if (name === 'Region') {
         this.params.fieldList = this.params.fieldList.filter(
-          (item) => item.fieldCode !== 'registration_area'
+          (item) => item.fieldCode !== data.fieldCode
         )
         if (data.fieldValue.length) this.params.fieldList.push(data)
       }
