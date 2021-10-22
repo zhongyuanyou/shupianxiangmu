@@ -137,15 +137,17 @@
         :finished-text="productList.length ? '没有更多了' : ''"
         @load="onLoad"
       >
-        <div v-if="productList.length">
-          <ProductCard
-            v-for="(pro, proIdx) in productList"
-            :key="proIdx"
-            :product="pro"
-            type="patent"
-          ></ProductCard>
-        </div>
-        <div v-else class="default-img">
+        <sp-skeleton :loading="productList.length === 0" title :row="8">
+          <div>
+            <ProductCard
+              v-for="(pro, proIdx) in productList"
+              :key="proIdx"
+              :product="pro"
+              type="patent"
+            ></ProductCard>
+          </div>
+        </sp-skeleton>
+        <div v-if="productList.length === 0 && !loading" class="default-img">
           <DefaultImg info="没有相关内容"></DefaultImg>
         </div>
       </sp-list>
@@ -154,10 +156,16 @@
 </template>
 
 <script>
-import { DropdownMenu, DropdownItem, List, Sticky } from '@chipspc/vant-dgg'
+import {
+  DropdownMenu,
+  DropdownItem,
+  List,
+  Sticky,
+  Skeleton,
+} from '@chipspc/vant-dgg'
 import ProductCard from '@/components/exchange_square/common/ProductCard.vue'
 import { newSpreadApi } from '@/api/spread'
-import DefaultImg from '@/components/common/DefaultImg.vue'
+// import DefaultImg from '@/components/common/DefaultImg.vue'
 export default {
   name: 'PatentProductList',
   components: {
@@ -166,7 +174,8 @@ export default {
     [DropdownItem.name]: DropdownItem,
     [List.name]: List,
     [Sticky.name]: Sticky,
-    DefaultImg,
+    // DefaultImg,
+    [Skeleton.name]: Skeleton,
   },
   props: {
     showTitle: {
