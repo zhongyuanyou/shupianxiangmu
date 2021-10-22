@@ -2,8 +2,8 @@
   <div class="goods-list">
     <div v-for="(item, i) of list" :key="i" class="box">
       <div class="name">
-        <div v-if="item.registration_area" class="address">
-          {{ item.registration_area.split(',')[0] }}
+        <div v-if="item.fieldValueCn" class="address">
+          {{ item.fieldValueCn }}
         </div>
         <div class="title">{{ item.name }}</div>
       </div>

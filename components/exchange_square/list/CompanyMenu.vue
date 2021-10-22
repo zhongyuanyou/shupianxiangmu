@@ -187,7 +187,10 @@ export default {
             (item) => item.fieldCode === ele.fieldCode
           )
         })
-        this.params.fieldLis = this.params.fieldList.concat(data.emitArr)
+        data.emitArr.forEach((item) => {
+          if (item.fieldValue) this.params.fieldList.push(item)
+        })
+        // this.params.fieldLis = this.params.fieldList.concat(data.emitArr)
       }
       // 排序
       if (name === 'Sortrd') {
