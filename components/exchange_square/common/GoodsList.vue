@@ -90,7 +90,6 @@ export default {
     [Loading.name]: Loading,
     CompanyGood,
     TrademarkGood,
-    // Waterfall,
   },
   props: {
     // 滚动导航
@@ -216,30 +215,6 @@ export default {
             }
             this.pageNumber++
             this.loading = false
-            // if (this.pageNumber === 1) {
-            //   res.data.filters.forEach((item, index) => {
-            //     if (item.name === '状态') {
-            //       this.stateList = item.children
-            //     } else if (item.name === '行业') {
-            //       this.classList = item.children
-            //     } else if (item.name === '价格') {
-            //       this.priceList = item.children
-            //     } else if (item.name === '类型') {
-            //       this.typeList = item.children
-            //     } else if (item.name === '排序') {
-            //       this.sortList = item.children
-            //     }
-            //   })
-            //   this.productList = res.data.goods.records
-            // } else {
-            //   res.data.goods.records.forEach((ele) => {
-            //     this.productList.push(ele)
-            //   })
-            // }
-            // if (res.data.goodes.records.length < 10) {
-            //   this.finished = true
-            // }
-            // this.pageNumber++
           } else {
             this.finished = true
           }
@@ -268,19 +243,12 @@ export default {
       this.typeList.forEach((element) => {
         if (element.name === this.typeName[this.active]) {
           this.classCode = element
-          // this.params.classCode = this.classCode.ext4
-          // this.params.dictCode = this.classCode.code
           this.getProductList()
         }
       })
     },
     onClick() {
-      this.$xToast.showLoading({ message: '加载中...' })
       this.pageNumber = 1
-      // this.classActive = -1
-      // this.classList = this.titleName[this.active].children
-      // this.activeCode = this.titleName[this.active].type
-      // this.initialize()
       this.typeChange()
     },
     initialize(changeObj) {
@@ -295,15 +263,10 @@ export default {
       if (this.pageNumber === 1) {
         this.list = []
       }
-      // this.selectTab()
-      // this.getProductList()
     },
     jumpLink(url) {
       this.$parent.jumpLink(url)
     },
-    // selectTab() {
-    //   this.list = this.list.concat(this.list)
-    // },
   },
 }
 </script>
@@ -366,7 +329,7 @@ export default {
     }
   }
   .labels {
-    padding: 0 20px 20px;
+    padding: 0 0 20px;
     background: #f5f5f5;
     position: -webkit-sticky;
     position: sticky;

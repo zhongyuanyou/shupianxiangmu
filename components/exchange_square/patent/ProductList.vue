@@ -174,7 +174,7 @@ export default {
       default: true,
     },
     fiexdHeight: {
-      type: Number,
+      type: [String, Number],
       default: 56,
     },
     searchVal: {
@@ -193,6 +193,7 @@ export default {
       tabList: ['类型', '分类', '价格', '状态', '排序'],
       typeList: [], // 类型分类
       classList: [], // 分类列表
+      classListCode: '',
       priceList: [], // 价格列表
       stateList: [], // 状态列表
       sortList: [], // 排序列表
@@ -275,6 +276,7 @@ export default {
                   this.stateList = item.children
                 } else if (item.name === '行业') {
                   this.classList = item.children
+                  this.classListCode = item.ext1
                 } else if (item.name === '价格') {
                   this.priceList = item.children
                 } else if (item.name === '类型') {
@@ -368,7 +370,6 @@ export default {
 
     // 分类选项
     chooseClass(idx, item) {
-      console.log(item)
       this.$emit('chooseClass')
       this.$refs.class.toggle()
       this.classActive = idx
@@ -378,12 +379,12 @@ export default {
       if (idx !== 0) {
         this.tabList[1] = this.classList[idx].name
         this.params.fieldList.forEach((res, index) => {
-          if (res.fieldCode === 'patent_industry') {
+          if (res.fieldCode === this.classListCode) {
             this.params.fieldList.splice(index, 1)
           }
         })
         const objValue = {}
-        objValue.fieldCode = 'patent_industry'
+        objValue.fieldCode = this.classListCode
         objValue.fieldValue = [item.name]
         objValue.matchType = 'MATCH_TYPE_MULTI'
         this.params.fieldList.push(objValue)
@@ -394,7 +395,7 @@ export default {
           this.params.fieldList = []
         } else {
           this.params.fieldList.forEach((res, index) => {
-            if (res.fieldCode === 'patent_industry') {
+            if (res.fieldCode === this.classListCode) {
               this.params.fieldList.splice(index, 1)
             }
           })
@@ -433,6 +434,11 @@ export default {
       this.stateActive = index
       this.$emit('chooseState')
       if (index !== 0) {
+        this.params.fieldList.forEach((ele, idx) => {
+          if (ele.fieldCode === item.ext1) {
+            this.params.fieldList.splice(idx, 1)
+          }
+        })
         const objValue = {}
         objValue.fieldCode = item.ext1
         objValue.fieldValue = [item.ext2]
@@ -446,7 +452,7 @@ export default {
           this.params.fieldList = []
         } else {
           this.params.fieldList.forEach((res, index) => {
-            if (res.fieldCode === 'patent_status') {
+            if (res.fieldCode === item.ext1) {
               this.params.fieldList.splice(index, 1)
             }
           })
@@ -500,7 +506,7 @@ export default {
   }
   .sp-dropdown-menu__title--active {
     color: #4974f5;
-    font-weight: bold;
+    font-weight: 700;
   }
   ::v-deep.sp-dropdown-menu__bar {
     box-shadow: none;

@@ -1,10 +1,11 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch />
+    <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
     <!-- 筛选 -->
     <CompanyMenu
-      :list="['Category', 'Classify', 'Price', 'State', 'Sortord']"
+      ref="menu"
+      :list="['Category', 'Classify', 'Price', 'More', 'Sortord']"
       :top="44"
       :active="1"
     />

@@ -1,5 +1,9 @@
 <template>
-  <sp-dropdown-item ref="item" :title="title">
+  <sp-dropdown-item
+    ref="item"
+    :title="title"
+    :title-class="title === '组合' ? '' : 'sp-dropdown-menu__title--active'"
+  >
     <div class="box">
       <div
         v-for="(item, index) in typeList"
@@ -27,7 +31,7 @@ export default {
   },
   data() {
     return {
-      title: '类型',
+      title: '组合',
       active: '',
     }
   },
@@ -59,6 +63,7 @@ export default {
   .active {
     background: rgb(236, 241, 254);
     color: #4974f5;
+    font-weight: bold;
   }
 }
 </style>
