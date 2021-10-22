@@ -145,6 +145,9 @@ export default {
         line-height: 44px;
         font-weight: bold;
         margin-left: 8px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
     > .tag {
