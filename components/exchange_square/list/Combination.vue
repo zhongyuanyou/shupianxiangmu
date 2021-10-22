@@ -2,7 +2,7 @@
   <sp-dropdown-item ref="item" :title="title">
     <div class="box">
       <div
-        v-for="(item, index) in combinationList"
+        v-for="(item, index) in combinationObj.children"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
         @click="activeItem(index)"
@@ -20,9 +20,9 @@ export default {
     [DropdownItem.name]: DropdownItem,
   },
   props: {
-    combinationList: {
-      type: Array,
-      default: () => [],
+    combinationObj: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -34,11 +34,11 @@ export default {
   methods: {
     activeItem(index) {
       this.active = index
-      this.title = this.combinationList[index].name
+      this.title = this.combinationObj.children[index].name
       this.$refs.item.toggle()
       const params = {
-        fieldCode: 'trademark_portfolio',
-        fieldValue: [this.combinationList[index].name],
+        fieldCode: this.combinationObj.ext1,
+        fieldValue: [this.combinationObj.children[index].name],
         matchType: 'MATCH_TYPE_MULTI',
       }
       this.$emit('activeItem', params, 'Combination')

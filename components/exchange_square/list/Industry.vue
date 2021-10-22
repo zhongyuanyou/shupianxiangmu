@@ -2,7 +2,7 @@
   <sp-dropdown-item ref="item" :title="title">
     <div class="box">
       <div
-        v-for="(item, index) in classList"
+        v-for="(item, index) in classObj.children"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
         @click="activeItem(index)"
@@ -20,9 +20,9 @@ export default {
     [DropdownItem.name]: DropdownItem,
   },
   props: {
-    classList: {
-      type: Array,
-      default: () => [],
+    classObj: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -35,10 +35,10 @@ export default {
   methods: {
     activeItem(index) {
       this.active = index
-      this.title = this.classList[index].name
+      this.title = this.classObj.children[index].name
       this.$refs.item.toggle()
       const fileds = {
-        fieldCode: 'company_industry',
+        fieldCode: this.classObj.ext1,
         fieldValue: [this.title],
         matchType: 'MATCH_TYPE_MULTI',
       }

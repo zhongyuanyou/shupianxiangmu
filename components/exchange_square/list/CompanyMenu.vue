@@ -7,14 +7,14 @@
           v-for="item in list"
           :key="item.id"
           :type-list="typeList"
-          :class-list="classList"
+          :class-obj="classObj"
           :price-list="priceList"
           :state-list="stateList"
           :sort-list="sortList"
           :more-list="moreList"
           :region-list="regionList"
-          :category-list="categoryList"
-          :combination-list="combinationList"
+          :category-obj="categoryObj"
+          :combination-obj="combinationObj"
           @activeItem="getFilterHandle"
         />
       </sp-dropdown-menu>
@@ -91,14 +91,14 @@ export default {
       classCode: '',
       pageNum: 1,
       stateList: [], // 状态
-      classList: [], // 行业
+      classObj: {}, // 行业
       priceList: [], // 价格
       typeList: [], // 类型
-      sortList: [], // 排序
-      moreList: [], // 更多
+      sortList: [], // 排序 //
+      moreList: [], // 更多 //
       regionList: [], // 地区
-      categoryList: [], // 分类
-      combinationList: [], // 组合
+      categoryObj: {}, // 分类
+      combinationObj: {}, // 组合
       productList: [], // 商品列表
       params: {
         classCode: '',
@@ -114,6 +114,7 @@ export default {
   },
   watch: {
     active() {
+      this.pageNum = 1
       this.getType()
       this.isAlive = false
       this.$nextTick(() => (this.isAlive = true))
@@ -236,15 +237,14 @@ export default {
         if (res.code === 200) {
           this.loading = false
           if (this.pageNum === 1) {
-            ;(res.data?.filters || []).forEach((item, index) => {
+            res.data.filters.forEach((item, index) => {
               if (item.name === '状态') {
                 this.stateList = item.children
               } else if (item.name === '行业') {
-                this.classList = item.children
+                this.classObj = item
               } else if (item.name === '价格') {
                 this.priceList = item.children
               } else if (item.name === '类型') {
-                console.error(this.typeList)
                 this.typeList = item.children
               } else if (item.name === '排序') {
                 this.sortList = item.children
@@ -253,9 +253,9 @@ export default {
               } else if (item.name === '地区') {
                 this.setRegionList(item.children)
               } else if (item.name === '分类') {
-                this.categoryList = item.children
+                this.categoryObj = item
               } else if (item.name === '组合') {
-                this.combinationList = item.children
+                this.combinationObj = item
               }
             })
             this.productList = res.data.goods.records || []
