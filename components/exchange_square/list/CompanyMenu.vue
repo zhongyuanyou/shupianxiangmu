@@ -35,7 +35,7 @@
       <CompanyGood
         v-show="active == 0 || active == 2 || active == 3"
         :list="productList"
-        :active="0"
+        :active="active"
       />
       <DefaultImg
         v-if="!loading && productList.length === 0"
