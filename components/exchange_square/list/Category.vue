@@ -1,13 +1,18 @@
 <template>
-  <sp-dropdown-item ref="item" :title="title">
+  <sp-dropdown-item
+    ref="item"
+    :title="title"
+    :title-class="title === '分类' ? '' : 'sp-dropdown-menu__title--active'"
+  >
     <div class="box">
       <div
-        v-for="(item, index) in categoryObj.children"
+        v-for="(item, index) in list(categoryObj.children)"
         :key="index"
         :class="item.show ? 'item active' : 'item'"
         @click="activeItem(item)"
       >
-        {{ item.name }}
+        {{ item.show }}
+        <!-- {{ item.name }} -->
       </div>
     </div>
     <div class="filter-footer">
@@ -39,6 +44,13 @@ export default {
       title: '分类',
       active: '',
     }
+  },
+  computed: {
+    list() {
+      return (list) => {
+        return []
+      }
+    },
   },
   methods: {
     activeItem(item) {
@@ -99,7 +111,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   .item {
-    width: 206px;
+    width: 149px;
     margin: 12px;
     padding: 20px 0;
     text-align: center;

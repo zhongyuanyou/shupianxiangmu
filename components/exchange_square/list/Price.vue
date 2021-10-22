@@ -1,5 +1,9 @@
 <template>
-  <sp-dropdown-item ref="item" :title="title">
+  <sp-dropdown-item
+    ref="item"
+    :title="title"
+    :title-class="title === '价格' ? '' : 'sp-dropdown-menu__title--active'"
+  >
     <div class="box">
       <div
         v-for="(item, index) in priceList"
@@ -51,6 +55,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.sp-dropdown-menu__title--active {
+  color: #4974f5;
+  font-weight: bold;
+}
 .box {
   padding: 56px 28px;
   display: flex;
@@ -68,6 +76,7 @@ export default {
   .active {
     background: rgb(236, 241, 254);
     color: #4974f5;
+    font-weight: bold;
   }
 }
 </style>
