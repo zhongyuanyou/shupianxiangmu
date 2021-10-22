@@ -40,7 +40,7 @@
         </div>
         <div class="list">
           <p>注册资本</p>
-          <p>{{ item.registered_capital || '-' }}</p>
+          <p>{{ Number(item.registered_capital) | filterMoney }}</p>
         </div>
         <div class="list">
           <p>所属行业</p>
@@ -90,6 +90,25 @@
 <script>
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
+  filters: {
+    filterMoney(money) {
+      if (money) {
+        if (money < 500000) {
+          return '50万以下'
+        } else if (money < 1000000) {
+          return '50-100万'
+        } else if (money < 5000000) {
+          return '100-500万'
+        } else if (money < 10000000) {
+          return '500-1000万'
+        } else {
+          return '1000万以上'
+        }
+      } else {
+        return '-'
+      }
+    },
+  },
   props: {
     active: {
       type: Number,
