@@ -15,7 +15,7 @@
         </sp-tab>
       </sp-tabs>
     </div>
-    <CompanyMenu ref="menu" :top="93" :active="active" :list="companyList" />
+    <CompanyMenu ref="menu" :top="88" :active="active" :list="companyList" />
     <!-- </sp-sticky> -->
   </div>
 </template>
@@ -62,7 +62,7 @@ export default {
         ]
       }
       if (this.active === 2) {
-        this.companyList = ['State', 'Industry', 'Classify', 'Price', 'Sortord']
+        this.companyList = ['State', 'Industry', 'Type', 'Price', 'Sortord']
       }
       this.$refs.menu.params = {
         classCode: '',

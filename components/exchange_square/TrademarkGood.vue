@@ -64,8 +64,11 @@ export default {
             }
           })
         }
-
-        return '[' + str + ']'
+        if (str) {
+          return '[' + str + ']'
+        } else {
+          return ''
+        }
       }
     },
   },

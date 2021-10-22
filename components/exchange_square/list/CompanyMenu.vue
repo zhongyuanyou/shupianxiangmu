@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown-list">
-    <sp-sticky :offset-top="top" @scroll="scrollEvent">
+    <sp-sticky v-if="list.length !== 0" :offset-top="top" @scroll="scrollEvent">
       <sp-dropdown-menu
         v-if="isAlive"
         active-color="#4974f5"
@@ -10,7 +10,7 @@
           :is="item"
           v-for="item in list"
           :key="item.id"
-          :type-list="typeList"
+          :type-obj="typeObj"
           :class-obj="classObj"
           :price-list="priceList"
           :state-list="stateList"
@@ -37,7 +37,10 @@
         :list="productList"
         :active="0"
       />
-      <DefaultImg v-if="!loading && productList.length === 0"></DefaultImg>
+      <DefaultImg
+        v-if="!loading && productList.length === 0"
+        :info="info"
+      ></DefaultImg>
     </sp-list>
   </div>
 </template>
@@ -60,6 +63,7 @@ export default {
     Category: () => import('./Category.vue'), //  分类
     Classify: () => import('./Classify.vue'), //  类型
     State: () => import('./State.vue'), //  状态
+    Type: () => import('./Type.vue'), //  类型
     Combination: () => import('./Combination.vue'), // 组合
     [List.name]: List,
     [Sticky.name]: Sticky,
@@ -76,6 +80,10 @@ export default {
     active: {
       type: Number,
       default: 0,
+    },
+    info: {
+      type: String,
+      default: '',
     },
     background: {
       type: String,
@@ -97,7 +105,7 @@ export default {
       stateList: [], // 状态
       classObj: {}, // 行业
       priceList: [], // 价格
-      typeList: [], // 类型
+      typeObj: {}, // 类型
       sortList: [], // 排序 //
       moreList: [], // 更多 //
       regionList: [], // 地区
@@ -119,6 +127,7 @@ export default {
   watch: {
     active() {
       this.pageNum = 1
+      this.productList = []
       this.getType()
       this.isAlive = false
       this.$nextTick(() => (this.isAlive = true))
@@ -152,12 +161,8 @@ export default {
     // 筛选
     getFilterHandle(data, name) {
       // 分类 ， 组合, 状态
-      console.log(data, name)
       if (
-        name === 'Csategory' ||
-        name === 'Combination' ||
-        name === 'Industry' ||
-        name === 'State'
+        ['Csategory', 'Combination', 'Industry', 'State', 'Type'].includes(name)
       ) {
         // 清除
         this.params.fieldList = this.params.fieldList.filter(
@@ -214,7 +219,6 @@ export default {
         .then((res) => {
           if (res.code === 200) {
             res.data.forEach((element) => {
-              console.log('element', element)
               if (element.name === '公司' && this.active === 0) {
                 this.classCode = element
               }
@@ -252,8 +256,6 @@ export default {
                 this.classObj = item
               } else if (item.name === '价格') {
                 this.priceList = item.children
-              } else if (item.name === '组合') {
-                this.typeList = item.children
               } else if (item.name === '排序') {
                 this.sortList = item.children
               } else if (item.name === '更多') {
@@ -264,6 +266,8 @@ export default {
                 this.categoryObj = item
               } else if (item.name === '组合') {
                 this.combinationObj = item
+              } else if (item.name === '类型') {
+                this.typeObj = item
               }
             })
             this.productList = res.data.goods.records || []

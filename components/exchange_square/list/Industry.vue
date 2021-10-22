@@ -9,7 +9,7 @@
         v-for="(item, index) in classObj.children"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
-        @click="activeItem(index)"
+        @click="activeItem(item, index)"
       >
         {{ item.name }}
       </div>
@@ -37,9 +37,9 @@ export default {
   },
 
   methods: {
-    activeItem(index) {
+    activeItem(item, index) {
       this.active = index
-      this.title = this.classObj.children[index].name
+      this.title = item.name
       this.$refs.item.toggle()
       const fileds = {
         fieldCode: this.classObj.ext1,
