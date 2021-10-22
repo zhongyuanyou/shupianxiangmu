@@ -27,6 +27,7 @@
         :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         :active="0"
+        info="暂无搜索结果"
         @scrollEvent="scrollEvent"
       />
     </div>
