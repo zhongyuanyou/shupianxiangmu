@@ -1,13 +1,17 @@
 <template>
-  <sp-dropdown-item ref="item" :title="title">
+  <sp-dropdown-item
+    ref="item"
+    :title="title"
+    :title-class="title === '类型' ? '' : 'sp-dropdown-menu__title--active'"
+  >
     <div class="box">
       <div
-        v-for="(item, index) in list"
+        v-for="(item, index) in typeObj.children"
         :key="index"
         :class="active === index ? 'item active' : 'item'"
-        @click="activeItem(index)"
+        @click="activeItem(item, index)"
       >
-        {{ item }}
+        {{ item.name }}
       </div>
     </div>
   </sp-dropdown-item>
@@ -19,29 +23,29 @@ export default {
   components: {
     [DropdownItem.name]: DropdownItem,
   },
+  props: {
+    typeObj: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
-      title: '行业',
+      title: '类型',
       active: '',
-      list: [
-        '不限',
-        '发明专利',
-        '广告传媒',
-        '实用新型',
-        '外观专利',
-        '外观专利',
-      ],
     }
   },
-  mounted() {
-    this.title = this.$attrs.title1
-  },
   methods: {
-    activeItem(index) {
+    activeItem(item, index) {
       this.active = index
-      this.title = this.list[index]
+      this.title = item.name
       this.$refs.item.toggle()
-      this.$emit('activeItem', index, 'Type')
+      const fileds = {
+        fieldCode: this.typeObj.ext1,
+        fieldValue: [this.title],
+        matchType: 'MATCH_TYPE_MULTI',
+      }
+      this.$emit('activeItem', fileds, 'Type')
     },
   },
 }
@@ -65,6 +69,7 @@ export default {
   .active {
     background: rgb(236, 241, 254);
     color: #4974f5;
+    font-weight: bold;
   }
 }
 </style>

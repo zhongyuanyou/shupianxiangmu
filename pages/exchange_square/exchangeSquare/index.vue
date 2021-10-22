@@ -1,23 +1,23 @@
 <template>
   <div class="exchange-square">
-    <sp-sticky>
+    <sp-sticky offset-top="0">
       <Header
         title="交易广场"
         placeholder="公司转让"
         disabled="true"
+        :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
+        :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
         path="/exchange_square/exchangeSquare/selectionPage"
       />
     </sp-sticky>
-    <div style="overflow-y: auto">
-      <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
-        <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
-          <img :src="item.materialUrl" alt="" @click="jump(item)" />
-        </sp-swipe-item>
-      </sp-swipe>
-      <NavBar :nav-list="navList"></NavBar>
-      <ScrollNav :roll-nav="scrollNavList"></ScrollNav>
-      <GoodsList :nav="goodNavlist"></GoodsList>
-    </div>
+    <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
+      <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
+        <img :src="item.materialUrl" alt="" @click="jump(item)" />
+      </sp-swipe-item>
+    </sp-swipe>
+    <NavBar :nav-list="navList"></NavBar>
+    <ScrollNav :roll-nav="scrollNavList"></ScrollNav>
+    <GoodsList :nav="goodNavlist" @scroll="scroll"></GoodsList>
   </div>
 </template>
 
@@ -51,6 +51,7 @@ export default {
           title: '',
         },
       ],
+      isFixed: false,
       // 滚动金刚区
       scrollNavList: [],
       navList: [],
@@ -95,6 +96,9 @@ export default {
           console.log(err)
         })
     },
+    scroll(e) {
+      this.isFixed = e.isFixed
+    },
     getData(item) {
       const arr = []
       item.forEach((ele) => {
@@ -110,7 +114,7 @@ export default {
 .exchange-square {
   width: 750px;
   margin: 0 auto;
-  height: 100vh;
+  min-height: 100vh;
   background: #f5f5f5;
   .banner {
     margin: 10px 20px 0 20px;

@@ -1,14 +1,12 @@
 <template>
-  <sp-sticky :offset-top="56" @scroll="scroll">
-    <div class="good-list">
+  <div class="good-list">
+    <sp-sticky offset-top="56" @scroll="scroll">
       <sp-tabs
         v-model="active"
-        class="labels"
         :animated="false"
         title-active-color="#222222"
         :swipe-threshold="nav.length - 1"
         title-inactive-color="#555555"
-        :offset-top="offsetTop"
         :background="isFixed ? fixedColor : bgColor"
         @scroll="scroll"
         @click="onClick()"
@@ -24,63 +22,16 @@
               <span v-show="active === itemKey" class="title_tag"></span>
             </div>
           </template>
-
-          <div
-            v-show="classList && classList.length"
-            class="labels"
-            :style="{
-              paddingTop: isFixed ? '10px' : '',
-              top: isFixed ? top - 1 + 'px' : '',
-            }"
-          >
-            <div class="lab-box">
-              <div
-                v-for="(classItem, classIndex) in classList"
-                :key="classIndex"
-                class="lab"
-                :style="{
-                  color: classActive === classIndex ? '#4974F5' : '',
-                }"
-                @click="chooesClass(classIndex)"
-              >
-                {{ classItem.name }}
-              </div>
-            </div>
-          </div>
-
-          <div class="list-box">
-            <sp-list
-              v-model="loading"
-              :finished="finished"
-              :error.sync="error"
-              finished-text="没有更多了"
-              error-text=""
-              @load="onLoad"
-            >
-              <template #loading>
-                <div v-show="pageNumber !== 1 && num !== 1" class="loding-box">
-                  <sp-loading size="12px" />加载中...
-                </div>
-              </template>
-              <TrademarkGood v-show="active == 1" :list="list"></TrademarkGood>
-              <CompanyGood
-                v-show="active == 0 || active == 2 || active == 3"
-                :list="list"
-                :active="active"
-              ></CompanyGood>
-            </sp-list>
-          </div>
         </sp-tab>
       </sp-tabs>
-    </div>
-  </sp-sticky>
+    </sp-sticky>
+    <CompanyMenu info="暂无搜索结果" :active="active" />
+  </div>
 </template>
 
 <script>
 import { Tab, Tabs, List, Sticky, Loading } from '@chipspc/vant-dgg'
-import CompanyGood from '@/components/exchange_square/CompanyGood.vue'
-import TrademarkGood from '@/components/exchange_square/TrademarkGood.vue'
-import { newSpreadApi } from '@/api/spread'
+import CompanyMenu from '~/components/exchange_square/list/CompanyMenu.vue'
 export default {
   components: {
     [Tab.name]: Tab,
@@ -88,8 +39,7 @@ export default {
     [List.name]: List,
     [Sticky.name]: Sticky,
     [Loading.name]: Loading,
-    CompanyGood,
-    TrademarkGood,
+    CompanyMenu,
   },
   props: {
     // 滚动导航
@@ -104,168 +54,24 @@ export default {
     return {
       list: [], // 商品数据
       active: 0,
-      offsetTop: 0,
+      offsetTop: 100,
       isFixed: false,
       fixedColor: '#ffffff',
       bgColor: '#f5f5f5',
-      // secondaryLabel: ['全部', '免费维护', '极速交付', '多方案维护'],
-      loading: false,
-      finished: false,
-      error: false,
       max: 2,
       pageNumber: 1,
-      classActive: -1,
-      top: 0,
-      classArr: '',
-      classCode: '',
-      activeCode: '',
-      num: 1,
-      classList: [],
-      typeList: [],
-      typeName: {
-        0: '公司',
-        1: '商标',
-        2: '专利',
-      },
     }
   },
-  created() {
-    this.getType()
-  },
   methods: {
-    getType() {
-      this.$axios
-        .get(newSpreadApi.type_list, {
-          params: {
-            code: 'CONDITION-JY',
-          },
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            this.typeList = res.data
-            this.typeChange()
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-    scrollEvent(e) {},
-    getProductList() {
-      if (this.finished) return
-      this.$axios
-        .post(newSpreadApi.product_list, {
-          classCode: this.classCode.ext4,
-          dictCode: this.classCode.code,
-          fieldList: [],
-          limit: 10,
-          needTypes: 1,
-          searchKey: '',
-          start: this.pageNumber,
-          statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            if (this.pageNumber === 1) {
-              this.list = res.data.goods?.records || []
-            } else {
-              res.data.goods.records.forEach((ele) => {
-                this.productList.push(ele)
-              })
-            }
-            this.list.forEach((item) => {
-              item.fieldList.forEach((ele) => {
-                // 注册区域
-                if (ele.fieldCode === 'registration_area')
-                  item.registration_area = ele.fieldValue
-                // 实缴资本
-                if (ele.fieldCode === 'paid_in_capital')
-                  item.paid_in_capital = ele.fieldValue
-                // 经营时间
-                if (ele.fieldCode === 'business_age_limit')
-                  item.business_age_limit = ele.fieldValue
-                // 纳税类型
-                if (ele.fieldCode === 'taxpayer_type')
-                  item.taxpayer_type = ele.fieldValue
-                // 注册资本
-                if (ele.fieldCode === 'registered_capital')
-                  item.registered_capital = ele.fieldValue
-                // 所属行业
-                if (ele.fieldCode === 'company_industry')
-                  item.company_industry = ele.fieldValue
-                // 申请日期
-                if (ele.fieldCode === 'date_of_application')
-                  item.date_of_application = ele.fieldValue
-                // 到期日期
-                if (ele.fieldCode === 'expire_date')
-                  item.expire_date = ele.fieldValue
-                // 专利状态
-                if (ele.fieldCode === 'patent_status')
-                  item.patent_status = ele.fieldValue
-                // 专利到期
-                if (ele.fieldCode === 'validity_of_certificate')
-                  item.validity_of_certificate = ele.fieldValue
-                // 专利类型
-                if (ele.fieldCode === 'patent_type')
-                  item.patent_type = ele.fieldValue
-              })
-            })
-            if (res.data.goods.records.length < 10) {
-              this.finished = true
-            }
-            this.pageNumber++
-            this.loading = false
-          } else {
-            this.finished = true
-          }
-          this.$xToast.hideLoading()
-        })
-        .catch((err) => {
-          console.log(err)
-          this.finished = true
-        })
-    },
     scroll(e) {
       this.$nextTick(() => {
         this.isFixed = e.isFixed
+        this.$emit('scroll', e)
       })
     },
-    chooesClass(i) {
-      this.$xToast.showLoading({ message: '加载中...' })
-      this.activeCode = this.titleName[this.active].children[i].ext1
-      this.pageNumber = 1
-      this.classActive = i
-      this.finished = false
-      this.list = []
-      this.selectTab()
-    },
-    typeChange() {
-      this.typeList.forEach((element) => {
-        if (element.name === this.typeName[this.active]) {
-          this.classCode = element
-          this.getProductList()
-        }
-      })
-    },
+
     onClick() {
       this.pageNumber = 1
-      this.typeChange()
-    },
-    initialize(changeObj) {
-      this.pageNumber = 1
-      this.finished = false
-      this.loading = true
-      this.onLoad()
-    },
-    onLoad() {
-      // // 异步更新数据
-      console.log(111)
-      if (this.pageNumber === 1) {
-        this.list = []
-      }
-    },
-    jumpLink(url) {
-      this.$parent.jumpLink(url)
     },
   },
 }
