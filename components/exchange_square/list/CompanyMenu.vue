@@ -292,37 +292,37 @@ export default {
             item.fieldList.forEach((ele) => {
               // 注册区域
               if (ele.fieldCode === 'registration_area')
-                item.registration_area = ele.fieldValue
+                item.registration_area = ele.fieldValueCn
               // 实缴资本
               if (ele.fieldCode === 'paid_in_capital')
-                item.paid_in_capital = ele.fieldValue
+                item.paid_in_capital = ele.fieldValueCn
               // 经营时间
               if (ele.fieldCode === 'business_age_limit')
-                item.business_age_limit = ele.fieldValue
+                item.business_age_limit = ele.fieldValueCn
               // 纳税类型
               if (ele.fieldCode === 'taxpayer_type')
-                item.taxpayer_type = ele.fieldValue
+                item.taxpayer_type = ele.fieldValueCn
               // 注册资本
               if (ele.fieldCode === 'registered_capital')
-                item.registered_capital = ele.fieldValue
+                item.registered_capital = ele.fieldValueCn
               // 所属行业
               if (ele.fieldCode === 'company_industry')
-                item.company_industry = ele.fieldValue
+                item.company_industry = ele.fieldValueCn
               // 申请日期
               if (ele.fieldCode === 'date_of_application')
-                item.date_of_application = ele.fieldValue
+                item.date_of_application = ele.fieldValueCn
               // 到期日期
               if (ele.fieldCode === 'expire_date')
-                item.expire_date = ele.fieldValue
+                item.expire_date = ele.fieldValueCn
               // 专利状态
               if (ele.fieldCode === 'patent_status')
-                item.patent_status = ele.fieldValue
+                item.patent_status = ele.fieldValueCn
               // 专利到期
               if (ele.fieldCode === 'validity_of_certificate')
-                item.validity_of_certificate = ele.fieldValue
+                item.validity_of_certificate = ele.fieldValueCn
               // 专利类型
               if (ele.fieldCode === 'patent_type')
-                item.patent_type = ele.fieldValue
+                item.patent_type = ele.fieldValueCn
             })
           })
           // 自加

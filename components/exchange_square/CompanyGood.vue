@@ -2,9 +2,16 @@
   <div class="goods-list">
     <div v-for="(item, i) of list" :key="i" class="box">
       <div class="name">
-        <div v-if="item.fieldValueCn" class="address">
-          {{ item.fieldValueCn }}
-        </div>
+        <template v-if="active === 0">
+          <div v-if="item.registration_area" class="address">
+            {{ item.registration_area.split(',')[0] }}
+          </div>
+        </template>
+        <template v-if="active === 2">
+          <div v-if="item.patent_type" class="address">
+            {{ item.patent_type }}
+          </div>
+        </template>
         <div class="title">{{ item.name }}</div>
       </div>
       <div class="tag">
@@ -130,6 +137,7 @@ export default {
         background: #f2f5ff;
         border: 1px solid #4974f5;
         border-radius: 4px;
+        flex-shrink: 0;
       }
       > .title {
         font-size: 32px;
