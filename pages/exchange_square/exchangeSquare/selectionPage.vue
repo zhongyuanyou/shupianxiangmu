@@ -1,7 +1,10 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
+    <headerSearch
+      :default-search-key="defaultSearchKey"
+      @searchValue="(val) => ($refs.menu.params.searchKey = val)"
+    />
     <!-- tabs -->
     <!-- <sp-sticky offset-top="44"> -->
     <div class="tabs">
@@ -15,7 +18,13 @@
         </sp-tab>
       </sp-tabs>
     </div>
-    <CompanyMenu ref="menu" :top="88" :active="active" :list="companyList" />
+    <CompanyMenu
+      ref="menu"
+      :top="88"
+      :active="active"
+      :list="companyList"
+      :default-search-key="defaultSearchKey"
+    />
     <!-- </sp-sticky> -->
   </div>
 </template>
@@ -36,6 +45,7 @@ export default {
   data() {
     return {
       loading: false,
+      defaultSearchKey: '公司转让',
       finished: false,
       companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,

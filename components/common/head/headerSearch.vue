@@ -76,11 +76,15 @@ export default {
       type: String,
       default: () => '',
     },
+    defaultSearchKey: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       isShow: true,
-      value: '',
+      value: this.defaultSearchKey,
       safeTop: 20, // 顶部安全区的高度
       useSafeAreaClass: false,
     }

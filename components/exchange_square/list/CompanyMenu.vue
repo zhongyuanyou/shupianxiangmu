@@ -93,6 +93,10 @@ export default {
       type: Number,
       default: 56,
     },
+    defaultSearchKey: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -118,7 +122,7 @@ export default {
         fieldList: [],
         limit: 10,
         needTypes: 1,
-        searchKey: '',
+        searchKey: this.defaultSearchKey,
         start: 1,
         statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
       },
@@ -142,6 +146,7 @@ export default {
     },
   },
   mounted() {
+    // this.params.searchKey = this.$route.query.serchKey || ''
     this.getType()
   },
 
