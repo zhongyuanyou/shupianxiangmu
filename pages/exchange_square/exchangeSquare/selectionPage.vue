@@ -2,6 +2,7 @@
   <div class="selection-page">
     <!-- 搜索 -->
     <headerSearch
+      ref="search"
       :default-search-key="defaultSearchKey"
       @searchValue="(val) => ($refs.menu.params.searchKey = val)"
     />
@@ -80,7 +81,7 @@ export default {
         fieldList: [],
         limit: 10,
         needTypes: 1,
-        searchKey: '',
+        searchKey: this.$refs.search.value,
         start: 1,
         statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
       }
