@@ -19,7 +19,7 @@
     <Advertising :ad-lf-list="adLfList[0]" :ad-rg-list="adRgList"></Advertising>
     <!-- 广告区 E -->
     <!-- 资源列表 S -->
-    <ProductList @scroll="scroll"></ProductList>
+    <ProductList info="暂无搜索结果" @scroll="scroll"></ProductList>
 
     <!-- 资源列表 E -->
     <!-- <BtnPlanner :planner="pagePlanner"></BtnPlanner> -->
