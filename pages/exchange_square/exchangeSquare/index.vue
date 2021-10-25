@@ -7,7 +7,7 @@
         disabled="true"
         :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
         :search-color="isFixed ? '#f5f5f5' : '#ffffff'"
-        path="/exchange_square/exchangeSquare/selectionPage"
+        path="/exchange_square/exchangeSquare/selectionPage?searchKey=公司转让"
       />
     </sp-sticky>
     <sp-swipe class="banner" :autoplay="3000" indicator-color="white">

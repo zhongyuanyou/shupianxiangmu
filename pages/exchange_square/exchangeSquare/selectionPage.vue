@@ -4,7 +4,7 @@
     <headerSearch
       ref="search"
       :default-search-key="defaultSearchKey"
-      @searchValue="(val) => ($refs.menu.params.searchKey = val)"
+      @searchValue="handleSearch"
     />
     <!-- tabs -->
     <!-- <sp-sticky offset-top="44"> -->
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       loading: false,
-      defaultSearchKey: '公司转让',
+      defaultSearchKey: this.$route.query.searchKey || '',
       finished: false,
       companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,
@@ -90,6 +90,11 @@ export default {
 
   methods: {
     onLoad() {},
+    handleSearch(val) {
+      this.$refs.menu.params.searchKey = val
+      const url = window.location.href.split('?')[0]
+      window.location.replace(`${url}?searchKey=${val}`)
+    },
   },
 }
 </script>
