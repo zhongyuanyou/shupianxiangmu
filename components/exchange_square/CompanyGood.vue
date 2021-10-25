@@ -21,8 +21,8 @@
       </div>
       <div class="price">
         <div class="left">
-          <b>{{ item.referencePrice }}</b
-          ><span>元</span>
+          <b>{{ setPrice(item.referencePrice) }}</b
+          ><span>{{ item.referencePrice > 9999 ? '万' : '元' }}</span>
         </div>
         <div class="right">
           <span @click="jump(item)">查看详情</span>
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import { price } from '@/utils/spread/exchange-square'
 const DGG_SERVER_ENV = process.env.DGG_SERVER_ENV
 export default {
   filters: {
@@ -122,6 +123,9 @@ export default {
     },
   },
   methods: {
+    setPrice(data) {
+      return price(data)
+    },
     jump(item) {
       console.log(item)
       let base = ''
