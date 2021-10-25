@@ -92,8 +92,9 @@ export default {
     onLoad() {},
     handleSearch(val) {
       this.$refs.menu.params.searchKey = val
-      const url = window.location.href.split('?')[0]
-      window.location.replace(`${url}?searchKey=${val}`)
+      this.$router.replace(
+        `/exchange_square/exchangeSquare/selectionPage?searchKey=${val}`
+      )
     },
   },
 }
