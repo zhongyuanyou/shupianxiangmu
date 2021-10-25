@@ -155,7 +155,7 @@
           v-if="productList.length === 0 && !loading && finished"
           class="default-img"
         >
-          <DefaultImg info="没有相关内容"></DefaultImg>
+          <DefaultImg :info="info"></DefaultImg>
         </div>
       </sp-list>
     </div>
@@ -200,6 +200,10 @@ export default {
     fixed: {
       type: Boolean,
       default: false,
+    },
+    info: {
+      type: String,
+      default: '没有找到相关结果，换个关键词试试吧',
     },
   },
   data() {
