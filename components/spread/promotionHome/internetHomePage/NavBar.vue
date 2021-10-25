@@ -70,7 +70,7 @@ export default {
       align-items: center;
       overflow-x: scroll;
       overflow-y: hidden;
-      justify-content: space-between;
+      justify-content: space-around;
       .navs {
         display: flex;
         flex-direction: column;

@@ -84,7 +84,7 @@ export default {
         .then((res) => {
           if (res.code === 200) {
             this.scrollNavList = res.data.navs.navJygc2.reverse()
-            this.navList = res.data.navs.navJygc1.reverse()
+            this.navList = res.data.navs.navJygc1.slice(0, 4)
             res.data.adList.forEach((item) => {
               if (item.locationCode === 'jyBanner') {
                 this.swipeList = this.getData(item.sortMaterialList)
