@@ -209,7 +209,7 @@ export default {
         })
       } else {
         // window.location.href = `https://${base}m.shupian.cn/detail?productId=${id}`
-        window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${this.classCode}&productId=${id}`
+        window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?classCodeOne=${this.classCode}&productId=${id}`
       }
     },
     // 请求数据

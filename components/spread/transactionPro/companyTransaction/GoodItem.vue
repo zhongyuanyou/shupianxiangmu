@@ -235,7 +235,7 @@ export default {
           androidRouter: androidRouterStr,
         })
       } else {
-        window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=FL20201224136319&productId=${id}`
+        window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?classCodeOne=FL20201224136319&productId=${id}`
       }
     },
     // @--随机生成三条数据

@@ -128,7 +128,7 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?type=${item.classCode}&productId=${item.id}`
+      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?classCodeOne=${item.classCode}&productId=${item.id}`
     },
   },
 }
