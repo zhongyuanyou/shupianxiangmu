@@ -93,10 +93,6 @@ export default {
       type: Number,
       default: 56,
     },
-    defaultSearchKey: {
-      type: String,
-      default: '',
-    },
   },
   data() {
     return {
