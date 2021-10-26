@@ -55,6 +55,7 @@ export default {
       type: Number,
       default: 50,
     },
+    // 默认搜索项
     defaultSearchKey: {
       type: String,
       default: '',
@@ -73,6 +74,7 @@ export default {
     }),
   },
   watch: {
+    // 清空搜索项则清除默认搜索
     value: {
       handler(nVal, oVal) {
         if (oVal && !nVal) {
