@@ -16,7 +16,7 @@
       </div>
       <div class="tag">
         <div v-for="(tagItem, tagIndex) of item.salesGoodsTags" :key="tagIndex">
-          {{ tagItem }}
+          {{ tagItem.tagValueName }}
         </div>
       </div>
       <div class="price">
