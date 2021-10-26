@@ -10,7 +10,7 @@
     </sp-sticky>
     <!-- 头部E -->
     <!-- banner S -->
-    <Banner :banner-list="bannerList"></Banner>
+    <Banner v-show="bannerList.length" :banner-list="bannerList"></Banner>
     <!-- banner E -->
     <!-- 导航区 S -->
     <NavList :nav-list="navList"></NavList>
