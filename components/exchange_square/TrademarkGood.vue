@@ -138,10 +138,11 @@ export default {
         line-height: 40px;
       }
       > .tag {
-        margin-top: 12px;
         display: flex;
+        flex-wrap: wrap;
         > span {
           margin-left: 8px;
+          margin: 6px 4px;
           height: 28px;
           background: #f0f2f5;
           border-radius: 4px;
