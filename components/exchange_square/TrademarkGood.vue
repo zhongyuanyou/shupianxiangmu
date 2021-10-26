@@ -1,7 +1,7 @@
 <template>
   <div class="trademark-good">
     <div v-for="(item, i) in list" :key="i" class="list" @click="jump(item)">
-      <img :src="item.goodsImg" alt="" class="photo" />
+      <img :src="getImg(item)" alt="" class="photo" />
       <div class="title">
         <div class="name">{{ classify(item.fieldList) }}{{ item.name }}</div>
         <div class="tag">
@@ -68,6 +68,22 @@ export default {
           return '[' + str + ']'
         } else {
           return ''
+        }
+      }
+    },
+    // 图片
+    getImg() {
+      return (item) => {
+        const img =
+          'https://cdn.shupian.cn/sp-pt/wap/images/2moigrokha00000.png'
+        try {
+          return (
+            item.fieldList.find((obj) => {
+              return obj.fieldName === '商标图片'
+            }).fieldValueCn || img
+          )
+        } catch (error) {
+          return img
         }
       }
     },
