@@ -122,7 +122,7 @@ export default {
         fieldList: [],
         limit: 10,
         needTypes: 1,
-        searchKey: this.defaultSearchKey,
+        searchKey: '',
         start: 1,
         statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
       },
