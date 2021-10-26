@@ -109,6 +109,7 @@ export default {
   flex-direction: column;
   background: #f5f5f5;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 .tabs {
   ::v-deep .sp-tabs__line {
