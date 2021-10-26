@@ -1,18 +1,6 @@
 <template>
-  <div
-    v-if="isShow"
-    :class="{ 'fixed-head': fixed, 'safe-area-top': useSafeAreaClass }"
-    :style="{
-      height: headHeight,
-      'padding-top': safeTop + 'px',
-      'box-sizing': 'content-box',
-    }"
-  >
-    <div
-      class="my-head"
-      :class="myHeadClass"
-      :style="{ height: headHeight, 'padding-top': safeTop + 'px' }"
-    >
+  <div v-if="isShow" class="fixed-head" style="height: 44px">
+    <div class="my-head" style="height: 44px; padding-top: 0px">
       <div class="my-head-row">
         <!-- 返回 -->
         <div class="slot-left">
@@ -63,19 +51,9 @@ export default {
       type: [Number, String],
       default: '0.88rem',
     },
-    // 是否吸顶
-    fixed: {
-      type: Boolean,
-      default: () => true,
-    },
     maxlength: {
       type: Number,
       default: 50,
-    },
-    // 自定义类名
-    headClass: {
-      type: String,
-      default: () => '',
     },
     defaultSearchKey: {
       type: String,
@@ -86,8 +64,6 @@ export default {
     return {
       isShow: true,
       value: '',
-      safeTop: 20, // 顶部安全区的高度
-      useSafeAreaClass: false,
     }
   },
   computed: {
@@ -95,17 +71,6 @@ export default {
       isInApp: (state) => state.app.isInApp, // 是否app中
       appInfo: (state) => state.app.appInfo, // app信息
     }),
-    headHeight() {
-      if (typeof this.height === 'number') {
-        return this.height + 'px'
-      }
-      return this.height
-    },
-    myHeadClass() {
-      return this.useSafeAreaClass
-        ? `${this.headClass} safe-area-top`
-        : this.headClass
-    },
   },
   watch: {
     value: {
@@ -116,16 +81,7 @@ export default {
       },
     },
   },
-  created() {
-    // 因为通过中间件ua获取到了 isInApp 的值，故可以在服务端设置，避免页面上头部抖动
-    if (process && process.server && !this.isInApp) {
-      this.safeTop = 0
-      this.useSafeAreaClass = true
-    }
-  },
-  mounted() {
-    this.getTopMargin()
-  },
+  mounted() {},
   methods: {
     onLeftClick() {
       if (this.isInApp) {
@@ -138,13 +94,6 @@ export default {
         this.$router.back()
       }
       this.$emit('backHandle')
-    },
-    getTopMargin() {
-      if (process && process.client) {
-        let safeTop = safeAreaInsets.top
-        if (this.isInApp) safeTop = this.appInfo.statusBarHeight
-        this.safeTop = safeTop
-      }
     },
     search() {
       this.value = this.value || this.defaultSearchKey
@@ -183,10 +132,6 @@ export default {
     color: #1a1a1a;
     flex: 1;
     text-align: center;
-  }
-  .safe-area-top {
-    padding-top: constant(safe-area-inset-top);
-    padding-top: env(safe-area-inset-top);
   }
 }
 .input-box {
