@@ -175,7 +175,7 @@ export default {
     }
     > .tag {
       margin-top: 10px;
-      height: 30px;
+      height: 28px;
       display: flex;
       flex-wrap: wrap;
       overflow: hidden;
