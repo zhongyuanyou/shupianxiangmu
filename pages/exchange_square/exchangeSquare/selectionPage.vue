@@ -92,6 +92,7 @@ export default {
     onLoad() {},
     handleSearch(val) {
       this.$refs.menu.params.searchKey = val
+      if (this.$route.query.searchKey === val) return
       this.$router.replace(
         `/exchange_square/exchangeSquare/selectionPage?searchKey=${val}`
       )
