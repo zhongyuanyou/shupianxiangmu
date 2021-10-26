@@ -104,6 +104,11 @@ export default {
   },
   methods: {
     scrollHandle() {
+      if (!this.canScrollWidth) {
+        const scrollWidth = this.$refs.refScroll.scrollWidth // 容器文档总宽
+        const clientWidth = this.$refs.refScroll.clientWidth // 容器可视宽度
+        this.canScrollWidth = scrollWidth - clientWidth // 容器可滚动宽度
+      }
       const scrollLeft = this.$refs.refScroll.scrollLeft // 容器滚动距离
       const scroLeft = Math.floor((scrollLeft / this.canScrollWidth) * 100) // 计算导航容器滚动百分比
       this.scroLeft = scroLeft / 2
