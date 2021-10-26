@@ -221,7 +221,7 @@ export default {
                 item.price = item.referencePrice
                 item.goodsImg =
                   image ||
-                  'https://cdn.shupian.cn/1621252424000_%E5%95%86%E6%A0%87%403x.png'
+                  'https://cdn.shupian.cn/sp-pt/wap/images/2moigrokha00000.png'
                 item.name = item.originalDataVO.name
               })
               //   this.productList = res.data.list
@@ -262,7 +262,10 @@ export default {
 .list {
   width: 100vw;
   min-height: 100vh;
-  background: #f5f5f5;
+  //   background: #f5f5f5;
+  ::v-deep.card {
+    border: 1px solid #dddddd;
+  }
   .banner-box {
     margin-top: 1px;
     width: 100%;
