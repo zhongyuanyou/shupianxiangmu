@@ -50,11 +50,11 @@
       <div v-show="active === 2" class="foot">
         <div class="list">
           <p>行业</p>
-          <p>{{ item.company_industry || '-' }}</p>
+          <p>{{ item.patent_industry || '-' }}</p>
         </div>
         <div class="list">
           <p>申请日期</p>
-          <p>{{ item.date_of_application || '-' }}</p>
+          <p>{{ item.patent_date_of_application || '-' }}</p>
         </div>
         <div class="list">
           <p>有效期至</p>

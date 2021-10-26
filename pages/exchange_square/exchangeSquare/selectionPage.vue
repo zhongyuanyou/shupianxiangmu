@@ -5,6 +5,7 @@
       ref="search"
       :default-search-key="defaultSearchKey"
       @searchValue="handleSearch"
+      @clearDefaultSearchKey="defaultSearchKey = ''"
     />
     <!-- tabs -->
     <!-- <sp-sticky offset-top="44"> -->
@@ -46,7 +47,7 @@ export default {
   data() {
     return {
       loading: false,
-      defaultSearchKey: this.$route.query.searchKey || '',
+      defaultSearchKey: '公司转让',
       finished: false,
       companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,
@@ -92,9 +93,10 @@ export default {
     onLoad() {},
     handleSearch(val) {
       this.$refs.menu.params.searchKey = val
-      this.$router.replace(
-        `/exchange_square/exchangeSquare/selectionPage?searchKey=${val}`
-      )
+      // if (this.$route.query.searchKey === val) return
+      // this.$router.replace(
+      //   `/exchange_square/exchangeSquare/selectionPage?searchKey=${val}`
+      // )
     },
   },
 }

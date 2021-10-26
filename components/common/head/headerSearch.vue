@@ -32,6 +32,7 @@
             v-model="value"
             class="input"
             type="text"
+            :placeholder="defaultSearchKey"
             :maxlength="maxlength"
             @keyup.enter="search"
           />
@@ -84,7 +85,7 @@ export default {
   data() {
     return {
       isShow: true,
-      value: this.defaultSearchKey,
+      value: '',
       safeTop: 20, // 顶部安全区的高度
       useSafeAreaClass: false,
     }
@@ -104,6 +105,15 @@ export default {
       return this.useSafeAreaClass
         ? `${this.headClass} safe-area-top`
         : this.headClass
+    },
+  },
+  watch: {
+    value: {
+      handler(nVal, oVal) {
+        if (oVal && !nVal) {
+          this.$emit('clearDefaultSearchKey')
+        }
+      },
     },
   },
   created() {
@@ -137,6 +147,7 @@ export default {
       }
     },
     search() {
+      this.value = this.value || this.defaultSearchKey
       this.$emit('searchValue', this.value)
     },
   },
