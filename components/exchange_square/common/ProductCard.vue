@@ -1,6 +1,6 @@
 <template>
   <div class="product-card">
-    <div class="card">
+    <div class="card" @click="jump">
       <div class="title-box">
         <div v-if="type === 'monthly' && product.areaValue" class="title-tag">
           {{ product.areaValue && product.areaValue.split(',')[0] }}
@@ -28,7 +28,7 @@
             {{ product.referencePrice > 9999 ? '万' : '元' }}
           </div>
         </div>
-        <div class="details" @click="jump">
+        <div class="details">
           <div class="btn">查看详情</div>
           <div class="icon">
             <my-icon
@@ -81,7 +81,7 @@
       </div> -->
       <div v-if="type === 'monthly'" class="msg-box">
         <div>
-          <div class="msg-title">经营时间</div>
+          <div class="msg-title">经营年限</div>
           <div class="msg-content">{{ product.ageLimitValue || '/' }}</div>
         </div>
         <div>
