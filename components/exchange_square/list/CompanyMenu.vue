@@ -92,7 +92,7 @@ export default {
     },
     top: {
       type: Number,
-      default: 48,
+      default: 56,
     },
     searchKey: {
       type: String,
