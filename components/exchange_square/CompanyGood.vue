@@ -1,6 +1,6 @@
 <template>
   <div class="goods-list">
-    <div v-for="(item, i) of list" :key="i" class="box">
+    <div v-for="(item, i) of list" :key="i" class="box" @click="jump(item)">
       <div class="name">
         <template v-if="active === 0">
           <div v-if="item.registration_area" class="address">
@@ -28,7 +28,7 @@
           ><span>{{ item.referencePrice > 9999 ? '万' : '元' }}</span>
         </div>
         <div class="right">
-          <span @click="jump(item)">查看详情</span>
+          <span>查看详情</span>
           <my-icon name="list_ic_next" size="0.22rem" color="#4974f5"></my-icon>
         </div>
       </div>
@@ -137,7 +137,6 @@ export default {
       return price(data)
     },
     jump(item) {
-      console.log(item)
       let base = ''
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
