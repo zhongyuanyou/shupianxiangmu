@@ -2,6 +2,7 @@
   <div class="exchange-square">
     <sp-sticky offset-top="0">
       <Header
+        style="height: 56px"
         title="交易广场"
         placeholder="公司转让"
         disabled="true"
