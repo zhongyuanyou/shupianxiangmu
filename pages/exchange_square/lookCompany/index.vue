@@ -24,7 +24,7 @@
       ></Advertising>
       <div class="resource">全部资源</div>
       <CompanyMenu
-        :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
+        :list="['Region', 'Price', 'Industry', 'More', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         :active="0"
         info="暂无搜索结果"
