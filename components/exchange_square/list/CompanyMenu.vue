@@ -128,6 +128,7 @@ export default {
     active() {
       this.pageNum = 1
       this.productList = []
+      this.loading = true
       this.getType()
       this.isAlive = false
       this.$nextTick(() => (this.isAlive = true))
