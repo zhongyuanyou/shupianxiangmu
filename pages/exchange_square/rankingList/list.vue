@@ -155,7 +155,7 @@ export default {
           return '1000万以上'
         }
       } else if (type === 'business_age_limit') {
-        if (key === '') return '/'
+        if (key === '') return '-'
         if (key < 1) return '1年以下'
         if (key >= 1 && key < 3) return '1-3年'
         if (key >= 3 && key < 5) return '3-5年'
