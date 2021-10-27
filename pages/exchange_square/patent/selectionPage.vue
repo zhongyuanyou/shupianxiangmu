@@ -40,6 +40,10 @@ export default {
     },
     search(val) {
       this.searchVal = val
+      if (this.$route.query.searchKey === val) return
+      this.$router.replace(
+        `/exchange_square/patent/selectionPage?searchKey=${val}`
+      )
     },
   },
 }
