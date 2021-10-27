@@ -45,20 +45,20 @@
         <div>
           <div class="msg-title">行业分类</div>
           <div class="msg-content">
-            {{ product.patentIndustryValue || '-' }}
+            {{ product.patentIndustryValue || '/' }}
           </div>
         </div>
         <div>
           <div class="msg-title">申请日期</div>
-          <div class="msg-content">{{ product.applicationValue || '-' }}</div>
+          <div class="msg-content">{{ product.applicationValue || '/' }}</div>
         </div>
         <div>
           <div class="msg-title">有限期至</div>
-          <div class="msg-content">{{ product.certificateValue || '-' }}</div>
+          <div class="msg-content">{{ product.certificateValue || '/' }}</div>
         </div>
         <div>
           <div class="msg-title">专利状态</div>
-          <div class="msg-content">{{ product.statusValue || '-' }}</div>
+          <div class="msg-content">{{ product.statusValue || '/' }}</div>
         </div>
       </div>
       <!-- <div v-if="type === 'ualification'" class="msg-box">
@@ -82,19 +82,19 @@
       <div v-if="type === 'monthly'" class="msg-box">
         <div>
           <div class="msg-title">经营时间</div>
-          <div class="msg-content">{{ product.ageLimitValue || '-' }}</div>
+          <div class="msg-content">{{ product.ageLimitValue || '/' }}</div>
         </div>
         <div>
           <div class="msg-title">纳税类型</div>
-          <div class="msg-content">{{ product.taxpayerTypeValue || '-' }}</div>
+          <div class="msg-content">{{ product.taxpayerTypeValue || '/' }}</div>
         </div>
         <div>
           <div class="msg-title">注册资本</div>
-          <div class="msg-content">{{ product.capitalValue || '-' }}</div>
+          <div class="msg-content">{{ product.capitalValue || '/' }}</div>
         </div>
         <div>
           <div class="msg-title">所属行业</div>
-          <div class="msg-content">{{ product.industryValue || '-' }}</div>
+          <div class="msg-content">{{ product.industryValue || '/' }}</div>
         </div>
       </div>
     </div>
