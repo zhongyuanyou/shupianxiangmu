@@ -39,7 +39,7 @@
         </div>
         <div class="list">
           <p>纳税类型</p>
-          <p>{{ item.taxpayer_type || '/' }}</p>
+          <p>{{ item.taxpayer_type || '-' }}</p>
         </div>
         <div class="list">
           <p>注册资本</p>
@@ -47,25 +47,25 @@
         </div>
         <div class="list">
           <p>所属行业</p>
-          <p>{{ item.company_industry || '/' }}</p>
+          <p>{{ item.company_industry || '-' }}</p>
         </div>
       </div>
       <div v-show="active === 2" class="foot">
         <div class="list">
           <p>行业</p>
-          <p>{{ item.patent_industry || '/' }}</p>
+          <p>{{ item.patent_industry || '-' }}</p>
         </div>
         <div class="list">
           <p>申请日期</p>
-          <p>{{ item.patent_date_of_application || '/' }}</p>
+          <p>{{ item.patent_date_of_application || '-' }}</p>
         </div>
         <div class="list">
           <p>有效期至</p>
-          <p>{{ item.validity_of_certificate || '/' }}</p>
+          <p>{{ item.validity_of_certificate || '-' }}</p>
         </div>
         <div class="list">
           <p>专利状态</p>
-          <p>{{ item.patent_status || '/' }}</p>
+          <p>{{ item.patent_status || '-' }}</p>
         </div>
       </div>
       <div v-show="active === 3" cdalass="foot">
@@ -75,15 +75,15 @@
         </div>
         <div class="list">
           <p>到期日期</p>
-          <p>{{ item.expire_date || '/' }}</p>
+          <p>{{ item.expire_date || '-' }}</p>
         </div>
         <div class="list">
           <p>注册资本</p>
-          <p>{{ item.registered_capital || '/' }}</p>
+          <p>{{ item.registered_capital || '-' }}</p>
         </div>
         <div class="list">
           <p>安全许可证</p>
-          <p>{{ item.industry || '/' }}</p>
+          <p>{{ item.industry || '-' }}</p>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@ export default {
           return '1000万以上'
         }
       } else {
-        return '/'
+        return '-'
       }
     },
     filterYear(year) {
