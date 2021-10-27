@@ -1,5 +1,5 @@
 <template>
-  <div class="header" :style="{ backgroundColor: bgColor }">
+  <div class="header" :style="{ backgroundColor: bgColor, height: '56px' }">
     <div class="slot-left">
       <slot name="left">
         <my-icon
