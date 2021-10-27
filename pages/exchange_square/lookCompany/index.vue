@@ -2,6 +2,7 @@
   <div class="exchange-square">
     <sp-sticky>
       <Header
+        style="height: 56px"
         title="找公司"
         placeholder="请输入关键词"
         :bg-color="isFixed ? '#ffffff' : '#f5f5f5'"
