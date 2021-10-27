@@ -113,7 +113,7 @@ export default {
       }
     },
     filterYear(year) {
-      if (year === '') return '/'
+      if (year === '') return '-'
       if (year < 1) return '1年以下'
       if (year >= 1 && year < 3) return '1-3年'
       if (year >= 3 && year < 5) return '3-5年'
