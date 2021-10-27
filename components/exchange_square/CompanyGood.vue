@@ -32,7 +32,7 @@
       <div v-show="active === 0" class="foot">
         <div class="list">
           <p>经营时间</p>
-          <p>{{ item.business_age_limit || '-' }}</p>
+          <p>{{ item.business_age_limit | filterYear }}</p>
         </div>
         <div class="list">
           <p>纳税类型</p>
@@ -108,6 +108,13 @@ export default {
       } else {
         return '-'
       }
+    },
+    filterYear(year) {
+      if (year === '') return '-'
+      if (year < 1) return '1年以下'
+      if (year >= 1 && year < 3) return '1-3年'
+      if (year >= 3 && year < 5) return '3-5年'
+      if (year >= 5) return '5年以上'
     },
   },
   props: {
