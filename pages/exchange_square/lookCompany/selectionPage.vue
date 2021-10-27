@@ -1,12 +1,12 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
+    <headerSearch @searchValue="handleSearch" />
     <!-- 筛选 -->
     <CompanyMenu
-      ref="menu"
       :top="44"
       :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
+      :search-key="searchKey"
     />
   </div>
 </template>
@@ -27,13 +27,20 @@ export default {
     return {
       loading: false,
       finished: false,
+      searchKey: '',
     }
   },
   methods: {
     onLoad() {
       this.finished = true
     },
-    search() {},
+    handleSearch(val) {
+      this.searchKey = val
+      if (this.$route.query.searchKey === val) return
+      this.$router.replace(
+        `/exchange_square/lookCompany/selectionPage?searchKey=${val}`
+      )
+    },
   },
 }
 </script>
