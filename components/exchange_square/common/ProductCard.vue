@@ -14,6 +14,7 @@
       <div class="label-box">
         <div
           v-for="(tag, tagIdx) in product.sellLabel"
+          v-show="tagIdx < 3"
           :key="tagIdx"
           class="label"
         >
