@@ -93,6 +93,10 @@ export default {
       type: Number,
       default: 56,
     },
+    searchKey: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -134,16 +138,18 @@ export default {
       this.$nextTick(() => (this.isAlive = true))
     },
     // 筛选
-    'params.searchKey': {
-      handler() {
+    searchKey: {
+      handler(v) {
+        console.log(v)
         this.pageNum = 1
         this.productList = []
+        this.params.searchKey = v
         this.getProductList()
       },
     },
   },
   mounted() {
-    // this.params.searchKey = this.$route.query.serchKey || ''
+    this.params.searchKey = this.$route.query.searchKey || ''
     this.getType()
   },
 

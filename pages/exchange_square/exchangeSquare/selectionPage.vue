@@ -26,6 +26,7 @@
       :active="active"
       :list="companyList"
       :default-search-key="defaultSearchKey"
+      :search-key="searchKey"
     />
     <!-- </sp-sticky> -->
   </div>
@@ -57,6 +58,7 @@ export default {
         1: '商标',
         2: '专利',
       },
+      searchKey: '',
     }
   },
   watch: {
@@ -92,11 +94,11 @@ export default {
   methods: {
     onLoad() {},
     handleSearch(val) {
-      this.$refs.menu.params.searchKey = val
-      // if (this.$route.query.searchKey === val) return
-      // this.$router.replace(
-      //   `/exchange_square/exchangeSquare/selectionPage?searchKey=${val}`
-      // )
+      this.searchKey = val
+      if (this.$route.query.searchKey === val) return
+      this.$router.replace(
+        `/exchange_square/exchangeSquare/selectionPage?searchKey=${val}`
+      )
     },
   },
 }

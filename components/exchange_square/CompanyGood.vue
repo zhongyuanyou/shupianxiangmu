@@ -34,7 +34,7 @@
       </div>
       <div v-show="active === 0" class="foot">
         <div class="list">
-          <p>经营时间</p>
+          <p>经营年限</p>
           <p>{{ item.business_age_limit | filterYear }}</p>
         </div>
         <div class="list">

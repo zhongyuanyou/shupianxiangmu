@@ -1,13 +1,13 @@
 <template>
   <div class="selection-page">
     <!-- 搜索 -->
-    <headerSearch @searchValue="(val) => ($refs.menu.params.searchKey = val)" />
+    <headerSearch @searchValue="handleSearch" />
     <!-- 筛选 -->
     <CompanyMenu
-      ref="menu"
       :list="['Category', 'Classify', 'Price', 'More', 'Sortord']"
       :top="44"
       :active="1"
+      :search-key="searchKey"
     />
   </div>
 </template>
@@ -25,9 +25,19 @@ export default {
     [Tabs.name]: Tabs,
   },
   data() {
-    return {}
+    return {
+      searchKey: '',
+    }
   },
-  methods: {},
+  methods: {
+    handleSearch(val) {
+      this.searchKey = val
+      if (this.$route.query.searchKey === val) return
+      this.$router.replace(
+        `/exchange_square/lookRrand/selectionPage?searchKey=${val}`
+      )
+    },
+  },
 }
 </script>
 

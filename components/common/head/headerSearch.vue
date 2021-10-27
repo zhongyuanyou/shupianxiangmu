@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       isShow: true,
-      value: '',
+      value: this.$route.query.searchKey || '',
     }
   },
   computed: {
@@ -82,6 +82,14 @@ export default {
         }
       },
     },
+    // '$route.query.searchKey': {
+    //   handler(v) {
+    //     console.log(v)
+    //     if (v) {
+    //       this.value = v
+    //     }
+    //   },
+    // },
   },
   mounted() {},
   methods: {
