@@ -62,7 +62,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .advertising {
-  margin-bottom: 34px;
   padding: 0 20px;
   display: flex;
   width: 100%;
