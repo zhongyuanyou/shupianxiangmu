@@ -5,7 +5,11 @@
       <div class="title">
         <div class="name">{{ classify(item.fieldList) }}{{ item.name }}</div>
         <div class="tag">
-          <span v-for="(tagItem, tagKey) in item.sellLabel" :key="tagKey">
+          <span
+            v-for="(tagItem, tagKey) in item.sellLabel"
+            v-show="tagKey < 3"
+            :key="tagKey"
+          >
             {{ tagItem }}
           </span>
         </div>

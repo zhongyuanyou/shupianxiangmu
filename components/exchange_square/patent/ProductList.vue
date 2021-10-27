@@ -251,6 +251,7 @@ export default {
     },
   },
   created() {
+    this.params.searchKey = this.$route.query.searchKey
     this.getType()
   },
   methods: {
