@@ -29,6 +29,7 @@
       v-model="loading"
       :finished="finished"
       finished-text="没有更多了"
+      style="margin-top: 13px"
       @load="onLoad"
     >
       <TrademarkGood v-show="active == 1" :list="productList" />
@@ -91,7 +92,7 @@ export default {
     },
     top: {
       type: Number,
-      default: 56,
+      default: 48,
     },
     searchKey: {
       type: String,
