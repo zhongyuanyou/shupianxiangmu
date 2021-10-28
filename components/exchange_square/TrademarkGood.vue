@@ -101,7 +101,9 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?classCodeOne=${item.classCode}&productId=${item.id}`
+      if (item.classCode === 'FL20201224136273') {
+        window.location.href = `https://${base}m.shupian.cn/detail/transaction/brand?productId=${item.id}`
+      }
     },
   },
 }

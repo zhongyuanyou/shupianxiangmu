@@ -141,7 +141,11 @@ export default {
       DGG_SERVER_ENV === 'development' && (base = 'd')
       DGG_SERVER_ENV === 'release' && (base = 't')
       DGG_SERVER_ENV === 'production' && (base = '')
-      window.location.href = `https://${base}m.shupian.cn/detail/transactionDetails?classCodeOne=${item.classCode}&productId=${item.id}`
+      if (item.classCode === 'FL20201224136341') {
+        window.location.href = `https://${base}m.shupian.cn/detail/transaction/patent?productId=${item.id}`
+      } else if (item.classCode === 'FL20201224136319') {
+        window.location.href = `https://${base}m.shupian.cn/detail/transaction/company?productId=${item.id}`
+      }
     },
   },
 }
