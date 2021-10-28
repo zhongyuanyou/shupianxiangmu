@@ -32,7 +32,7 @@
       <div class="resource">全部资源</div>
       <CompanyMenu
         :active="1"
-        :list="['Category', 'Combination', 'Price', 'More', 'Sortord']"
+        :list="['Category', 'Combination', 'Price', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         info="暂无搜索结果"
         @scrollEvent="scrollEvent"

@@ -187,6 +187,7 @@ export default {
         height: 28px;
         padding: 0 6px;
         font-size: 20px;
+        padding-top: 0.5px;
         color: #5c7499;
         line-height: 28px;
         margin-right: 8px;

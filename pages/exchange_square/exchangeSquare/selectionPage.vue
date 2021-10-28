@@ -71,7 +71,7 @@ export default {
           'Category',
           'Combination',
           'Price',
-          'More',
+          // 'More',
           'Sortord',
         ]
       }
