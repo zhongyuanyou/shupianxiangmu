@@ -63,7 +63,6 @@ export default {
     // 输入框聚焦
     searchFocus() {
       this.$emit('searchFocus')
-      console.log(111)
     },
   },
 }

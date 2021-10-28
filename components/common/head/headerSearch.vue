@@ -25,6 +25,7 @@
             @keyup.enter="search"
           />
           <my-icon
+            v-show="value"
             name="guanbi_mian"
             size="0.32rem"
             color="#CCCCCC"
