@@ -377,7 +377,10 @@ export default {
   font-weight: bold;
 }
 ::v-deep .sp-dropdown-menu__title {
-  max-width: 160px;
+  max-width: 120px;
+}
+::v-deep .sp-ellipsis {
+  font-size: 28px !important;
 }
 ::v-deep .sp-dropdown-menu__bar {
   box-shadow: none;

@@ -16,12 +16,7 @@
           <div v-if="item.label">{{ item.label }}</div>
           <a @click="jump(item)">
             <img v-lazy="item.navigationImageUrl + $ossImgSet(48, 48)" alt="" />
-            <span
-              :style="{
-                fontWeight: `${item.size === 'small' ? '400' : 'bold'}`,
-              }"
-              >{{ item.name }}</span
-            >
+            <span>{{ item.name }}</span>
           </a>
         </li>
       </ul>
