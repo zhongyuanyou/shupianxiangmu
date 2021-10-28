@@ -12,10 +12,10 @@
     <div class="tabs">
       <sp-tabs v-model="active">
         <sp-tab
-          v-for="(item, index) in tabList"
-          :key="index"
-          :title="item"
-          :name="index"
+          v-for="item in tabList"
+          :key="item.key"
+          :title="item.label"
+          :name="item.key"
         >
         </sp-tab>
       </sp-tabs>
@@ -52,12 +52,11 @@ export default {
       finished: false,
       companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,
-      tabList: ['公司交易', '商标交易', '专利交易'],
-      typeName: {
-        0: '公司',
-        1: '商标',
-        2: '专利',
-      },
+      tabList: [
+        { label: '公司交易', key: 0 },
+        { label: '专利交易', key: 2 },
+        { label: '商标交易', key: 1 },
+      ],
       searchKey: '',
     }
   },
