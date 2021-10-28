@@ -188,8 +188,7 @@ export default {
     }
   }
   .resource {
-    padding: 0 20px;
-    margin-bottom: 5px;
+    padding: 34px 20px 6px;
     font-weight: bold;
     font-size: 32px;
     color: #222222;
