@@ -5,7 +5,7 @@
     <!-- 筛选 -->
     <CompanyMenu
       :top="44"
-      :list="['Region', 'Price', 'Industry', 'More', 'Sortord']"
+      :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
       :search-key="searchKey"
     />
   </div>

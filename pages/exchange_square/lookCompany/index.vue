@@ -25,7 +25,7 @@
       ></Advertising>
       <div class="resource">全部资源</div>
       <CompanyMenu
-        :list="['Region', 'Price', 'Industry', 'More', 'Sortord']"
+        :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         :active="0"
         info="暂无搜索结果"
@@ -188,7 +188,8 @@ export default {
     }
   }
   .resource {
-    padding: 11.5px 20px 32px 20px;
+    padding: 0 20px;
+    margin-bottom: 5px;
     font-weight: bold;
     font-size: 32px;
     color: #222222;
