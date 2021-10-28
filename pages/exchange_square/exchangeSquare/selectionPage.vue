@@ -75,7 +75,7 @@ export default {
         ]
       }
       if (this.active === 2) {
-        this.companyList = ['State', 'Industry', 'Type', 'Price', 'Sortord']
+        this.companyList = ['Type', 'Industry', 'State', 'Price', 'Sortord']
       }
       this.$refs.menu.params = {
         classCode: '',
