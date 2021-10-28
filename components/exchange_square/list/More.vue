@@ -57,21 +57,30 @@ export default {
         emitData: {},
         nameLengthEnd: '',
         nameLengthStart: '',
-        name: '',
       },
       active: [],
+      activeName: [],
     }
   },
   methods: {
     activeItem(item, index, key) {
-      this.name = item.name
+      const active = item.children[key]
+      const idx = this.activeName.findIndex(
+        (item) => item.pcode === active.pcode
+      )
+      if (idx > -1) {
+        if (active.name === '不限') this.activeName.splice(index, 1)
+        else this.activeName[idx] = active
+      } else {
+        this.activeName.push(active)
+      }
       this.$set(this.active, index, key)
     },
     reset() {
       this.active = Object.values(this.active).map((key) => {
         return (key = 0)
       })
-      console.log(this.active)
+      this.activeName = []
     },
     custom() {
       const list = []
@@ -175,7 +184,7 @@ export default {
         }
         if (['JY-GS-GD-ZCZB'].includes(item.pcode)) {
           emitArr.push({
-            fieldCode: 'taxpayer_type',
+            fieldCode: item.ext1,
             fieldValue: item.ext2
               ? {
                   start: item.ext2.split('-')[0],
@@ -186,10 +195,11 @@ export default {
           })
         }
       })
-      if (emitArr.length >= 2) {
+      const arrL = this.activeName.length
+      if (arrL >= 2) {
         this.title = '多选'
       } else {
-        this.title = this.name || '更多'
+        this.title = arrL === 1 ? this.activeName[0].name : '更多'
       }
       this.params.emitArr = emitArr
       this.$refs.item.toggle()

@@ -136,15 +136,11 @@ export default {
         ids.push(this.province)
       }
       this.$refs.item.toggle()
-      if (this.title === '全国') {
-        this.$emit('activeItem', {}, 'Region')
-        return
-      }
       this.$emit(
         'activeItem',
         {
           fieldCode: 'registration_area',
-          fieldValue: ids,
+          fieldValue: this.title === '全国' ? null : ids,
           matchType: 'MATCH_TYPE_MULTI',
         },
         'Region'

@@ -196,25 +196,17 @@ export default {
       // 更多
       if (name === 'More') {
         // 字符
-        console.log(data)
         this.params.nameLengthStart = data.nameLengthEnd
         this.params.nameLengthStart = data.nameLengthStart
         data.emitArr.forEach((ele) => {
           const index = this.params.fieldList.findIndex(
             (item) => item.fieldCode === ele.fieldCode
           )
-          console.log(index)
-          this.params.fieldList = this.params.fieldList.splice(index, 1)
-          console.log(this.params.fieldList)
-          // this.params.fieldList = this.params.fieldList.filter(
-          //   (item) => item.fieldCode === ele.fieldCode
-          // )
-          if (ele.fieldValue) this.params.fieldList.push(ele)
+          this.params.fieldList.splice(index, 1)
         })
-        // data.emitArr.forEach((item) => {
-        //   if (item.fieldValue) this.params.fieldList.push(item)
-        // })
-        // this.params.fieldLis = this.params.fieldList.concat(data.emitArr)
+        data.emitArr.forEach((item) => {
+          if (item.fieldValue) this.params.fieldList.push(item)
+        })
       }
       // 排序
       if (name === 'Sortrd') {
