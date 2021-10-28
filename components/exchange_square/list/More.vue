@@ -69,7 +69,7 @@ export default {
         (item) => item.pcode === active.pcode
       )
       if (idx > -1) {
-        if (active.name === '不限') this.activeName.splice(index, 1)
+        if (active.name === '不限') this.activeName.splice(idx, 1)
         else this.activeName[idx] = active
       } else {
         this.activeName.push(active)
