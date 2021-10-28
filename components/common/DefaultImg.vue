@@ -18,7 +18,6 @@ export default {
 
 <style lang="less" scoped>
 .default-img {
-  margin-top: 52px;
   min-height: 600px;
   text-align: center;
   img {
