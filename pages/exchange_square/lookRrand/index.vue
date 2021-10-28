@@ -144,6 +144,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+::v-deep .trademark-good {
+  padding-top: 0;
+}
 ::v-deep .sp-dropdown-menu__bar {
   background: none;
 }
@@ -185,7 +188,7 @@ export default {
     }
   }
   .resource {
-    padding: 22px 20px 32px;
+    padding: 30px 20px 6px 20px;
     font-weight: bold;
     font-size: 32px;
     color: #222222;

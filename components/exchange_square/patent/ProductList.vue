@@ -374,7 +374,7 @@ export default {
         this.params.fieldList.push(objValue)
         this.getProductList()
       } else {
-        this.tabList[0] = '行业'
+        this.tabList[0] = '类型'
 
         if (this.params.fieldList.length === 1) {
           this.params.fieldList = []
@@ -411,7 +411,7 @@ export default {
         this.params.fieldList.push(objValue)
         this.getProductList()
       } else {
-        this.tabList[1] = '分类'
+        this.tabList[1] = '行业'
         if (this.params.fieldList.length === 1) {
           this.params.fieldList = []
         } else {
@@ -513,6 +513,7 @@ export default {
 <style lang="less" scoped>
 .product-list {
   .list {
+    min-height: calc(100vh - 200px);
     .default-img {
       padding-bottom: 30px;
     }

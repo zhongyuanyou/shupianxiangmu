@@ -221,7 +221,7 @@ export default {
 .box {
   flex: 1;
   overflow-y: auto;
-  padding: 56px 28px;
+  padding: 0 28px 56px;
   .list {
     display: flex;
     flex-wrap: wrap;
@@ -257,7 +257,7 @@ export default {
     font-weight: bold;
   }
   .title {
-    margin-bottom: 28px;
+    margin: 52px 0 20px 12px;
     font-size: 36px;
     font-weight: 700;
     color: #222;

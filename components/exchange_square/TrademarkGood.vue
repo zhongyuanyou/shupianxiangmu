@@ -79,7 +79,7 @@ export default {
     getImg() {
       return (item) => {
         const img =
-          'https://cdn.shupian.cn/sp-pt/wap/images/2moigrokha00000.png'
+          'https://cdn.shupian.cn/sp-pt/wap/images/23ptgue5z4ow000.png'
         try {
           return (
             item.fieldList.find((obj) => {
@@ -111,7 +111,7 @@ export default {
 
 <style lang="less" scoped>
 .trademark-good {
-  padding: 0 20px;
+  padding: 20px;
   column-count: 2;
   -webkit-column-count: 2; /* 兼容性 */
   -moz-column-count: 2; /* 兼容性 */
