@@ -32,7 +32,6 @@
       v-model="loading"
       :finished="finished"
       finished-text="没有更多了"
-      style="margin-top: -6px"
       @load="onLoad"
     >
       <TrademarkGood v-show="active == 1" :list="productList" />
@@ -200,16 +199,24 @@ export default {
       // 更多
       if (name === 'More') {
         // 字符
+        console.log(data)
         this.params.nameLengthStart = data.nameLengthEnd
         this.params.nameLengthStart = data.nameLengthStart
         data.emitArr.forEach((ele) => {
-          this.params.fieldList = this.params.fieldList.filter(
+          const index = this.params.fieldList.findIndex(
             (item) => item.fieldCode === ele.fieldCode
           )
+          console.log(index)
+          this.params.fieldList = this.params.fieldList.splice(index, 1)
+          console.log(this.params.fieldList)
+          // this.params.fieldList = this.params.fieldList.filter(
+          //   (item) => item.fieldCode === ele.fieldCode
+          // )
+          if (ele.fieldValue) this.params.fieldList.push(ele)
         })
-        data.emitArr.forEach((item) => {
-          if (item.fieldValue) this.params.fieldList.push(item)
-        })
+        // data.emitArr.forEach((item) => {
+        //   if (item.fieldValue) this.params.fieldList.push(item)
+        // })
         // this.params.fieldLis = this.params.fieldList.concat(data.emitArr)
       }
       // 排序

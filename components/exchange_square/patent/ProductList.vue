@@ -33,7 +33,7 @@
             ref="class"
             :title="tabList[1]"
             :title-class="
-              tabList[1] !== '分类' ? 'sp-dropdown-menu__title--active' : ''
+              tabList[1] !== '行业' ? 'sp-dropdown-menu__title--active' : ''
             "
           >
             <div class="class-list">
@@ -210,7 +210,7 @@ export default {
     return {
       loading: false,
       finished: false,
-      tabList: ['类型', '分类', '价格', '状态', '排序'],
+      tabList: ['类型', '行业', '价格', '状态', '排序'],
       typeList: [], // 类型分类
       classList: [], // 分类列表
       classListCode: '',
@@ -374,7 +374,7 @@ export default {
         this.params.fieldList.push(objValue)
         this.getProductList()
       } else {
-        this.tabList[0] = '类型'
+        this.tabList[0] = '行业'
 
         if (this.params.fieldList.length === 1) {
           this.params.fieldList = []

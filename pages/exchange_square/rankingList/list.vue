@@ -268,10 +268,10 @@ export default {
 .list {
   width: 100vw;
   min-height: 100vh;
-  //   background: #f5f5f5;
-  ::v-deep.card {
-    border: 1px solid #dddddd;
-  }
+  background: #f5f5f5;
+  //   ::v-deep.card {
+  //     border: 1px solid #dddddd;
+  //   }
   .banner-box {
     margin-top: 1px;
     width: 100%;
@@ -338,7 +338,7 @@ export default {
           color: #ffffff;
           font-weight: bold;
           margin-right: 100px;
-          width: 64px;
+          width: 70px;
         }
         .tab:last-child {
           margin-right: 0;
@@ -360,7 +360,7 @@ export default {
         left: 356px;
       }
       .line3 {
-        left: 610px;
+        left: 604px;
       }
       .line4 {
         left: 598px;
