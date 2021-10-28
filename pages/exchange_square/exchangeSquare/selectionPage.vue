@@ -50,7 +50,7 @@ export default {
       loading: false,
       defaultSearchKey: '公司转让',
       finished: false,
-      companyList: ['Region', 'Price', 'Industry', 'More', 'Sortord'],
+      companyList: ['Industry', 'Region', 'Price', 'More', 'Sortord'],
       active: 0,
       tabList: ['公司交易', '商标交易', '专利交易'],
       typeName: {
@@ -64,7 +64,7 @@ export default {
   watch: {
     active() {
       if (this.active === 0) {
-        this.companyList = ['Region', 'Price', 'Industry', 'More', 'Sortord']
+        this.companyList = ['Industry', 'Region', 'Price', 'More', 'Sortord']
       }
       if (this.active === 1) {
         this.companyList = [
