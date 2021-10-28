@@ -145,6 +145,7 @@ export default {
       }
       > .tag {
         display: flex;
+        padding: 6px 0;
         flex-wrap: wrap;
         > span {
           margin-left: 8px;
@@ -170,10 +171,11 @@ export default {
         color: #ec5330;
         font-weight: bold;
         display: flex;
-        align-items: center;
+        align-items: baseline;
         margin-top: 16px;
         > span {
           font-size: 22px;
+          margin-left: 4px;
           font-weight: normal;
         }
       }

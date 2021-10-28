@@ -1,5 +1,8 @@
 <template>
-  <div class="dropdown-list">
+  <div
+    class="dropdown-list"
+    :style="{ background: !loading && productList.length === 0 ? '#fff' : '' }"
+  >
     <sp-sticky v-if="list.length !== 0" :offset-top="top" @scroll="scrollEvent">
       <sp-dropdown-menu
         v-if="isAlive"

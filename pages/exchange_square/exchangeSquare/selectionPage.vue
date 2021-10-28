@@ -105,6 +105,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+::v-deep .sp-tab {
+  line-height: normal;
+}
 .selection-page {
   height: 100vh;
   display: flex;

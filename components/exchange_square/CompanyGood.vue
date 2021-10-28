@@ -29,7 +29,7 @@
         </div>
         <div class="right">
           <span>查看详情</span>
-          <my-icon name="list_ic_next" size="0.22rem" color="#4974f5"></my-icon>
+          <my-icon name="list_ic_next" size="0.20rem" color="#4974f5"></my-icon>
         </div>
       </div>
       <div v-show="active === 0" class="foot">
@@ -167,9 +167,7 @@ export default {
         color: #4974f5;
         letter-spacing: 0;
         text-align: center;
-        line-height: 32px;
-        height: 32px;
-        padding: 0 6px;
+        padding: 2px 6px;
         background: #f2f5ff;
         border: 1px solid #4974f5;
         border-radius: 4px;
@@ -217,9 +215,10 @@ export default {
         font-size: 36px;
         color: #ec5330;
         display: flex;
-        align-items: center;
+        align-items: baseline;
         width: 60%;
         > span {
+          margin-left: 4px;
           font-size: 22px;
         }
       }
@@ -227,7 +226,7 @@ export default {
         width: 40%;
         padding-left: 10px;
         display: flex;
-        align-items: center;
+        align-items: baseline;
         justify-content: flex-end;
         > span {
           display: block;
@@ -237,7 +236,7 @@ export default {
           margin-right: 8px;
         }
         ::v-deep.spiconfont-list_ic_next {
-          padding-top: 5px;
+          padding-top: 4px;
         }
       }
     }
