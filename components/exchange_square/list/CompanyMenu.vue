@@ -64,7 +64,6 @@ export default {
     Sortord: () => import('./Sortord.vue'), // 排序
     More: () => import('./More.vue'), //  更多
     Category: () => import('./Category.vue'), //  分类
-    Classify: () => import('./Classify.vue'), //  类型
     State: () => import('./State.vue'), //  状态
     Type: () => import('./Type.vue'), //  类型
     Combination: () => import('./Combination.vue'), // 组合

@@ -112,6 +112,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+::v-deep .goods-list {
+  margin: 0 0.2rem;
+}
+::v-deep .trademark-good {
+  padding-top: 0;
+}
 .exchange-square {
   width: 750px;
   margin: 0 auto;

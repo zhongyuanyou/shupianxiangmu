@@ -64,7 +64,7 @@ export default {
   .item {
     margin: 12px;
     width: 149px;
-    padding: 20px 5px;
+    padding: 20px 8px;
     background: #f8f8f8;
     font-size: 24px;
     text-align: center;

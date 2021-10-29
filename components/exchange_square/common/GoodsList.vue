@@ -80,11 +80,17 @@ export default {
 <style lang="less" scoped>
 .good-list {
   width: 100%;
-  margin-top: 7px;
+  padding-top: 7px;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
-
+  ::v-deep .sp-sticky {
+    height: 0.96rem;
+    .sp-tabs,
+    .sp-tabs__wrap {
+      height: 0.96rem;
+    }
+  }
   ::v-deep.sp-tabs__nav--line {
     padding-left: 20px;
     padding-bottom: 0;
@@ -126,7 +132,7 @@ export default {
     }
     &_tag {
       position: absolute;
-      bottom: 0;
+      bottom: -0.05rem;
       right: 0;
       width: 60px;
       height: 12px;

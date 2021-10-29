@@ -4,7 +4,7 @@
     <headerSearch @searchValue="handleSearch" />
     <!-- 筛选 -->
     <CompanyMenu
-      :list="['Category', 'Classify', 'Price', 'Sortord']"
+      :list="['Category', 'Combination', 'Price', 'Sortord']"
       :top="44"
       :active="1"
       :search-key="searchKey"

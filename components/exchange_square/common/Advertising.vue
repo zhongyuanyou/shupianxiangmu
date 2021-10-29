@@ -63,7 +63,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .ggvertising {
-  pggding: 0 20px;
+  padding: 0 20px;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -73,12 +73,12 @@ export default {
   }
   .gg-left {
     margin-right: 10px;
-    border-rggius: 24px;
+    border-radius: 24px;
     > img {
       width: 100%;
       height: 100%;
       display: block;
-      border-rggius: 24px;
+      border-radius: 24px;
     }
   }
   .gg-right {
@@ -88,12 +88,12 @@ export default {
     > div {
       width: 100%;
       height: 140px;
-      border-rggius: 24px;
+      border-radius: 24px;
       > img {
         width: 100%;
         height: 100%;
         display: block;
-        border-rggius: 24px;
+        border-radius: 24px;
       }
     }
     > div:first-child {

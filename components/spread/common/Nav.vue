@@ -140,6 +140,7 @@ export default {
 
 <style lang="less" scoped>
 .nav-content {
+  position: relative;
   width: 100%;
   padding: 0 20px;
   .up-and-down {
@@ -286,18 +287,19 @@ export default {
   }
 }
 .scroll-box {
+  z-index: 99;
+  position: absolute;
+  bottom: 20px;
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 20px;
-  padding-top: 3px;
-  margin-top: -30px;
+  height: 8px;
   span {
     position: relative;
     display: flex;
     content: '';
     width: 80px;
-    height: 6px;
+    height: 8px;
     background-color: rgba(73, 116, 245, 0.1);
     border-radius: 3px;
     i {

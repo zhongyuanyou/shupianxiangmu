@@ -159,6 +159,7 @@ export default {
     margin-left: 12px;
     width: 100%;
     height: 68px;
+    font-size: 28px;
     background: #f5f5f5;
     border-radius: 12px;
     border: 0;
