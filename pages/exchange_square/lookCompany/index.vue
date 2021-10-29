@@ -149,6 +149,9 @@ export default {
 ::v-deep .sp-dropdown-menu__bar {
   background: none;
 }
+::v-deep .goods-list {
+  margin: 0 0.2rem 0 0.2rem;
+}
 .exchange-square {
   width: 750px;
   margin: 0 auto;
@@ -188,7 +191,7 @@ export default {
     }
   }
   .resource {
-    padding: 34px 20px 0;
+    padding: 34px 20px 6px;
     font-weight: bold;
     font-size: 32px;
     color: #222222;

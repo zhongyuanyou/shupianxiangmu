@@ -105,7 +105,7 @@ export default {
       display: block;
       border: none;
       background: none;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 700;
     }
     > input::-webkit-input-placeholder {

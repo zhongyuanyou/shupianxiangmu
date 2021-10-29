@@ -384,6 +384,7 @@ export default {
   font-size: 28px !important;
 }
 ::v-deep .sp-dropdown-menu__bar {
+  height: 0.88rem;
   box-shadow: none;
 }
 </style>

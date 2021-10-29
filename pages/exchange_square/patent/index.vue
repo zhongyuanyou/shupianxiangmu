@@ -27,7 +27,7 @@
     <!-- 资源列表 S -->
     <div
       :style="{
-        marginTop: '17px',
+        marginTop: '0.34rem',
       }"
     >
       <ProductList info="暂无搜索结果" @scroll="scroll"></ProductList>
