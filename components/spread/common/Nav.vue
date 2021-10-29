@@ -289,10 +289,12 @@ export default {
 .scroll-box {
   z-index: 99;
   position: absolute;
+  right: 50%;
+  transform: translateX(50%);
   bottom: 20px;
   display: flex;
   justify-content: center;
-  width: 100%;
+  // width: 100%;
   height: 8px;
   span {
     position: relative;
