@@ -4,7 +4,7 @@
       <img :src="getImg(item)" alt="" class="photo" />
       <div class="title">
         <div class="name">{{ classify(item.fieldList) }}{{ item.name }}</div>
-        <div class="tag">
+        <div v-if="item.sellLabel && item.sellLabel.length !== 0" class="tag">
           <span
             v-for="(tagItem, tagKey) in item.sellLabel"
             v-show="tagKey < 3"
@@ -162,7 +162,7 @@ export default {
         }
       }
       > .slogan {
-        margin-top: 12px;
+        margin-top: 5px;
         font-size: 22px;
         color: #222222;
       }
