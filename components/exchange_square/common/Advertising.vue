@@ -1,15 +1,16 @@
 <template>
-  <div class="advertising">
-    <div class="ad-left" @click="jump(adLfList)">
+  <div class="ggvertising">
+    <div class="gg-left" @click="jump(ggLfList)">
+      {{ ggLfList[0] }}
       <img
         :src="`${
-          adLfList && adLfList.materialUrl
+          ggLfList && ggLfList.materialUrl
         }?x-oss-process=image/resize,m_fill,w_335,h_290,limit_0`"
       />
     </div>
-    <div class="ad-right">
+    <div class="gg-right">
       <div
-        v-for="(item, index) in adRgList"
+        v-for="(item, index) in ggRgList"
         :key="index"
         class="img-box"
         @click="jump(item)"
@@ -30,7 +31,7 @@ export default {
   name: 'Advertising',
   mixins: [jump],
   props: {
-    adLfList: {
+    ggLfList: {
       type: Object,
       default: () => {
         return {
@@ -40,7 +41,7 @@ export default {
         }
       },
     }, // 广告位左边
-    adRgList: {
+    ggRgList: {
       type: Array,
       default: () => {
         return [
@@ -61,8 +62,8 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.advertising {
-  padding: 0 20px;
+.ggvertising {
+  pggding: 0 20px;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -70,29 +71,29 @@ export default {
     flex: 1;
     height: 290px;
   }
-  .ad-left {
+  .gg-left {
     margin-right: 10px;
-    border-radius: 24px;
+    border-rggius: 24px;
     > img {
       width: 100%;
       height: 100%;
       display: block;
-      border-radius: 24px;
+      border-rggius: 24px;
     }
   }
-  .ad-right {
+  .gg-right {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     > div {
       width: 100%;
       height: 140px;
-      border-radius: 24px;
+      border-rggius: 24px;
       > img {
         width: 100%;
         height: 100%;
         display: block;
-        border-radius: 24px;
+        border-rggius: 24px;
       }
     }
     > div:first-child {

@@ -16,7 +16,13 @@
     <NavList :nav-list="navList"></NavList>
     <!-- 导航区 E -->
     <!-- 广告区 S -->
-    <Advertising :ad-lf-list="adLfList[0]" :ad-rg-list="adRgList"></Advertising>
+    <div>
+      <Advertising
+        :gg-lf-list="adLfList[0]"
+        :gg-rg-list="adRgList"
+      ></Advertising>
+    </div>
+
     <!-- 广告区 E -->
     <!-- 资源列表 S -->
     <div

@@ -53,7 +53,7 @@ export default {
       this.$refs.item.toggle()
       const item = {
         fieldCode: this.stateList[index].ext1,
-        fieldValue: this.stateList[index].ext2,
+        fieldValue: [this.stateList[index].ext2],
         matchType: 'MATCH_TYPE_MULTI',
       }
       this.$emit('activeItem', item, 'State')
