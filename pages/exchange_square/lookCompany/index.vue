@@ -20,8 +20,8 @@
       <NavList :nav-list="scrollNavList" />
       <!-- 服务 -->
       <Advertising
-        :ad-lf-list="adLfList[0]"
-        :ad-rg-list="adRgList"
+        :gg-lf-list="adLfList[0]"
+        :gg-rg-list="adRgList"
       ></Advertising>
       <div class="resource">全部资源</div>
       <CompanyMenu
