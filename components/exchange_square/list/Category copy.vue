@@ -110,7 +110,7 @@ export default {
 .box {
   flex: 1;
   overflow-y: auto;
-  padding: 56px 28px;
+  padding: 26px 28px 56px;
   display: flex;
   flex-wrap: wrap;
   .item {

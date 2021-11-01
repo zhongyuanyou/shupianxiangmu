@@ -1,7 +1,12 @@
 <template>
   <div class="nav-list">
     <div class="list">
-      <div v-for="(item, index) in navList" :key="index" class="navs">
+      <div
+        v-for="(item, index) in navList"
+        v-show="index < 10"
+        :key="index"
+        class="navs"
+      >
         <div class="nav" @click="jumpUrl(item)">
           <div class="icon">
             <img
