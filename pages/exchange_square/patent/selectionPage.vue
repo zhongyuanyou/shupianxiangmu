@@ -10,6 +10,7 @@
       fiexd-height="44"
       :search-val="searchVal"
       :fixed="true"
+      type="search"
     />
   </div>
 </template>

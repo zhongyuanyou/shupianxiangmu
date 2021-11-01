@@ -217,6 +217,10 @@ export default {
       type: String,
       default: '没有找到相关结果，换个关键词试试吧',
     },
+    type: {
+      type: String,
+      default: 'list',
+    },
   },
   data() {
     return {
@@ -268,7 +272,9 @@ export default {
   },
   methods: {
     open() {
-      window.scrollTo(0, 800)
+      if (this.type === 'list') {
+        window.scrollTo(0, 510)
+      }
     },
     onLoad() {
       if (this.params.start !== 1) {
