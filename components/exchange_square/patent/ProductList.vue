@@ -1,5 +1,11 @@
 <template>
-  <div class="product-list">
+  <div
+    class="product-list"
+    :style="{
+      background:
+        productList.length === 0 && !loading && finished ? '#ffffff' : '',
+    }"
+  >
     <div v-if="showTitle" class="title">全部资源</div>
     <sp-sticky :offset-top="fiexdHeight" @scroll="scroll">
       <div

@@ -59,7 +59,12 @@ export default {
     // 默认搜索项
     defaultSearchKey: {
       type: String,
-      default: '',
+      default: '请输入关键字',
+    },
+    // 回车是否显示默认字
+    carriage: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -83,14 +88,6 @@ export default {
         }
       },
     },
-    // '$route.query.searchKey': {
-    //   handler(v) {
-    //     console.log(v)
-    //     if (v) {
-    //       this.value = v
-    //     }
-    //   },
-    // },
   },
   mounted() {},
   methods: {
@@ -107,7 +104,9 @@ export default {
       this.$emit('backHandle')
     },
     search() {
-      this.value = this.value || this.defaultSearchKey
+      this.value = this.carriage
+        ? this.value || this.defaultSearchKey
+        : this.value
       this.$emit('searchValue', this.value)
     },
   },

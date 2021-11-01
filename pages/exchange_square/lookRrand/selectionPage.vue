@@ -44,6 +44,15 @@ export default {
 <style lang="less" scoped>
 .selection-page {
   background: #f5f5f5;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+::v-deep .dropdown-list {
+  flex: 1;
+  overflow-y: auto;
 }
 </style>

@@ -3,6 +3,7 @@
     <!-- 搜索 -->
     <headerSearch
       ref="search"
+      :carriage="true"
       :default-search-key="defaultSearchKey"
       @searchValue="handleSearch"
       @clearDefaultSearchKey="defaultSearchKey = ''"
