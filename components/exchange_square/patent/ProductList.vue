@@ -272,7 +272,7 @@ export default {
   },
   methods: {
     open() {
-      if (this.type === 'list') {
+      if (this.type === 'list' && !this.isFixed) {
         window.scrollTo(0, 510)
       }
     },
@@ -534,7 +534,7 @@ export default {
 <style lang="less" scoped>
 .product-list {
   .list {
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 195px);
     .default-img {
       padding-bottom: 30px;
     }
