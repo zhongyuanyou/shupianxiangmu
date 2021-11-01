@@ -101,7 +101,8 @@ export default {
     .search-input {
       margin-left: 10px;
       width: 100%;
-      height: 100%;
+      // height: 100%;
+      height: 36px;
       display: block;
       border: none;
       background: none;
