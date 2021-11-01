@@ -3,6 +3,7 @@
     <!-- 搜索 -->
     <headerSearch
       ref="search"
+      :carriage="true"
       :default-search-key="defaultSearchKey"
       @searchValue="handleSearch"
       @clearDefaultSearchKey="defaultSearchKey = ''"
@@ -120,6 +121,14 @@ export default {
     width: 28px;
     height: 6px;
     background: #4974f5;
+    border-radius: 3px;
+    position: absolute;
+    bottom: 35px;
+    left: 0;
+    z-index: 1;
+    width: 28px;
+    height: 6px;
+    background-color: #4974f5;
     border-radius: 3px;
   }
   ::v-deep .sp-tab--active {

@@ -4,7 +4,7 @@
     <headerSearch @searchValue="handleSearch" />
     <!-- 筛选 -->
     <CompanyMenu
-      :list="['Category', 'Classify', 'Price', 'Sortord']"
+      :list="['Category', 'Combination', 'Price', 'Sortord']"
       :top="44"
       :active="1"
       :search-key="searchKey"
@@ -44,6 +44,15 @@ export default {
 <style lang="less" scoped>
 .selection-page {
   background: #f5f5f5;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+::v-deep .dropdown-list {
+  flex: 1;
+  overflow-y: auto;
 }
 </style>

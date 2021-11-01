@@ -20,8 +20,8 @@
       <NavList :nav-list="scrollNavList" />
       <!-- 服务 -->
       <Advertising
-        :ad-lf-list="adLfList[0]"
-        :ad-rg-list="adRgList"
+        :gg-lf-list="adLfList[0]"
+        :gg-rg-list="adRgList"
       ></Advertising>
       <div class="resource">全部资源</div>
       <CompanyMenu
@@ -148,6 +148,9 @@ export default {
 <style lang="less" scoped>
 ::v-deep .sp-dropdown-menu__bar {
   background: none;
+}
+::v-deep .goods-list {
+  margin: 0 0.2rem 0 0.2rem;
 }
 .exchange-square {
   width: 750px;
