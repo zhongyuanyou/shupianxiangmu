@@ -273,7 +273,7 @@ export default {
   methods: {
     open() {
       if (this.type === 'list' && !this.isFixed) {
-        window.scrollTo(0, 510)
+        window.scrollTo(0, 525)
       }
     },
     onLoad() {
