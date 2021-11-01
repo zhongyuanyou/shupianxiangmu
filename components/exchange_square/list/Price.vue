@@ -60,7 +60,7 @@ export default {
   font-weight: bold;
 }
 .box {
-  padding: 56px 28px;
+  padding: 26px 28px 56px;
   display: flex;
   flex-wrap: wrap;
   .item {
