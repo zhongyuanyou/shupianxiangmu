@@ -164,6 +164,18 @@ export default {
     border: 0;
   }
 }
+input::-webkit-input-placeholder {
+  color: #999;
+}
+input:-moz-placeholder {
+  color: #999;
+}
+input::-moz-placeholder {
+  color: #999;
+}
+input:-ms-input-placeholder {
+  color: #999;
+}
 
 .fixed-head {
   width: 100%;

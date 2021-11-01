@@ -162,6 +162,7 @@ export default {
     > .name {
       display: flex;
       align-items: center;
+      font-weight: bold;
       > .address {
         font-size: 20px;
         color: #4974f5;

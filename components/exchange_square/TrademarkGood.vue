@@ -162,7 +162,7 @@ export default {
         }
       }
       > .slogan {
-        margin-top: 5px;
+        margin-top: 6px;
         font-size: 22px;
         color: #222222;
       }
