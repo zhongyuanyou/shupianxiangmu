@@ -9,6 +9,7 @@
     <div v-if="showTitle" class="title">全部资源</div>
     <sp-sticky :offset-top="fiexdHeight" @scroll="scroll">
       <div
+        ref="product"
         class="tabs"
         :style="{
           background: isFixed || fixed ? '#fff' : '',
@@ -23,6 +24,7 @@
             :title-class="
               tabList[0] !== '类型' ? 'sp-dropdown-menu__title--active' : ''
             "
+            @open="open"
           >
             <div class="type-list">
               <div
@@ -41,6 +43,7 @@
             :title-class="
               tabList[1] !== '行业' ? 'sp-dropdown-menu__title--active' : ''
             "
+            @open="open"
           >
             <div class="class-list">
               <div
@@ -61,6 +64,7 @@
             :title-class="
               tabList[2] !== '价格' ? 'sp-dropdown-menu__title--active' : ''
             "
+            @open="open"
           >
             <div class="class-list">
               <div
@@ -81,6 +85,7 @@
             :title-class="
               tabList[3] !== '状态' ? 'sp-dropdown-menu__title--active' : ''
             "
+            @open="open"
           >
             <div class="sorting-list">
               <div
@@ -110,6 +115,7 @@
             :title-class="
               tabList[4] !== '排序' ? 'sp-dropdown-menu__title--active' : ''
             "
+            @open="open"
           >
             <div class="sorting-list">
               <div
@@ -236,7 +242,7 @@ export default {
         classCode: '',
         dictCode: '',
         fieldList: [],
-        limit: 10,
+        limit: 20,
         needTypes: 1,
         searchKey: '',
         start: 1,
@@ -261,6 +267,9 @@ export default {
     this.getType()
   },
   methods: {
+    open() {
+      window.scrollTo(0, 800)
+    },
     onLoad() {
       if (this.params.start !== 1) {
         this.getProductList()
