@@ -10,7 +10,7 @@
         path="/exchange_square/lookCompany/selectionPage"
       />
     </sp-sticky>
-    <div style="overflow-y: auto">
+    <div ref="top" style="overflow-y: auto">
       <sp-swipe class="banner" :autoplay="3000" indicator-color="white">
         <sp-swipe-item v-for="(item, index) in swipeList" :key="index">
           <img :src="item.materialUrl" alt="" @click="jump(item)" />
@@ -29,6 +29,7 @@
         :background="isFixed ? '#ffffff' : 'none'"
         :active="0"
         info="暂无搜索结果"
+        @click.native="chilcktop($event)"
         @scrollEvent="scrollEvent"
       />
     </div>
@@ -100,6 +101,12 @@ export default {
     onLoad() {
       this.finished = true
       this.loading = false
+    },
+    chilcktop(e) {
+      const top = e.target.getBoundingClientRect().toptop
+      if (top !== 56) {
+        this.$refs.top.scrollTo(0, 540)
+      }
     },
     scrollEvent(e) {
       this.isFixed = e
@@ -196,5 +203,13 @@ export default {
     font-size: 32px;
     color: #222222;
   }
+}
+::v-deep .dropdown-list {
+  background: none !important;
+}
+::v-deep .sp-list {
+  // height: 100vh;
+  background: #fff;
+  height: calc(100vh - 112px);
 }
 </style>
