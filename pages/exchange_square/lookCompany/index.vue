@@ -28,6 +28,7 @@
         :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         :active="0"
+        :show="show"
         info="暂无搜索结果"
         @click.native="chilcktop($event)"
         @scrollEvent="scrollEvent"
@@ -69,6 +70,7 @@ export default {
           title: '',
         },
       ],
+      show: false,
       bgColor: '',
       isFixed: false,
       searchColor: '',
@@ -105,11 +107,13 @@ export default {
     chilcktop(e) {
       const top = e.target.getBoundingClientRect().toptop
       if (top !== 56) {
+        this.show = true
         this.$refs.top.scrollTo(0, 540)
       }
     },
     scrollEvent(e) {
       this.isFixed = e
+      if (!e) this.show = e
     },
     getList() {
       this.$axios
@@ -208,8 +212,6 @@ export default {
   background: none !important;
 }
 ::v-deep .sp-list {
-  // height: 100vh;
-  background: #fff;
   height: calc(100vh - 112px);
 }
 </style>

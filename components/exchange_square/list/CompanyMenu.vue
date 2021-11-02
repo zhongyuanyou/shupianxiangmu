@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="dropdown-list"
-    :style="{ background: !loading && productList.length === 0 ? '#fff' : '' }"
-  >
+  <div class="dropdown-list">
     <sp-sticky v-if="list.length !== 0" :offset-top="top" @scroll="scrollEvent">
       <sp-dropdown-menu
         v-if="isAlive"
@@ -26,10 +23,13 @@
         />
       </sp-dropdown-menu>
     </sp-sticky>
-
+    <div v-show="show" style="height: 54px"></div>
     <!-- 列表 -->
     <sp-list
       v-model="loading"
+      :style="{
+        background: !loading && productList.length === 0 ? '#fff' : '',
+      }"
       :finished="finished"
       finished-text="没有更多了"
       @load="onLoad"
@@ -98,6 +98,10 @@ export default {
     searchKey: {
       type: String,
       default: '',
+    },
+    show: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

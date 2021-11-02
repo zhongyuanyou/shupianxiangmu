@@ -32,6 +32,7 @@
       <div class="resource">全部资源</div>
       <CompanyMenu
         :active="1"
+        :show="show"
         :list="['Category', 'Combination', 'Price', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         info="暂无搜索结果"
@@ -71,6 +72,7 @@ export default {
           title: '',
         },
       ],
+      show: false,
       bgColor: '',
       isFixed: false,
       searchColor: '',
@@ -101,11 +103,13 @@ export default {
     chilcktop(e) {
       const top = e.target.getBoundingClientRect().toptop
       if (top !== 56) {
+        this.show = true
         this.$refs.top.scrollTo(0, 540)
       }
     },
     scrollEvent(e) {
       this.isFixed = e
+      if (!e) this.show = e
     },
     getList(list) {
       console.error(list)
@@ -202,7 +206,6 @@ export default {
   }
 }
 ::v-deep .sp-list {
-  background: #fff;
   height: calc(100vh - 112px);
 }
 </style>
