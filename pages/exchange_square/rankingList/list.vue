@@ -236,6 +236,8 @@ export default {
                 res.data.list
               )
             }
+          } else {
+            this.finished = true
           }
         })
         .catch((err) => {
