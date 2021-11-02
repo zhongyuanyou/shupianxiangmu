@@ -28,10 +28,10 @@
           >
             <div class="type-list">
               <div
-                v-for="(type, idx) in typeList"
+                v-for="(types, idx) in typeList"
                 :key="idx"
                 :class="[typeActive === idx ? 'type_item-active' : 'type_item']"
-                @click="chooseType(idx, type)"
+                @click="chooseType(idx, types)"
               >
                 {{ type.name }}
               </div>
