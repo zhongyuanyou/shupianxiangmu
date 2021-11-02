@@ -18,7 +18,7 @@
           :price-list="priceList"
           :state-list="stateList"
           :sort-list="sortList"
-          :more-list="moreList"
+          :more-list="filterMoreList"
           :region-list="regionList"
           :category-obj="categoryObj"
           :combination-obj="combinationObj"
@@ -129,6 +129,15 @@ export default {
         statusList: ['PRO_STATUS_LOCKED', 'PRO_STATUS_PUT_AWAY'],
       },
     }
+  },
+  computed: {
+    filterMoreList() {
+      if (this.active === 0) {
+        return this.moreList.filter((item) => item.name !== '经营时间')
+      } else {
+        return this.moreList
+      }
+    },
   },
   watch: {
     active() {
