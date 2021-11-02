@@ -55,7 +55,7 @@ export default {
     .my-swipe {
       width: 100%;
       height: 100%;
-      background: #357dff;
+      //   background: #357dff;
       border-radius: 24px;
       .img-box {
         width: 100%;

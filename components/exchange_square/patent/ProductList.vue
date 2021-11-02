@@ -272,8 +272,9 @@ export default {
   },
   methods: {
     open() {
+      const a = document.getElementsByClassName('product-list')
       if (this.type === 'list' && !this.isFixed) {
-        window.scrollTo(0, 535)
+        window.scrollTo(0, a[0].offsetTop - 28)
       }
     },
     onLoad() {
