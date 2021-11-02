@@ -28,7 +28,6 @@
         :list="['Industry', 'Region', 'Price', 'More', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         :active="0"
-        :show="show"
         info="暂无搜索结果"
         @click.native="chilcktop($event)"
         @scrollEvent="scrollEvent"
@@ -70,7 +69,6 @@ export default {
           title: '',
         },
       ],
-      show: false,
       bgColor: '',
       isFixed: false,
       searchColor: '',
@@ -105,15 +103,14 @@ export default {
       this.loading = false
     },
     chilcktop(e) {
+      const a = document.getElementsByClassName('dropdown-list')
       const top = e.target.getBoundingClientRect().toptop
       if (top !== 56) {
-        this.show = true
-        this.$refs.top.scrollTo(0, 540)
+        this.$refs.top.scrollTo(0, a[0].offsetTop - 55)
       }
     },
     scrollEvent(e) {
       this.isFixed = e
-      if (!e) this.show = e
     },
     getList() {
       this.$axios
