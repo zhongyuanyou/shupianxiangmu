@@ -33,7 +33,7 @@
                 :class="[typeActive === idx ? 'type_item-active' : 'type_item']"
                 @click="chooseType(idx, types)"
               >
-                {{ type.name }}
+                {{ types.name }}
               </div>
             </div>
           </sp-dropdown-item>
