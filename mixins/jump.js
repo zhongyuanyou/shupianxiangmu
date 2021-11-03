@@ -18,9 +18,14 @@ export default {
         data &&
         (data.executionParameters === 'im' || data.executeParam === 'im')
       ) {
-        const planner = { mchUserId: '', type: '' }
-        planner.mchUserId = data.materialDescription || data.description
-        this.uPIM(planner)
+        if (data.wapLink === '/' || data.wapRoute === '/') {
+          const planner = { mchUserId: '', type: '' }
+          planner.mchUserId = data.materialDescription || data.description
+          this.uPIM(planner)
+        } else {
+          const path = data.wapLink || data.wapRoute
+          window.location.href = path
+        }
       } else if (
         data &&
         (data.executionParameters === 'app' ||

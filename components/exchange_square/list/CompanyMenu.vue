@@ -23,7 +23,6 @@
         />
       </sp-dropdown-menu>
     </sp-sticky>
-    <div v-show="show" style="height: 54px"></div>
     <!-- 列表 -->
     <sp-list
       v-model="loading"
@@ -98,10 +97,6 @@ export default {
     searchKey: {
       type: String,
       default: '',
-    },
-    show: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {

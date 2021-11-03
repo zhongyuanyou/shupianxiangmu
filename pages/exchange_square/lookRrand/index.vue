@@ -32,7 +32,6 @@
       <div class="resource">全部资源</div>
       <CompanyMenu
         :active="1"
-        :show="show"
         :list="['Category', 'Combination', 'Price', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         info="暂无搜索结果"
@@ -72,7 +71,6 @@ export default {
           title: '',
         },
       ],
-      show: false,
       bgColor: '',
       isFixed: false,
       searchColor: '',
@@ -101,15 +99,14 @@ export default {
       this.loading = false
     },
     chilcktop(e) {
+      const a = document.getElementsByClassName('dropdown-list')
       const top = e.target.getBoundingClientRect().toptop
       if (top !== 56) {
-        this.show = true
-        this.$refs.top.scrollTo(0, 540)
+        this.$refs.top.scrollTo(0, a[0].offsetTop - 55)
       }
     },
     scrollEvent(e) {
       this.isFixed = e
-      if (!e) this.show = e
     },
     getList(list) {
       console.error(list)
