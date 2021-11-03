@@ -1,5 +1,5 @@
 <template>
-  <div class="good-list">
+  <div ref="top" class="good-list">
     <sp-sticky offset-top="56" @scroll="scroll">
       <sp-tabs
         v-model="active"
@@ -9,7 +9,7 @@
         title-inactive-color="#555555"
         :background="isFixed ? fixedColor : bgColor"
         @scroll="scroll"
-        @click="onClick()"
+        @click.native="onClick()"
       >
         <sp-tab
           v-for="(item, itemKey) of nav"
@@ -81,6 +81,7 @@ export default {
 .good-list {
   width: 100%;
   padding-top: 7px;
+  height: 100%;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }

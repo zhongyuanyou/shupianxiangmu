@@ -121,7 +121,7 @@ export default {
 .exchange-square {
   width: 750px;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100vh;
   background: #f5f5f5;
   .banner {
     margin: 10px 20px 0 20px;
