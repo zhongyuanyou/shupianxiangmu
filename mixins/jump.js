@@ -35,7 +35,7 @@ export default {
       ) {
         if (data.wapLink === 'live' || data.wapRoute === 'live') {
           this.openApp()
-        } else {
+        } else if (data.wapLink !== '/' || data.wapRoute !== '/') {
           const path = data.wapLink || data.wapRoute
           window.location.href = path
         }
