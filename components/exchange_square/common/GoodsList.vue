@@ -82,6 +82,7 @@ export default {
   width: 100%;
   padding-top: 7px;
   height: 100%;
+  background: #f5f5f5;
   ::v-deep.sp-tabs__nav {
     margin: 0 auto;
   }
