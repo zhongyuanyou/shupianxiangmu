@@ -29,7 +29,7 @@
         :background="isFixed ? '#ffffff' : 'none'"
         :active="0"
         info="暂无搜索结果"
-        @click.native="chilcktop($event)"
+        @dropdownClick="chilcktop($event)"
         @scrollEvent="scrollEvent"
       />
     </div>

@@ -5,6 +5,11 @@
         v-if="isAlive"
         active-color="#4974f5"
         :style="{ background: background }"
+        @click.native="
+          () => {
+            $emit('dropdownClick', $event)
+          }
+        "
       >
         <component
           :is="item"

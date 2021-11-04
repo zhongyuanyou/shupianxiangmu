@@ -35,7 +35,7 @@
         :list="['Category', 'Combination', 'Price', 'Sortord']"
         :background="isFixed ? '#ffffff' : 'none'"
         info="暂无搜索结果"
-        @click.native="chilcktop($event)"
+        @dropdownClick="chilcktop($event)"
         @scrollEvent="scrollEvent"
       />
     </div>
