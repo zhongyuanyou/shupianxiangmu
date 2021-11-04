@@ -27,7 +27,7 @@
     <sp-list
       v-model="loading"
       :style="{
-        background: !loading && productList.length === 0 ? '#fff' : '',
+        background: '#f5f5f5',
       }"
       :finished="finished"
       finished-text="没有更多了"

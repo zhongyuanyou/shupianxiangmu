@@ -35,7 +35,11 @@ export default {
       ) {
         if (data.wapLink === 'live' || data.wapRoute === 'live') {
           this.openApp()
-        } else if (data.wapLink !== '/' || data.wapRoute !== '/') {
+        } else if (data.wapLink === '/' || data.wapRoute === '/') {
+          const planner = { mchUserId: '', type: '' }
+          planner.mchUserId = data.materialDescription || data.description
+          this.uPIM(planner)
+        } else {
           const path = data.wapLink || data.wapRoute
           window.location.href = path
         }
