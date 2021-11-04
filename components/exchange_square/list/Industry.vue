@@ -58,7 +58,7 @@ export default {
   font-weight: bold;
 }
 .box {
-  padding: 26px 28px 56px;
+  padding: 26px 28px 48px;
   display: flex;
   flex-wrap: wrap;
   .item {

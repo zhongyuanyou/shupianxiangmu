@@ -221,7 +221,7 @@ export default {
 .box {
   flex: 1;
   overflow-y: auto;
-  padding: 0 28px 56px;
+  padding: 0 28px 48px;
   .list {
     display: flex;
     flex-wrap: wrap;

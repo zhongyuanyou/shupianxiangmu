@@ -577,7 +577,7 @@ export default {
   }
   .tabs {
     .type-list {
-      padding: 26px 20px 56px 40px;
+      padding: 26px 20px 32px 40px;
       background: #fff;
       display: flex;
       flex-wrap: wrap;
@@ -606,7 +606,7 @@ export default {
       }
     }
     .class-list {
-      padding: 26px 20px 56px 40px;
+      padding: 26px 20px 32px 40px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
